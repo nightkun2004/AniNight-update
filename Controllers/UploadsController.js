@@ -3,7 +3,6 @@ const User = require("../models/UserModel")
 const crypto = require("crypto")
 const path = require("path")
 const fs = require("fs")
-const { generateFilename } = require("../lib/generateFilename")
 
 // ==================== CREATE Article POST
 // POST /api/v2/post/article/create
@@ -23,10 +22,16 @@ const CreateArticle = async (req, res, next) => {
 
         const tagsArray = tags ? tags.split('#').map(tag => tag.trim()).filter(tag => tag) : [];
 
+        const generateFilename = (file) => {
+            let splittedFilename = file.name.split('.');
+            return splittedFilename[0] + crypto.randomUUID() + '.' + splittedFilename[splittedFilename.length - 1];
+        };
+        
+
         let postId = crypto.randomUUID();
 
         // อัปโหลดภาพปก
-        let thumbnailFilename = generateFilename(thumbnail);
+        let thumbnailFilename = generateFilename(thumbnail); 
         let thumbnailUploadPath = path.join(__dirname, '..', 'public/uploads/thumbnails', thumbnailFilename);
         await thumbnail.mv(thumbnailUploadPath);
 

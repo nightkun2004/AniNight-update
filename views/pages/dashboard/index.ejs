@@ -8,13 +8,14 @@
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
         crossorigin="anonymous"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+        function gtag() { dataLayer.push(arguments); } 
         gtag('js', new Date());
 
         gtag('config', 'G-LTJP520FN4');
@@ -126,7 +127,10 @@
                                     <button class="text-blue-500 hover:text-blue-700">
                                         <a href="/edit/post/article?articleid=<%= article._id %>">แก้ไข</a>
                                     </button>
-                                    <button class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
+                                    <button class="text-red-500 hover:text-red-700 ml-2" onclick="deletearticle(event, '<%= article._id %>')" type="button">
+                                        ลบ
+                                    </button>
+                                    
                                 </td>
                             </tr>
                             <% }) %>
@@ -143,39 +147,57 @@
     </div>
     <script src="/js/script.js"></script>
     <script>
+        function deletearticle(event, postId) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณต้องการลบโพสต์นี้หรือไม่?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่, ลบโพสต์!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/post/article/delete/${postId}`;
+                }
+            });
+        }
+
         // Function to update the progress bar
         function updateProgressBar(totalArticles, publishedArticles) {
             const progressBar = document.getElementById('progress-bar-article');
             const progressText = document.getElementById('progress-text');
-        
+
             // Define the number of required articles
             const requiredArticles = 5;
             const progressPercentage = Math.min((publishedArticles / requiredArticles) * 100, 100);
-        
+
             // Update the progress bar width and text
             progressBar.style.width = `${progressPercentage}%`;
             progressText.textContent = `${publishedArticles} / ${requiredArticles} บทความ`;
         }
 
-         // Function to update the deadline progress bar
-    function updateDeadlineBar(daysLeft) {
-        const deadlineBar = document.getElementById('deadline-bar');
+        // Function to update the deadline progress bar
+        function updateDeadlineBar(daysLeft) {
+            const deadlineBar = document.getElementById('deadline-bar');
 
-        const maxDays = 29;
-        const progressPercentage = Math.max(((maxDays - daysLeft) / maxDays) * 100, 0);
+            const maxDays = 29;
+            const progressPercentage = Math.max(((maxDays - daysLeft) / maxDays) * 100, 0);
 
-        deadlineBar.style.width = `${progressPercentage}%`;
-    }
-        
+            deadlineBar.style.width = `${progressPercentage}%`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-        const progressInfo = document.getElementById('progress-info');
-        const totalArticles = parseInt(progressInfo.getAttribute('data-total-articles'));
-        const publishedArticles = parseInt(progressInfo.getAttribute('data-published-articles'));
-        const daysLeft = parseInt(document.getElementById('days-left').textContent);
+            const progressInfo = document.getElementById('progress-info');
+            const totalArticles = parseInt(progressInfo.getAttribute('data-total-articles'));
+            const publishedArticles = parseInt(progressInfo.getAttribute('data-published-articles'));
+            const daysLeft = parseInt(document.getElementById('days-left').textContent);
 
-        updateProgressBar(totalArticles, publishedArticles);
-        updateDeadlineBar(daysLeft);
-    });
-        </script>
+            updateProgressBar(totalArticles, publishedArticles);
+            updateDeadlineBar(daysLeft);
+        });
+    </script>
 </body>
 </html>

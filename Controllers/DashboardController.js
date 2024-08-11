@@ -1,7 +1,7 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 const crypto = require('crypto');
 
 const getDashboard = async (req, res) => {
@@ -126,10 +126,92 @@ const EditPostArticle = async (req, res, next) => {
     }
 };
 
+// ============================= DELETE Post
+// GET : /api/v2/post/article/delete/:id
+const deletePostArticle = async (req, res, next) => {
+    const userID = req.session.userlogin;
+    const today = new Date();
+    const deadline = new Date(today);
+    deadline.setDate(today.getDate() + 29); // 29 days from today
+    const daysLeft = Math.max(Math.ceil((deadline - today) / (1000 * 60 * 60 * 24)), 0); // Calculate days left
+    
+    try {
+        const postId = req.params.id;
+        console.log("Received postId:", postId); 
+
+        const userDatas = await User.findById(req.user.id).populate('articles').exec();
+        const publishedArticlesCount = userDatas.articles.filter(article => article.published).length;
+
+        // ค้นหาโพสต์
+        const post = await Article.findById(postId);
+        if (!post) {
+            return res.status(404).render("./pages/dashboard/index", {
+                error: "เราไม่พบโพสต์บทความของคุณ",
+                userID,
+                userDatas,
+                daysLeft,
+                publishedArticlesCount
+            });
+        }
+
+        console.log("Post found, continuing with delete...");
+
+        const thumbnailFileName = post.thumbnail;
+        const imagesFileNames = post.imagesarticle;
+
+        // ลบไฟล์
+        const deletePromises = [];
+
+        if (thumbnailFileName) {
+            deletePromises.push(
+                fs.unlink(path.join(__dirname, '..', 'public/uploads/thumbnails', thumbnailFileName))
+            );
+        }
+
+        if (Array.isArray(imagesFileNames)) {
+            imagesFileNames.forEach((fileName) => {
+                deletePromises.push(
+                    fs.unlink(path.join(__dirname, '..', 'public/uploads/articlesImages', fileName))
+                );
+            });
+        }
+
+        // รอให้การลบไฟล์ทั้งหมดเสร็จสิ้น
+        await Promise.all(deletePromises);
+
+        // ลบโพสต์
+        await Article.findByIdAndDelete(postId);
+
+        // ลบ ID ของบทความจาก User โมเดล
+        await User.updateMany(
+            { articles: postId },
+            { $pull: { articles: postId } }
+        );
+
+        res.status(200).render("./pages/dashboard/index", {
+            message: `ทำการลบโพสต์ที่มีไอดี ${postId} เสร็จแล้ว`,
+            userID,
+            userDatas,
+            daysLeft,
+            publishedArticlesCount
+        });
+
+    } catch (error) {
+        const errorMessage = error.response ? error.response.data.message : error.message;
+        res.status(500).render("./pages/dashboard/index", {
+            userID,
+            error: errorMessage,
+            userDatas,
+            daysLeft,
+            publishedArticlesCount
+        });
+    }
+};
 
 
 module.exports = {
     getDashboard,
     Getedit,
-    EditPostArticle
+    EditPostArticle,
+    deletePostArticle
 }

@@ -18,6 +18,9 @@ const getRead = async (req, res, next) => {
             });
         }
 
+        post.views = (post.views || 0) + 1;
+        await post.save();
+
         let isSaved = false;
         if (userID && userID.user._id && post.savearticles) {
             isSaved = post.savearticles.includes(userID.user._id.toString());
