@@ -31,10 +31,10 @@
                             <% if (userID) {%>
                             <a href="/<%= userID.user.username %>" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">โปรไฟล์ของคุณ   </a>
                             <a href="/top/coin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เติมเงิน</a>
-                            <% if (userID.user.role === 'content_creator' || userID.user._id === '66a44b5cef5fb7a07c616a62') { %>
+                            <% if (userID.user.role === 'content_creator' || userID.user.username === 'Oshitakun') { %>
                                 <a href="/dashboard" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">จัดการเนื้อหา</a>
                             <% } %>
-                            <% if (userID.user.role === 'admin' || userID.user.role === 'moderator') { %>
+                            <% if (userID.user.role === 'admin' || userID.user.role === 'moderator' || userID.user.username === 'Oshitakun') { %>
                                 <a href="/admin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เข้าสู่ผู้ดูแล</a>
                             <% } %>
                             <% } %>
