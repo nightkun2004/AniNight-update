@@ -4,6 +4,6 @@ const { checkAuth } = require("../lib/auth")
 const { authMiddleware } = require("../Middlewares/authMiddleware")
 const { updateUserRole } = require("../Controllers/AdminController")
 
-router.post('/admin/update-role',authMiddleware, checkAuth, updateUserRole)
-
+router.post('/admin/update-role', checkAuth, updateUserRole)
+ 
 module.exports = router;

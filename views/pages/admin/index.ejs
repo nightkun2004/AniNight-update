@@ -35,20 +35,20 @@
                     </div>
                 <% if (users && users.length > 0) { %>
                     <form action="/admin/update-role" method="POST" class="mt-6 bg-white p-6 rounded-lg shadow-md">
-                        <div class="mb-4">
-                            <label for="userIdToUpdate" class="block text-gray-700 font-semibold">เลือกผู้ใช้เพื่ออัพเดตบทบาท</label>
-                            <input type="search" id="searchUser" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ค้นหา..." oninput="filterOptions()">
-                            <select id="userIdToUpdate" name="userIdToUpdate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option disabled selected>เลือก</option>
-                                <% if (users && users.length > 0) { %>
-                                    <% users.forEach(user => { %>
-                                        <option value="<%= user._id %>" data-username="<%= user.username %>" data-email="<%= user.email %>">
-                                            <%= user.username %> - <%= user.email %>
-                                        </option>
-                                    <% }) %>
-                                <% } %>
-                            </select>
-                        </div>
+                       <div class="mb-4">
+                        <label for="userIdToUpdate" class="block text-gray-700 font-semibold">เลือกผู้ใช้เพื่ออัพเดตบทบาท</label>
+                        <input type="search" id="searchUser" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ค้นหา..." oninput="filterOptions()">
+                        <select id="userIdToUpdate" name="userIdToUpdate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option disabled selected>เลือก</option>
+                            <% if (users && users.length > 0) { %>
+                                <% users.forEach(user => { %>
+                                    <option value="<%= user._id %>" data-username="<%= user.username %>" data-email="<%= user.email %>">
+                                        <%= user.username %> - <%= user.email %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
                         <div class="mb-4">
                             <label for="newRole" class="block text-gray-700 font-semibold">บทบาทใหม่</label>
                             <select id="newRole" name="newRole" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
