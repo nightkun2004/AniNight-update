@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อผิดพลาด - การเข้าถึงไม่ได้</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <div class="flex items-center justify-center mb-4">
+            <i class="fas fa-exclamation-triangle text-red-600 text-6xl"></i>
+        </div>
+        <div class="flex items-center flex-col">
+            <h1 class="text-3xl font-bold text-red-600 mb-2">ข้อผิดพลาด</h1>
+            <p class="text-gray-700 text-md mb-4">คุณไม่ได้รับอนุญาตให้เข้าถึงหน้านี้</p>
+            <p class="text-gray-500">ไม่พบ token ในการร้องขอของคุณ หรือ token ที่ให้มาไม่ถูกต้อง</p>
+            <p class="text-gray-500 mb-6 text-center">รหัสข้อผิดพลาด: <span class="font-bold text-red-600">401</span></p>
+            <a href="/" class="text-blue-500 hover:text-blue-700">กลับไปยังหน้าแรก</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /foryou
+Allow: /schedule/anime
+Disallow: /admin
+Disallow: /dashboard

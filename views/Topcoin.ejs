@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เติมเหรียญ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('./Component/Sidebar') %>
+    <div class="flex-1 flex flex-col">
+        <%- include('./Component/Header') %>
+
+        <div class="container mx-auto p-2 max-w-7xl shadow-md bg-gradient-to-b from-sky-100">
+            <div class="header__profile z-4 p-5 rounded flex justify-between ">
+                <!-- Left -->
+                <div class="profile flex items-center">
+                    <img src="https://ani-night.online/profiles/3013c1083d9ea2694d1cc6851d79411be01e48cb-9b05-4233-8b43-3cc5b933d272.jpg"
+                        class="w-10 h-10 rounded-full " alt="profile__user">
+                    <div class="flex flex-col pl-5 profile-content" id="profile-content" data-useremail="user@example.com">
+                        <h3>Username</h3>
+                        <p>Email</p>
+                    </div>
+                </div>
+
+                <!-- Right -->
+                <div class="redeem__code">
+                    <p class="text-md text-sky-600 underline-offset-auto cursor-pointer">ใส่รหัสแลก</p>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+             <main class="mx-auto z-3 bg-white rounded-lg">
+                <div class="rold p-6">
+                    <p class="font-semibold">สิทธิ์ของการแลกคะแนน</p>
+                    <p><i class="fa-solid fa-shop"></i> คุณสามารถใช้คะแนนซื้อสินค้าของเราได้</p>
+                    <p><i class="fa-solid fa-rectangle-ad"></i> ลบโฆษณา คุณสามารถใช้คะแนนแลกเพ็คเกจปิดโฆษณาบนเว็บได้
+                        หลักจากซื้อคะแนนแล้วสามารถแลกเพคเกจโฆษณา
+                        <a href="#" class="underline underline-offset-2 text-sky-700 font-bold">ที่หน้านี้ กดทที่นี่</a>
+                    </p>
+                </div>
+
+                <p class="p-5 font-semibold">เลือกรายการที่ต้องการเติม</p>
+                <div class="flex flex-wrap gap-3 p-3">
+                    <div class="item relative flex flex-col rounded-lg cursor-pointer bg-sky-50 border border-sky-600 p-5 w-full sm:w-1/2 md:w-1/3 lg:w-1/4" onclick="selectItem(this, 'price_20')">
+                        <h2 class="selection-text hidden absolute top-2 right-2 bg-indigo-600 text-white px-2 py-1 rounded">กำลังเลือก</h2>
+                        <h3 class="text-2xl">100 คะแนน</h3>
+                        <p>20 บาท</p>
+                    </div>
+                    <div class="item relative flex flex-col rounded-lg cursor-pointer bg-sky-50 border border-sky-600 p-5 w-full sm:w-1/2 md:w-1/3 lg:w-1/4" onclick="selectItem(this, 'price_50')">
+                        <h2 class="selection-text hidden absolute top-2 right-2 bg-indigo-600 text-white px-2 py-1 rounded">กำลังเลือก</h2>
+                        <h3 class="text-2xl">500 คะแนน</h3>
+                        <p>50 บาท</p>
+                    </div>
+                    <div class="item relative flex flex-col rounded-lg cursor-pointer bg-sky-50 border border-sky-600 p-5 w-full sm:w-1/2 md:w-1/3 lg:w-1/4" onclick="selectItem(this, 'price_100')">
+                        <h2 class="selection-text hidden absolute top-2 right-2 bg-indigo-600 text-white px-2 py-1 rounded">กำลังเลือก</h2>
+                        <h3 class="text-2xl">2000 คะแนน</h3>
+                        <p>100 บาท</p>
+                    </div>
+                </div>
+                
+                <div class="btn m-5">
+                    <button id="payButton" class="hidden bg-sky-500 w-full text-white px-4 py-2 rounded" onclick="checkout()">ชำระเงิน</button>
+                </div>
+                
+             </main>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.js"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/topcoin.js"></script>
+</body>
+</html>

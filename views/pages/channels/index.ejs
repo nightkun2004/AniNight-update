@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= channel.username %> | Channel</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LTJP520FN4');
+    </script>
+</head>
+
+<body>
+    <%- include('../../Component/Sidebar') %>
+        <div class="flex-1 flex flex-col">
+            <%- include('../../Component/Header') %>
+
+                <!-- Registration Form -->
+                <main class="flex-1 sm:p-4">
+                    <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6">
+                        <div class="banner relative w-full h-40 sm:h-64">
+                            <img style="user-select: none;" src="https://ani-night.online/banner/14cd43e9-ba3a-4ed9-af84-d9c6ffe09201.png" alt="banner" class="w-full rounded-lg h-full object-cover">
+                        </div>
+                        <div class="flex flex-col sm:flex-row p-5 justify-between items-center">
+                            <div class="flex flex-col items-center sm:flex-row">
+                                <img class="h-24 w-24 rounded-full object-cover"
+                                    src="https://ani-night.online/profiles/<%= channel.profilePicture %>"
+                                    alt="channel">
+                                <div class="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+                                    <ul>
+                                        <li class="text-sm md:text-2xl font-bold text-gray-900"> <%= channel.username %></li>
+                                    </ul>
+                                    <h1 data-userid="<%= channel._id %>"></h1>
+                                    <div class="mt-4 flex justify-center sm:justify-start space-x-4">
+                                        <span class="text-sm text-gray-600"><strong> <%= channel.followers.length %></strong> : ผู้ติดตาม</span>
+                                        <span class="text-sm text-gray-600"><strong><%= channel.following.length %></strong> : กำลังติดตาม</span>
+                                    </div>
+                                    <ul class="items-center">
+                                        <li class="text-sm text-gray-900 mt-5 flex"><strong class="font-medium">ประวัติ:</strong> <p class="text-sm text-gray-600 pl-2"> Bio.</p></li>
+                                        <li class="text-sm text-gray-900"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+
+                            <!-- Right Follow -->
+                            <div>
+                                <% const isFollowing = channel.followers && channel.followers.includes(userID); %>
+                                <% if (isFollowing) { %>
+                                    <button class="mt-4 text-white px-4 py-2 rounded-md bg-gray-400">กดติดตามแล้ว</button>
+                                <% } else { %>
+                                    <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md" id="followButton" onclick="toggleFollow()">ติดตาม</button>
+                                <% } %>
+
+                                
+
+                                <!-- <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md" id="followButton" onclick="toggleFollow()">ติดตาม</button> -->
+                            </div>
+                        </div>
+                        <% if (typeof message !== 'undefined') { %>
+                            <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
+                        <% } %>
+                        
+                        <% if (typeof error !== 'undefined') { %>
+                            <div class="mb-4 text-red-500 text-center"><%= error %></div>
+                        <% } %>
+                    </div>
+                </main>
+        </div>
+
+
+
+        <script src="/js/script.js"></script>
+        <script src="/js/channel.js"></script>
+</body>
+
+</html>

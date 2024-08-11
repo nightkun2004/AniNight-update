@@ -1,0 +1,39 @@
+<!-- Sidebar -->
+<div id="sidebar" class="fixed inset-y-0 left-0 md:left-0 w-64 text-black backdrop-blur-sm bg-white/30 overflow-auto shadow-md sidebar z-50">
+    <div class="p-6 flex justify-between items-center">
+        <h2 class="text-blue-500 text-2xl font-bold">
+            <a href="/">AniNight</a>
+        </h2>
+        <button id="closeSidebar">
+            <svg class="h-10 w-10 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+    <hr class="mt-4 mb-6">
+    <nav class="space-y-4">
+        <a href="/" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">หน้าหลัก</a>
+        <a href="/foryou?recomment=0&i-0" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">สำหรับคุณ</a>
+        <a href="#" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">บทความ</a>
+        <a href="/schedule/anime" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ตารางอนิเมะ</a>
+        <a href="#" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ฟอรัม</a>
+        <% if (userID) {%>
+            <a href="/<%= userID.user.username %>" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">โปรไฟล์ของคุณ   </a>
+            <a href="/top/coin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เติมเงิน</a>
+            <% if (userID.user.role === 'content_creator' || userID.user.username === 'pino2004') {%>
+                <a href="/dashboard" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">จัดการเนื้อหา</a>
+            <% } %>
+            <% if (userID.user.role === 'admin') { %>
+                <a href="/admin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เข้าสู่ผู้ดูแล</a>
+            <% } %>
+        <% } %>
+    </nav>
+    <hr class="mt-4 mb-6">
+    <div class="footer flex gap-1 flex-wrap p-2">
+        <p class="font-medium text-black text-sm"><i class="fa-regular fa-copyright"></i> 2024 AniNight |</p>
+        <p class="font-medium text-black text-sm"><a href="#">ติดต่อเรา</a></p>
+        <p class="font-medium text-black text-sm"><a href="#">นโยบายของเรา</a></p>
+        <p class="font-medium text-black text-sm"><a href="#">ความเป็นส่วนตัว</a></p>
+        <p class="font-medium text-black text-sm"><a href="#">กฏการใช้งาน</a></p>
+    </div>
+</div>

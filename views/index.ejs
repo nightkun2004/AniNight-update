@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniNight — อนิไนท์</title>
+    <meta name="title" content="Meta Tags — Preview, Edit and Generate" />
+    <meta name="description"
+        content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.ani-night.online" />
+    <meta property="og:title" content="AniNight — อนิไนท์" />
+    <meta property="og:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
+    <meta property="og:image" content="hhttps://www.ani-night.online/seo/images" />
+
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.ani-night.online" />
+    <meta property="twitter:title" content="AniNight — อนิไนท์" />
+    <meta property="twitter:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
+    <meta property="twitter:image" content="hhttps://www.ani-night.online/seo/image" />
+
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('./Component/Sidebar') %>
+    <div class="flex-1 flex flex-col">
+        <%- include('./Component/Header') %>
+
+        <main class="max-w-3xl sm:max-w-4xl md:max-w-5xl lg:max-w-7xl mx-auto mt-3">
+            <div class="mb-6 mt-4">
+                <% if (typeof error !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= error %></div>
+                <% } %>
+            </div>
+            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">มาใหม่</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <% if (Posts.length > 0) { %>
+                    <% Posts.forEach(post => { %>
+                        <% if (post.published) { %>
+                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                <a href="/read/<%= post.urlslug %>">
+                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
+                                </a>
+                                <div class="p-6 md:col-span-1">
+                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
+                                    </h1>
+                                    <% if (post.creator && post.creator.id) { %>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                            <p class="text-gray-700"><%= post.creator.username %></p>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </article>
+                        <% } %>
+                    <% }) %>  
+                    <% } else { %>
+                    <p>ยังไม่ได้เขียนบทความ</p>
+                    <% } %>
+            </div>
+
+
+            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">แนะนำบทความที่มาแรงจาก 5 รายการ</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                    <a href="#">
+                        <img src="https://ani-night.online/ArticlesImages_mord/ecde10b5-9545-4109-bf50-d7c4e9992bb6.jpg" alt="article title" class="w-full h-60 object-cover md:h-48">
+                    </a>
+                    <div class="p-6 md:col-span-1">
+                        <h1 class="text-2xl font-semibold text-gray-900 mb-4"><a href="#" class="hover:text-blue-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati, vero?</a></h1>
+                        <div class="flex items-center space-x-4">
+                            <img src="" alt="profile-user" class="w-12 h-12 rounded-full border border-gray-300">
+                            <p class="text-gray-700">User</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </main>
+        
+    </div>
+
+
+    <script src="/js/script.js  "></script>
+</body>
+</html>

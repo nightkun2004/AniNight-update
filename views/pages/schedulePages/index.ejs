@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางอนิเมะ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LTJP520FN4');
+    </script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+    <%- include('../../Component/Sidebar') %>
+    <div class="flex-1 flex flex-col">
+        <%- include('../../Component/Header') %>
+        <main class="flex-grow flex flex-col justify-center items-center text-center p-6">
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
+                <div class="flex">
+                    <div class="ml-3">
+                        <div class="flex-shrink-0 mb-6">
+                            <i class="fa-solid fa-database text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold">การย้ายข้อมูลกำลังดำเนินการอยู่</h3>
+                        <div class="mt-2 text-sm">
+                            <p>ขณะนี้เรากำลังย้ายข้อมูล กรุณารอสักครู่ ระบบจะพร้อมใช้งานในเร็ว ๆ นี้ ขออภัยในความไม่สะดวก</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>

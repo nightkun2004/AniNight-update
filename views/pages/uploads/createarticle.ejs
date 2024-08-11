@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างบทความ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../Component/Sidebar') %>
+    <div class="flex-1 flex flex-col">
+        <%- include('../../Component/Header') %>
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+            <div class="mb-6 mt-4">
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center"><%= message %></div>
+                <% } %>
+                <div id="message" class="message mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center" style="display: none;"></div>
+                <div id="errormessage" class="errormessage mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center" style="display: none;"></div>
+                <% if (typeof error !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+                <% } %>
+                <% if (typeof dataprofile !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-sky-500 text-center"><%= dataprofile %></div>
+                <% } %>
+            </div>
+            <section class="flex flex-col md:flex-row gap-4">
+                <h1 class="text-2xl font-semibold text-gray-800 mb-6 pr-6">
+                    <a href="/<%= userID.user.username %>">
+                        <i class="fa-solid fa-arrow-left"></i> กลับ
+                    </a>
+                </h1>
+                <div class="flex-1 bg-white p-4 rounded shadow-md"> 
+                 <h2 class="text-2xl font-bold text-center">สร้างบทความ</h2>
+                 <form action="/api/v2/post/article/create" method="post" enctype="multipart/form-data">
+                     <div class="mb-5">
+                         <label for="name_act" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อบทความ</label>
+                         <input type="text" id="title" name="title" class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
+                     </div>
+                     <div class="mb-5">
+                         <label for="tags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ใสแท็กเนื้อหาของคุณ</label>
+                         <input type="text" id="tags" name="tags" class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                         <p class="text-gray-500 text-sm">Tip: ตัวอย่างแท็กที่สมบูรณ์: #9test #anime #ตัวอย่าง #ทดสอบแท็ก</p>
+                     </div>
+                     <div class="mb-4">
+                         <label for="content" class="block text-sm font-medium text-gray-700">เนื้อหา</label>
+                         <div id="editor" class="mt-1 block w-full h-[300px] md:h-[500px] shadow-sm sm:text-sm border border-gray-300 rounded-md"></div>
+                         <input type="hidden" id="content" name="content">
+                     </div>
+                     <div class="mb-4">
+                         <label class="block text-sm font-medium text-gray-700">หมวดหมู่</label>
+                         <div class="flex flex-wrap gap-2 mt-2">
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="อนิเมะ">
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">อนิเมะ</span>
+                             </label>
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="บันเทิง">
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">บันเทิง</span>
+                             </label>
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="เพลง">
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">เพลง</span>
+                             </label>
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="การ์ตูน" >
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">การ์ตูน</span>
+                             </label>
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="ข่าวสาร">
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ข่าวสาร</span>
+                             </label>
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="การท่องเที่ยว">
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">การท่องเที่ยว</span>
+                             </label>
+                             <label class="category-label">
+                                 <input type="checkbox" name="categories" value="อาหาร">
+                                 <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">อาหาร</span>
+                             </label>
+                         </div>
+                     </div>
+                     <div class="mb-5">
+                         <label for="thumbnail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่มภาพปกของคุณ</label>
+                         <input id="thumbnail"
+                             class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
+                             type="file" name="thumbnail" accept="image/*" required onchange="previewImage(this, 'preview', 'cover-text')">
+                     </div>
+                     
+                     <div class="mb-5">
+                         <label for="images" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ภาพประกอบ</label>
+                         <input type="file"
+                             class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
+                             id="images" name="images" multiple accept="image/*" onchange="previewImages(this)">
+                     </div>
+         
+                     <div class="mb-5">
+                         <div class="flex">
+                             <div class="flex items-center h-5">
+                                 <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" id="published" name="published"
+                                  class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                             </div>
+                             <div class="ms-2 text-sm">
+                                 <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
+                                 <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้ หากคุณต้องการเผยแพร่เลยให้ติ้งไว้</p>
+                             </div>
+                         </div>
+                     </div>
+                    
+                     <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                         ส่งบทความ</button>
+                 </form>
+                 
+                </div>
+                <div class="w-full md:w-1/3 bg-white p-4 rounded shadow-md overflow-x-hidden mb-5">
+                 <div class="mb-5">
+                     <h3>ตัวอย่างภาพปก</h3>
+                     <div class="bg-gray-100 rounded relative w-full h-[320px] md:h-[230px]">
+                         <p id="cover-text" class="absolute top-0 left-0 w-full h-full flex items-center justify-center text-gray-500 z-10">ภาพปกของคุณ</p>
+                         <img id="preview" class="absolute inset-0 w-full h-full object-cover" src="" alt="">
+                     </div>
+                 </div>
+         
+                 <div class="mt-5 mb-5">
+                     <h3>ตัวอย่างภาพประกอบที่คุณเลือก</h3>
+                     <div class="bg-gray-100 rounded relative w-full h-[320px] md:h-[230px]">
+                         <p id="cover-text" class="absolute top-0 left-0 w-full h-full flex items-center justify-center text-gray-500 z-10">ภาพประกอบ</p>
+                         <div id="previewimages" class="absolute inset-0 w-full h-full object-cover"></div>
+                     </div>
+                 </div>
+                </div>
+             </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/uploads/article.js"></script>
+</body>
+</html>

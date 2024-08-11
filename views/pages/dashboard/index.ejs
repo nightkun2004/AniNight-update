@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio จัดการบทความ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LTJP520FN4');
+    </script>
+    <style>
+        /* Styling for progress bar container */
+        .progress-bar-bg {
+            position: relative;
+            background-color: #f3f4f6;
+        }
+    
+        /* Styling for progress bar fill */
+        .progress-bar-fill {
+            width: 0%;
+            /* Default width, will be updated with JavaScript */
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <%- include('../../Component/Sidebar') %>
+    <div class="flex-1 flex flex-col">
+        <%- include('../../Component/Header') %>
+        <main class="flex-grow p-6">
+            <!-- Dashboard Header -->
+            <header class="mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">จัดการบทความ</h1>
+                <p class="text-gray-600">ภาพรวมของบทความและเครื่องมือการจัดการของคุณ</p>
+            </header>
+
+            <!-- Overview Section -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Card 1: Total Articles -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">บทความทั้งหมด</h2>
+                    <p class="text-gray-500">
+                        <%= userDatas.articles.length %>
+                    </p>
+                </div>
+                
+                <!-- Card 2: Published Articles -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">บทความที่เผยแพร่</h2>
+                    <p class="text-gray-500">
+                        <%= userDatas.articles.filter(article => article.published).length %>
+                    </p>
+                </div>
+                
+                <!-- Card 3: Drafts -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">บทความที่ยังไม่เผยแพร่</h2>
+                    <p class="text-gray-500">
+                        <%= userDatas.articles.filter(article => !article.published).length %>
+                    </p>
+                </div>   
+                
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">คุณต้องมี 5 บทความถึงจะเปิดสร้างรายได้</h2>
+                    <p class="text-gray-500" id="progress-info" 
+                       data-total-articles="<%= userDatas.articles.length %>" 
+                       data-published-articles="<%= publishedArticlesCount %>">
+                       <!-- This will be updated dynamically -->
+                    </p>
+                    <div class="relative bg-gray-200 rounded-full h-4 mt-2">
+                        <div id="progress-bar-article" class="absolute top-0 left-0 h-full bg-green-500 rounded-full"></div>
+                    </div>
+                    <p id="progress-text">0/5</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">ต้องเผยแพร่บทความภายใน</h2>
+                    <p id="days-left" class="text-gray-500"><%= daysLeft %> วัน</p>
+                    <div class="relative bg-gray-200 rounded-full h-4 mt-2">
+                        <div id="deadline-bar" class="absolute top-0 left-0 h-full bg-blue-500 rounded-full"></div>
+                    </div>
+                    <p class="text-gray-500">ถึงจะสร้างรายได้</p>
+                </div>
+            </section>
+
+            <!-- Articles Management Section -->
+            <section>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">บทความ</h2>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <a href="/uploads/create/article">เพิ่มบทความใหม่</a>
+                    </button>
+                </div>
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            <th class="py-2 px-4 border-b">#</th>
+                            <th class="py-2 px-4 border-b">ชื่อบทความ</th>
+                            <th class="py-2 px-4 border-b">สถานะ</th>
+                            <th class="py-2 px-4 border-b">วันที่เผยแพร่</th>
+                            <th class="py-2 px-4 border-b">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (userDatas && userDatas.articles.length > 0) { %>
+                            <% userDatas.articles.forEach((article, index) => { %>
+                            <tr>
+                                <td class="py-2 px-4 border-b text-center"><%= index + 1 %></td>
+                                <td class="py-2 px-4 border-b">
+                                    <%= article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %>
+                                </td>                                
+                                <td class="py-2 px-4 border-b text-center"><%= article.published ? 'เผยแพร่แล้ว' : 'ไม่ได้เผยแพร่' %></td>
+                                <td class="py-2 px-4 border-b text-center"><%= new Date(article.createdAt).toLocaleDateString('en-US') %></td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <button class="text-blue-500 hover:text-blue-700">
+                                        <a href="/edit/post/article?articleid=<%= article._id %>">แก้ไข</a>
+                                    </button>
+                                    <button class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                    
+                </table>
+            </section>
+        </main>
+    </div>
+    <script src="/js/script.js"></script>
+    <script>
+        // Function to update the progress bar
+        function updateProgressBar(totalArticles, publishedArticles) {
+            const progressBar = document.getElementById('progress-bar-article');
+            const progressText = document.getElementById('progress-text');
+        
+            // Define the number of required articles
+            const requiredArticles = 5;
+            const progressPercentage = Math.min((publishedArticles / requiredArticles) * 100, 100);
+        
+            // Update the progress bar width and text
+            progressBar.style.width = `${progressPercentage}%`;
+            progressText.textContent = `${publishedArticles} / ${requiredArticles} บทความ`;
+        }
+
+         // Function to update the deadline progress bar
+    function updateDeadlineBar(daysLeft) {
+        const deadlineBar = document.getElementById('deadline-bar');
+
+        const maxDays = 29;
+        const progressPercentage = Math.max(((maxDays - daysLeft) / maxDays) * 100, 0);
+
+        deadlineBar.style.width = `${progressPercentage}%`;
+    }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+        const progressInfo = document.getElementById('progress-info');
+        const totalArticles = parseInt(progressInfo.getAttribute('data-total-articles'));
+        const publishedArticles = parseInt(progressInfo.getAttribute('data-published-articles'));
+        const daysLeft = parseInt(document.getElementById('days-left').textContent);
+
+        updateProgressBar(totalArticles, publishedArticles);
+        updateDeadlineBar(daysLeft);
+    });
+        </script>
+</body>
+</html>

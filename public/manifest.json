@@ -1,0 +1,18 @@
+{
+    "name": "AniNight",
+    "short_name": "ani-night.online",
+    "start_url": "https://www.ani-night.online",
+    "description": "นี่คือเว็บไซต์ที่รวมรวมข่าวสารด้านอนิเมะและสื่อต่างๆ",
+    "display": "standalone",
+    "prefer_related_applications": true,
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "/logo/Aninight.png",
+        "sizes": "48x48",
+        "type": "image/png"
+      }
+    ]
+  }
+  

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post.title %></title>
+    <meta name="title" content="Meta Tags — Preview, Edit and Generate" />
+    <meta name="description"
+        content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
+    <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.ani-night.online" />
+    <meta property="og:title" content="<%= post.title %>" />
+    <meta property="og:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
+    <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
+
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.ani-night.online" />
+    <meta property="twitter:title" content="<%= post.title %>" />
+    <meta property="twitter:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
+    <meta property="twitter:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LTJP520FN4');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <script>
+    window.googletag = window.googletag || {cmd: []};
+    googletag.cmd.push(function() {
+        googletag.defineSlot('/22745653040/Read-Displayed-by-aninight', [300, 50], 'div-gpt-ad-1723344157500-0').addService(googletag.companionAds()).addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.pubads().enableVideoAds();
+        googletag.companionAds().setRefreshUnfilledSlots(true);
+        googletag.enableServices();
+    });
+    </script>
+    <style>
+        .fullscreen-read {
+            height: 100%;
+            /* ให้ครอบคลุมความสูงเต็มที่ */
+            max-height: 100vh;
+            /* ไม่เกินความสูงของ viewport */
+            overflow-y: auto;
+            /* เปิดใช้งานการเลื่อนเนื้อหาในแนวตั้ง */
+            box-sizing: border-box;
+            /* ทำให้ padding และ border ไม่เกินจากขอบของกล่อง */
+        }
+    
+        .liked {
+            color: #f56565;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./Component/Sidebar') %>
+    <div class="flex-1 flex flex-col">
+        <%- include('./Component/Header') %>
+       <div class="container mx-auto mt-3">
+        <div class="mb-6 mt-4">
+            <% if (typeof error !== 'undefined') { %>
+                <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+            <% } %>
+        </div>
+       </div>
+        <% if (post.published) { %>
+        <main class="container mx-auto md:4">
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- main content -->
+                 <div class="flex-1 bg-white p-4 rounded shadow-md open-windows-read">
+                    <div class="skeleton">
+                        <div class="title__main flex justify-between items-center">
+                                <h1 class="text-2xl font-bold mb-4">
+                                    <a href="/read/<%= post.urlslug %>?lang=en"><%= post.title %></a>
+                                </h1>
+                                <div class="right__title-main flex flex-col items-center">
+                                    <div class="relative">
+                                        <!-- Share Button -->
+                                        <button id="share-button" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            แชร์
+                                        </button>
+
+                                    <!-- Popup Alert -->
+                                    <div class="popupalert hidden" id="popupalert">
+                                        <p>แชร์ลิ้งแล้ว</p>
+                                    </div>
+
+                                    <div class="data__box-share hidden">
+                                        <form>
+                                            <input type="text" name="articleTitle" value="<%= post.title %>">
+                                            <input type="text" name="articleContent" value="<%- post.content %>">
+                                            <input type="file" name="articleImage" value="/uploads/thumbnails/<%= post.thumbnail %>">
+                                        </form>
+                                    </div>
+
+                                    
+                                        <!-- Share Popup -->
+                                        <div id="share-popup" class="hidden absolute top-full right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
+                                            <h3 class="text-md font-semibold mb-2">แชร์บทความนี้</h3>
+                                            <button id="copy-link" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-1 rounded mb-2 flex items-center justify-between">
+                                                คัดลอกลิ้ง
+                                                <i class="fas fa-link"></i>
+                                            </button>
+                                            <button class="share-button w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="facebook">
+                                                Facebook
+                                                <i class="fab fa-facebook-f"></i>
+                                            </button>
+                                            <button class="share-button w-full bg-blue-400 hover:bg-blue-500 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="twitter">
+                                                Twitter
+                                                <i class="fab fa-twitter"></i>
+                                            </button>
+                                            <button class="share-button w-full bg-pink-500 hover:bg-pink-600 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="tiktok">
+                                                TikTok
+                                                <i class="fab fa-tiktok"></i>
+                                            </button>
+                                            <button class="share-button w-full bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="youtube">
+                                                YouTube
+                                                <i class="fab fa-youtube"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="flex justify-between items-center" style="border-bottom: 1px solid #eee;">
+                            <div class="mb-4 flex items-center">
+                                <h2 class="text-sm font-semibold bg-gray-100 rounded-full p-1"><i class="fa-solid fa-pen-to-square"></i> เขียนโดย:  <a
+                                        href="/editor/<%= post.creator.username %>" target="_blank">
+                                        <%= post.creator.username %>
+                                    </a></h2>
+                                <p class="text-gray-600">
+                                    <%= post.creator.bio %>
+                                </p>
+                                <div class="pl-3">
+                                    <% if (userID) {%>
+                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
+                                            onclick="likeArticle('<%= post._id %>')">
+                                            <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                            <span class="pl-2">
+                                                <%= post.likes.length %> ไลค์
+                                            </span>
+                                        </button>
+                                    <% } else {%>
+                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID) ? 'liked' : '' %>"
+                                            onclick="likeArticle('<%= post._id %>')">
+                                            <i class="fa fa-heart <%= post.likes.includes(userID) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                            <span class="pl-2">
+                                                <%= post.likes.length %> ไลค์
+                                            </span>
+                                        </button>
+                                    <% } %>
+                                </div>
+                                
+                                <div class="pl-3">
+                                   <% if (userID) {%>
+                                    <button class="flex items-center <%= isSaved ? 'text-blue-500' : 'text-gray-500' %>">
+                                        <i class="fa-regular fa-bookmark" id="bookmark-<%= post._id %>" onclick="saveArticle('<%= post._id %>')"></i>
+                                        <span class="pl-2">บันทึก</span>
+                                    </button>
+                                <% } else {%>
+                                    <button class="flex items-center">
+                                        <i class="fa-regular fa-bookmark 
+                                            <%= post.savearticles && userID && userID.user && post.savearticles.includes(userID.user._id) ? 'text-blue-500' : 'text-gray-500' %>" 
+                                            id="bookmark-<%= post._id %>" 
+                                            onclick="saveArticle('<%= post._id %>')">
+                                      </i>
+
+                                        <span class="pl-2">บันทึก</span>
+                                    </button>
+                                <% } %>
+                                </div>
+                           
+                            </div>
+                        </div>
+                        <div class="mt-1 max-w-2xl text-sm text-gray-500 flex  items-center ">
+                            <%= moment(post.createdAt).locale('th').fromNow() %>,
+                            <p class="pl-3 text-sm">
+                                <i class="fa-regular fa-eye"></i> <%= (post.views) %> ครั้ง,
+                           </p>
+                           <p class="md:ml-2">เผยแพร่เมื่อ: <%= new Date(post.createdAt).toLocaleDateString() %></p>
+                           <p class="pl-2 cursor-pointer" id="btn-read-fullscreen"><i class="fa-solid fa-expand"></i> อ่านเต็มหน้าจอ</p>
+                       </div>
+
+                        <!-- Advertisement Section -->
+                        <div class="ads-container my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+                            <!-- /22745653040/Read-Displayed-by-aninight -->
+                            <div id='div-gpt-ad-1723344157500-0 ad-container' data-article-id="<%= post._id %>" 
+                                data-ad-displayed="false" style='min-width: 300px; min-height: 50px;'>
+                                <script>
+                                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1723344157500-0'); });
+                                </script>
+                            </div>
+                        </div>
+
+                        <p><%- post.content %></p>
+                    
+
+                        <div class="gallery w-full flex justify-center flex-col mt-5 z-0">
+                            <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full cursor-pointer h-full object-cover open-fullscreen">
+                             <% if (post.imagesarticle.length > 0) { %>
+                                 <% post.imagesarticle.forEach(function(image) { %>
+                                     <img src="/uploads/articlesImages/<%= image %>" alt="" class="w-full cursor-pointer h-full object-cover open-fullscreen">
+                                 <% }); %>
+                             <% } %>
+                         </div>
+                      
+                        
+                        
+                        <hr class="mb-2 mt-4">
+                     </div>
+                 </div>
+
+                 <!-- Right Content -->
+                  <div class="w-full md:w-1/3 bg-white p-4 rounded shadow-md">
+                    <h2 class="text-lg font-semibold mb-4">คุณอาจชอบรายการเนื้อหาต่อไปนี้</h2>
+                    <div class="tages">
+                        <div class="mt-1 flex justify-between">
+                            <% if (post && post.tags && post.tags.length> 0) { %>
+                                <h2
+                                    class="inline-block rounded-full border-2 mr-2 bg-white mb-2 border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
+                                    Tags: <% post.tags.forEach((tag, index) => { %>
+                                        <a class="text-sky-500" href="/tag/<%= tag %>">
+                                            <%= tag %>
+                                        </a>
+                                        <% if (index < post.tags.length - 1) { %>
+                                            ,
+                                        <% } %>
+                                    <% }); %>
+                                </h2>
+                                <% } else { %>
+                                    <h2>Tags: ไม่มีแท็ก</h2>
+                                    <% } %>
+                        </div>
+                        <hr class="mt-4 mb-6">
+                        <h3 class="text-2xl font-medium mb-2">อัพเดตล่าสุด</h3>
+                        <% recentUpdates.forEach(function(update) { %>
+                            <% if (update.published) { %>
+                                <div class="skeleton flex flex-col overflow-hidden gap-4 p-4 border border-gray-200 rounded-lg shadow-sm transition-all mb-5 hover:shadow-md">
+                                    <div class="w-full">
+                                        <a href="/read/<%= update.urlslug %>?lang=en&id=<%= update._id %>">
+                                            <div class="relative">
+                                                <img class="w-full h-auto object-cover rounded-md" src="/uploads/thumbnails/<%= update.thumbnail %>" alt="<%= update.title %>">
+                                                <p class="views" style="position: absolute; top: 0; left: 0;
+                                                background-color: rgba(255, 255, 255, 0.961); color: #000;
+                                                padding: 5px; border-radius: 10px 0;">การดู <%= (update.views) %></p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="w-3/3">
+                                        <a href="/read/<%= update.urlslug %>?lang=en&id=<%= update._id %>">
+                                            <h3 class="text-lg font-medium text-gray-800 mb-2 hover:text-blue-600 transition-colors">
+                                                <%= update.title %>
+                                            </h3>
+                                        </a>
+                                        <p class="text-sm text-gray-600 aspect-w-16 aspect-h-9">
+                                            <!-- Add a brief description or excerpt if available -->
+                                            <%- update.excerpt || update.content.substring(0, 100) %>...
+                                        </p>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }); %>
+                        <hr class="mt-4 mb-6">
+                    </div>
+                  </div>
+            </div>
+            <div class="my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+                <!-- /22745653040/Ani_night-read -->
+                <div id='div-gpt-ad-1722758068851-0'>
+                    <script>
+                        googletag.cmd.push(function () { googletag.display('div-gpt-ad-1722758068851-0'); });
+                    </script>
+                </div>
+            </div>
+        </main>
+        <% } else {%>
+            <div class="flex items-center justify-center h-screen">
+                <div class="text-center">
+                    <h1 class="text-6xl font-bold text-blue-500">404</h1>
+                    <img src="/annight/error.png" alt="" class="h-60 object-contain w-full pointer-events-none select-none">
+                    <p class="text-xl text-gray-700 mt-4">ขออภัย, หน้าที่คุณกำลังหาไม่พบ</p>
+                    <p class="text-gray-500 mt-2">หน้าที่คุณกำลังหาอาจถูกลบด้วยเนื่อกจากลิขสิทธิ์</p>
+                    <p class="text-gray-500 mt-2">ลองใช้คำค้นหาใหม่เพื่อค้นหา เนื้อที่คุณต้องการดู</p>
+                    <p class="text-gray-500 mt-2">ลหรือเนื้อหานี้อาจถูกปิดแล้ว ด้วยของครีเอเตอร์</p>
+                    <div class="mt-6">
+                        <a href="/" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">กลับไปหน้าแรก</a>
+                    </div>
+                    <!-- <div class="mt-50 flex justify-center">
+                        <img src="https://path-to-your-animation.gif" alt="Not Found Animation" class="w-64 h-64 animate-bounce-slow">
+                    </div> -->
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+      
+                        <!-- Fullscreen Modal -->
+                        <div id="fullscreenModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+                            <div class="relative max-w-full max-h-full flex flex-col items-center justify-center">
+                                <button id="closeFullscreen" class="absolute top-2 right-2 z-10 text-black bg-white rounded-full px-3 text-3xl z-60">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                <div class="relative">
+                                    <img id="fullscreenImage" src="" alt="" class="object-contain max-h-screen max-w-screen">
+                                    <button id="prevImage"
+                                        class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-100 rounded-full px-3 text-black text-3xl z-50">
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                    </button>
+                                    <button id="nextImage"
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-100 rounded-full px-3 text-black text-3xl z-50">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <div class="absolute bottom-1 right-1 z-50">
+                                    <!-- Fullscreen Button -->
+                                    <button id="toggleFullScreen" class="mt-4 text-black">
+                                        <i class="fa-solid fa-expand"></i> ขยาย
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+    <script src="/js/script.js"></script>
+    <script src="/js/read.js"></script>
+</body>
+</html>

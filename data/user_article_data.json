@@ -1,0 +1,10 @@
+[
+    {
+        "user_id": "1",
+        "saved_articles": ["101", "103"]
+    },
+    {
+        "user_id": "2",
+        "saved_articles": ["102", "104"]
+    }
+]
