@@ -43,18 +43,13 @@ const authLogin = async (req, res, next) => {
         const token = jwt.sign({ id, username, role }, process.env.JWT_SECRET, { expiresIn: "1d" });
         const tksave = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-        // ส่ง token ใน HTTP header + ส่งไปยัง subdomain
+        // ส่ง token ใน HTTP header
         res.cookie('token', token, { httpOnly: true, secure: true, domain: '.ani-night.online' });
         res.cookie('tksave', tksave, { httpOnly: false, secure: false, domain: '.ani-night.online' });
         res.cookie('role', role, { httpOnly: true, secure: true, domain: '.ani-night.online' }); 
         // เก็บ token ใน Session Storage 
 
-        // ตรวจสอบว่าผู้ใช้กำลังเข้าถึง /admin หรือไม่
         const returnTo = req.session.returnTo || `/${username}`;
-        if (req.originalUrl === '/admin') {
-            delete req.session.returnTo;
-            return res.redirect(303, `http://admin.ani-night.online`);
-        }
         delete req.session.returnTo;
         res.redirect(303, returnTo);
     } catch (error) {
