@@ -46,7 +46,7 @@ const authLogin = async (req, res, next) => {
         // ส่ง token ใน HTTP header
         res.cookie('token', token, { httpOnly: true, secure: true, domain: '.ani-night.online' });
         res.cookie('tksave', tksave, { httpOnly: false, secure: false, domain: '.ani-night.online' });
-        res.cookie('role', role, { httpOnly: true, secure: true, domain: '.ani-night.online' }); 
+        res.cookie('role', token, { httpOnly: true, secure: true, domain: '.ani-night.online' }); 
         // เก็บ token ใน Session Storage 
 
         const returnTo = req.session.returnTo || `/${username}`;
