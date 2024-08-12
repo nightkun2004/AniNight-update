@@ -9,15 +9,18 @@ const authorizeRole = (...role) => {
 };
 
 
-const authhorizeRoleAdmin = (...roles) => {
+const authorizeRoleAdmin = (...roles) => {
     return (req, res, next) => {
-        if (req.session.userlogin && req.session.userlogin.user && roles.includes(req.session.userlogin.user.role)) {
+        // ตรวจสอบว่าเข้าผ่าน subdomain หรือ path /admin
+        const isAdminPath = req.originalUrl.startsWith('/admin') || req.hostname.startsWith('admin.');
+        
+        if (isAdminPath && req.session.userlogin && req.session.userlogin.user && roles.includes(req.session.userlogin.user.role)) {
             next();
         } else {
             res.status(403).render('./errors/admin/403', { message: 'คุณไม่ได้รับอนุญาตให้เข้าหน้านี้' });
         }
     };
-}
+};
 
 
 
