@@ -24,4 +24,4 @@ const authorizeRoleAdmin = (...roles) => {
 
 
 
-module.exports = {authorizeRole, authhorizeRoleAdmin};
+module.exports = {authorizeRole, authorizeRoleAdmin};
