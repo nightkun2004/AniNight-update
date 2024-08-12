@@ -68,7 +68,7 @@ app.use(session({
   secret: process.env.ACCESS_TOKEN_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: { secure: true, domain: '.ani-night.online' }
 }));
 
 

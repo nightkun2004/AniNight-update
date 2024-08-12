@@ -29,7 +29,7 @@
 
             <!-- Add New Admin -->
             <section class="mb-6">
-                <% if (userID.user.role === 'admin') {%>
+                <% if (userID && userID.user && userID.user.role === 'admin') {%>
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-bold text-gray-800">เพิ่มผู้ดูแลระบบใหม่</h2>
                     </div>
