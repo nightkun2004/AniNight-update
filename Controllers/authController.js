@@ -46,6 +46,7 @@ const authLogin = async (req, res, next) => {
         // ส่ง token ใน HTTP header
         res.cookie('token', token, { httpOnly: true, secure: true });
         res.cookie('tksave', tksave, { httpOnly: false, secure: false });
+
         // เก็บ token ใน Session Storage 
 
         const returnTo = req.session.returnTo || `/${username}`;
