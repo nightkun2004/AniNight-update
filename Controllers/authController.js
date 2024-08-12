@@ -44,8 +44,8 @@ const authLogin = async (req, res, next) => {
         const tksave = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
         // ส่ง token ใน HTTP header
-        res.cookie('token', token, { httpOnly: true, secure: true, domain: '.ani-night.online' });
-        res.cookie('tksave', tksave, { httpOnly: false, secure: false, domain: '.ani-night.online' });
+        res.cookie('token', token, { httpOnly: true, secure: true });
+        res.cookie('tksave', tksave, { httpOnly: false, secure: false });
         // เก็บ token ใน Session Storage 
 
         const returnTo = req.session.returnTo || `/${username}`;
