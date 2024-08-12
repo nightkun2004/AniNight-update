@@ -16,7 +16,7 @@ const authorizeRoleAdmin = (...roles) => {
         
         // ดึงข้อมูล role จาก session และคุกกี้
         const sessionRole = req.session.userlogin && req.session.userlogin.user && req.session.userlogin.user.role;
-        const cookieRole = req.cookies.role;
+        const cookieRole = req.cookies.token;
 
         // ตรวจสอบ role จาก session หรือจากคุกกี้
         const hasValidRole = roles.includes(sessionRole) || roles.includes(cookieRole);
