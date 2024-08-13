@@ -24,8 +24,122 @@
     <%- include('../../Component/Sidebar') %>
     <div class="flex-1 flex flex-col">
         <%- include('../../Component/Header') %>
-        <main class="flex-grow flex flex-col justify-center items-center text-center p-6">
-            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
+        <main class="flex flex-col md:flex-row gap-4">
+            <div class="container mx-auto p-4">
+                <div class="mb-4 flex gap-4 items-center">
+                    <h1 class="text-xl font-bold border-black border-b-2">ตารางอนิเมะฉายแต่ล่ะแพลตฟอร์ม</h1>
+                </div>
+                <div class="bg-white shadow rounded p-4">
+                    <!-- Categories -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">แนวแอนิเมะ</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-category="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-category="japan">ญี่ปุ่น</button>
+                        </div>
+                    </div>
+        
+                    <!-- Styles -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">สไตล์</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-style="ทั้งหมด">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="อนิเมะ">อนิเมะ</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="มังงะ">ดัดแปลงจากมังงะ</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ชีวิตประจำวัน">ชีวิตประจำวัน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="sci-fi">Sci-fi</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="นิยาย">นิยาย</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ผจญภัย">ผจญภัย</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="โมเอะ">โมเอะ</button>
+                        </div>
+                    </div>
+        
+                    <!-- Voice Actors -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">พากย์เสียง</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-voice="ทั้งหมด">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ไทย">พากย์ไทย</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ญี่ปุ่น">พากย์ญี่ปุ่น</button>
+                        </div>
+                    </div>
+        
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">รูปแบบเสียเงินหรือฟรี</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-price="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="free">ฟรี</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="premium">พรีเมียม</button>
+                        </div>
+                    </div>
+        
+                    <!-- Year -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">สมัย</h3>
+                        <div class="flex flex-wrap gap-2 year">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-year="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2025">2025</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2024">2024</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2023">2023</button>
+                        </div>
+                    </div>
+        
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">หน้าหนังสือ</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-status="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="completed">ดูจบแล้ว</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="incomplete">ดูยังไม่จบ</button>
+                        </div>
+                    </div>
+                    <!-- แพลตฟอร์ม -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">เลือกแพลตฟอร์มสตีม</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-platform="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
+                                data-platform="bilibili">BILIBILI</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
+                                data-platform="crunchyroll">Crunchyroll</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
+                                data-platform="iqiyi">iqiyi</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- Language Selector -->
+                <div class="mt-4">
+                    <button class="px-4 py-2 text-gray-500">เลือก: <span id="selected-filters" class="text-black">ทั้งหมด</span></button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Anime Card 1 -->
+                    <div class="anime-card bg-white shadow rounded overflow-hidden" data-category="japan" data-style="novel"
+                        data-voice="thai" data-price="free" data-year="2024" data-status="completed">
+                        <img class="w-full h-48 object-cover" src="https://via.placeholder.com/400x200"
+                            alt="Campfire Cooking in Another World">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">สกิลสุดพิสดารกับมื้ออาหารในต่างโลก (พากย์ไทย)</h3>
+                            <p class="text-gray-600 text-sm">พากย์ไทย • ดัดแปลงจากนิยาย</p>
+                        </div>
+                    </div>
+        
+                    <!-- Anime Card 2 -->
+                    <div class="anime-card bg-white shadow rounded overflow-hidden" data-category="japan" data-style="manga" data-voice="thai" data-price="premium" data-year="2023" data-status="incomplete" data-platform="iqiyi">
+                        <img class="w-full h-48 object-cover" src="https://via.placeholder.com/400x200" alt="Jujutsu Kaisen">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">มหาเวทย์ผนึกมาร (พากย์ไทย)</h3>
+                            <p class="text-gray-600 text-sm">พากย์ไทย • ดัดแปลงจากมังงะ</p>
+                        </div>
+                    </div>
+        
+                    <!-- Add more anime cards as needed -->
+                </div>
+            </div>
+            <!-- <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
                 <div class="flex">
                     <div class="ml-3">
                         <div class="flex-shrink-0 mb-6">
@@ -37,9 +151,105 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </main>
     </div>
     <script src="/js/script.js"></script>
+    <script>
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const animeCards = document.querySelectorAll('.anime-card');
+        const selectedFiltersElement = document.getElementById('selected-filters');
+    
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category || 'all';
+                const style = button.dataset.style || 'all';
+                const voice = button.dataset.voice || 'all';
+                const price = button.dataset.price || 'all';
+                const year = button.dataset.year || 'all';
+                const status = button.dataset.status || 'all';
+                const platform = button.dataset.platform || 'all';
+                const sort = button.dataset.sort || '';
+    
+                // รีเซ็ตคลาสของปุ่มทั้งหมดเป็นค่าเริ่มต้น
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-200', 'text-blue-600');
+                    btn.classList.add('bg-gray-200', 'text-gray-600');
+                });
+    
+                // เพิ่มคลาสที่เลือกให้กับปุ่มที่ถูกคลิก
+                button.classList.remove('bg-gray-200', 'text-gray-600');
+                button.classList.add('bg-blue-200', 'text-blue-600');
+    
+                // อัปเดตข้อความที่แสดง
+                const selectedText = [];
+                if (category !== 'all') selectedText.push(`หมวดหมู่: ${category}`);
+                if (style !== 'all') selectedText.push(`สไตล์: ${style}`);
+                if (voice !== 'all') selectedText.push(`พากย์เสียง: ${voice}`);
+                if (price !== 'all') selectedText.push(`จ่าย: ${price}`);
+                if (year !== 'all') selectedText.push(`ปี: ${year}`);
+                if (status !== 'all') selectedText.push(`สถานะ: ${status}`);
+                if (platform !== 'all') selectedText.push(`แพลตฟอร์ม: ${platform}`);
+                if (sort) selectedText.push(`เรียง: ${sort}`);
+    
+                selectedFiltersElement.textContent = selectedText.length > 0 ? selectedText.join(', ') : 'ทั้งหมด';
+    
+                // กรองการ์ดแอนิเมะ
+                animeCards.forEach(card => {
+                    const isCategoryMatch = (category === 'all' || card.dataset.category === category);
+                    const isStyleMatch = (style === 'all' || card.dataset.style === style);
+                    const isVoiceMatch = (voice === 'all' || card.dataset.voice === voice);
+                    const isPriceMatch = (price === 'all' || card.dataset.price === price);
+                    const isYearMatch = (year === 'all' || card.dataset.year === year);
+                    const isStatusMatch = (status === 'all' || card.dataset.status === status);
+                    const isPlatformMatch = (platform === 'all' || card.dataset.platform === platform);
+    
+                    if (isCategoryMatch && isStyleMatch && isVoiceMatch && isPriceMatch && isYearMatch && isStatusMatch && isPlatformMatch) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // const buttonContainer = document.querySelector('.year');
+
+        //     for (let year = 2000; year <= 2025; year++) {
+        //         const button = document.createElement('button');
+
+        //         button.className = 'bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn';
+
+        //         button.textContent = year;
+
+        //         button.setAttribute('data-year', year);
+        //         buttonContainer.appendChild(button);
+
+        //         button.addEventListener('click', () => {
+        //             const selectedYear = button.dataset.year;
+
+        //             filterButtons.forEach(btn => {
+        //                 btn.classList.remove('bg-blue-200', 'text-blue-600');
+        //                 btn.classList.add('bg-gray-200', 'text-gray-600');
+        //             });
+
+        //             button.classList.remove('bg-gray-200', 'text-gray-600');
+        //             button.classList.add('bg-blue-200', 'text-blue-600');
+
+        //             animeCards.forEach(card => {
+        //                 const isYearMatch = (selectedYear === 'all' || card.dataset.year === selectedYear);
+
+        //                 if (isYearMatch) {
+        //                     card.style.display = 'block';
+        //                 } else {
+        //                     card.style.display = 'none';
+        //                 }
+        //             });
+        //         });
+        //     }
+        </script>
+    
+    
+    
 </body>
 </html>
