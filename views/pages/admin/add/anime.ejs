@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มอนิเมะ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../Component/Sidebar') %>
+    <div class="flex-1">
+        <%- include('../../../Component/Header') %>
+        <main class="flex flex-col md:flex-row gap-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 pr-6">
+                <a href="/admin">
+                    <i class="fa-solid fa-arrow-left"></i> กลับ
+                </a>
+            </h1>
+            <div class="flex-1 bg-white p-4 rounded shadow-md">
+                <h2 class="text-2xl font-bold text-center">สร้างอนิเมะ</h2>
+                <form action="/api/v2/admin/add/anime" method="post" enctype="multipart/form-data" id="animeForm">
+                    <!-- ชื่ออนิเมะ -->
+                    <div class="mb-5">
+                        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่ออนิเมะ</label>
+                        <input type="text" id="title" name="title" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" required>
+                    </div>
+                
+                    <!-- เนื้อเรื่อง -->
+                    <div class="mb-5">
+                        <label for="synopsis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เนื้อเรื่อง</label>
+                        <textarea name="synopsis" id="synopsis" class="outline-none w-full h-24 border-gray-100 border-2 rounded px-2 py-4 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" required></textarea>
+                    </div>
+                
+                    <!-- ประเภทอนิเมะ -->
+                    <div class="mb-4">
+                        <label for="animetype" class="block text-sm font-medium text-gray-700 dark:text-white">ประเภทอนิเมะ</label>
+                        <div class="mt-2">
+                            <label for="anime_jp" class="inline-flex items-center">
+                                <input type="radio" name="animetype" id="anime_jp" value="ญี่ปุ่น"
+                                    class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="ml-2 text-gray-900 dark:text-gray-300">อนิเมะญี่ปุ่น</span>
+                            </label>
+                            <label for="anime_cn" class="inline-flex items-center ml-4">
+                                <input type="radio" name="animetype" id="anime_cn" value="จีน"
+                                    class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="ml-2 text-gray-900 dark:text-gray-300">อนิเมะจีน</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- รูปแบบเสียง -->
+                    <div class="mb-5">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รูปแบบเสียง</label>
+                        <div class="flex items-center mb-4">
+                            <input id="voice_th" type="radio" name="voice" value="พากย์ไทย"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="voice_th" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พากย์ไทย</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="voice_jp" type="radio" name="voice" value="พากย์ญี่ปุ่น"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="voice_jp" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พากย์ญี่ปุ่น</label>
+                        </div>
+                    </div>
+                    
+                    <!-- ราคา -->
+                    <div class="mb-5">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ราคา</label>
+                        <div class="flex items-center mb-4">
+                            <input id="price_free" type="radio" name="price" value="free"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="price_free" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ฟรี</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="price_premium" type="radio" name="price" value="premium"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="price_premium" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พรีเมียม</label>
+                        </div>
+                    </div>
+                    
+                    <!-- แพลตฟอร์ม -->
+                    <div class="mb-5">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">แพลตฟอร์ม</label>
+                        <div class="flex items-center mb-4">
+                            <input id="platform_bilibili" type="checkbox" name="platforms" value="bilibili" 
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="platform_bilibili" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Bilibili</label>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <input id="platform_iqiyi" type="checkbox" name="platforms" value="iqiyi" 
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="platform_iqiyi" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">iQiyi</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="platform_crunchyroll" type="checkbox" name="platforms" value="crunchyroll" 
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="platform_crunchyroll" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Crunchyroll</label>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- ปีที่ออก -->
+                    <div class="mb-5">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ปีที่ออกฉาย</label>
+                        <div class="flex items-center mb-4">
+                            <input id="year_2025" type="radio" name="year" value="2025"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="year_2025" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">2025</label>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <input id="year_2024" type="radio" name="year" value="2024"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="year_2024" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">2024</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="year_2023" type="radio" name="year" value="2023"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="year_2023" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">2023</label>
+                        </div>
+                    </div>
+
+                    <!-- เดือน -->
+                    <div class="mb-5">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เดือนที่ออกอากาศ</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex items-center">
+                                <input id="month_january" type="radio" name="month" value="มกราคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_january" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มกราคม</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_february" type="radio" name="month" value="กุมภาพันธ์"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_february" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">กุมภาพันธ์</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_march" type="radio" name="month" value="มีนาคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_march" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มีนาคม</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_april" type="radio" name="month" value="เมษายน"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_april" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เมษายน</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_may" type="radio" name="month" value="พฤษภาคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_may" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พฤษภาคม</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_june" type="radio" name="month" value="มิถุนายน"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_june" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มิถุนายน</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_july" type="radio" name="month" value="กรกฎาคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_july" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">กรกฎาคม</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_august" type="radio" name="month" value="สิงหาคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_august" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">สิงหาคม</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_september" type="radio" name="month" value="กันยายน"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_september" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">กันยายน</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_october" type="radio" name="month" value="ตุลาคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_october" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตุลาคม</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_november" type="radio" name="month" value="พฤศจิกายน"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_november" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พฤศจิกายน</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="month_december" type="radio" name="month" value="ธันวาคม"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="month_december" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ธันวาคม</label>
+                            </div>
+                        </div>
+                    </div>                    
+                    
+                    <!-- สถานะ -->
+                    <div class="mb-5">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+                        <div class="flex items-center mb-4">
+                            <input id="status_completed" type="radio" name="status" value="true"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+                            <label for="status_completed" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">จบแล้ว</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="status_ongoing" type="radio" name="status" value="false"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+                            <label for="status_ongoing" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ยังไม่จบ</label>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- URL Slug -->
+                    <div class="mb-5">
+                        <label for="urlslug" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL Slug</label>
+                        <input type="text" id="urlslug" name="urlslug"
+                            class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                            required>
+                    </div>
+
+                
+                    <!-- หมวดหมู่ -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-white">หมวดหมู่</label>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="อนิเมะ" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">อนิเมะ</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="มังงะ" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">มังงะ</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ชีวิตประจำวัน" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">ชีวิตประจำวัน</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="sci-fi" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">sci-fi</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="นิยาย" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">นิยาย</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ผจญภัย" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">ผจญภัย</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="โมเอะ" class="hidden" onchange="toggleActive(this)">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">โมเอะ</span>
+                            </label>
+                        </div>
+                    </div>
+                
+                    <!-- โปรเตอร์หรือ KV Anime -->
+                    <div class="mb-5">
+                        <label for="poster" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกโปรเตอร์หรือ KV Anime</label>
+                        <input id="poster" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400 dark:border-gray-600 dark:placeholder-blue-400" type="file" name="poster" accept="image/*" required onchange="previewImage(this, 'preview', 'cover-text')">
+                    </div>
+                
+                    <!-- เผยแพร่บทความ -->
+                    <div class="mb-5">
+                        <div class="flex items-center">
+                            <input id="published" name="published" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="published" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
+                        </div>
+                    </div>
+                
+                    <!-- ปุ่มส่งบทความ -->
+                    <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        ส่งบทความ
+                    </button>
+                </form>
+                
+            </div>
+            <div class="w-full md:w-1/2 bg-white p-4 rounded shadow-md overflow-x-hidden mb-5">
+                <h3>ตัวอย่างเนื้อหาก่อนเผยแพร่</h3>
+                <div id="preview" class="anime-card bg-white shadow rounded overflow-hidden hidden">
+                    <img id="posterPreview" class="w-[500px] h-[700px] object-cover" src="https://via.placeholder.com/500x700" alt="Jujutsu Kaisen">
+                    <div class="p-4">
+                        <h3 id="titlePreview" class="text-lg font-semibold">ชื่ออนิเมะ</h3>
+                        <p id="synopsisPreview" class="text-gray-600 text-sm">เนื้อเรื่อง</p>
+                        <p id="detailsPreview" class="text-gray-600 text-sm">ประเภท • หมวดหมู่ • แพลตฟอร์ม</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script>
+        function toggleActive(checkbox) {
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.classList.add('bg-blue-500', 'text-white', 'border-transparent');
+            } else {
+                span.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+            }
+        }
+
+        document.getElementById("animeForm").addEventListener("input", function () {
+            const title = document.getElementById("title").value;
+            const synopsis = document.getElementById("synopsis").value;
+            const animetype = document.querySelector('input[name="animetype"]:checked')?.value || "ไม่มี";
+            const categories = Array.from(document.querySelectorAll('input[name="categories"]:checked'))
+                .map(checkbox => checkbox.nextSibling.textContent.trim())
+                .join(" • ") || "ไม่มี";
+            const platforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked'))
+                .map(checkbox => checkbox.nextSibling.textContent.trim())
+                .join(" • ") || "ไม่มี";
+            const poster = document.getElementById("poster").files[0];
+
+            // แสดงตัวอย่างเนื้อหา
+            document.getElementById("titlePreview").textContent = title || "ชื่ออนิเมะ";
+            document.getElementById("synopsisPreview").textContent = synopsis || "เนื้อเรื่อง";
+            document.getElementById("detailsPreview").textContent = `${animetype} • ${categories} • ${platforms}`;
+
+            // แสดงภาพโปรเตอร์หากมีการเลือก
+            if (poster) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("posterPreview").src = e.target.result;
+                }
+                reader.readAsDataURL(poster);
+            }
+
+            // แสดงการ์ดตัวอย่าง
+            document.getElementById("preview").classList.remove("hidden");
+        });
+
+
+    </script>
+</body>
+</html>

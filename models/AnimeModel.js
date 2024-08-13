@@ -5,12 +5,19 @@ const AnimeSchema = new mongoose.Schema({
     synopsis: {
         type: String
     },
-    image: String,
+    animetype: {
+        type: String,
+        enum: ["ญี่ปุ่น", "จีน"]
+    },
+    season: {
+        type: String,
+        enum: ["Spring", "Summer", "Fall", "Winter"]
+    },
+    poster: String,
     categories: [{
         type: String,
         enum: ["อนิเมะ", "มังงะ", "ชีวิตประจำวัน", "sci-fi", "นิยาย", "ผจญภัย", "โมเอะ"]
     }],
-    style: String,
     voice: {
         type: String,
         enum: ["พากย์ไทย", "พากย์ญี่ปุ่น"]
@@ -24,11 +31,18 @@ const AnimeSchema = new mongoose.Schema({
         enum: ["bilibili", "iqiyi", "crunchyroll"]
     },
     year: {
+        type: Number,
+        enum: [2025, 2024, 2023]
+    },
+    month: {
         type: String,
-        enum: ["2025", "2024", "2023"]
+        enum: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
     },
     year: Number,
-    status: String,
+    status: {
+        type: Boolean,
+        required: true
+    },
     urlslug: {
         type: String,
         required: true,
@@ -39,8 +53,7 @@ const AnimeSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
-        username: String,
-        profilePicture: String
+        username: String
     }
 }, { timestamps: true });
 

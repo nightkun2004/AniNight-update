@@ -21,6 +21,7 @@ const PostsRouter = require("./routers/ArticleRouter")
 const recommenRouter = require("./routers/RecommenRouter")
 const DashboardRouter = require("./routers/DashboardRouter")
 const AdminRouter = require("./routers/AdminRouter")
+const AnimeRouter = require("./routers/AnimeRouer")
 
 
 app.get('/ads.txt', (req, res) => {
@@ -83,6 +84,7 @@ app.use(IndexRouter)
 app.use(ReadRouter)
 app.use(recommenRouter)
 app.use(AdminRouter)
+app.use(AnimeRouter)
 app.use(TopCoinRouter)
 
 app.use("/auth", checkAuth)

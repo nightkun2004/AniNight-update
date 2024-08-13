@@ -30,16 +30,16 @@
                     <h1 class="text-xl font-bold border-black border-b-2">ตารางอนิเมะฉายแต่ล่ะแพลตฟอร์ม</h1>
                 </div>
                 <div class="bg-white shadow rounded p-4">
-                    <!-- Categories -->
+                    <!-- ประเภทอนิเมะ -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2">แนวแอนิเมะ</h3>
+                        <h3 class="font-semibold mb-2">ประเภทอนิเมะ</h3>
                         <div class="flex flex-wrap gap-2">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-category="all">ทั้งหมด</button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-category="japan">ญี่ปุ่น</button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-animetype="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-animetype="japan">ญี่ปุ่น</button>
                         </div>
                     </div>
         
-                    <!-- Styles -->
+                    <!-- categories -->
                     <div class="mb-4">
                         <h3 class="font-semibold mb-2">สไตล์</h3>
                         <div class="flex flex-wrap gap-2">
@@ -74,9 +74,21 @@
                         </div>
                     </div>
         
+                    <!-- season -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">เลือก season</h3>
+                        <div class="flex flex-wrap gap-2 year">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-season="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Spring">Spring</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Summer">Summer</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Fall">Fall</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Winter">Winter</button>
+                        </div>
+                    </div>
+
                     <!-- Year -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2">สมัย</h3>
+                        <h3 class="font-semibold mb-2">เลือกปี</h3>
                         <div class="flex flex-wrap gap-2 year">
                             <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-year="all">ทั้งหมด</button>
                             <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2025">2025</button>
@@ -85,13 +97,33 @@
                         </div>
                     </div>
         
+                    <!-- เดือน -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">เลือกเดือน</h3>
+                        <div class="flex flex-wrap gap-2 year">
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-month="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มกราคม">มกราคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กุมภาพันธ์">กุมภาพันธ์</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มีนาคม">มีนาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="เมษายน">เมษายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤษภาคม">พฤษภาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มิถุนายน">มิถุนายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กรกฎาคม">กรกฎาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="สิงหาคม">สิงหาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กันยายน">กันยายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ตุลาคม">ตุลาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤศจิกายน">พฤศจิกายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ธันวาคม">ธันวาคม</button>
+                        </div>
+                    </div>
+        
                     <!-- Status -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2">หน้าหนังสือ</h3>
+                        <h3 class="font-semibold mb-2">สถานะ</h3>
                         <div class="flex flex-wrap gap-2">
                             <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-status="all">ทั้งหมด</button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="completed">ดูจบแล้ว</button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="incomplete">ดูยังไม่จบ</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="completed">จบแล้ว</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="incomplete">ยังไม่จบ</button>
                         </div>
                     </div>
                     <!-- แพลตฟอร์ม -->
@@ -118,7 +150,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Anime Card 1 -->
                     <div class="anime-card bg-white shadow rounded overflow-hidden" data-category="japan" data-style="novel"
-                        data-voice="thai" data-price="free" data-year="2024" data-status="completed">
+                        data-voice="thai" data-price="free" data-year="2024" data-status="completed" data-season="Spring" data-month="มกราคม">
                         <img class="w-full h-48 object-cover" src="https://via.placeholder.com/400x200"
                             alt="Campfire Cooking in Another World">
                         <div class="p-4">
@@ -173,16 +205,39 @@
         const animeCards = document.querySelectorAll('.anime-card');
         const selectedFiltersElement = document.getElementById('selected-filters');
     
+        let selectedYear = 'all';
+        let selectedMonth = 'all';
+        let selectedvoice = 'all';
+        let selectedseason = 'all';
+        let selectedanimetype = 'all';
+    
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const category = button.dataset.category || 'all';
+                const animetype = button.dataset.animetype || 'all';
                 const style = button.dataset.style || 'all';
                 const voice = button.dataset.voice || 'all';
                 const price = button.dataset.price || 'all';
                 const year = button.dataset.year || 'all';
+                const month = button.dataset.month || 'all';
                 const status = button.dataset.status || 'all';
                 const platform = button.dataset.platform || 'all';
                 const sort = button.dataset.sort || '';
+    
+                if (button.dataset.animetype) {
+                    selectedanimetype = button.dataset.animetype;
+                }
+                if (button.dataset.year) {
+                    selectedYear = button.dataset.year;
+                }
+                if (button.dataset.month) {
+                    selectedMonth = button.dataset.month;
+                }
+                if (button.dataset.voice) {
+                    selectedvoice = button.dataset.voice;
+                }
+                if (button.dataset.season) {
+                    selectedseason = button.dataset.season;
+                }
     
                 // รีเซ็ตคลาสของปุ่มทั้งหมดเป็นค่าเริ่มต้น
                 filterButtons.forEach(btn => {
@@ -196,28 +251,56 @@
     
                 // อัปเดตข้อความที่แสดง
                 const selectedText = [];
-                if (category !== 'all') selectedText.push(`หมวดหมู่: ${category}`);
-                if (style !== 'all') selectedText.push(`สไตล์: ${style}`);
-                if (voice !== 'all') selectedText.push(`พากย์เสียง: ${voice}`);
-                if (price !== 'all') selectedText.push(`จ่าย: ${price}`);
-                if (year !== 'all') selectedText.push(`ปี: ${year}`);
-                if (status !== 'all') selectedText.push(`สถานะ: ${status}`);
-                if (platform !== 'all') selectedText.push(`แพลตฟอร์ม: ${platform}`);
+                if (animetype !== 'all') selectedText.push(`• รูปแบบอนิเมะ: ${animetype}`);
+                if (style !== 'all') selectedText.push(`• สไตล์: ${style}`);
+                if (price !== 'all') selectedText.push(`• จ่าย: ${price}`);
+    
+                // แสดงเดือนและปีถ้าเลือก
+                if (selectedMonth !== 'all' || selectedYear !== 'all') {
+                    const monthText = selectedMonth !== 'all' ? `เดือน: ${selectedMonth}` : '';
+                    const yearText = selectedYear !== 'all' ? `ปี: ${selectedYear}` : '';
+                    const animetypeText = selectedanimetype !== 'all' ? `รูปแบบอนิเมะ: ${selectedanimetype}` : '';
+                    
+                    // เพิ่มข้อความเดือนและปี
+                    if (monthText && yearText) {
+                        selectedText.push(`${monthText} • ${yearText}`);
+                    } else if (monthText) {
+                        selectedText.push(monthText);
+                    } else if (yearText) {
+                        selectedText.push(yearText);
+                    } else if (animetypeText) {
+                        selectedText.push(animetypeText);
+                    }
+                }
+    
+                // เพิ่มข้อความสำหรับพากย์เสียง และ season
+                if (selectedvoice !== 'all') selectedText.push(`• พากย์เสียง: ${selectedvoice}`);
+                if (selectedseason !== 'all') selectedText.push(`• Season: ${selectedseason}`);
+    
+                // เพิ่มข้อความสำหรับสถานะ และแพลตฟอร์ม
+                if (status !== 'all') selectedText.push(`• สถานะ: ${status}`);
+                if (platform !== 'all') selectedText.push(`• แพลตฟอร์ม: ${platform}`);
                 if (sort) selectedText.push(`เรียง: ${sort}`);
     
+                // อัปเดตข้อความที่แสดง
                 selectedFiltersElement.textContent = selectedText.length > 0 ? selectedText.join(', ') : 'ทั้งหมด';
     
                 // กรองการ์ดแอนิเมะ
                 animeCards.forEach(card => {
-                    const isCategoryMatch = (category === 'all' || card.dataset.category === category);
+                    const isanimetypeMatch = (selectedanimetype === 'all' || card.dataset.animetype === selectedanimetype);
                     const isStyleMatch = (style === 'all' || card.dataset.style === style);
-                    const isVoiceMatch = (voice === 'all' || card.dataset.voice === voice);
+                    const isVoiceMatch = (selectedvoice === 'all' || card.dataset.voice === selectedvoice);
                     const isPriceMatch = (price === 'all' || card.dataset.price === price);
-                    const isYearMatch = (year === 'all' || card.dataset.year === year);
+                    const isSeasonMatch = (selectedseason === 'all' || card.dataset.season === selectedseason);
+                    const isYearMatch = (selectedYear === 'all' || card.dataset.year === selectedYear);
+                    const isMonthMatch = (selectedMonth === 'all' || card.dataset.month === selectedMonth);
                     const isStatusMatch = (status === 'all' || card.dataset.status === status);
                     const isPlatformMatch = (platform === 'all' || card.dataset.platform === platform);
     
-                    if (isCategoryMatch && isStyleMatch && isVoiceMatch && isPriceMatch && isYearMatch && isStatusMatch && isPlatformMatch) {
+                    if (isanimetypeMatch && isStyleMatch && isVoiceMatch && isPriceMatch && isStatusMatch && isPlatformMatch) {
+                        console.log(isanimetypeMatch && isStyleMatch && isVoiceMatch && isPriceMatch && isStatusMatch && isPlatformMatch && isSeasonMatch && isYearMatch && isMonthMatch )
+                        card.style.display = 'block';
+                    } else if (isSeasonMatch && isYearMatch && isMonthMatch) {
                         card.style.display = 'block';
                     } else {
                         card.style.display = 'none';
@@ -225,6 +308,8 @@
                 });
             });
         });
+    
+
 
         // const buttonContainer = document.querySelector('.year');
 
