@@ -1,6 +1,13 @@
 const mongoose = require("../config/db");
 
+const StreamSchema = new mongoose.Schema({
+    crunchyroll: String,
+    bilibili: String,
+    iqiyi: String,
+}, { timestamps: true });
+
 const AnimeSchema = new mongoose.Schema({
+    type: String,
     title: String,
     synopsis: {
         type: String
@@ -14,6 +21,12 @@ const AnimeSchema = new mongoose.Schema({
         enum: ["Spring", "Summer", "Fall", "Winter"]
     },
     poster: String,
+    studio: String,
+    Source: String,
+    Licensors: String,
+    website: String,
+    Episodes: Number,
+    Duration: Number,
     categories: [{
         type: String,
         enum: ["อนิเมะ", "มังงะ", "ชีวิตประจำวัน", "sci-fi", "นิยาย", "ผจญภัย", "โมเอะ"]
@@ -26,10 +39,10 @@ const AnimeSchema = new mongoose.Schema({
         type: String,
         enum: ["free", "premium"]
     },
-    platforms: {
+    platforms: [{
         type: String,
         enum: ["bilibili", "iqiyi", "crunchyroll"]
-    },
+    }],
     year: {
         type: Number,
         enum: [2025, 2024, 2023]
@@ -43,6 +56,11 @@ const AnimeSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    published: {
+        type: Boolean,
+        required: false
+    },
+    streaming: [StreamSchema],
     urlslug: {
         type: String,
         required: true,

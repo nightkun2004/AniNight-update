@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
+const Anime = require("../models/AnimeModel")
 
 const getAdmin = async (req, res) => {
     const userID = req.session.userlogin;
@@ -22,6 +23,21 @@ const getAdmin = async (req, res) => {
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/index', {
+            error: errorMessage,
+            userID
+        });
+    }
+}
+
+const ManageAnimes = async (req, res) => {
+    const userID = req.session.userlogin;
+    try {
+        const animelists = await Anime.find().exec();
+        // console.log(animelists)
+        res.render("./pages/admin/manage/manage_anime", { userID, animelists})
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./pages/admin/manage/manage_anime', {
             error: errorMessage,
             userID
         });
@@ -78,6 +94,7 @@ const filterUsers = async (req, res) => {
 
 module.exports = {
     getAdmin,
+    ManageAnimes,
     updateUserRole,
     filterUsers
 }

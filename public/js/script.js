@@ -30,3 +30,8 @@ window.onload = function() {
         }
     }, 20);
 };
+
+window.onload = function() {
+    document.getElementById('loading-content').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+}

@@ -42,8 +42,7 @@
 </head>
 <body>
     <%- include('./Component/Sidebar') %>
-    <div class="flex-1 flex flex-col">
-        <%- include('./Component/Header') %>
+    <%- include('./Component/Header') %>
 
         <main class="max-w-3xl sm:max-w-4xl md:max-w-5xl lg:max-w-7xl mx-auto mt-3">
             <div class="mb-6 mt-4">
@@ -63,36 +62,48 @@
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
-            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">มาใหม่</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                <% if (Posts.length > 0) { %>
-                    <% Posts.forEach(post => { %>
-                        <% if (post.published) { %>
-                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
-                                <a href="/read/<%= post.urlslug %>">
-                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
-                                </a>
-                                <div class="p-6 md:col-span-1">
-                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
-                                    </h1>
-                                    <% if (post.creator && post.creator.id) { %>
-                                        <div class="flex items-center space-x-4">
-                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
-                                            <p class="text-gray-700"><%= post.creator.username %></p>
-                                        </div>
-                                    <% } %>
-                                </div>
-                            </article>
-                        <% } %>
-                    <% }) %>  
-                    <% } else { %>
-                    <p>ยังไม่ได้เขียนบทความ</p>
-                    <% } %>
+            <div id="loading-content" class="loading-content flex justify-center mt-5 mb-6" >
+                <div class="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="50" height="50" style="shape-rendering: auto; display: block; background: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g>
+                            <circle stroke-dasharray="169.64600329384882 58.548667764616276" r="36" stroke-width="3" stroke="#5bbfe1" fill="none" cy="50" cx="50">
+                                <animateTransform keyTimes="0;1" values="0 50 50;360 50 50" dur="0.6211180124223602s" repeatCount="indefinite" type="rotate" attributeName="transform"></animateTransform>
+                            </circle>
+                        </g>
+                    </svg>
+                    <span>กำลังโหลดเนื้อหา.....</span>
+                </div>
             </div>
-
-
-            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">แนะนำบทความที่มาแรงจาก 5 รายการ</h3>
+            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">มาใหม่</h3>
+            <div id="main-content" style="display: none;">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <% if (Posts.length > 0) { %>
+                        <% Posts.forEach(post => { %>
+                            <% if (post.published) { %>
+                                <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                    <a href="/read/<%= post.urlslug %>">
+                                        <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
+                                    </a>
+                                    <div class="p-6 md:col-span-1">
+                                        <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                            <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
+                                        </h1>
+                                        <% if (post.creator && post.creator.id) { %>
+                                            <div class="flex items-center space-x-4">
+                                                <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                                <p class="text-gray-700"><%= post.creator.username %></p>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </article>
+                            <% } %>
+                        <% }) %>  
+                        <% } else { %>
+                        <p>ยังไม่ได้เขียนบทความ</p>
+                        <% } %>
+                </div>
+                
+                <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">แนะนำบทความที่มาแรงจาก 5 รายการ</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <p class="text-gray-300">ยังไม่ได้เชื่อมต่อข้อมูล</p>
                 <!-- <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
@@ -108,9 +119,10 @@
                     </div>
                 </article> -->
             </div>
+            </div>
+
+            
         </main>
-        
-    </div>
 
 
     <script src="/js/script.js  "></script>

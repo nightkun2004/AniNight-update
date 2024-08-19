@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= anime.title %></title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+
+
+     <!-- Primary Meta Tags -->
+     <title><%= anime.title %></title>
+     <meta name="title" content="<%= anime.title %>" />
+     <meta name="description"
+         content="<%= anime.synopsis %>" />
+     
+     <!-- Open Graph / Facebook -->
+     <meta property="og:type" content="website" />
+     <meta property="og:url" content="https://ani-night.online/" />
+     <meta property="og:title" content="<%= anime.title %>" />
+     <meta property="og:description"
+         content="<%= anime.synopsis %>" />
+     <meta property="og:image" content="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/50x75' %>" />
+     
+     <!-- Twitter -->
+     <meta property="twitter:card" content="summary_large_image" />
+     <meta property="twitter:url" content="https://ani-night.online/" />
+     <meta property="twitter:title" content="<%= anime.title %>" />
+     <meta property="twitter:description"
+         content="<%= anime.synopsis %>" />
+     <meta property="twitter:image" content="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/50x75' %>" />
+     
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) --> 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LTJP520FN4');
+    </script>
+</head>
+
+<body class="bg-gray-100 text-black">
+    <%- include('../../../Component/Sidebar') %>
+    <div class="flex-1">
+        <%- include('../../../Component/Header') %>
+        <main class="flex mx-auto my-4 px-4 w-full max-w-5xl gap-x-6">
+            <!-- Left sidebar pc -->
+            <div class="shrink-0 overflow-hidden hidden md:flex flex-col gap-4 rounded-lg p-4 w-64">
+                <div class="w-full">
+                    <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/50x75' %>" alt=" <%= anime.title %>" width="175" height="250" class="overflow-hidden rounded">
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div>
+                        <h3 class="text-base">ชื่อต้นฉบับ ( ญี่ปุ่น )</h3>
+                        <p class="text-lg">
+                            <%= anime.title.length > 50 ? anime.title.substring(0, 50) + '...' : anime.title %>
+                          </p>                          
+                    </div>
+                
+                    <div>
+                        <h3 class="text-base">สถานะ</h3>
+                        <p class="text-lg"><%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-base">Season</h3>
+                        <p class="text-lg"><%= anime.season %></p>
+                    </div><hr class="mt-4 mb-5">
+                    <div>
+                        <p class="text-balance">สตูดิโอ:<%= anime.studio %></p>
+                        <p class="text-balance">Source:<%= anime.Source %></p>
+                        <p class="text-balance">Licensors:<%= anime.Licensors %></p>
+                    </div><hr class="mt-4 mb-5">
+                    <div>
+                        <p>
+                            <a href="<%= anime.website %>" class="bg-blue-400 rounded-lg px-4 py-2 text-white">
+                                Official Site
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content Mobile -->
+            <div class="flex-grow">
+                <div class="flex flex-col gap-4">
+                    <div class="grow">
+                        <h1 class="text-3xl font-bold"><%= anime.title %></h1>
+                        <p class=" text-black text-1xl"><%= anime.title %></p>
+
+                        <div class="flex justify-end ">
+                            <i class="fa-solid fa-bookmark text-2xl cursor-pointer hover:bg-blue-500 hover:rounded-full px-2"></i>
+                        </div>
+                    </div>
+                    <nav class="flex gap-3 items-center border-gray-200 border-t-2 border-b-2">
+                        <a href="/anime/<%= anime.urlslug %>" class="text-sm text-gray-400">รายละเอียด</a>
+                        <a href="/anime/<%= anime.urlslug %>/stream" class="text-sm text-black border-black border-b-2">แพลตฟอร์มฉาย</a>
+                        <a href="#" class="text-sm text-gray-400">PV</a>
+                        <a href="#" class="text-sm text-gray-400">แสดงความคิดเห็น</a>
+                    </nav>
+                    <div class="flex flex-col gap-4">
+                        <div class="flex gap-4 mb-4 md:hidden">
+                            <div class="shrink-0">
+                                <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/50x75' %>" alt="<%= anime.title %>" width="175" height="250" class="overflow-hidden rounded w-24 xs:w-40">
+                            </div>
+                            <div class="grow">
+                                <div class="text-sm text-base-content/75">
+                                    <div class="whitespace-nowrap text-ellipsis">
+                                        <%= anime.month %>  <%= anime.year %>
+                                    </div>
+                                </div>
+                                <div class="text-lg font-medium line-clamp-3 text-base-content/50 cursor-pointer">
+                                    <span class="text-base-content"><%= anime.title  %></span>
+                                </div>
+                                <div class="flex justify-around flex-wrap mt-3 bg-white rounded px-4 py-5 md:hidden">
+                                    <div class="flex flex-col items-center">
+                                        <p class="text-xs">ชื่อต้นฉบับ ( ญี่ปุ่น )</p>
+                                        <span class="text-sm text-gray-700"><%= anime.title.substring(0, 10) + '...'  %></span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <p  class="text-xs">สถานะ</p>
+                                        <span class="text-sm text-gray-700"><%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></span> 
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <p  class="text-xs">Season</p>
+                                        <span class="text-sm text-gray-700"><%= anime.season %> <%= anime.year %></span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <p  class="text-xs">Studio</p>
+                                        <span class="text-sm text-gray-700"><%= anime.studio %></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <!-- Container Tv -->
+                        <div class="flex justify-center gap-4 bg-white rounded px-4 py-4">
+                            <div class="flex-col items-center text-center">
+                                <p class="font-medium text-2xl"><%= anime.type %></p>
+                                <p class="font-medium">เริ่มฉาย:  <%= anime.month %>  <%= anime.year %></p>
+                            </div>
+                        </div>
+
+                       <section class="streem">
+                        <div class="bg-white rounded px-4 py-4">
+                            <% let hasPlatforms = false; %> <!-- ตัวแปรเพื่อตรวจสอบว่ามีแพลตฟอร์มใด ๆ หรือไม่ -->
+                            
+                            <% if (anime.streaming && anime.streaming.length > 0) { %>
+                                <% anime.streaming.forEach(stream => { %>
+                                    <% if (stream.crunchyroll) { %>
+                                        <div class="crunchyroll bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.crunchyroll %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>Crunchyroll</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %> <!-- ตั้งค่าตัวแปรเพื่อตรวจสอบว่าอย่างน้อยมีแพลตฟอร์มหนึ่งที่มีข้อมูล -->
+                                    <% } %>
+                        
+                                    <% if (stream.iqiyi) { %>
+                                        <div class="iqiyi bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.iqiyi %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/iqiyi_icon.png" alt="iqiyi" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>IQIYI</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                        
+                                    <% if (stream.bilibili) { %>
+                                        <div class="bilibili bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.bilibili %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/bilibili-icon.png" alt="bilibili" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>bilibili</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        
+                            <% if (!hasPlatforms) { %>
+                                <p class="text-center text-sm text-black">ยังไม่มีแพลตฟอร์มสตีม</p>
+                            <% } %>
+                        </div>
+                        
+                       </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

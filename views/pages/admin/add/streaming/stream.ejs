@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มแพลตฟอร์ม</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../../Component/Sidebar') %>
+    <div class="flex-1">
+        <%- include('../../../../Component/Header') %>
+        <main class="flex flex-col md:flex-row gap-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 pr-6">
+                <a href="/admin">
+                    <i class="fa-solid fa-arrow-left"></i> กลับ
+                </a>
+            </h1>
+            <div class="flex-1 bg-white p-4 rounded shadow-md">
+                <div class="mb-6 mt-4">
+                    <% if (typeof message !== 'undefined') { %>
+                        <div class="mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center"><%= message %></div>
+                    <% } %>
+                    <div id="message" class="message mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center" style="display: none;"></div>
+                    <div id="errormessage" class="errormessage mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center" style="display: none;"></div>
+                    <% if (typeof error !== 'undefined') { %>
+                        <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+                    <% } %>
+                    <% if (typeof dataprofile !== 'undefined') { %>
+                        <div class="mb-4 bg-gray-100 rounded-lg p-2 text-sky-500 text-center"><%= dataprofile %></div>
+                    <% } %>
+                </div>
+                <h2 class="text-2xl font-bold text-center">สร้างอนิเมะ</h2>
+                <% if (anime.streaming && anime.streaming.length > 0) { %>
+                    <form action="/anime/update/<%= anime._id %>" method="post" enctype="multipart/form-data" id="animeForm">
+                        <div class="mb-5">
+                            <label for="crunchyroll" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Crunchyroll</label>
+                            <input type="text" name="crunchyroll" id="crunchyroll" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" value="<%= (anime.streaming[0].crunchyroll || '') %>">
+                        </div>
+                        <div class="mb-5">
+                            <label for="bilibili" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bilibili</label>
+                            <input type="text" name="bilibili" id="bilibili" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" value="<%= (anime.streaming[0].bilibili || '') %>">
+                        </div>
+                        <div class="mb-5">
+                            <label for="iqiyi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">IQIYI</label>
+                            <input type="text" name="iqiyi" id="iqiyi" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" value="<%= (anime.streaming[0].iqiyi || '') %>">
+                        </div>
+                        <!-- ปุ่มส่งบทความ -->
+                        <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            เพิ่มแพลตฟอร์ม
+                        </button>
+                    </form>
+                <% } else {%>
+                    <form action="/anime/update/<%= anime._id %>" method="post" enctype="multipart/form-data" id="animeForm">
+                        <div class="mb-5">
+                            <label for="crunchyroll" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Crunchyroll</label>
+                            <input type="text" name="crunchyroll" id="crunchyroll" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                        </div>
+                        <div class="mb-5">
+                            <label for="bilibili" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bilibili</label>
+                            <input type="text" name="bilibili" id="bilibili" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                        </div>
+                        <div class="mb-5">
+                            <label for="iqiyi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">IQIYI</label>
+                            <input type="text" name="iqiyi" id="iqiyi" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                        </div>
+                        <!-- ปุ่มส่งบทความ -->
+                        <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            เพิ่มแพลตฟอร์ม
+                        </button>
+                    </form>
+                <% } %>
+                
+                
+                
+            </div>
+            <div class="w-full md:w-1/4 bg-white p-4 rounded shadow-md overflow-x-hidden mb-5">
+                <h3>ตัวอย่างเนื้อหาก่อนเผยแพร่</h3>
+                <div id="preview" class="anime-card bg-white w-full shadow rounded overflow-hidden hidden">
+                    <img id="posterPreview" width="200px" height="400px" src="https://via.placeholder.com/500x700" alt="Jujutsu Kaisen">
+                    <div class="p-4">
+                        <h3 id="titlePreview" class="text-lg font-semibold">ชื่ออนิเมะ</h3>
+                        <p id="synopsisPreview" class="text-gray-600 text-sm">เนื้อเรื่อง</p>
+                        <p id="detailsPreview" class="text-gray-600 text-sm">ประเภท • หมวดหมู่ • แพลตฟอร์ม</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script>
+        function toggleActive(checkbox) {
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.classList.add('bg-blue-500', 'text-white', 'border-transparent');
+            } else {
+                span.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+            }
+        }
+
+        document.getElementById("animeForm").addEventListener("input", function () {
+            const title = document.getElementById("title").value;
+            const synopsis = document.getElementById("synopsis").value;
+            const animetype = document.querySelector('input[name="animetype"]:checked')?.value || "ไม่มี";
+            const categories = Array.from(document.querySelectorAll('input[name="categories"]:checked'))
+                .map(checkbox => checkbox.nextSibling.textContent.trim())
+                .join(" • ") || "ไม่มี";
+            const platforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked'))
+                .map(checkbox => checkbox.nextSibling.textContent.trim())
+                .join(" • ") || "ไม่มี";
+            const poster = document.getElementById("poster").files[0];
+
+            // แสดงตัวอย่างเนื้อหา
+            document.getElementById("titlePreview").textContent = title || "ชื่ออนิเมะ";
+            document.getElementById("synopsisPreview").textContent = synopsis || "เนื้อเรื่อง";
+            document.getElementById("detailsPreview").textContent = `${animetype} • ${categories} • ${platforms}`;
+
+            // แสดงภาพโปรเตอร์หากมีการเลือก
+            if (poster) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("posterPreview").src = e.target.result;
+                }
+                reader.readAsDataURL(poster);
+            }
+
+            // แสดงการ์ดตัวอย่าง
+            document.getElementById("preview").classList.remove("hidden");
+        });
+
+
+    </script>
+</body>
+</html>

@@ -6,6 +6,10 @@
     <title>ตารางอนิเมะ</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    
+    
+   
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
@@ -22,8 +26,7 @@
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100">
     <%- include('../../Component/Sidebar') %>
-    <div class="flex-1 flex flex-col">
-        <%- include('../../Component/Header') %>
+    <%- include('../../Component/Header') %>
         <main class="flex flex-col md:flex-row gap-4">
             <div class="container mx-auto p-4">
                 <div class="mb-4 flex gap-4 items-center">
@@ -140,214 +143,101 @@
                         </div>
                     </div>
 
+                    <div class="mb-4">
+                        <h3 class="font-semibold mb-2">หรือค้นหาชื่ออนิเมะ</h3>
+                        <input type="text" id="search-input" class="p-2 border rounded outline-none" placeholder="ค้นหาชื่ออนิเมะ...">
+                    </div>
+
 
                 </div>
                 <!-- Language Selector -->
                 <div class="mt-4">
                     <button class="px-4 py-2 text-gray-500">เลือก: <span id="selected-filters" class="text-black">ทั้งหมด</span></button>
                 </div>
+
+                <div id="loading-content" class="loading-content flex justify-center" style="display: none;">
+                    <div class="flex gap-2 items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="50" height="50" style="shape-rendering: auto; display: block; background: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g>
+                                <circle stroke-dasharray="169.64600329384882 58.548667764616276" r="36" stroke-width="3" stroke="#5bbfe1" fill="none" cy="50" cx="50">
+                                    <animateTransform keyTimes="0;1" values="0 50 50;360 50 50" dur="0.6211180124223602s" repeatCount="indefinite" type="rotate" attributeName="transform"></animateTransform>
+                                </circle>
+                            </g>
+                        </svg>
+                        <span>กำลังโหลดเนื้อหา.....</span>
+                    </div>
+                </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Anime Card 1 -->
-                    <div class="anime-card bg-white shadow rounded overflow-hidden" data-category="japan" data-style="novel"
-                        data-voice="thai" data-price="free" data-year="2024" data-status="completed" data-season="Spring" data-month="มกราคม">
-                        <img class="w-full h-48 object-cover" src="https://via.placeholder.com/400x200"
-                            alt="Campfire Cooking in Another World">
+                
+                <div class="flex flex-wrap gap-3" id="anime-container">
+
+                    <% if (Animelists && Animelists.length > 0) {%>
+                    <% Animelists.forEach(anime => { %>
+                     <% if (anime.published) {%>
+                    <div class="anime-card bg-white shadow rounded overflow-hidden w-[200px] h-[400px]" id="main-content" style="display: none;"
+                        data-animetype="<%= anime.animetype %>" data-categories="<%= anime.categories %>" data-voice="<%= anime.voice %>"
+                        data-price="<%= anime.price %>" data-year="<%= anime.year %>"
+                        data-status="<%= anime.status ? 'completed' : 'incomplete' %>" data-season="<%= anime.season %>"
+                        data-month="<%= anime.month %>" 
+                        <% if(anime.platforms && anime.platforms.length > 0) { %>
+                            data-platforms="<%= JSON.stringify(anime.platforms) %>"
+                        <% } %>>
+                    
+                        <picture class="relative">
+                            <a href="/anime/<%= anime.urlslug %>">
+                                <img width="400px" height="600px"
+                            src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                            alt="<%= anime.title %>">
+                            </a>
+                            <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3"><%= anime.year %></span>
+                            <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
+                                <% if (anime.platforms.includes('crunchyroll')) { %>
+                                    <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" class="w-7 h-7 pointer-events-none rounded-full">
+                                <% } %>
+                                <% if (anime.platforms.includes('bilibili')) { %>
+                                    <img src="/logo/bilibili-icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                                <% } %>
+                                <% if (anime.platforms.includes('iqiyi')) { %>
+                                    <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                                <% } %>
+                                
+                            </streeming>
+                        </picture>
                         <div class="p-4">
-                            <h3 class="text-lg font-semibold">สกิลสุดพิสดารกับมื้ออาหารในต่างโลก (พากย์ไทย)</h3>
-                            <p class="text-gray-600 text-sm">พากย์ไทย • ดัดแปลงจากนิยาย</p>
+                            <h3 class="text-lg font-semibold">
+                                <a href="/anime/<%= anime.urlslug %>">
+                                    <%= anime.title %>
+                                </a>
+                            </h3>
+                            <p class="text-gray-600 text-sm">
+                                <%= anime.voice %> • <%= anime.categories %>
+                            </p>
+                           
                         </div>
                     </div>
-        
-                    <!-- Anime Card 2 -->
-                    <div class="anime-card bg-white shadow rounded overflow-hidden" data-category="japan" data-style="manga" data-voice="thai" data-price="premium" data-year="2023" data-status="incomplete" data-platform="iqiyi">
-                        <img class="w-full h-48 object-cover" src="https://via.placeholder.com/400x200" alt="Jujutsu Kaisen">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold">มหาเวทย์ผนึกมาร (พากย์ไทย)</h3>
-                            <p class="text-gray-600 text-sm">พากย์ไทย • ดัดแปลงจากมังงะ</p>
+                     <% } %>
+                    <% }) %>
+                    <% } else { %>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
+                            <div class="flex">
+                                <div class="ml-3">
+                                    <div class="flex-shrink-0 mb-6">
+                                        <i class="fa-solid fa-database text-4xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold">การย้ายข้อมูลกำลังดำเนินการอยู่</h3>
+                                    <div class="mt-2 text-sm">
+                                        <p>ขณะนี้เรากำลังย้ายข้อมูล กรุณารอสักครู่ ระบบจะพร้อมใช้งานในเร็ว ๆ นี้ ขออภัยในความไม่สะดวก</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-        
+                    <% } %>
                     <!-- Add more anime cards as needed -->
                 </div>
-                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
-                    <div class="flex">
-                        <div class="ml-3">
-                            <div class="flex-shrink-0 mb-6">
-                                <i class="fa-solid fa-database text-4xl"></i>
-                            </div>
-                            <h3 class="text-lg font-semibold">การย้ายข้อมูลกำลังดำเนินการอยู่</h3>
-                            <div class="mt-2 text-sm">
-                                <p>ขณะนี้เรากำลังย้ายข้อมูล กรุณารอสักครู่ ระบบจะพร้อมใช้งานในเร็ว ๆ นี้ ขออภัยในความไม่สะดวก</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
-            <!-- <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
-                <div class="flex">
-                    <div class="ml-3">
-                        <div class="flex-shrink-0 mb-6">
-                            <i class="fa-solid fa-database text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold">การย้ายข้อมูลกำลังดำเนินการอยู่</h3>
-                        <div class="mt-2 text-sm">
-                            <p>ขณะนี้เรากำลังย้ายข้อมูล กรุณารอสักครู่ ระบบจะพร้อมใช้งานในเร็ว ๆ นี้ ขออภัยในความไม่สะดวก</p>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </main>
-    </div>
     <script src="/js/script.js"></script>
-    <script>
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const animeCards = document.querySelectorAll('.anime-card');
-        const selectedFiltersElement = document.getElementById('selected-filters');
-    
-        let selectedYear = 'all';
-        let selectedMonth = 'all';
-        let selectedvoice = 'all';
-        let selectedseason = 'all';
-        let selectedanimetype = 'all';
-    
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const animetype = button.dataset.animetype || 'all';
-                const style = button.dataset.style || 'all';
-                const voice = button.dataset.voice || 'all';
-                const price = button.dataset.price || 'all';
-                const year = button.dataset.year || 'all';
-                const month = button.dataset.month || 'all';
-                const status = button.dataset.status || 'all';
-                const platform = button.dataset.platform || 'all';
-                const sort = button.dataset.sort || '';
-    
-                if (button.dataset.animetype) {
-                    selectedanimetype = button.dataset.animetype;
-                }
-                if (button.dataset.year) {
-                    selectedYear = button.dataset.year;
-                }
-                if (button.dataset.month) {
-                    selectedMonth = button.dataset.month;
-                }
-                if (button.dataset.voice) {
-                    selectedvoice = button.dataset.voice;
-                }
-                if (button.dataset.season) {
-                    selectedseason = button.dataset.season;
-                }
-    
-                // รีเซ็ตคลาสของปุ่มทั้งหมดเป็นค่าเริ่มต้น
-                filterButtons.forEach(btn => {
-                    btn.classList.remove('bg-blue-200', 'text-blue-600');
-                    btn.classList.add('bg-gray-200', 'text-gray-600');
-                });
-    
-                // เพิ่มคลาสที่เลือกให้กับปุ่มที่ถูกคลิก
-                button.classList.remove('bg-gray-200', 'text-gray-600');
-                button.classList.add('bg-blue-200', 'text-blue-600');
-    
-                // อัปเดตข้อความที่แสดง
-                const selectedText = [];
-                if (animetype !== 'all') selectedText.push(`• รูปแบบอนิเมะ: ${animetype}`);
-                if (style !== 'all') selectedText.push(`• สไตล์: ${style}`);
-                if (price !== 'all') selectedText.push(`• จ่าย: ${price}`);
-    
-                // แสดงเดือนและปีถ้าเลือก
-                if (selectedMonth !== 'all' || selectedYear !== 'all') {
-                    const monthText = selectedMonth !== 'all' ? `เดือน: ${selectedMonth}` : '';
-                    const yearText = selectedYear !== 'all' ? `ปี: ${selectedYear}` : '';
-                    const animetypeText = selectedanimetype !== 'all' ? `รูปแบบอนิเมะ: ${selectedanimetype}` : '';
-                    
-                    // เพิ่มข้อความเดือนและปี
-                    if (monthText && yearText) {
-                        selectedText.push(`${monthText} • ${yearText}`);
-                    } else if (monthText) {
-                        selectedText.push(monthText);
-                    } else if (yearText) {
-                        selectedText.push(yearText);
-                    } else if (animetypeText) {
-                        selectedText.push(animetypeText);
-                    }
-                }
-    
-                // เพิ่มข้อความสำหรับพากย์เสียง และ season
-                if (selectedvoice !== 'all') selectedText.push(`• พากย์เสียง: ${selectedvoice}`);
-                if (selectedseason !== 'all') selectedText.push(`• Season: ${selectedseason}`);
-    
-                // เพิ่มข้อความสำหรับสถานะ และแพลตฟอร์ม
-                if (status !== 'all') selectedText.push(`• สถานะ: ${status}`);
-                if (platform !== 'all') selectedText.push(`• แพลตฟอร์ม: ${platform}`);
-                if (sort) selectedText.push(`เรียง: ${sort}`);
-    
-                // อัปเดตข้อความที่แสดง
-                selectedFiltersElement.textContent = selectedText.length > 0 ? selectedText.join(', ') : 'ทั้งหมด';
-    
-                // กรองการ์ดแอนิเมะ
-                animeCards.forEach(card => {
-                    const isanimetypeMatch = (selectedanimetype === 'all' || card.dataset.animetype === selectedanimetype);
-                    const isStyleMatch = (style === 'all' || card.dataset.style === style);
-                    const isVoiceMatch = (selectedvoice === 'all' || card.dataset.voice === selectedvoice);
-                    const isPriceMatch = (price === 'all' || card.dataset.price === price);
-                    const isSeasonMatch = (selectedseason === 'all' || card.dataset.season === selectedseason);
-                    const isYearMatch = (selectedYear === 'all' || card.dataset.year === selectedYear);
-                    const isMonthMatch = (selectedMonth === 'all' || card.dataset.month === selectedMonth);
-                    const isStatusMatch = (status === 'all' || card.dataset.status === status);
-                    const isPlatformMatch = (platform === 'all' || card.dataset.platform === platform);
-    
-                    if (isanimetypeMatch && isStyleMatch && isVoiceMatch && isPriceMatch && isStatusMatch && isPlatformMatch) {
-                        console.log(isanimetypeMatch && isStyleMatch && isVoiceMatch && isPriceMatch && isStatusMatch && isPlatformMatch && isSeasonMatch && isYearMatch && isMonthMatch )
-                        card.style.display = 'block';
-                    } else if (isSeasonMatch && isYearMatch && isMonthMatch) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-    
-
-
-        // const buttonContainer = document.querySelector('.year');
-
-        //     for (let year = 2000; year <= 2025; year++) {
-        //         const button = document.createElement('button');
-
-        //         button.className = 'bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn';
-
-        //         button.textContent = year;
-
-        //         button.setAttribute('data-year', year);
-        //         buttonContainer.appendChild(button);
-
-        //         button.addEventListener('click', () => {
-        //             const selectedYear = button.dataset.year;
-
-        //             filterButtons.forEach(btn => {
-        //                 btn.classList.remove('bg-blue-200', 'text-blue-600');
-        //                 btn.classList.add('bg-gray-200', 'text-gray-600');
-        //             });
-
-        //             button.classList.remove('bg-gray-200', 'text-gray-600');
-        //             button.classList.add('bg-blue-200', 'text-blue-600');
-
-        //             animeCards.forEach(card => {
-        //                 const isYearMatch = (selectedYear === 'all' || card.dataset.year === selectedYear);
-
-        //                 if (isYearMatch) {
-        //                     card.style.display = 'block';
-        //                 } else {
-        //                     card.style.display = 'none';
-        //                 }
-        //             });
-        //         });
-        //     }
-        </script>
-    
-    
-    
+    <script src="/js/stanime.js"></script>
 </body>
 </html>

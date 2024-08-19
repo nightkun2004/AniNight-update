@@ -42,6 +42,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type'],
 }));
 
+
 app.use((req, res, next) => {
   const originalUri = req.headers['x-original-uri'];
   if (originalUri && originalUri.startsWith('/admin')) {

@@ -74,7 +74,7 @@ const CreateArticle = async (req, res, next) => {
         const Articlesave = new Article(postcreate);
         await Articlesave.save();
         await User.findByIdAndUpdate(req.user.id, { $push: { articles: Articlesave._id } }, { new: true });
-        console.log(Articlesave)
+        // console.log(Articlesave)
         res.status(200).render("./pages/uploads/createarticle", {message: "ทำการสร้างโพสต์สำเร็จ", userID, Articlesave})
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
