@@ -8,7 +8,7 @@ const getPosts = async (req, res, next) => {
     const userID = req.session.userlogin;
     try {
         // Fetch all posts and populate the 'creator.id' field
-        const Posts = await Article.find().populate('creator.id').sort({createdAt: -1 }).exec();
+        const Posts = await Article.find().populate('creator.id').sort({createdAt: -1 }).limit(10).exec();
 
         // Pass 'posts' to the template
         res.render("index", { Posts, userID });

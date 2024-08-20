@@ -62,7 +62,59 @@
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
-            <div id="loading-content" class="loading-content flex justify-center mt-5 mb-6" >
+
+            <!-- NEXT SESTION -->
+        <div class="bg-white shadow">
+            <h3 class="text-2xl font-medium pl-5 mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
+            <div class="flex items-center justify-between -md p-4 mb-5">
+                <!-- Left Scroll Button -->
+                <button id="scroll-left" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+        
+                <div class="flex space-x-2 overflow-x-auto scrollbar-hide" id="anime-list-nextseason">
+                    <!-- <div class="anime-card bg-white shadow rounded overflow-hidden w-[200px] h-[400px]">
+                                <picture class="relative">
+                                    <a href="/anime/">
+                                        <img width="400px" height="600px" src="" alt="title">
+                                    </a>
+                                    <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3">2024</span>
+                                    <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
+                                        <img src="/logo/crunchyroll_icon.png" alt="crunchyroll"
+                                            class="w-7 h-7 pointer-events-none rounded-full">
+                                        <img src="/logo/bilibili-icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                                        <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                                    </streeming>
+                                </picture>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold">
+                                        <a href="/anime/">
+                                            Lorem, ipsum.
+                                        </a>
+                                    </h3>
+                                    <p class="text-gray-600 text-sm">
+                                        เสียงพากย์> • [หมวดหมู่]
+                                    </p>
+                        
+                                </div>
+                            </div> -->
+                </div>
+        
+        
+                <!-- Right Scroll Button -->
+                <button id="scroll-right" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+            <div id="loading-content" class="loading-content flex justify-center mt-5 mb-6" style="display: none;">
                 <div class="flex gap-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="50" height="50" style="shape-rendering: auto; display: block; background: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <g>
@@ -75,7 +127,7 @@
                 </div>
             </div>
             <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">มาใหม่</h3>
-            <div id="main-content" style="display: none;">
+            <div id="main-content">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     <% if (Posts.length > 0) { %>
                         <% Posts.forEach(post => { %>
@@ -125,6 +177,26 @@
         </main>
 
 
-    <script src="/js/script.js  "></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/nextseason.js"></script>
+    <script>
+        const scrollContainer = document.getElementById('category-container');
+        const scrollLeft = document.getElementById('scroll-left');
+        const scrollRight = document.getElementById('scroll-right');
+
+        scrollLeft.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -200,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollRight.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 </html>

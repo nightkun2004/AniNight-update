@@ -33,6 +33,7 @@ app.get('/robots.txt', (req, res) => {
 
 // เส้นทาง router สำหรับ lib
 const Router = require("./lib/routers/router")
+const ApiService = require("./lib/routers/serverApis")
 const {checkAuth} = require("./lib/auth")
 
 // กำหนดค่า CORS
@@ -93,6 +94,7 @@ app.use("/api/v2", authRouter)
 app.use("/api/v2", UploadsRouter)
 app.use("/api/v2", PostsRouter)
 app.use("/api/v2", DashboardRouter)
+app.use("/api/v2", ApiService)
 
 app.use(helmet());
 

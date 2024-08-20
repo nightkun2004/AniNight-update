@@ -45,5 +45,20 @@ const getAnimeStream = async (req, res) => {
     }
 }
 
+const getAnimeSesstionNext = async (req, res) => {
+    const { year, month, season } = req.query;
+    try {
+        const animes = await Anime.find({ year: year, month: month, season: season }).sort({createdAt: -1 }).exec();
+        if (animes.length === 0) {
+            return res.status(404).json({ message: "No anime found" });
+        }
+        res.status(200).json({ animes });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ errorMessage });
+    }
+};
 
-module.exports = { getAnimeInfo, getAnimeStream }
+
+
+module.exports = { getAnimeInfo, getAnimeStream, getAnimeSesstionNext }
