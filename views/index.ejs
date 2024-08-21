@@ -86,56 +86,38 @@
             </div>
 
             <!-- NEXT SESTION -->
-        <div class="bg-white shadow">
-            <h3 class="text-2xl font-medium pl-5 mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
-            <div class="flex items-center justify-between -md p-4 mb-5">
-                <!-- Left Scroll Button -->
-                <button id="scroll-left" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-        
-                <div class="anime-list-nextseason flex space-x-2 overflow-x-scroll scrollbar-hide" id="anime-list-nextseason">
-                    <div class="anime-card bg-white shadow rounded  w-[200px] h-[400px] whitespace-nowrap">
-                                <picture class="relative">
-                                    <a href="/anime/">
-                                        <img width="400px" height="600px" src="" alt="title">
-                                    </a>
-                                    <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3">2024</span>
-                                    <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
-                                        <img src="/logo/crunchyroll_icon.png" alt="crunchyroll"
-                                            class="w-7 h-7 pointer-events-none rounded-full">
-                                        <img src="/logo/bilibili-icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
-                                        <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
-                                    </streeming>
-                                </picture>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold">
-                                        <a href="/anime/">
-                                            Lorem, ipsum.
-                                        </a>
-                                    </h3>
-                                    <p class="text-gray-600 text-sm">
-                                        เสียงพากย์> • [หมวดหมู่]
-                                    </p>
-                        
-                                </div>
-                            </div>
-  
+            <div class="bg-white shadow">
+                <h3 class="text-2xl font-medium pl-5 mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
+            
+                <div class="anime-list-nextseason px-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2" id="anime-list-nextseason">
+                    <div class="anime-card bg-white shadow rounded">
+                        <picture class="relative">
+                            <a href="/anime/">
+                                <img width="400px" height="600px" src="" alt="title">
+                            </a>
+                            <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3">2024</span>
+                            <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
+                                <img src="/logo/crunchyroll_icon.png" alt="crunchyroll"
+                                    class="w-7 h-7 pointer-events-none rounded-full">
+                                <img src="/logo/bilibili-icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                                <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                            </streeming>
+                        </picture>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">
+                                <a href="/anime/">
+                                    Lorem, ipsum.
+                                </a>
+                            </h3>
+                            <p class="text-gray-600 text-sm">
+                                เสียงพากย์> • [หมวดหมู่]
+                            </p>
+            
+                        </div>
+                    </div>
+            
                 </div>
-        
-        
-                <!-- Right Scroll Button -->
-                <button id="scroll-right" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
             </div>
-        </div>
 
             <div id="loading-content" class="loading-content flex justify-center mt-5 mb-6" style="display: none;">
                 <div class="flex gap-2 items-center">
@@ -178,21 +160,34 @@
                         <% } %>
                 </div>
                 
-                <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">แนะนำบทความที่มาแรงจาก 5 รายการ</h3>
+                <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">แนะนำบทความที่มาแรงจาก 10 รายการ</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                <p class="text-gray-300">ยังไม่ได้เชื่อมต่อข้อมูล</p>
-                <!-- <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
-                    <a href="#">
-                        <img src="https://ani-night.online/ArticlesImages_mord/ecde10b5-9545-4109-bf50-d7c4e9992bb6.jpg" alt="article title" class="w-full h-60 object-cover md:h-48">
-                    </a>
-                    <div class="p-6 md:col-span-1">
-                        <h1 class="text-2xl font-semibold text-gray-900 mb-4"><a href="#" class="hover:text-blue-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati, vero?</a></h1>
-                        <div class="flex items-center space-x-4">
-                            <img src="" alt="profile-user" class="w-12 h-12 rounded-full border border-gray-300">
-                            <p class="text-gray-700">User</p>
-                        </div>
-                    </div>
-                </article> -->
+                <% if (TopViews.length > 0) { %>
+                    <% TopViews.forEach(post => { %>
+                        <% if (post.published) { %>
+                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                <a href="/read/<%= post.urlslug %>">
+                                    <% if (post.thumbnail.startsWith('http')) { %>
+                                        <img src="<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
+                                      <% } else { %>
+                                        <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
+                                      <% } %>                                      
+                                </a>
+                                <div class="p-6 md:col-span-1">
+                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4"><a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a></h1>
+                                    <% if (post.creator && post.creator.id) { %>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                            <p class="text-gray-700"><%= post.creator.username %></p>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </article> 
+                        <% } %>
+                    <% }) %>  
+                    <% } else { %>
+                    <p>ยังไม่ได้เขียนบทความ</p>
+                    <% } %>
             </div>
             </div>
 
