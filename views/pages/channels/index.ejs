@@ -20,25 +20,29 @@
 
         gtag('config', 'G-LTJP520FN4');
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
     <%- include('../../Component/Sidebar') %>
-        <div class="flex-1 flex flex-col">
-            <%- include('../../Component/Header') %>
+        <div class="flex-1 flex flex-col"> 
+            <%- include('../../Component/Header') %> 
 
                 <!-- Registration Form -->
                 <main class="flex-1 sm:p-4">
                     <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6">
-                        <div class="banner relative w-full h-40 sm:h-64">
-                            <img style="user-select: none;" src="https://ani-night.online/banner/14cd43e9-ba3a-4ed9-af84-d9c6ffe09201.png" alt="banner" class="w-full rounded-lg h-full object-cover">
-                        </div>
-                        <div class="flex flex-col sm:flex-row p-5 justify-between items-center">
-                            <div class="flex flex-col items-center sm:flex-row">
+                        <% if (channel.bannerImagePath) {%>
+                            <div class="banner relative w-full h-40 sm:h-64">
+                                <img style="user-select: none;" src="/uploads/banners/<%= channel.bannerImagePath %>" alt="banner" class="w-full rounded-lg h-full object-cover">
+                            </div>
+                        <% } %>
+                       
+                        <div class="flex flex-col p-5 justify-center">
+                            <div class="flex flex-col items-center">
                                 <img class="h-24 w-24 rounded-full object-cover"
-                                    src="https://ani-night.online/profiles/<%= channel.profilePicture %>"
+                                    src="/uploads/profiles/<%= channel.profilePicture %>"
                                     alt="channel">
-                                <div class="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+                                <div class="text-center">
                                     <ul>
                                         <li class="text-sm md:text-2xl font-bold text-gray-900"> <%= channel.username %></li>
                                     </ul>
@@ -48,26 +52,32 @@
                                         <span class="text-sm text-gray-600"><strong><%= channel.following.length %></strong> : กำลังติดตาม</span>
                                     </div>
                                     <ul class="items-center">
-                                        <li class="text-sm text-gray-900 mt-5 flex"><strong class="font-medium">ประวัติ:</strong> <p class="text-sm text-gray-600 pl-2"> Bio.</p></li>
+                                        <li class="text-sm text-gray-900 p-2 bg-gray-200 rounded-md mt-5 mb-6"><strong class="font-medium">ประวัติ:</strong> <p class="text-sm text-gray-600"> Bio.</p></li>
                                         <li class="text-sm text-gray-900"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
                                     </ul>
                                 </div>
                             </div>
                             
+<!-- Right Follow -->
+<div class="flex justify-center">
+    <% if (userID) { %>
+        <% if (channel.followers.includes(userID.user._id)) { %>
+            <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->
+            <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
+                onclick="confirmUnfollow('<%= channel._id %>')">
+                <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
+            </button>
+        <% } else { %>
+            <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
+            <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
+                    onclick="toggleFollow('<%= channel._id %>')">
+                <i class="fa-solid fa-user-plus"></i> ติดตาม
+            </button>
+        <% } %>
+    <% } %>
+</div>
 
-                            <!-- Right Follow -->
-                            <div>
-                                <% const isFollowing = channel.followers && channel.followers.includes(userID); %>
-                                <% if (isFollowing) { %>
-                                    <button class="mt-4 text-white px-4 py-2 rounded-md bg-gray-400">กดติดตามแล้ว</button>
-                                <% } else { %>
-                                    <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md" id="followButton" onclick="toggleFollow()">ติดตาม</button>
-                                <% } %>
 
-                                
-
-                                <!-- <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md" id="followButton" onclick="toggleFollow()">ติดตาม</button> -->
-                            </div>
                         </div>
                         <% if (typeof message !== 'undefined') { %>
                             <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
@@ -77,13 +87,94 @@
                             <div class="mb-4 text-red-500 text-center"><%= error %></div>
                         <% } %>
                     </div>
+
+                    <% if (channel.role === 'content_creator') {%>
+                        <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-md">
+                            <!-- Profile Blogs -->
+                            <h3 class="text-xl font-semibold mb-4">บทความของผู้ใช้</h3>
+                            <ul class="space-y-4">
+                                <% if (channel.articles.length > 0) { %>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                                        <% channel.articles.forEach(article => { %>
+                                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                                <a href="/read/<%= article.urlslug %>" target="_blank">
+                                                    <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="<%= article.title %>" class="w-full h-60 object-cover md:h-48">
+                                                </a>
+                                                <div class="p-6 md:col-span-1">
+                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                        <a href="/read/<%= article.urlslug %>" target="_blank" class="hover:text-blue-500"><%= article.title %></a>
+                                                    </h1>
+                                                    <% if (article.creator && channel) { %>
+                                                        <div class="flex items-center space-x-4">
+                                                            <img src="/uploads/profiles/<%= channel.profilePicture %>" alt="<%= channel.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                                            <p class="text-gray-700"><%= channel.username %></p>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                            </article>
+                                        <% }); %>
+                                    </div>
+                                <% } else { %>
+                                    <p>คุณยังไม่ได้เขียนบทความ</p>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <% } %>
                 </main>
         </div>
 
 
 
         <script src="/js/script.js"></script>
-        <script src="/js/channel.js"></script>
+        <script>
+           async function toggleFollow(userId) {
+    const followBtn = document.getElementById('follow-btn');
+    const unfollowBtn = document.getElementById('unfollow-btn');
+
+    try {
+        const response = await fetch(`/api/v2/user/${followBtn.classList.contains('hidden') ? 'unfollow' : 'follow'}/${userId}`, {
+            method: followBtn.classList.contains('hidden') ? 'DELETE' : 'POST'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        followBtn.classList.toggle('hidden');
+        unfollowBtn.classList.toggle('hidden');
+        Swal.fire({
+            title: followBtn.classList.contains('hidden') ? 'ยกเลิกติดตามสำเร็จ!' : 'ติดตามสำเร็จ!',
+            icon: 'success',
+            text: response.message,
+            showConfirmButton: false
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถดำเนินการได้', 'error');
+    }
+}
+
+        
+            async function confirmUnfollow(userId) {
+                const result = await Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: 'คุณต้องการยกเลิกการติดตามช่องนี้?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, ยกเลิกการติดตาม!',
+                    cancelButtonText: 'ยกเลิก'
+                });
+        
+                if (result.isConfirmed) {
+                    // เรียกใช้งานฟังก์ชัน toggleFollow สำหรับการยกเลิกการติดตาม
+                    await toggleFollow(userId);
+                }
+            }
+        </script>
+        
+        <!-- <script src="/js/channel.js"></script> -->
 </body>
 
 </html>

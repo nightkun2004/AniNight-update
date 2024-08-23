@@ -64,6 +64,10 @@ const UserSchema = new mongoose.Schema({
     savearticles: {
         type: [String]
     },
+    saveanime: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Anime'
+    }],
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);

@@ -247,6 +247,7 @@ const EditAnimeinfo = async (req, res) => {
 // =================================================================================================================
 const deleteAnime = async (req, res) => {
     const userID = req.session.userlogin;
+    const user = req.user.id
     const { anime_id } = req.body;
 
     try {
@@ -270,6 +271,15 @@ const deleteAnime = async (req, res) => {
 
         // ลบอนิเมะจากฐานข้อมูล
         await Anime.findByIdAndDelete(anime_id);
+
+        // อัปเดตผู้ใช้ (ถ้ามีการจัดการอนิเมะในรายการของผู้ใช้)
+        if (userID) {
+            const user = await User.findById(req.user.id).exec();
+            if (user) {
+                user.animelists = user.animelists.filter(id => id.toString() !== anime_id);
+                await user.save();
+            }
+        }
 
         res.status(200).redirect('/admin/manage/anime'); // เปลี่ยนเป็นหน้าที่คุณต้องการให้เปลี่ยนไปหลังลบสำเร็จ
     } catch (error) {
@@ -299,11 +309,71 @@ const getSchedule = async (req, res) => {
         });
     }
 }
+ 
 
+// =========================================================== BookmarkSaveAnime ======================================
+// ===================================================================================================
+const BookmarkSaveAnime  = async (req, res) => {   
+    const userID = req.session.userlogin;
+    try {
+        const user = await User.findById(req.user.id);
+          
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
+        }
+
+        const { animeid } = req.body;
+
+        if (!animeid) {
+            return res.status(400).json({ success: false, message: 'ไม่พบ ID ของบทความ' });
+        }
+
+        const animeindex = user.saveanime.indexOf(animeid);
+
+        // Toggle save/remove logic
+        if (animeindex === -1) {
+            // Save the article
+            user.saveanime.push(animeid);
+            await user.save();
+            return res.status(200).json({ success: true, message: 'บันทึกรายการอนิเมะสำเร็จ' });
+        } else {
+            // Remove the article
+            user.saveanime.splice(animeindex, 1);
+            await user.save();
+            return res.status(200).json({ success: true, message: 'ยกเลิกการบันทึกรายการอนิเมะแล้ว' });
+        }
+
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์', error: errorMessage });
+    }
+}
+ 
+// =========================================================== UnbookmarkBookmarkSaveAnime ======================================
+// ===================================================================================================
+const UnbookmarkBookmarkSaveAnime  = async (req, res) => {   
+    const { animeId } = req.params;
+
+    try {
+        const anime = await Anime.findById(animeId);
+        if (!anime) {
+            return res.status(404).json({ error: 'Anime not found' });
+        }
+
+        // Remove anime from user's saved list
+        req.user.id.saveanime.pull(animeId);
+        await req.user.id.save();
+
+        res.json({ message: 'Anime unbookmarked successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error unbookmarking anime' });
+    }
+}
+ 
 
 // =========================================================== infinite scroll ======================================
 // ===================================================================================================
-const getInfiniteScroll = async (req, res) => {
+const getInfiniteScroll = async (req, res) => {   
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const skip = (page - 1) * limit;
@@ -377,5 +447,7 @@ module.exports = {
     getEditAnime,
     EditAnimeinfo,
     deleteAnime,
-    updateAnimeStream
+    updateAnimeStream,
+    BookmarkSaveAnime,
+    UnbookmarkBookmarkSaveAnime
 }

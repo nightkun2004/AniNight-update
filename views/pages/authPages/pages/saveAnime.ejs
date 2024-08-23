@@ -16,9 +16,8 @@
     </style>
 </head>
 <body class="bg-blue-50">
-    <%- include('../../Component/Sidebar') %>
-    <div class="flex-1 flex flex-col">
-        <%- include('../../Component/Header') %>
+    <%- include('../../../Component/Sidebar') %>
+    <%- include('../../../Component/Header') %>
 
         <main class="flex-1 p-4">
             <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg">
@@ -101,14 +100,14 @@
                     <!-- NavBar Profile -->
                     <div class="header-userarticle mt-4"> 
                         <nav>
-                            <ul class="article-user-menus bg-black flex items-center rounded-lg">
+                            <ul class="article-user-menus bg-black flex items-center rounded">
                                 <% if (user.role === 'content_creator') {%>
-                                    <li class="p-3 mr-3 cursor-pointer transform text-white active" onclick="showSection('article-section', this)" id="article-tab">
-                                        <a href="/<%= user.username %>">บทความของคุณ</a>
-                                    </li>
-                                    <% } %>
-                                <li class="p-3 mr-3 cursor-pointer transform text-white" onclick="showSection('save-section', this)" id="save-tab">
-                                    <a href="/<%= user.username %>/saveanime">รายการอนิเมะที่บันทึก</a>
+                                <li class="p-3 mr-3 cursor-pointer transform text-white active" onclick="showSection('article-section', this)" id="article-tab">
+                                    <a href="/<%= user.username %>">บทความของคุณ</a>
+                                </li>
+                                <% } %>
+                                <li class="p-3 mr-3 cursor-pointer transform text-white border-b-4 border-blue-500" onclick="showSection('save-section', this)" id="save-tab">
+                                    <a href="javascript:void(0)">รายการอนิเมะที่บันทึก (<%= user.saveanime.length %>)</a>
                                 </li>
                             </ul>
                         </nav>
@@ -116,7 +115,30 @@
 
 
                     <div class="main_section py-8 px-4">
-                        
+                        <section class="article-section">
+                            <div class="container mx-auto">
+                                <!-- Anime List -->
+                                <% if (user.saveanime.length > 0) { %>
+                                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4">
+                                   <% user.saveanime.forEach(anime => { %>
+                                    <div class="bg-white shadow-lg rounded-lg overflow-hidden h-[500px]">
+                                        <% if (anime.poster.startsWith('http')) { %>
+                                            <img src="<%= anime.poster %>" alt="<%= anime.title %>"class="w-full">
+                                          <% } else { %>
+                                            <img src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title %>" height="400px">
+                                          <% } %>          
+                                        <div class="p-4">
+                                            <h2 class="text-lg font-semibold mb-2"><%= anime.title %></h2>
+                                            <p class="text-gray-600 mb-2">ปีที่ฉาย: <%= anime.year %></p>
+                                        </div>
+                                    </div>
+                                   <% }) %>
+                                </div>
+                                <% } else { %>
+                                    <p>ยังไม่มีรายการอนิเมะที่บันทึก</p>
+                                <% } %>
+                            </div>
+                        </section>
                     </div>
                     
 

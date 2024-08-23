@@ -159,78 +159,28 @@ const authProfile = async (req, res) => {
 };
 
 
-const getChannel = async (req, res) => {
+// =============================================== Profile Save Anime =========================================
+// ============================================================================================================
+const authProfileSaveAnime = async (req, res) => {
     const userID = req.session.userlogin;
-    const channelID = req.params.id;
     try {
-        const response = await axios.post(`${process.env.API_URL_USERS}/profile/channel/${channelID}`, {
-        });
-        const { data } = response;
-
-        res.render("./pages/channels/index", {
-            userID,
-            channel: data
+        // ใช้ฟังก์ชัน checkAuth เพื่อทำการตรวจสอบการเข้าสู่ระบบ
+        checkAuth(req, res, async () => {
+            const user = await User.findById(userID.user._id).select('-password').populate('saveanime').exec();
+            if (!user) {
+                return res.status(404).render('./pages/authPages/pages/saveAnime', { error: 'ไม่พบผู้ใช้นี้ในระบบ' });
+            }
+            res.render("./pages/authPages/pages/saveAnime", {
+                user,
+                userID,
+                message: "โหลดโปรไฟล์เรียบร้อยแล้ว"
+            });
         });
     } catch (error) {
-        console.log(error.response ? error.response.data : error.message);
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render('./pages/channels/index', {
+        res.status(500).render('./pages/authPages/pages/saveAnime', {
             error: errorMessage,
             userID
-        });
-    }
-};
-
-
-const getFollow = async (req, res) => {
-    const userID = req.session.userlogin;
-    const channelID = req.params.id;
-    const { userId, token } = req.body;
-    try {
-        const response = await axios.post(`${process.env.API_URL_USERS}/follow/${userId}`,
-            {},  // ส่ง body ว่างถ้าไม่จำเป็นต้องมีข้อมูลเพิ่มเติม
-            {
-                headers: {
-                    'Authorization': `Bearer ${userID.token}`  // ใช้ token ที่จัดเก็บใน session
-                }
-            });
-        const { data } = response;
-        res.status(200).json({
-            massage: "ส่งข้อมูลกดติดตามไปยัง API Server แล้ว",
-            data
-        })
-
-    } catch (error) {
-        // console.log("มีข้อผิดพลากติดตาม",error.response ? error.response.data : error.message);
-        const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).json({
-            massage: "เกิดข้อผิดพลาดข้อมูลกดติดตามไปยัง API Server แล้ว",
-            error: errorMessage
-        })
-    }
-};
-
-const getUnfollow = async (req, res) => {
-    const userID = req.session.userlogin;
-    const channelID = req.params.id;
-    try {
-        const response = await axios.post(`${process.env.API_URL_USERS}/followers/${channelID}`, {},  // ส่ง body ว่างถ้าไม่จำเป็นต้องมีข้อมูลเพิ่มเติม
-            {
-                headers: {
-                    'Authorization': `Bearer ${userID.token}`  // ใช้ token ที่จัดเก็บใน session
-                }
-            });
-        const { data } = response;
-        res.status(200).json({
-            message: "ส่งข้อมูลยกเลิกติดตามไปยัง API Server แล้ว",
-            data
-        });
-    } catch (error) {
-        console.log(error.response ? error.response.data : error.message);
-        const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).json({
-            message: "เกิดข้อผิดพลาดข้อมูลยกเลิกติดตามไปยัง API Server แล้ว",
-            error: errorMessage
         });
     }
 };
@@ -484,9 +434,7 @@ module.exports = {
     authLogin,
     authRegister,
     authProfile,
-    getChannel,
-    getFollow,
-    getUnfollow,
+    authProfileSaveAnime,
     EditProfile,
     EditProfileAvater,
     EditBanner,

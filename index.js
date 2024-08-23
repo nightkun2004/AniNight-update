@@ -22,6 +22,7 @@ const recommenRouter = require("./routers/RecommenRouter")
 const DashboardRouter = require("./routers/DashboardRouter")
 const AdminRouter = require("./routers/AdminRouter")
 const AnimeRouter = require("./routers/AnimeRouer")
+const channalRouter = require("./routers/ChannelRouter")
 
 
 app.get('/ads.txt', (req, res) => {
@@ -95,6 +96,7 @@ app.use("/api/v2", UploadsRouter)
 app.use("/api/v2", PostsRouter)
 app.use("/api/v2", DashboardRouter)
 app.use("/api/v2", ApiService)
+app.use("/api/v2", channalRouter)
 
 app.use(helmet());
 

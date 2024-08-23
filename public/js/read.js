@@ -112,7 +112,7 @@ async function saveArticle(articleId) {
         }
 
         const response = await fetch('/api/v2/save/article', {
-            method: 'POST',
+            method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
