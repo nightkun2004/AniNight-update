@@ -169,12 +169,12 @@
                 </div>
                 
                 
-                <div class="flex flex-wrap gap-3" id="anime-container">
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-container">
 
                     <% if (Animelists && Animelists.length > 0) {%>
                     <% Animelists.forEach(anime => { %>
                      <% if (anime.published) {%>
-                    <div class="anime-card bg-white shadow rounded overflow-hidden w-[200px] h-[400px]" id="main-content" style="display: none;"
+                    <div class="anime-card bg-white shadow rounded overflow-hidden" id="main-content" style="display: none;"
                         data-animetype="<%= anime.animetype %>" data-categories="<%= anime.categories %>" data-voice="<%= anime.voice %>"
                         data-price="<%= anime.price %>" data-year="<%= anime.year %>"
                         data-status="<%= anime.status ? 'completed' : 'incomplete' %>" data-season="<%= anime.season %>"
