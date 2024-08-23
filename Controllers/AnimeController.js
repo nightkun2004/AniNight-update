@@ -298,7 +298,7 @@ const deleteAnime = async (req, res) => {
 const getSchedule = async (req, res) => {
     const userID = req.session.userlogin;
     try {
-        const Animelists = await Anime.find().exec();
+        const Animelists = await Anime.find().sort({createdAt: -1 }).exec();
 
         res.render("./pages/schedulePages/index", { userID, Animelists })
     } catch (error) {
