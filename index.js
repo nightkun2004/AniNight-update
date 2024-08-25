@@ -46,7 +46,6 @@ app.use(cors({
 
 
 function setLanguage(req, res, next) {
-  // ตรวจสอบภาษาใน query string
   let lang = req.query.lang;
 
   // ถ้าไม่ได้ระบุภาษาใน query parameter ให้ใช้ภาษาจาก Header Accept-Language หรือถ้าไม่มีให้ใช้เป็นอังกฤษ
@@ -62,7 +61,7 @@ function setLanguage(req, res, next) {
               lang = 'en';
           }
       } else {
-          lang = 'en'; // ภาษาเริ่มต้น
+          lang = 'th';
       }
   }
 
