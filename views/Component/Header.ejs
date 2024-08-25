@@ -19,20 +19,19 @@
             <!-- Navigation Links -->
             <nav class="hidden md:hidden lg:flex">
                 <a href="/" class="text-gray-600 text-md md:text-text-1xl px-5">หน้าหลัก</a>
-                <a href="/foryou?recomment=0&i-0&sortBy=views" class="text-gray-600 text-md md:text-text-1xl  px-5">สำหรับคุณ</a>
-                <a href="#" class="text-gray-600 text-md md:text-text-1xl  px-5">บทความ</a>
-                <a href="/schedule/anime" class="text-gray-600 text-md md:text-text-1xl  px-5">ตารางอนิเมะ</a>
+                <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" class="text-gray-600 text-md md:text-text-1xl  px-5">สำหรับคุณ</a>
+                <a href="/<%= lang %>/schedule/anime" class="text-gray-600 text-md md:text-text-1xl  px-5">ตารางอนิเมะ</a>
                 <div class="relative group">
                     <a href="#" class="text-gray-600 text-md md:text-text-1xl  px-5">เพิ่มเติม</a>
                     <div class="absolute right-1 transform hidden group-hover:block w-64 p-4 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
                         <div class="flex flex-col">
-                            <a href="/uploads/create/article" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เขียนบทความ</a>
+                            <a href="/<%= lang %>/uploads/create/article" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เขียนบทความ</a>
                             <a href="#" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">ฟอรัม</a>
                             <% if (userID) {%>
-                            <a href="/<%= userID.user.username %>" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">โปรไฟล์ของคุณ   </a>
+                            <a href="/<%= lang %>/<%= userID.user.username %>" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">โปรไฟล์ของคุณ   </a>
                             <a href="/top/coin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เติมเงิน</a>
                             <% if (userID.user.role === 'content_creator' || userID.user.username === 'Night') { %>
-                                <a href="/dashboard" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">จัดการเนื้อหา</a>
+                                <a href="/<%= lang %>/dashboard" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">จัดการเนื้อหา</a>
                             <% } %>
                             <% if (userID.user.role === 'admin' || userID.user.role === 'moderator' || userID.user.username === 'Night') { %>
                                 <a href="/admin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เข้าสู่ผู้ดูแล</a>
@@ -45,15 +44,16 @@
         </div>
         <!-- Icons -->
         <div class="flex items-center space-x-4">
-            <button >
+            <!-- <button >
                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M14.9536 14.9458L21 21M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
                         stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-            </button>
+            </button> -->
+           
             <% if (userID) {%>
-            <div class="relative group hidden md:block ">
+            <div class="relative group hidden md:block">
                 <% if (userID.user.profilePicture) { %>
                     <img src="/uploads/profiles/<%= userID.user.profilePicture %>" class="w-10 h-10 border-blue-500 border-2 rounded-full" alt="Profile Picture">
                 <% } else {%>
@@ -128,7 +128,7 @@
             
             <!-- btn login -->
              <div class="relative group">
-                <a href="/auth/login" class="block px-4 py-2 font-bold text-sm md:text-md bg-red-500 text-white rounded-lg hover:bg-red-600">
+                <a href="/<%= lang %>/auth/login" class="block px-4 py-2 font-bold text-sm md:text-md bg-red-500 text-white rounded-lg hover:bg-red-600">
                     เข้าสู่ระบบ
                 </a>
              </div>

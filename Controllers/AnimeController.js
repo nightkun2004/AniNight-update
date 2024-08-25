@@ -8,13 +8,15 @@ require("dotenv").config
 
 const getAnime = async (req, res) => {
     const userID = req.session.userlogin;
+    const lang = req.params.lang || 'th'; 
     try {
-        res.render("./pages/admin/add/anime", { userID })
+        res.render("./pages/admin/add/anime", { userID, translations: req.translations,lang   })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/add/anime', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
@@ -23,15 +25,17 @@ const getAnime = async (req, res) => {
 // ==============================================================================================================
 const getAnimeStreem = async (req, res) => {
     const userID = req.session.userlogin;
+    const lang = req.params.lang || 'th'; 
     const { id } = req.query;
     try {
         const anime = await Anime.findById(id).exec();
-        res.render("./pages/admin/add/streaming/stream", { userID, anime })
+        res.render("./pages/admin/add/streaming/stream", { userID, anime, translations: req.translations,lang   })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/add/streaming/stream', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
@@ -39,7 +43,8 @@ const getAnimeStreem = async (req, res) => {
 // ================================================================ update stream ========================================
 // =======================================================================================================================
 const updateAnimeStream = async (req, res) => {
-    const userID = req.session.userlogin; // ดึงข้อมูล user ID จาก session
+    const userID = req.session.userlogin; 
+    const lang = req.params.lang || 'th'; 
     const { id } = req.params; // ดึง ID จาก params
     const { crunchyroll, bilibili, iqiyi } = req.body; // ดึงข้อมูลที่ส่งมาจากฟอร์ม
 
@@ -50,7 +55,8 @@ const updateAnimeStream = async (req, res) => {
         if (!anime) {
             return res.status(404).render('./pages/admin/add/streaming/stream', {
                 error: 'Anime not found',
-                userID
+                userID,
+                translations: req.translations,lang  
             });
         }
 
@@ -68,14 +74,16 @@ const updateAnimeStream = async (req, res) => {
         res.status(200).render('./pages/admin/add/streaming/stream', {
             message: 'Anime updated successfully',
             userID,
-            anime
+            anime,
+            translations: req.translations,lang  
         });
 
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/add/streaming/stream', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
@@ -85,6 +93,7 @@ const updateAnimeStream = async (req, res) => {
 
 const getEditAnime = async (req, res) => {
     const userID = req.session.userlogin;
+    const lang = req.params.lang || 'th'; 
     const { id } = req.query; // แก้ไขการดึง id จาก req.query
     try {
         const edit = await Anime.findById(id).exec();
@@ -92,15 +101,17 @@ const getEditAnime = async (req, res) => {
         if (!edit) {
             return res.status(404).render('./pages/admin/edit/anime', {
                 error: 'Anime not found',
-                userID
+                userID,
+                translations: req.translations,lang  
             });
         }
-        res.render("./pages/admin/edit/anime", { userID, edit });
+        res.render("./pages/admin/edit/anime", { userID, edit, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/edit/anime', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
@@ -109,20 +120,21 @@ const getEditAnime = async (req, res) => {
 // ======================================================================================================================
 const CreateanimeItem = async (req, res) => {
     const userID = req.session.userlogin;
+    const lang = req.params.lang || 'th'; 
     const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories } = req.body;
     const poster = req.files.poster;
     try {
         if (!title || !animetype || !year || !month || !status || !urlslug)
-            return res.status(404).render('./pages/admin/add/anime', { message: "โปรดกรองข้อมูลให้ครบทุกช่องที่จำเป็น", userID })
+            return res.status(404).render('./pages/admin/add/anime', { message: "โปรดกรองข้อมูลให้ครบทุกช่องที่จำเป็น", userID, translations: req.translations,lang   })
 
         if (!poster) {
-            return res.status(404).render("./pages/admin/add/anime", { message: "ไม่พบ poster", userID })
+            return res.status(404).render("./pages/admin/add/anime", { message: "ไม่พบ poster", userID, translations: req.translations,lang   })
         }
 
         // ตรวจสอบ urlslug
         const existingUrlslug = await Anime.findOne({ urlslug });
         if (existingUrlslug) {
-            return res.status(400).render('./pages/admin/add/anime', { error: 'urlslug นี้ไม่ว่าง', userID });
+            return res.status(400).render('./pages/admin/add/anime', { error: 'urlslug นี้ไม่ว่าง', userID, translations: req.translations,lang  });
         }
 
         const generateFilename = (file) => {
@@ -165,12 +177,13 @@ const CreateanimeItem = async (req, res) => {
         await postcreate.save();
         console.log(postcreate)
         await User.findByIdAndUpdate(req.user.id, { $push: { animelists: postcreate._id } }, { new: true });
-        res.status(200).render("./pages/admin/add/anime", { message: "สร้างสำเร็จ", userID })
+        res.status(200).render("./pages/admin/add/anime", { message: "สร้างสำเร็จ", userID, translations: req.translations,lang   })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/add/anime', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
@@ -181,6 +194,7 @@ const CreateanimeItem = async (req, res) => {
 const EditAnimeinfo = async (req, res) => {
     const userID = req.session.userlogin;
     const id  = req.body.update_id;
+    const lang = req.params.lang || 'th'; 
     const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, published, studio, Source, Licensors, website, Episodes, Duration, type } = req.body;
 
     try {
@@ -193,7 +207,9 @@ const EditAnimeinfo = async (req, res) => {
             return res.status(404).json({
                 error: 'Anime not found',
                 userID,
-                edit
+                edit,
+                translations: req.translations,
+                lang  
             })
         }
 
@@ -202,7 +218,7 @@ const EditAnimeinfo = async (req, res) => {
         if (req.files && req.files.poster) {
             const poster = req.files.poster;
             if (poster.size > 5000000) {
-                return res.status(400).render('./pages/admin/edit/anime', { error: `Image size exceeds 5MB limit`, userID, edit });
+                return res.status(400).render('./pages/admin/edit/anime', { error: `Image size exceeds 5MB limit`, userID, edit, translations: req.translations,lang   });
             }
 
             const fileName = poster.name;
@@ -222,23 +238,25 @@ const EditAnimeinfo = async (req, res) => {
                     });
                 }
             } catch (err) {
-                return res.status(500).render('./pages/admin/edit/anime', { error: `Error uploading new poster: ${err}`, userID, edit });
+                return res.status(500).render('./pages/admin/edit/anime', { error: `Error uploading new poster: ${err}`, userID, edit , translations: req.translations,lang  });
             }
         }
 
         const updatedPost = await Anime.findByIdAndUpdate(id, updateData, { new: true });
 
         if (!updatedPost) {
-            return res.status(400).render('./pages/admin/edit/anime', { error: "Couldn't update post.", userID, edit });
+            return res.status(400).render('./pages/admin/edit/anime', { error: "Couldn't update post.", userID, edit , translations: req.translations,lang  });
         }
 
-        res.status(200).render('./pages/admin/edit/anime', { message: `อัปเดตสำเร็จ`, userID, edit: updatedPost });
+        res.status(200).render('./pages/admin/edit/anime', { message: `อัปเดตสำเร็จ`, userID, edit: updatedPost, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/admin/edit/anime', {
             error: errorMessage,
             userID,
-            edit
+            edit,
+            translations: req.translations,
+            lang  
         });
     }
 }
@@ -297,15 +315,17 @@ const deleteAnime = async (req, res) => {
 // ===================================================================================================
 const getSchedule = async (req, res) => {
     const userID = req.session.userlogin;
+    const lang = req.params.lang || 'th'; 
     try {
         const Animelists = await Anime.find().sort({createdAt: -1 }).exec();
 
-        res.render("./pages/schedulePages/index", { userID, Animelists })
+        res.render("./pages/schedulePages/index", { userID, Animelists, translations: req.translations,lang   })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/schedulePages/index', {
             error: errorMessage,
-            userID
+            userID,
+            lang 
         });
     }
 }

@@ -7,17 +7,18 @@ const fs = require("fs")
 // ==================== CREATE Article POST
 // POST /api/v2/post/article/create
 const CreateArticle = async (req, res, next) => {
+    const lang = req.params.lang || 'th'; 
     const userID = req.session.userlogin;
     try {
         const { title, tags, content, categories } = req.body;
         const { thumbnail, images } = req.files;
 
         if (!thumbnail) {
-            return res.status(404).render("./pages/uploads/createarticle", {message: "ไม่พบรูปภาพ", userID})
+            return res.status(404).render("./pages/uploads/createarticle", {message: "ไม่พบรูปภาพ", userID, translations: req.translations,lang  })
         }
 
         if (!images || images.length === 0) {
-            return res.status(404).render("./pages/uploads/createarticle", {message: "ไม่พบรูปภาพประกอบ", userID})
+            return res.status(404).render("./pages/uploads/createarticle", {message: "ไม่พบรูปภาพประกอบ", userID, translations: req.translations,lang  })
         }
 
         const tagsArray = tags ? tags.split('#').map(tag => tag.trim()).filter(tag => tag) : [];
@@ -75,12 +76,13 @@ const CreateArticle = async (req, res, next) => {
         await Articlesave.save();
         await User.findByIdAndUpdate(req.user.id, { $push: { articles: Articlesave._id } }, { new: true });
         // console.log(Articlesave)
-        res.status(200).render("./pages/uploads/createarticle", {message: "ทำการสร้างโพสต์สำเร็จ", userID, Articlesave})
+        res.status(200).render("./pages/uploads/createarticle", {message: "ทำการสร้างโพสต์สำเร็จ", userID, translations: req.translations,lang  , Articlesave})
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
         res.status(500).render("./pages/uploads/createarticle", {
             userID,
-            error: errorMessage
+            error: errorMessage,
+            translations: req.translations,lang  
         });
     }
 }

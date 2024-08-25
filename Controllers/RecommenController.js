@@ -4,6 +4,7 @@ const { getRecommendations } = require("../lib/generateRecommen")
 
 const getRecommen = async (req, res) => {
     const userID = req.session.userlogin;
+    const lang = req.params.lang || 'th'; 
     try {
         const sortBy = req.query.sortBy || 'views';
         const page = parseInt(req.query.page) || 1; // หน้าปัจจุบัน (ค่าเริ่มต้นคือ 1)
@@ -20,12 +21,13 @@ const getRecommen = async (req, res) => {
         const totalArticles = await Article.countDocuments({ published: true });
         const totalPages = Math.ceil(totalArticles / limit);
 
-        res.render('./pages/recommendations', { articles, currentPage: page, totalPages, sortBy , userID });
+        res.render('./pages/recommendations', { articles, currentPage: page, totalPages, sortBy , userID, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/recommendations', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }

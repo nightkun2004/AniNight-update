@@ -45,6 +45,53 @@ app.use(cors({
 }));
 
 
+function setLanguage(req, res, next) {
+  // ตรวจสอบภาษาใน query string
+  let lang = req.query.lang;
+
+  // ถ้าไม่ได้ระบุภาษาใน query parameter ให้ใช้ภาษาจาก Header Accept-Language หรือถ้าไม่มีให้ใช้เป็นอังกฤษ
+  if (!lang) {
+      const acceptLang = req.headers['accept-language'];
+      if (acceptLang) {
+          // เลือกภาษาที่มีความสำคัญสูงสุดจาก header
+          if (acceptLang.includes('th')) {
+              lang = 'th';
+          } else if (acceptLang.includes('jp')) {
+              lang = 'jp';
+          } else {
+              lang = 'en';
+          }
+      } else {
+          lang = 'en'; // ภาษาเริ่มต้น
+      }
+  }
+
+  // ตรวจสอบ path และตั้งค่าภาษาตามเส้นทาง
+  if (req.path.startsWith('/en/')) {
+      lang = 'en';
+  } else if (req.path.startsWith('/jp/')) {
+      lang = 'jp';
+  } else if (req.path.startsWith('/th/')) {
+      lang = 'th';
+  }
+
+  req.lang = lang; // เก็บภาษาที่เลือกไว้ใน req.lang
+
+  try {
+      req.translations = require(`./translations/${lang}.json`); // โหลดไฟล์การแปล
+  } catch (error) {
+      console.error(`Translation file for ${lang} not found.`);
+      req.translations = require('./translations/th.json'); // โหลดไฟล์การแปลค่าเริ่มต้น
+  }
+
+  next();
+}
+
+// ใช้ middleware
+app.use(setLanguage);
+
+
+
 app.use((req, res, next) => {
   const originalUri = req.headers['x-original-uri'];
   if (originalUri && originalUri.startsWith('/admin')) {
@@ -110,7 +157,8 @@ app.use(limiter);
 app.use((req, res, next) => {
   const userID = req.session.userlogin;
   res.status(404).render('./errors/404', {userID});
-});  
+}); 
+
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);

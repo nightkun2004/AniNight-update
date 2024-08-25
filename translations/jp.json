@@ -1,0 +1,87 @@
+{
+    "welcome": "各プラットフォームのアニメスケジュール",
+    "description": "あなたが私のために作成したウェブサイトに会いましょう。あなたのアニメ記事、クリエイティブである限り、当社の収益ツールを使用してお金を稼ぐことができます！",
+    "pages": {
+        "schedule": {
+            "animetype": "アニメの種類",
+            "all": "すべて",
+            "japanlang": "日本語",
+            "stylesesstion": "スタイル",
+            "animecat": "アニメ",
+            "mangacat": "マンガからのアダプテーション",
+            "adventurecat": "冒険",
+            "lifecat": "日常生活",
+            "scificat": "SF",
+            "lncat": "小説",
+            "Moecat": "萌え",
+            "voiceActors": {
+                "title": "吹き替え",
+                "all": "すべて",
+                "thai": "タイ語吹き替え",
+                "japan": "日本語吹き替え"
+            },
+            "price": {
+                "title": "有料または無料のフォーマット？",
+                "all": "すべて",
+                "free": "無料",
+                "premium": "プレミアム"
+            },
+            "season": {
+                "title": "シーズンを選択",
+                "all": "すべて",
+                "spring": "春",
+                "summer": "夏",
+                "fall": "秋",
+                "winter": "冬"
+            },
+            "year": {
+                "title": "年を選択",
+                "all": "すべて",
+                "year2025": "2025年",
+                "year2024": "2024年",
+                "year2023": "2023年"
+            },
+            "month": {
+                "title": "月を選択",
+                "all": "すべて",
+                "january": "1月",
+                "february": "2月",
+                "march": "3月",
+                "april": "4月",
+                "may": "5月",
+                "june": "6月",
+                "july": "7月",
+                "august": "8月",
+                "september": "9月",
+                "october": "10月",
+                "november": "11月",
+                "december": "12月"
+            },
+            "status": {
+                "title": "ステータス",
+                "all": "すべて",
+                "completed": "完了しました。",
+                "incomplete": "まだ完了していません。"
+            },
+            "platform": {
+                "title": "ストリーミングプラットフォームを選択",
+                "all": "すべて",
+                "bilibili": "ビリビリ",
+                "crunchyroll": "クランチロール",
+                "iqiyi": "アイチーイー"
+            },
+            "search": {
+                "title": "またはアニメの名前で検索",
+                "placeholder": "アニメの名前を検索..."
+            }
+        },
+        "anotherPage": {
+            "heading": "他のページのトピック",
+            "content": "他のページのコンテンツ"
+        },
+        "contact": {
+            "title": "お問い合わせ",
+            "description": "以下のフォームからお問い合わせください。"
+        }
+    }
+}

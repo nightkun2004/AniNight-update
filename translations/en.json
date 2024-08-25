@@ -1,0 +1,87 @@
+{
+    "welcome": "Anime schedule for each platform",
+    "description": "Meet the website that you created for me. Your anime articles As long as you are creative you can make money using our income generating tools!",
+    "pages": {
+        "schedule": {
+            "animetype": "Anime Type",
+            "all": "All",
+            "japanlang": "Japan",
+            "stylesesstion": "Styles",
+            "animecat": "Anime",
+            "mangacat": "Adapted from the manga",
+            "adventurecat": "Adventure",
+            "lifecat": "Daily life",
+            "scificat": "sci-fi",
+            "lncat": "novel",
+            "Moecat": "Moe",
+            "voiceActors": {
+                "title": "Dubbing",
+                "all": "All",
+                "thai": "Dubbed Thai",
+                "japan": "Dubbed Japan"
+            },
+            "price": {
+                "title": "Paid or free format?",
+                "all": "All",
+                "free": "Free",
+                "premium": "Premium"
+            },
+            "season": {
+                "title": "Choose season",
+                "all": "All",
+                "spring": "Spring",
+                "summer": "Summer",
+                "fall": "Fall",
+                "winter": "Winter"
+            },
+            "year": {
+                "title": "Choose a year",
+                "all": "All",
+                "year2025": "2025",
+                "year2024": "2024",
+                "year2023": "2023"
+            },
+            "month": {
+                "title": "Choose a month",
+                "all": "All",
+                "january": "January",
+                "february": "February",
+                "march": "March",
+                "april": "April",
+                "may": "May",
+                "june": "June",
+                "july": "July",
+                "august": "August",
+                "september": "September",
+                "october": "October",
+                "november": "November",
+                "december": "December"
+            },
+            "status": {
+                "title": "Status",
+                "all": "All",
+                "completed": "It's over.",
+                "incomplete": "It's not over yet."
+            },
+            "platform": {
+                "title": "Choose a streaming platform",
+                "all": "All",
+                "bilibili": "BILIBILI",
+                "crunchyroll": "Crunchyroll",
+                "iqiyi": "iqiyi"
+            },
+            "search": {
+                "title": "or search for anime name",
+                "placeholder": "Search for anime name..."
+            }
+        },
+        "anotherPage": {
+            "heading": "Other page topics",
+            "content": "Content for other pages"
+        },
+        "contact": {
+            "title": "Contact us",
+            "description": "Contact us via the form below."
+        }
+    }
+}

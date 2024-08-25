@@ -15,7 +15,7 @@ function displayAnimeData(animes) {
     animeList.innerHTML = ''; // Clear any existing content
     animes.forEach(anime => {
         const animeCard = document.createElement('div');
-        animeCard.className = 'anime-card bg-white shadow rounded';
+        animeCard.className = 'anime-card bg-white shadow rounded-lg overflow-hidden';
 
         // const platforms = anime.platforms || []; 
         // const streamingHTML = platforms.map(platform => {

@@ -5,6 +5,7 @@ const Article = require("../models/ArticleModel")
 // GET : /api/posts
 const getRead = async (req, res, next) => {
     const { urlslug } = req.params;
+    const lang = req.params.lang || 'th'; 
     const userID = req.session.userlogin;
     try {
         // Fetch all posts and populate the 'creator.id' field
@@ -15,6 +16,7 @@ const getRead = async (req, res, next) => {
                 post: { title: "ไม่พบข้อมูล"},
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
                 userID,
+                translations: req.translations,lang  
             });
         }
 
@@ -27,12 +29,13 @@ const getRead = async (req, res, next) => {
         }
         // console.log(post)
         // Pass 'posts' to the template
-        res.render("read", { post, recentUpdates, userID, isSaved });
+        res.render("read", { post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('read', {
             error: errorMessage,
-            userID
+            userID, 
+            translations: req.translations,lang  
         });
     }
 };

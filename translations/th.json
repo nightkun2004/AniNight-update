@@ -1,0 +1,87 @@
+{
+    "welcome": "ตารางอนิเมะฉายแต่ละแพลตฟอร์ม",
+    "description": "พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !",
+    "pages": {
+        "schedule": {
+            "animetype": "ประเภทอนิเมะ",
+            "all": "ทั้งหมด",
+            "japanlang": "ญี่ปุ่น",
+            "stylesesstion": "สไตล์",
+            "animecat": "อนิเมะ",
+            "mangacat": "ดัดแปลงจากมังงะ",
+            "adventurecat": "ผจญภัย",
+            "lifecat": "ชีวิตประจำวัน",
+            "scificat": "ไซไฟ",
+            "lncat": "นิยาย",
+            "Moecat": "โมเอะ",
+            "voiceActors": {
+                "title": "พากย์เสียง",
+                "all": "ทั้งหมด",
+                "thai": "พากย์ไทย",
+                "japan": "พากย์ญี่ปุ่น"
+            },
+            "price": {
+                "title": "รูปแบบเสียเงินหรือฟรี",
+                "all": "ทั้งหมด",
+                "free": "ฟรี",
+                "premium": "พรีเมียม"
+            },
+            "season": {
+                "title": "เลือก season",
+                "all": "ทั้งหมด",
+                "spring": "Spring",
+                "summer": "Summer",
+                "fall": "Fall",
+                "winter": "Winter"
+            },
+            "year": {
+                "title": "เลือกปี",
+                "all": "ทั้งหมด",
+                "year2025": "2025",
+                "year2024": "2024",
+                "year2023": "2023"
+            },
+            "month": {
+                "title": "เลือกเดือน",
+                "all": "ทั้งหมด",
+                "january": "มกราคม",
+                "february": "กุมภาพันธ์",
+                "march": "มีนาคม",
+                "april": "เมษายน",
+                "may": "พฤษภาคม",
+                "june": "มิถุนายน",
+                "july": "กรกฎาคม",
+                "august": "สิงหาคม",
+                "september": "กันยายน",
+                "october": "ตุลาคม",
+                "november": "พฤศจิกายน",
+                "december": "ธันวาคม"
+            },
+            "status": {
+                "title": "สถานะ",
+                "all": "ทั้งหมด",
+                "completed": "จบแล้ว",
+                "incomplete": "ยังไม่จบ"
+            },
+            "platform": {
+                "title": "เลือกแพลตฟอร์มสตีม",
+                "all": "ทั้งหมด",
+                "bilibili": "BILIBILI",
+                "crunchyroll": "Crunchyroll",
+                "iqiyi": "iqiyi"
+            },
+            "search": {
+                "title": "หรือค้นหาชื่ออนิเมะ",
+                "placeholder": "ค้นหาชื่ออนิเมะ..."
+            }
+        },
+        "anotherPage": {
+            "heading": "หัวข้อหน้าอื่น",
+            "content": "เนื้อหาสำหรับหน้าอื่น"
+        },
+        "contact": {
+            "title": "ติดต่อเรา",
+            "description": "ติดต่อเราผ่านแบบฟอร์มด้านล่าง"
+        }
+    }
+}

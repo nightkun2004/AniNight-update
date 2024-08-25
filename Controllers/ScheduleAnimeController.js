@@ -2,6 +2,7 @@ const User = require("../models/UserModel");
 const Anime = require("../models/AnimeModel")
 
 const getAnimeInfo = async (req, res) => {
+    const lang = req.params.lang || 'th'; 
     const userID = req.session.userlogin;
     const { urlslug } = req.params; // ดึงค่า urlslug จาก req.params
     try {
@@ -12,12 +13,13 @@ const getAnimeInfo = async (req, res) => {
                 userID
             });
         }
-        res.render("./pages/schedulePages/info", { userID, anime });
+        res.render("./pages/schedulePages/info", { userID, anime, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/schedulePages/info', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
@@ -25,6 +27,7 @@ const getAnimeInfo = async (req, res) => {
 // ============================================== Stream ====================================================
 // ==========================================================================================================
 const getAnimeStream = async (req, res) => {
+    const lang = req.params.lang || 'th'; 
     const userID = req.session.userlogin;
     const { urlslug } = req.params; // ดึงค่า urlslug จาก req.params
     try {
@@ -32,15 +35,17 @@ const getAnimeStream = async (req, res) => {
         if (!anime) {
             return res.status(404).render('./pages/schedulePages/streaming/index', {
                 error: 'Anime not found',
-                userID
+                userID,
+                translations: req.translations,lang  
             });
         }
-        res.render("./pages/schedulePages/streaming/index", { userID, anime });
+        res.render("./pages/schedulePages/streaming/index", { userID, anime, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/schedulePages/streaming/index', {
             error: errorMessage,
-            userID
+            userID,
+            translations: req.translations,lang  
         });
     }
 }
