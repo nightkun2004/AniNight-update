@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= post.title %></title>
-    <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
+    <meta property="og:title" content="<%= post.title %>">
+    <meta name="description" content="อัตเดตข่าวสารด้านอนิเมะที่คุณชอบ พร้อมเนื้อหาที่มีประโยนช์แ่คุณ!!">
+    <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="ani-night.online">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -22,17 +27,6 @@
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-        crossorigin="anonymous"></script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-LTJP520FN4');
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
@@ -76,7 +70,7 @@
         <main class="container mx-auto md:4">
             <div class="flex flex-col md:flex-row gap-4">
                 <!-- main content -->
-                 <div class="flex-1 bg-white p-4 rounded shadow-md open-windows-read">
+                 <div class="flex-1 bg-white text-black p-4 rounded shadow-md open-windows-read">
                     <div class="skeleton">
                         <div class="title__main flex justify-between items-center">
                                 <h1 class="text-2xl font-bold mb-4">
@@ -189,15 +183,19 @@
                            <p class="pl-2 cursor-pointer" id="btn-read-fullscreen"><i class="fa-solid fa-expand"></i> อ่านเต็มหน้าจอ</p>
                        </div>
 
-                        <!-- Advertisement Section -->
-                        <div class="ads-container my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
-                            <!-- /22745653040/Read-Displayed-by-aninight -->
-                            <div id='div-gpt-ad-1723344157500-0 ad-container' data-article-id="<%= post._id %>" 
-                                data-ad-displayed="false" style='min-width: 300px; min-height: 50px;'>
-                                <script>
-                                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1723344157500-0'); });
-                                </script>
+                         <!-- Advertisement Section -->
+                         <div class="ads-container my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+                            <div class="text-center mb-4">
+                                <p class="text-sm text-gray-500 " style="user-select: none;">Sponsored</p>
                             </div>
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                                crossorigin="anonymous"></script>
+                            <ins class="adsbygoogle block mx-auto" style="display:block; text-align:center; width: 50%;"
+                                data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-6579807593228261"
+                                data-ad-slot="5440757573"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
                         </div>
 
                         <p><%- post.content %></p>
@@ -219,7 +217,7 @@
                  </div>
 
                  <!-- Right Content -->
-                  <div class="w-full md:w-1/3 bg-white p-4 rounded shadow-md">
+                  <div class="w-full md:w-1/3 bg-white text-black p-4 rounded shadow-md">
                     <h2 class="text-lg font-semibold mb-4">คุณอาจชอบรายการเนื้อหาต่อไปนี้</h2>
                     <div class="tages">
                         <div class="mt-1 flex justify-between">
@@ -245,7 +243,7 @@
                             <% if (update.published) { %>
                                 <div class="skeleton flex flex-col overflow-hidden gap-4 p-4 border border-gray-200 rounded-lg shadow-sm transition-all mb-5 hover:shadow-md">
                                     <div class="w-full">
-                                        <a href="/read/<%= update.urlslug %>?lang=en&id=<%= update._id %>">
+                                        <a href="/read/<%= update.urlslug %>">
                                             <div class="relative">
                                                 <img class="w-full h-auto object-cover rounded-md" src="/uploads/thumbnails/<%= update.thumbnail %>" alt="<%= update.title %>">
                                                 <p class="views" style="position: absolute; top: 0; left: 0;
@@ -255,7 +253,7 @@
                                         </a>
                                     </div>
                                     <div class="w-3/3">
-                                        <a href="/read/<%= update.urlslug %>?lang=en&id=<%= update._id %>">
+                                        <a href="/read/<%= update.urlslug %>">
                                             <h3 class="text-lg font-medium text-gray-800 mb-2 hover:text-blue-600 transition-colors">
                                                 <%= update.title %>
                                             </h3>
@@ -273,12 +271,17 @@
                   </div>
             </div>
             <div class="my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
-                <!-- /22745653040/Ani_night-read -->
-                <div id='div-gpt-ad-1722758068851-0'>
-                    <script>
-                        googletag.cmd.push(function () { googletag.display('div-gpt-ad-1722758068851-0'); });
-                    </script>
-                </div>
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                crossorigin="anonymous"></script>
+           <ins class="adsbygoogle"
+                style="display:block; text-align:center;"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="2386038227"></ins>
+           <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+           </script>
             </div>
         </main>
         <% } else {%>

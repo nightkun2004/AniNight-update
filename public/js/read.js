@@ -103,7 +103,7 @@ async function saveArticle(articleId) {
                 confirmButtonText: 'เข้าสู่ระบบ',
                 cancelButtonText: 'ยกเลิก',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
+                confirmButtonColor: '#333',
                 preConfirm: () => {
                     window.location.href = '/auth/login'; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
                 }
