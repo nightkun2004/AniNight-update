@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสำรวจรางวัล - AniNight</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body class="bg-white text-gray-900">
+    <%- include('../../Component/Sidebar') %>
+    <%- include('../../Component/Header') %>
+
+    <main class="max-w-3xl mx-auto mt-8 p-4 bg-white mb-10 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-center text-blue-600 mb-4">การสำรวจทั้งหมด</h1>
+        <div class="mb-6">
+            <% if (typeof error !== 'undefined') { %>
+                <div class="mb-4 text-red-500 text-center"><%= error %></div>
+            <% } %>
+        </div>
+        <% if (surveys && surveys.length > 0) { %>
+            <div class="grid gap-6 mb-5">
+                <% surveys.forEach(survey => { %>
+                    <div class="bg-blue-50 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex items-center mb-4">
+                            <img src="<%= survey.category.icon_url %>" alt="<%= survey.category.name %>" class="w-8 h-8 mr-3">
+                            <h3 class="text-lg font-semibold text-blue-500 flex items-center">
+                                <!-- <% if (survey.category.icon_name ) {%>
+                                    <i class="fa-solid fa-<%= survey.category.icon_name %> mr-2"></i>
+                                <% } %> -->
+                                การสำรวจเกี่ยวกับ: 
+                                <%= survey.category.name === "Shopping" ? "การช็อปปิ้ง" : 
+                                    survey.category.name === "Other" ? "อื่นๆ" : 
+                                    survey.category.name === "Lifestyle" ? "การตอบแบบไลค์สไตล์" : 
+                                    survey.category.name %>
+                            </h3>
+                        </div>
+                        <p class="text-sm text-gray-600">ภูมิภาค: <%= survey.country %></p>
+                        <p class="text-sm text-gray-600">คะแนนของการสำรวจ: <%= survey.cpi %></p>
+                        <a href="<%= survey.click_url %>" target="_blank" class="inline-block mt-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300">
+                            เข้าร่วมการสำรวจ
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="text-center">
+                <p class="text-lg text-gray-700">ตอนนี้แบบสำรวจว่าง โปรดเข้ามาตรวจสอบอีกครั้งในเวลาใหม่</p>
+            </div>
+        <% } %>
+    </main>
+    
+    <script src="/js/script.js"></script>
+</body>
+</html>

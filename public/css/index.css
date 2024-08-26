@@ -11,3 +11,17 @@ body {
 .sidebar-open {
     transform: translateX(0);
 }
+
+#sidebar::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+    background-color: #f6f6f6; /* สีพื้นหลังของสกอบาร์ */
+    border-radius: 10px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    width: 8px;
+    height: 6px;
+    background-color: #888; /* สีของแถบเลื่อน */
+    border-radius: 10px;
+}

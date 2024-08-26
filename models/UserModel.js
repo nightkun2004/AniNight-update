@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    bank: {
+        truemoneywallet: {
+            truemonname: String,
+            truemoneynumber: Number
+        }
+    },
     // serverUrl: {
     //     type: String,
     //     enum: ["ani-night.online", "sv1.ani-night.online", "sv2.ani-night.online"],

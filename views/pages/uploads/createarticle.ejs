@@ -89,7 +89,23 @@
                          <input id="thumbnail"
                              class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
                              type="file" name="thumbnail" accept="image/*" required onchange="previewImage(this, 'preview', 'cover-text')">
-                     </div>
+                     </div> 
+
+                     <hr class="mt-4 mb-6">
+                        <div class="mb-5">
+                            <label for="url_edit">แก้ไข URL</label>
+                            <input class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                             type="text" name="urlslug" placeholder="use-hyphens-for-spaces">
+                            <p>การแก้ไข URL จะช่วยให้บทความขึ้นคำค้นหาของ Google ได้</p>
+                            <ul class="text-sm mt-2">
+                                <li> * ใช้ตัวอักษรภาษาอังกฤษและตัวเลขเท่านั้น</li>
+                                <li> * แทนที่ช่องว่างด้วยเครื่องหมายขีด (-)</li>
+                                <li> * ใช้คำสำคัญที่เกี่ยวข้องกับเนื้อหา</li>
+                                <li> * หลีกเลี่ยงคำซ้ำหรือคำที่ไม่จำเป็น</li>
+                                <li> * ความยาว URL ไม่เกิน 60 ตัวอักษร</li>
+                            </ul>
+                        </div>
+                        <hr class="mt-4 mb-6">
                      
                      <div class="mb-5">
                          <label for="images" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ภาพประกอบ</label>

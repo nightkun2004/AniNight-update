@@ -10,7 +10,7 @@ const CreateArticle = async (req, res, next) => {
     const lang = req.params.lang || 'th'; 
     const userID = req.session.userlogin;
     try {
-        const { title, tags, content, categories } = req.body;
+        const { title, tags, content, categories, urlslug } = req.body;
         const { thumbnail, images } = req.files;
 
         if (!thumbnail) {
@@ -62,7 +62,7 @@ const CreateArticle = async (req, res, next) => {
             tags: tagsArray,
             thumbnail: `${thumbnailFilename}`, // ภาพ thumbnail
             imagesarticle: imageUrls, // ภาพประกอบหลายไฟล์
-            urlslug: postId,
+            urlslug: urlslug || postId,
             published: req.body.published === 'on',
             creator: {
                 id: useridnew._id,

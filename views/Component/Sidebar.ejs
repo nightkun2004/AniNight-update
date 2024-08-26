@@ -16,7 +16,6 @@
         <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">สำหรับคุณ</a>
         <a href="#" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">บทความ</a>
         <a href="/<%= lang %>/schedule/anime" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ตารางอนิเมะ</a>
-        <a href="#" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ฟอรัม</a>
         <% if (userID) {%>
             <a href="/<%= lang %>/<%= userID.user.username %>" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">โปรไฟล์ของคุณ   </a>
             <a href="/top/coin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เติมเงิน</a>
@@ -27,6 +26,9 @@
                 <a href="/admin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เข้าสู่ผู้ดูแล</a>
             <% } %>
         <% } %>
+        <hr class="mt-4 mb-6">
+        <p class="text-sm font-medium text-gray-400 pl-2">การสำรวจของเราและรับรางวัล</p>
+        <a href="/survey/reward" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">การสำรวจ</a>
     </nav>
     <hr class="mt-4 mb-6">
     <div class="footer flex gap-1 flex-wrap p-2">
