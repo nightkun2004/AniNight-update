@@ -2,5 +2,5 @@ User-agent: *
 Disallow: 
 Disallow: /dashboard
 Disallow: /cgi-bin/
-Disallow: /sitemap.xml
+
 Sitemap: https://ani-night.online/sitemap.xml
