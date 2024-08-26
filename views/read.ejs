@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +17,12 @@
     <meta property="og:title" content="<%= post.title %>" />
     <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
 
+    <meta property="og:type" content="website">
+    <meta name="twitter:description" content="เว็บที่ให้คุณเขียนบทความข่าวสารด้านอนิเมะ และรับรายได้จากค่าโฆษณา">
+    <meta name="google-site-verification" content="eyTwMkNmyYZFyV7ag9MuAEh5uOPdc4uZ6ONSM3w5HRI">
+    <meta property="og:url" content="https://ani-night.online/read/<%= acticle.urlslug %>">
+    <meta name="twitter:title" content="<%= acticle.title %>">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://www.ani-night.online" />
-    <meta property="twitter:title" content="<%= post.title %>" />
     <meta property="twitter:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
@@ -29,16 +30,6 @@
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-    <script>
-    window.googletag = window.googletag || {cmd: []};
-    googletag.cmd.push(function() {
-        googletag.defineSlot('/22745653040/Read-Displayed-by-aninight', [300, 50], 'div-gpt-ad-1723344157500-0').addService(googletag.companionAds()).addService(googletag.pubads());
-        googletag.pubads().enableSingleRequest();
-        googletag.pubads().enableVideoAds();
-        googletag.companionAds().setRefreshUnfilledSlots(true);
-        googletag.enableServices();
-    });
-    </script>
     <style>
         .fullscreen-read {
             height: 100%;
