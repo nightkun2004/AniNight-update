@@ -65,11 +65,16 @@
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
-                                <% if (user.profilePicture) {%>
-                                    <img src="/uploads/profiles/<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
-                                <% } else {%>
-                                    <img src="/uploads/profiles/defult.png" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
-                                <% } %>
+                                <% if (user.profilePicture && user.profilePicture.startsWith('http')) { %>
+                                    <img src="<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                <% } else { %>
+                                    <% if (user.profilePicture) { %>
+                                        <img src="/uploads/profiles/<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                    <% } else { %>
+                                        <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                    <% } %>
+                                <% } %>                                    
+                               
                                 <ul>
                                     <li><strong>ชื่อผู้ใช้:</strong> <%= user.username %></li>
                                     <li><strong>อีเมล:</strong> <%= user.email %></li>
@@ -94,7 +99,7 @@
                                 <li><strong>สถานะบัญชี:</strong> <%= user.role === "user" ? "ผู้ใช้" : user.role === "content_creator" ? "ครีเอเตอร์" : user.role === "partners" ? "เป็นครีเอเตอร์แบบชำระเงิน" : user.role %></li>
                                 <li><strong>ได้รับการอนุมัติเป็นครีเอเตอร์:</strong> <%= user.isApproved ? "อนุมัติแล้ว" : "ยังไม่อนุมัติ" %></li>
                             </ul>
-                            
+                             
                         </section>
                     </div>
 

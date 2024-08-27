@@ -7,7 +7,8 @@ const UserSchema = new mongoose.Schema({
         unique: true
     },
     googleId: {
-        type: String
+        type: String,
+        unique: true
     },
     email: {
         type: String,
@@ -15,7 +16,9 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: function() {
+            return !this.googleId;  // ถ้าไม่มี googleId ให้บังคับให้ใส่ password
+        }
     },
     bank: {
         truemoneywallet: {
