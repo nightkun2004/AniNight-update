@@ -6,6 +6,8 @@ const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const crypto = require("crypto")
 const fs = require("fs")
+const axios = require('axios');
+require("dotenv").config()
 
 const { checkAuth } = require("../lib/auth")
 require("dotenv").config()
@@ -66,8 +68,9 @@ const authLogin = async (req, res, next) => {
 // POST: /api/users/register
 const authRegister = async (req, res, next) => {
     const lang = req.params.lang || 'th'; 
-    const { username, email, password, password2 } = req.body;
+    const { username, email, password, password2, 'g-recaptcha-response': recaptchaResponse } = req.body;
     const userID = req.session.userlogin;
+    const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA; 
     try {
 
         // ตรวจสอบข้อมูลที่จำเป็น
@@ -81,6 +84,18 @@ const authRegister = async (req, res, next) => {
 
         if (password != password2) {
             return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านขอคุณไม่ตรงกัน', userID, translations: req.translations,lang   });
+        }
+
+         // ตรวจสอบ reCAPTCHA
+         const recaptchaResponseData = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+            params: {
+                secret: secretKey,
+                response: recaptchaResponse
+            }
+        });
+
+        if (!recaptchaResponseData.data.success) {
+            return res.status(400).render('./pages/authPages/register', { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว', userID, translations: req.translations,lang, siteKey });
         }
 
         // ตรวจสอบความปลอดภัยของรหัสผ่าน (ตัวอย่างเช่น การมีอักขระต่างๆ)

@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="bg-blue-50">
     <%- include('../../Component/Sidebar') %>
@@ -34,6 +35,10 @@
                     <div class="mb-4">
                         <label for="confirm_password" class="block text-gray-700">ยืนยันรหัสผ่าน</label>
                         <input type="password" id="confirm_password" name="password2" class="mt-2 p-2 w-full border rounded-md outline-none" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="g-recaptcha" data-sitekey="<%= siteKey %>"></div>
                     </div>
                     <div class="mb-6">
                         <button type="submit" class="w-full bg-black text-white p-2 rounded-md   focus:ring-opacity-50">สมัครสมาชิก</button>
