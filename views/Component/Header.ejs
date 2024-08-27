@@ -192,9 +192,9 @@
             <a href="/<%= lang %>/<%= userID.user.username %>" class="flex flex-col items-center py-2 text-gray-500 hover:text-blue-500">
                 <% if (userID.user.profilePicture) { %>
                     <% if (userID.user.profilePicture.startsWith('http')) { %>
-                        <img src="<%= userID.user.profilePicture %>" class="w-5 h-w-5 border-blue-500 border-2 rounded-full" alt="Profile Picture">
+                        <img src="<%= userID.user.profilePicture %>" class="w-7 h-w-7 border-blue-500 border-2 rounded-full" alt="Profile Picture">
                     <% } else { %>
-                        <img src="/uploads/profiles/<%= userID.user.profilePicture %>" class="w-10 h-10 border-blue-500 border-2 rounded-full" alt="Profile Picture">
+                        <img src="/uploads/profiles/<%= userID.user.profilePicture %>" class="w-7 h-7 border-blue-500 border-2 rounded-full" alt="Profile Picture">
                     <% } %>
                 <% } else { %>
                     <svg width="28px" height="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
