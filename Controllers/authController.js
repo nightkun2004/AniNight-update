@@ -71,19 +71,20 @@ const authRegister = async (req, res, next) => {
     const { username, email, password, password2, 'g-recaptcha-response': recaptchaResponse } = req.body;
     const userID = req.session.userlogin;
     const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA; 
+    const siteKey = process.env.SITE_KEY;
     try {
 
         // ตรวจสอบข้อมูลที่จำเป็น
         if (!username || !email || !password) {
-            return res.status(400).render('./pages/authPages/register', { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, translations: req.translations,lang   });
+            return res.status(400).render('./pages/authPages/register', { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, siteKey, translations: req.translations,lang   });
         }
 
         if (password.length < 6) {
-            return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', userID , translations: req.translations,lang   });
+            return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', userID , siteKey, translations: req.translations,lang   });
         }
 
         if (password != password2) {
-            return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านขอคุณไม่ตรงกัน', userID, translations: req.translations,lang   });
+            return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านขอคุณไม่ตรงกัน', userID, siteKey, translations: req.translations,lang   });
         }
 
          // ตรวจสอบ reCAPTCHA
@@ -95,7 +96,7 @@ const authRegister = async (req, res, next) => {
         });
 
         if (!recaptchaResponseData.data.success) {
-            return res.status(400).render('./pages/authPages/register', { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว', userID, translations: req.translations,lang, siteKey });
+            return res.status(400).render('./pages/authPages/register', { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตนมัติ', userID, siteKey, translations: req.translations,lang, siteKey });
         }
 
         // ตรวจสอบความปลอดภัยของรหัสผ่าน (ตัวอย่างเช่น การมีอักขระต่างๆ)
@@ -107,12 +108,12 @@ const authRegister = async (req, res, next) => {
         // ตรวจสอบอีเมลที่ซ้ำ
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).render('./pages/authPages/register', { error: 'อีเมลนี้ถูกใช้ไปแล้ว', userID, translations: req.translations,lang   });
+            return res.status(400).render('./pages/authPages/register', { error: 'อีเมลนี้ถูกใช้ไปแล้ว', siteKey, userID, translations: req.translations,lang   });
         }
         // ตรวจสอบชื่อผู้ใช้ที่ซ้ำ
         const existingUsername = await User.findOne({ username });
         if (existingUsername) {
-            return res.status(400).render('./pages/authPages/register', { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, translations: req.translations,lang   });
+            return res.status(400).render('./pages/authPages/register', { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, siteKey, translations: req.translations,lang   });
         }
 
         // เข้ารหัสรหัสผ่าน
@@ -141,6 +142,7 @@ const authRegister = async (req, res, next) => {
                 username: newUser.username,
                 email: newUser.email
             },
+            siteKey,
             translations: req.translations,lang  
         });
 
@@ -149,7 +151,7 @@ const authRegister = async (req, res, next) => {
         res.status(500).render('./pages/authPages/register', {
             error: errorMessage,
             userID,
-            translations: req.translations,lang  
+            translations: req.translations,lang  ,siteKey
         });
     }
 }
