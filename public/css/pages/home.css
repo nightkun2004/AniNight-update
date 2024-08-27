@@ -1,0 +1,44 @@
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.Sidebar-before::before {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+
+.link-thumbnail {
+    width: calc(50% -(25px / 2));
+    height: 180px;
+}
+
+.span-thumbnail.pbt-lazy {
+    opacity: 1;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@media (min-width: 1024px) {
+    .anime-list-nextseason {
+        max-width: calc(200px * 5 + 16px * 4);
+        /* Show exactly 5 items on large screens */
+    }
+}
+
+@media (max-width: 1023px) {
+    .anime-list-nextseason {
+        max-width: none;
+        /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 1030px) {
+    .main-content {
+        width: calc(70% - var(--gap));
+    }
+}

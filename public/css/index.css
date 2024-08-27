@@ -1,7 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+
+:root {
+    --body-font: Montserrat, sans-serif;
+    --menu-font: Montserrat, sans-serif;
+    --title-font: Montserrat, sans-serif;
+    --text-font: Montserrat, sans-serif;
+    --icon-font: "bootstrap-icons", bootstrap-icons;
+    --body-bg-color: #f1f5f9;
+    --body-bg: #f1f5f9 none repeat fixed top left;
+    --outer-bg: #f8fafc;
+    --widget-bg: #ffffff;
+    --accent-color: #3b82f6;
+    --accent-color-10: #3b82f610;
+    --title-color: #0f172a;
+    --title-hover-color: #3b82f6;
+    --text-color: #475569;
+    --meta-color: #94a3b8;
+    --border-top-bg: #3b82f6;
+    --header: 62px;
+    --header-bg: #ffffff;
+    --header-color: #0f172a;
+    --header-hover-color: #3b82f6;
+    --submenu-bg: #ffffff;
+    --submenu-color: #0f172a;
+    --submenu-hover-color: #3b82f6;
+    --footer-bg: #1e293b;
+    --footer-color: #f8fafc;
+    --footer-hover-color: #3b82f6;
+    --footer-text-color: #cbd5e1;
+    --footerbar-bg: #0f172a;
+    --footerbar-color: #f8fafc;
+    --footerbar-hover-color: #3b82f6;
+    --gradient: var(--accent-color);
+    --modal-bg: var(--widget-bg);
+    --button-bg: #3b82f6;
+    --button-color: #ffffff;
+    --h-weight: 700;
+    --gap: 30px;
+    --deg: 45deg;
+    --gray-bg: #0f172a08;
+    --overlay-bg: #0f172a80;
+    --border-color: #0f172a0d;
+    --shadow: 0 1px 2px #0f172a0d;
+    --radius: 8px;
+}
 body {
     font-family: "Prompt", sans-serif;
+    background-color: var(--body-bg-color);
 }
 
 .sidebar {

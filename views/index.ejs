@@ -24,6 +24,7 @@
     <meta property="twitter:image" content="hhttps://www.ani-night.online/seo/image" />
 
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/pages/home.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -39,54 +40,200 @@
 
         gtag('config', 'G-LTJP520FN4');
     </script>
-    <style>
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-    
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        @media (min-width: 1024px) {
-    .anime-list-nextseason {
-        max-width: calc(200px * 5 + 16px * 4); /* Show exactly 5 items on large screens */
-    }
-}
-
-@media (max-width: 1023px) {
-    .anime-list-nextseason {
-        max-width: none; /* Adjust for smaller screens */
-    }
-}
-
-    </style>
 </head>
 <body class="text-black">
     <%- include('./Component/Sidebar') %>
     <%- include('./Component/Header') %>
-
-        <main class="max-w-3xl sm:max-w-4xl md:max-w-5xl lg:max-w-7xl mx-auto mt-3">
-            <div class="mb-6 mt-4">
+    <div
+        class="ads-container my-8 p-4 bg-gray-50 mx-auto container mt-5 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+        <!-- Ads Home -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+            crossorigin="anonymous"></script>
+        <!-- Ani Night -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261" data-ad-slot="9626337250"
+            data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+        <main class="h-auto lg:px-5 lg:w-full flex flex-col lg:flex-row md:justify-between max-w-full w-[970px] mt-5 mb-7">
+            <div class="mb-6 mt-4" >
                 <% if (typeof error !== 'undefined') { %>
                     <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= error %></div>
                 <% } %>
             </div>
-            <div
-                class="ads-container my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
-                <!-- Ads Home -->
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                    crossorigin="anonymous"></script>
-                <!-- Ani Night -->
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261" data-ad-slot="9626337250"
-                    data-ad-format="auto" data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+            <div class="main-content relative box-border min-h-1 lg:w-[calc(70%-var(--gap))] w-full">
+                <div class="Sidebar-before pt-0 pb-1 sticky transform-none top-0 left-5">
+                    <div class="blogs bg-white p-5 shadow-transparent rounded-lg">
+                        <div class="title-header relative flex items-center justify-between mt-0 mr-0 mb-5">
+                            <h3 class="flex items-center relative text-lg text-black">มาใหม่ >></h3>
+                            <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" target="_blank" class="title-link flex items-center flex-shrink-0 gap-1 text-lg text-blue-400 font-medium">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                        <div class="posts grid grid-cols-1 gap-6">
+                            <% if (Posts.length > 0) { %>
+                                <div class="post-container">
+                                    <% Posts.slice(0, 7).forEach(post => { %> <!-- Display only the first 7 posts -->
+                                        <% if (post.published) { %>
+                                            <article class="flex flex-col md:flex-row gap-5">
+                                                <a href="/read/<%= post.urlslug %>" class="link-thumbnail block relative lg:w-[500px] h-64 mb-5 md:w-1/2">
+                                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>" 
+                                                         class="span-thumbnail pbt-lazy w-full rounded-lg h-72 md:h-64 object-cover bg-cover z-0" 
+                                                         alt="<%= post.title %>">
+                                                    <span class="absolute top-5 left-5 flex items-center w-fit h-5 px-2 py-4 text-white font-normal rounded-lg z-10" 
+                                                          style="background-color: #3b82f6;">
+                                                        <%= post.tags.slice(0, 2).join(', ') %>
+                                                        <% if (post.tags.length > 2) { %> ... <% } %>
+                                                    </span>
+                                                </a>
+                                                
+                                                <div class="p-6 md:w-1/2">
+                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
+                                                    </h1>
+                                                    <% if (post.creator && post.creator.id) { %>
+                                                        <div class="flex items-center space-x-4">
+                                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" 
+                                                                 class="w-12 h-12 rounded-full border border-gray-300">
+                                                            <p class="text-gray-700">
+                                                                <a class="hover:text-blue-400" href="/<%= lang %>/editor/<%= post.creator.username %>">
+                                                                    <%= post.creator.username %>
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                            </article>
+                                        <% } %>
+                                    <% }) %>  
+                                </div>
+                            
+                                <!-- Display "Load More" button if there are more than 7 posts -->
+                                <% if (Posts.length > 7) { %>
+                                    <div class="text-center mt-8">
+                                        <button id="load-more" data-posts='<%- JSON.stringify(Posts) %>' class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+                                           โหลดเพิ่มเติม
+                                        </button>
+                                    </div>
+                                <% } %>  
+                            <% } else { %>
+                                <p>ยังไม่ได้เขียนบทความ</p>
+                            <% } %>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
+            <aside class="w-full mt-5 lg:block lg:w-[30%] lg-pl-2 relative visible box-border min-h-1"> <!-- ส่วนนี้จะซ่อนในหน้าจอที่เล็กกว่า lg -->
+                <div style="padding-top: 0px;padding-bottom: 1px;position: static;transform: none;height: auto !important;">
+                    <div class="sidebar-main-home grid  grid-cols-1 gap-1">
+                        <!-- Ads right -->
+                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                            <div
+                                class="ads-container my-8 p-4 borderaspect-w-16 aspect-h-9">
+                                <!-- Ads Home -->
+                                <script async
+                                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                                    crossorigin="anonymous"></script>
+                                <!-- Ani Night -->
+                                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
+                                    data-ad-slot="9626337250" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                            </div>
+                        </div>
+                        <!-- Tags -->
+                       <div class="bg-white rounded-lg p-5 shadow-lg mt-4 mb-6">
+                        <h2 class="font-semibold text-lg mb-5 mt-4 text-black">Tags ที่คุณอาจจะสนใจ</h2>
+                        <div class="flex flex-wrap bg-white  rounded-lg p-4">
+                            <% if (Posts.length > 0) { %>
+                                <% Posts.forEach(post => { %>
+                                    <% post.tags.forEach(tag => { %> <!-- Iterate over tags for each post -->
+                                        <a href="/tag/<%= tag %>" target="_blank" 
+                                        class="inline-block rounded-full border-2 mr-2 mb-2 bg-white border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
+                                            <%= tag %>
+                                        </a>
+                                    <% }) %>
+                                <% }) %>
+                            <% } else { %>
+                                <p>No tags available</p>
+                            <% } %>
+                        </div>
+                       </div>
+                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                            <h2 class="font-semibold text-lg text-black mb-5 mt-4">ติดตามเรา | ติดต่อเรา</h2>
+                            <a href="https://web.facebook.com/AniNightOffice.net" target="_blank" class="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded-lg">Facebook</a>
+                            <a href="#" target="_blank" class="px-4 py-2 bg-red-500 hover:bg-red-900 text-white rounded-lg">YouTube</a>
+                        </div>
+                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                            <h3 class="text-2xl font-medium text-black mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
+                            <div class="anime-list-nextseason grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-list-nextseason">
+                                <div class="anime-card bg-white shadow rounded">
+                                    <picture class="relative">
+                                        <a href="/anime/">
+                                            <img width="200px" height="400px" src="https://ani-night.online/uploads/posters/481939ef-43f1-446a-998f-ae9e3f017950.png" alt="title">
+                                        </a>
+                                        <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3">2024</span>
+                                        <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
+                                            <img src="/logo/crunchyroll_icon.png" alt="crunchyroll"
+                                                class="w-7 h-7 pointer-events-none rounded-full">
+                                            <img src="/logo/bilibili-icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                                        </streeming>
+                                    </picture>
+                                    <div class="p-4">
+                                        <h3 class="text-lg font-semibold">
+                                            <a href="/anime/">
+                                                Lorem, ipsum.
+                                            </a>
+                                        </h3>
+                                        <p class="text-gray-600 text-sm">
+                                            เสียงพากย์> • [หมวดหมู่]
+                                        </p>
+                        
+                                    </div>
+                                </div>
+                        
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                            <h3 class="text-2xl font-medium text-black mb-5 mt-6">บทความมาแรงจาก 10 รายการ</h3>
+                            <div class="grid grid-cols-2 gap-5">
+                                <% if (TopViews.length > 0) { %>
+                                    <% TopViews.forEach(post => { %>
+                                        <% if (post.published) { %>
+                                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                                <a href="/read/<%= post.urlslug %>">
+                                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
+                                                </a>
+                                                <div class="p-6 md:col-span-1">
+                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
+                                                    </h1>
+                                                    <% if (post.creator && post.creator.id) { %>
+                                                        <div class="flex items-center space-x-4">
+                                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                                            <p class="text-gray-700"><%= post.creator.username %></p>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                            </article>
+                                        <% } %>
+                                    <% }) %>  
+                                    <% } else { %>
+                                    <p>ยังไม่ได้เขียนบทความ</p>
+                                    <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
 
             <!-- NEXT SESTION -->
-            <div class="bg-white shadow">
+            <div class="bg-white shadow hidden">
                 <h3 class="text-2xl font-medium text-black pl-5 mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
                 <div class="anime-list-nextseason grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-list-nextseason">
                     <div class="anime-card bg-white shadow rounded">
@@ -124,9 +271,9 @@
                     <span>กำลังโหลดเนื้อหา.....</span>
                 </div>
             </div>
-            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">มาใหม่</h3>
+            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6 hidden">มาใหม่</h3>
             <div id="main-content">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
                     <% if (Posts.length > 0) { %>
                         <% Posts.forEach(post => { %>
                             <% if (post.published) { %>
@@ -153,8 +300,8 @@
                         <% } %>
                 </div>
                 
-                <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6">แนะนำบทความที่มาแรงจาก 10 รายการ</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6" hidden>แนะนำบทความที่มาแรงจาก 10 รายการ</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
                 <% if (TopViews.length > 0) { %>
                     <% TopViews.forEach(post => { %>
                         <% if (post.published) { %>
@@ -191,29 +338,86 @@
     <script src="/js/script.js"></script>
     <script src="/js/nextseason.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadMoreButton = document.getElementById('load-more');
+            const posts = JSON.parse(loadMoreButton.getAttribute('data-posts'));
+            let currentIndex = 7;
+    
+            loadMoreButton.addEventListener('click', function() {
+                const container = document.querySelector('.post-container');
+                
+                posts.slice(currentIndex, currentIndex + 7).forEach(post => {
+                    if (post.published) {
+                        const article = document.createElement('article');
+                        article.classList.add('flex', 'flex-col', 'md:flex-row', 'gap-5');
+                        
+                        article.innerHTML = `
+                            <a href="/read/${post.urlslug}" class="link-thumbnail block relative lg:w-[500px] h-auto md:w-1/2">
+                                <img src="/uploads/thumbnails/${post.thumbnail}" 
+                                     class="span-thumbnail pbt-lazy w-full rounded-lg h-60 md:h-48 object-cover bg-cover bg-center bg-no-repeat z-0" 
+                                     alt="${post.title}">
+                                <span class="absolute top-5 left-5 flex items-center w-fit h-5 px-2 py-5 text-white font-normal rounded-lg z-10" 
+                                      style="background-color: #3b82f6;">
+                                    ${post.tags.slice(0, 2).join(', ')}
+                                    ${post.tags.length > 2 ? '...' : ''}
+                                </span>
+                            </a>
+                            <div class="p-6 md:w-1/2">
+                                <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                    <a href="/read/${post.urlslug}" class="hover:text-blue-500">${post.title}</a>
+                                </h1>
+                                ${post.creator && post.creator.id ? `
+                                    <div class="flex items-center space-x-4">
+                                        <img src="/uploads/profiles/${post.creator.id.profilePicture}" alt="${post.creator.username}" 
+                                             class="w-12 h-12 rounded-full border border-gray-300">
+                                        <p class="text-gray-700">
+                                            <a class="hover:text-blue-400" href="/${lang}/editor/${post.creator.username}">
+                                                ${post.creator.username}
+                                            </a>
+                                        </p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+    
+                        container.appendChild(article);
+                    }
+                });
+    
+                currentIndex += 7;
+                
+                if (currentIndex >= posts.length) {
+                    loadMoreButton.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
+    
+    <script>
         const scrollContainer = document.querySelector('.anime-list-nextseason');
-const scrollLeft = document.getElementById('scroll-left');
-const scrollRight = document.getElementById('scroll-right');
+        const scrollLeft = document.getElementById('scroll-left');
+        const scrollRight = document.getElementById('scroll-right');
 
-// Width of one card plus gap (200px card + 16px gap * 4)
-const cardWidth = 200;
-const gap = 16;
-const itemsToShow = 5;
-const scrollAmount = (cardWidth + gap) * itemsToShow;
+        // Width of one card plus gap (200px card + 16px gap * 4)
+        const cardWidth = 200;
+        const gap = 16;
+        const itemsToShow = 5;
+        const scrollAmount = (cardWidth + gap) * itemsToShow;
 
-scrollLeft.addEventListener('click', () => {
-    scrollContainer.scrollBy({
-        left: -scrollAmount,
-        behavior: 'smooth'
-    });
-});
+        scrollLeft.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        });
 
-scrollRight.addEventListener('click', () => {
-    scrollContainer.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth'
-    });
-});
+        scrollRight.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
 
     </script>
 </body>
