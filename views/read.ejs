@@ -48,8 +48,9 @@
     </style>
 </head>
 <body>
+    <%- include('./Component/Header') %>
     <%- include('./Component/Sidebar') %>
-        <%- include('./Component/Header') %>
+    
        <div class="container mx-auto mt-3">
         <div class="mb-6 mt-4">
             <% if (typeof error !== 'undefined') { %>

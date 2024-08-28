@@ -1,4 +1,4 @@
-
+<div id="progress-bar"></div>
 <header class="bg-white shadow-md border-b border-gray-200 sticky max-w-full top-0 w-full z-10">
     <div class="px-4 flex items-center justify-between">
         <!-- Logo left -->
@@ -26,7 +26,8 @@
                     <div class="absolute right-1 transform hidden group-hover:block w-64 p-4 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
                         <div class="flex flex-col">
                             <a href="/<%= lang %>/uploads/create/article" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เขียนบทความ</a>
-                            <a href="/survey/reward" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">การสำรวจ</a>
+                            <a href="/survey/reward" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">แบบสำรวจ</a>
+                            <a href="/reward/withdraws" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">แลกรางวัล</a>
                             <% if (userID) {%>
                             <a href="/<%= lang %>/<%= userID.user.username %>" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">โปรไฟล์ของคุณ   </a>
                             <a href="/top/coin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เติมเงิน</a>
@@ -51,7 +52,22 @@
                         stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button> -->
-           
+            <div class="flex items-center">
+                <h2 class="text-black hidden md:block">เปลี่ยนโหมด</h2>
+                <div class="mx-auto">
+                    <div class="flex justify-end">
+                        <label for="theme-toggle" class="inline-flex items-center cursor-pointer">
+                            <div class="relative">
+                                <input type="checkbox" id="theme-toggle" class="sr-only">
+                                <div class="block-dack bg-gray-100 w-14 h-8 rounded-full">
+                                </div>
+                                <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition transform">
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <% if (userID) {%>
             <div class="relative group hidden md:block">
                 <% if (userID.user.profilePicture) { %>
@@ -135,22 +151,7 @@
                     </svg>
                 <% } %>
             <% } else {%> 
-                <div class="flex items-center">
-                    <h2 class="text-black hidden md:block">เปลี่ยนโหมด</h2>
-                    <div class="mx-auto">
-                        <div class="flex justify-end">
-                            <label for="theme-toggle" class="inline-flex items-center cursor-pointer">
-                                <div class="relative">
-                                    <input type="checkbox" id="theme-toggle" class="sr-only">
-                                    <div class="block-dack bg-gray-100 w-14 h-8 rounded-full">
-                                    </div>
-                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition transform">
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+               
             <!-- btn login -->
              <div class="relative group">
                 <a href="/<%= lang %>/auth/login" class="block px-4 py-2 font-bold text-sm md:text-md bg-black text-white rounded">

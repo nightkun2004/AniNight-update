@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
+const Payment = require("../models/PaymentModel")
 const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
@@ -52,6 +53,60 @@ const Getedit = async (req, res) => {
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./pages/dashboard/edits/article', {
+            error: errorMessage,
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+}
+
+
+// =========================================================== Router Playment manage =====================================
+// ========================================================================================================================
+const gatManagePlayment = async (req, res) => {
+    const lang = req.params.lang || 'th'; 
+    const userID = req.session.userlogin;
+
+    try {
+        const rewards = await Payment.find().lean();
+        res.render("./pages/admin/manage/manage_playment", { 
+            userID, 
+            rewards,
+            translations: req.translations,
+            lang   
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./pages/admin/manage/manage_playment', {
+            error: errorMessage,
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+}
+
+
+// =========================================================== Router Playment manage =====================================
+// ========================================================================================================================
+const gatPlaymentEdit = async (req, res) => {
+    const lang = req.params.lang || 'th'; 
+    const userID = req.session.userlogin;
+    const rewardId = req.query.rewardId; 
+
+    try {
+        const reward = await Payment.findById(req.params.id).lean();
+        
+        console.log(reward)
+        res.render("./pages/admin/edit/playment/index", { 
+            userID, 
+            reward,
+            rewardId,
+            translations: req.translations,
+            lang   
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./pages/admin/edit/playment/index', {
             error: errorMessage,
             userID,
             translations: req.translations,lang  
@@ -224,6 +279,8 @@ const deletePostArticle = async (req, res, next) => {
 module.exports = {
     getDashboard,
     Getedit,
+    gatManagePlayment,
+    gatPlaymentEdit,
     EditPostArticle,
     deletePostArticle
 }

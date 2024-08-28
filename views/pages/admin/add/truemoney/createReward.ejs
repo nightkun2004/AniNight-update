@@ -1,0 +1,50 @@
+<!-- views/admin/createReward.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มของรางวัล TrueMoney Wallet</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../../Component/Header') %>
+    <%- include('../../../../Component/Sidebar') %>
+
+    <main class="container mx-auto mt-10">
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <% if (typeof error !== 'undefined') { %>
+                <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+            <% } %>
+            <div class="mb-6 mt-4">
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= message %></div>
+                <% } %>
+            </div>
+            <h1 class="text-2xl font-semibold mb-4">เพิ่มของรางวัล TrueMoney Wallet</h1>
+            <form action="/api/v2/admin/create/reward" method="POST">
+                <div class="mb-4">
+                    <label for="points" class="block text-gray-700 font-semibold mb-2">คะแนน</label>
+                    <input type="number" name="points" id="points" class="w-full p-2 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="wallet" class="block text-gray-700 font-semibold mb-2">จำนวนเงิน (บาท)</label>
+                    <input type="number" name="wallet" id="wallet" class="w-full p-2 border rounded-lg" required>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                        เพิ่มของรางวัล
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

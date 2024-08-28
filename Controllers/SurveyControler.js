@@ -1,5 +1,6 @@
 const User = require("../models/UserModel")
 const Survey = require("../models/SurveyModel")
+const SurveyAdmin = require("../models/SurveyAddModel")
 const axios = require("axios")
 const crypto = require('crypto');
 require("dotenv").config()
@@ -37,6 +38,8 @@ const getSurvey = async (req, res) => {
         };
 
         const response = await axios.request(options);
+
+        const surveyNpat = await SurveyAdmin.find().lean();
         // console.log(response.data.data.surveys)
 
         const surveys = response.data.data.surveys || [];
@@ -45,6 +48,7 @@ const getSurvey = async (req, res) => {
         // ตรวจสอบว่าตัวแปร surveys ถูกส่งไปยัง EJS
         res.render('./pages/Survey/index', {
             surveys,
+            surveyNpat,
             translations: req.translations,
             lang: lang,
             userID

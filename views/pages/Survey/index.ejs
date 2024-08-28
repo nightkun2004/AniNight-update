@@ -21,6 +21,39 @@
                 <div class="mb-4 text-red-500 text-center"><%= error %></div>
             <% } %>
         </div>
+        <hr class="mb-5 mt-6">
+        <div class="relative">
+            <h2 class="text-lg font-light">การสำรวจจาก NPatPublisher <span class="absolute text-red-600 top-0 right-2">ในระบบ</span></h2>
+        </div>
+        
+        <% if (surveyNpat && surveyNpat.length) { %>
+            <div class="grid gap-6 mb-5">
+                <% surveyNpat.forEach(survey => { %>
+                    <% if (survey.published) { %>
+                        <div class="bg-blue-50 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <img src="/logo/Aninight.png" alt="NPatPublisher" class="w-8 h-8 mr-3 rounded-lg">
+                                <h3 class="text-lg font-semibold text-blue-500 flex items-center">
+                                    การสำรวจเกี่ยวกับ: <%= survey.surveyName %>
+                                </h3>
+                            </div>
+                            <p class="text-sm text-gray-600">ภูมิภาค: TH</p>
+                            <p class="text-sm text-gray-600">คะแนนของการสำรวจ: <%= survey.score %></p>
+                            <a href="/survey/start/<%= survey._id %>" target="_blank" class="inline-block mt-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300">
+                                เข้าร่วมการสำรวจ
+                            </a>
+                        </div>
+                    <% } %>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="text-center">
+                <p class="text-lg text-gray-700">ตอนนี้แบบสำรวจจากเรายังไม่พร้อม โปรดเข้ามาตรวจสอบอีกครั้งในเวลาใหม่</p>
+            </div>
+        <% } %>
+        
+        <hr class="mb-5 mt-6">
+        <h2>การสำรวจจาก bitlabs</h2>
         <% if (surveys && surveys.length > 0) { %>
             <div class="grid gap-6 mb-5">
                 <% surveys.forEach(survey => { %>
@@ -48,7 +81,7 @@
             </div>
         <% } else { %>
             <div class="text-center">
-                <p class="text-lg text-gray-700">ตอนนี้แบบสำรวจว่าง โปรดเข้ามาตรวจสอบอีกครั้งในเวลาใหม่</p>
+                <p class="text-lg text-gray-700">ตอนนี้แบบสำรวจจาก bitlabs ว่าง โปรดเข้ามาตรวจสอบอีกครั้งในเวลาใหม่</p>
             </div>
         <% } %>
     </main>

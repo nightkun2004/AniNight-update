@@ -26,6 +26,8 @@ const AdminRouter = require("./routers/AdminRouter")
 const AnimeRouter = require("./routers/AnimeRouer")
 const channalRouter = require("./routers/ChannelRouter")
 const SurveyRouter = require("./routers/SurveyRouter")
+const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
+const PlaymentRoute = require("./routers/PlaymentRouter")
 
 
 app.get('/ads.txt', (req, res) => {
@@ -162,6 +164,8 @@ app.use("/api/v2", DashboardRouter)
 app.use("/api/v2", ApiService)
 app.use("/api/v2", channalRouter)
 app.use("/api/v2", SurveyRouter)
+app.use("/api/v2", SurveyRouterCrerate)
+app.use("/api/v2", PlaymentRoute)
 
 app.use(helmet());
 

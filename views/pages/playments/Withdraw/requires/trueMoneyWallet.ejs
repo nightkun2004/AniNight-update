@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueMoney Wallet</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../../Component/Header') %>
+    <%- include('../../../../Component/Sidebar') %>
+    <main class="container mx-auto mt-10 mb-20">
+        <h1 class="text-3xl font-bold text-center mb-6">แลกคะแนน TrueMoney Wallet</h1>
+        <% if (userID) {%>
+        <p class="text-2xl mb-5"><span class="font-normal">คะแนนของคุณ: </span> <%= userID.user.points %></p>
+        <% } %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center items-center">
+
+            <!-- 500 คะแนน แลกได้ 50 บาท -->
+            <div class=" bg-white text-black rounded-lg shadow-md overflow-hidden text-center p-6">
+                <img class="w-full h-48 object-contain" src="/logo/playments/truemoney.png" alt="TrueMoney Wallet">
+                <hr class="mb-5 mt-7">
+                <h2 class="text-xl font-bold mb-4">500 คะแนน</h2>
+                <p class="text-gray-700 mb-4">แลกได้ 50 บาท</p>
+                <button class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">แลก</button>
+            </div>
+
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-6t+ed+2i-1n-4w"
+     data-ad-client="ca-pub-6579807593228261"
+     data-ad-slot="3378951421"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+            <!-- 1000 คะแนน แลกได้ 100 บาท -->
+            <div class=" bg-white text-black rounded-lg shadow-md overflow-hidden text-center p-6">
+                <img class="w-full h-48 object-contain" src="/logo/playments/truemoney.png" alt="TrueMoney Wallet">
+                <hr class="mb-5 mt-7">
+                <h2 class="text-xl font-bold mb-4">1000 คะแนน</h2>
+                <p class="text-gray-700 mb-4">แลกได้ 100 บาท</p>
+                <button class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">แลก</button>
+            </div>
+
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-6t+ed+2i-1n-4w"
+     data-ad-client="ca-pub-6579807593228261"
+     data-ad-slot="3378951421"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    </main>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขแบบสำรวจ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <%- include('../../../../Component/Header') %>
+    <%- include('../../../../Component/Sidebar') %>
+    <div class="container mx-auto p-4">
+        <div class="mb-6 mt-4 ">
+            <% if (typeof error !== 'undefined') { %>
+                <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+            <% } %>
+        </div>
+        <h1 class="text-2xl font-bold mb-6 text-center">แก้ไขแบบสำรวจ</h1>
+        <form action="/api/v2/admin/update-survey/<%= survey._id %>" method="POST" class="bg-white p-6 rounded-lg shadow-md">
+            <div class="mb-4">
+                <label for="surveyName" class="block text-gray-700">ชื่อแบบสำรวจ</label>
+                <input type="text" id="surveyName" name="surveyName" value="<%= survey.surveyName %>" class="w-full mt-2 p-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <hr class="mt-4 mb-6">
+            <div id="questions">
+                <% survey.questions.forEach((question, index) => { %>
+                <div class="question mb-4 p-4 border rounded-md">
+                    <label for="questionText<%= index %>" class="block text-gray-700">คำถาม</label>
+                    <input type="text" id="questionText<%= index %>" name="questions[<%= index %>][questionText]" value="<%= question.questionText %>" class="w-full mt-2 p-2 border border-gray-300 rounded-md" required>
+
+                    <label for="inputType<%= index %>" class="block mt-4 text-gray-700">ประเภทการตอบ</label>
+                    <select name="questions[<%= index %>][inputType]" id="inputType<%= index %>" class="w-full mt-2 p-2 border border-gray-300 rounded-md" onchange="handleInputTypeChange(this)">
+                        <option value="text" <%= question.inputType === 'text' ? 'selected' : '' %>>ตอบ</option>
+                        <option value="single-choice" <%= question.inputType === 'single-choice' ? 'selected' : '' %>>เลือกได้คำตอบเดี่ยว</option>
+                        <option value="multiple-choice" <%= question.inputType === 'multiple-choice' ? 'selected' : '' %>>เลือกได้หลายคำตอบ</option>
+                    </select>
+
+                    <div class="options mt-4" id="optionsContainer<%= index %>" style="display: <%= question.inputType !== 'text' ? 'block' : 'none' %>;">
+                        <label class="block text-gray-700">ตัวเลือก</label>
+                        <% (question.options || []).forEach((option, optionIndex) => { %>
+                        <div class="option mb-2">
+                            <input type="text" name="questions[<%= index %>][options][<%= optionIndex %>]" value="<%= option %>" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                            <% if (optionIndex > 0) { %>
+                                <button type="button" onclick="removeOption(this)" class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
+                            <% } %>
+                        </div>
+                        <% }) %>
+                        <button type="button" onclick="addOption(<%= index %>)" class="text-blue-500 hover:text-blue-700 mt-2">เพิ่มตัวเลือก</button>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+            <hr class="mt-4 mb-6">
+
+            <div class="mb-4">
+                <label for="score" class="block text-gray-700">คะแนน</label>
+                <input type="number" id="score" name="score" value="<%= survey.score %>" class="w-full mt-2 p-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="published" class="block text-gray-700">เผยแพร่</label>
+                <input type="checkbox" id="published" name="published" <%= survey.published ? 'checked' : '' %> class="mt-2">
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">บันทึกการเปลี่ยนแปลง</button>
+                <button type="button" onclick="addQuestion()" class="bg-green-500 text-white px-4 py-2 rounded-md">เพิ่มคำถาม</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function handleInputTypeChange(select) {
+            const optionsDiv = select.closest('.question').querySelector('.options');
+            optionsDiv.style.display = select.value !== 'text' ? 'block' : 'none';
+        }
+
+        function addQuestion() {
+            const questionsDiv = document.getElementById('questions');
+            const questionCount = questionsDiv.getElementsByClassName('question').length;
+
+            const newQuestion = document.createElement('div');
+            newQuestion.className = 'question mb-4 p-4 border rounded-md';
+
+            newQuestion.innerHTML = `
+            <hr class="mt-4 mb-6">
+                <label for="questionText${questionCount}" class="block text-gray-700">คำถาม</label>
+                <input type="text" id="questionText${questionCount}" name="questions[${questionCount}][questionText]" class="w-full mt-2 p-2 border border-gray-300 rounded-md" required>
+
+                <label for="inputType${questionCount}" class="block mt-4 text-gray-700">ประเภทการตอบ</label>
+                <select name="questions[${questionCount}][inputType]" id="inputType${questionCount}" class="w-full mt-2 p-2 border border-gray-300 rounded-md" onchange="handleInputTypeChange(this)">
+                    <option value="text">ตอบ</option>
+                    <option value="single-choice">เลือกได้คำตอบเดี่ยว</option>
+                    <option value="multiple-choice">เลือกได้หลายคำตอบ</option>
+                </select>
+
+                <div class="options mt-4" id="optionsContainer${questionCount}" style="display: none;">
+                    <label class="block text-gray-700">ตัวเลือก</label>
+                    <input type="text" name="questions[${questionCount}][options][0]" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                    <button type="button" onclick="addOption(${questionCount})" class="text-blue-500 hover:text-blue-700 mt-2">เพิ่มตัวเลือก</button>
+                </div>
+                <hr class="mt-4 mb-6">
+            `;
+
+            questionsDiv.appendChild(newQuestion);
+        }
+
+        function addOption(questionIndex) {
+            const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
+            const optionCount = optionsContainer.getElementsByClassName('option').length;
+
+            const newOption = document.createElement('div');
+            newOption.className = 'option mb-2';
+            newOption.innerHTML = `
+                <input type="text" name="questions[${questionIndex}][options][${optionCount}]" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                <button type="button" onclick="removeOption(this)" class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
+            `;
+
+            optionsContainer.insertBefore(newOption, optionsContainer.querySelector('button'));
+        }
+
+        function removeOption(button) {
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+
+</html>

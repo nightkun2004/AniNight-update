@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ของรางวัลการชำระเงิน</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 leading-normal tracking-normal">
+    <%- include('../../../Component/Header') %>
+    <%- include('../../../Component/Sidebar') %>
+
+    <div class="container mx-auto mt-10 mb-10">
+        <h1 class="text-3xl font-bold text-center mb-6">เลือกของรางวัลของคุณ</h1>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+
+            <!-- TrueMoney Wallet -->
+            <div class="w-full bg-white md:rounded-lg p-5 shadow-md overflow-hidden">
+                <img class="w-full h-48 object-contain" src="/logo/playments/truemoney.png" alt="TrueMoney Wallet">
+                <hr class="mb-5 mt-7">
+                <div class="p-6">
+                    <h2 class="text-xl font-normal mb-2">TrueMoney Wallet</h2>
+                    <p class="text-gray-700 text-base">เติมเงินด้วย TrueMoney Wallet และใช้จ่ายได้หลากหลาย <br>
+                        <span class="font-bold">TrueMoney Wallet</span> เป็นแอปพลิเคชันสำหรับการชำระเงินและการทำธุรกรรมทางการเงินในประเทศไทย สามารถใช้เติมเงิน ซื้อสินค้าและบริการ รวมถึงการโอนเงินและจ่ายบิลได้สะดวกสบาย <br>
+                        <span class="font-bold">วิธีใช้</span>: ผู้ใช้สามารถเติมเงินเข้า TrueMoney Wallet แล้วนำเงินใน Wallet ไปใช้จ่ายในการซื้อของออนไลน์ จ่ายบิล หรือแลกของรางวัลที่มีในแพลตฟอร์มนี้
+                    </p>
+                    <button class="mt-4 bg-red-500 text-white w-full px-4 py-2 rounded hover:bg-red-600">
+                        <a href="/reward/withdraws/truemoney">เลือก</a>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lazada -->
+            <div class="w-full bg-white md:rounded-lg p-5 shadow-md overflow-hidden">
+                <img class="w-full h-48 object-contain" src="/logo/playments/lazada.jpg" alt="Lazada">
+                <hr class="mb-5 mt-7">
+                <div class="p-6">
+                    <h2 class="text-xl font-normal mb-2">Lazada voucher code</h2>
+                    <p class="text-gray-700 text-base">ซื้อของออนไลน์ได้สะดวกและรวดเร็วที่ Lazada <br>
+                        <span class="font-bold">Lazada</span> เป็นแพลตฟอร์มอีคอมเมิร์ซที่ใหญ่ที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้ ซึ่งรวมถึงประเทศไทย ผู้ใช้สามารถซื้อสินค้าหลากหลายหมวดหมู่ เช่น อิเล็กทรอนิกส์ เสื้อผ้า เครื่องใช้ภายในบ้าน และอื่น ๆ ผ่านทางออนไลน์ <br>
+                        <span class="font-bold">วิธีใช้</span>: ผู้ใช้สามารถจะได้โค้ด Lazada voucher หรือวิธีการชำระเงินอื่น ๆ เพื่อซื้อสินค้าและรับส่วนลดหรือแลกของรางวัลที่นำเสนอผ่านทาง Lazada
+                    </p>
+                    <button onclick="alert('ของรางวัลยังไม่พร้อมให้บริการสำหรับ Lazada voucher')" class="mt-4 bg-blue-500 text-white w-full px-4 py-2 rounded hover:bg-blue-600">เลือก</button>
+                </div>
+            </div>
+
+            <!-- ShopeePlay -->
+            <div class="w-full bg-white md:rounded-lg p-5 shadow-md overflow-hidden">
+                <img class="w-full h-48 object-contain" src="/logo/playments/shopeeplay.png" alt="ShopeePlay">
+                <hr class="mb-5 mt-7">
+                <div class="p-6">
+                    <h2 class="text-xl font-normal mb-2">ShopeePlay</h2>
+                    <p class="text-gray-700 text-base">รับรางวัลพิเศษและคูปองกับ ShopeePlay <br>
+                        <span class="font-bold">ShopeePlay</span> เป็นฟีเจอร์เกมภายในแอปพลิเคชัน Shopee ที่ให้ผู้ใช้เล่นเกมเพื่อรับรางวัล เช่น คูปองส่วนลด Shopee Coins หรือสินค้าโปรโมชั่น ผู้ใช้สามารถสะสมรางวัลและแลกเพื่อใช้ในการซื้อของผ่าน Shopee ได้ <br>
+                        <span class="font-bold">วิธีใช้</span>: ผู้ใช้สามารถเข้าร่วมเล่นเกมต่าง ๆ ใน ShopeePlay เพื่อสะสมคะแนนหรือรางวัล และสามารถแลกเปลี่ยนรางวัลที่ได้รับเป็นสินค้าหรือส่วนลดในการซื้อของบน Shopee
+                    </p>
+                    <button onclick="alert('ของรางวัลยังไม่พร้อมให้บริการสำหรับ ShopeePlay')" class="mt-4 bg-orange-500 text-white w-full px-4 py-2 rounded hover:bg-orange-600">เลือก</button>
+                </div>
+            </div>
+
+        </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-6t+ed+2i-1n-4w"
+     data-ad-client="ca-pub-6579807593228261"
+     data-ad-slot="3378951421"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+        <div class="leading-8 font-light pt-6 text-center">
+            <p class="indent-8 font-normal">ของรางวัลนี้จะใช้แลกสำหรับผู้ใช้ที่เข้าร่วมแบบสำรวจหรือกิจกรรมเรา ที่เราจัด 
+                คุณสามารถแลกของรางวัลได้ตามที่เรามีในคลังรางวัล ทางเราอาจจะขอข้อมูลเพิ่มเติมสำหรับ การแลกรางวัล เช่น ชื่อบัญชี ของรางวัลการชำระเงิน ที่จำเป็นต้องตรวจสอบความถูกต้อง <br>
+                ข้อมูลการแลกของรางวัลจะถูกเก็บไว้เป็นความลับ และจะไม่เปิดเผยข้อมูลหรือส่งต่อข้อมูลเด็ดขาด <span class="font-medium"><a href="/term#playment" target="_blank" rel="noopener noreferrer" class="text-blue-500">อ่านนโยบายของเรา</a></span>
+            </p>
+        </div><hr class="mb-5 mt-7">
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

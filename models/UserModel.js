@@ -69,6 +69,10 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Article'
     }],
+    surveyadmin: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SurveyAdmin'
+    }],
     animelists: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Anime'
