@@ -72,7 +72,7 @@
                         <div class="posts grid grid-cols-1 gap-6">
                             <% if (Posts.length > 0) { %>
                                 <div class="post-container">
-                                    <% Posts.slice(0, 7).forEach(post => { %> <!-- Display only the first 7 posts -->
+                                    <% Posts.slice(0, 10).forEach(post => { %> 
                                         <% if (post.published) { %>
                                             <article class="flex flex-col md:flex-row gap-5">
                                                 <a href="/read/<%= post.urlslug %>" class="link-thumbnail block relative lg:w-[500px] h-64 mb-5 md:w-1/2">
@@ -107,14 +107,6 @@
                                     <% }) %>  
                                 </div>
                             
-                                <!-- Display "Load More" button if there are more than 7 posts -->
-                                <% if (Posts.length > 7) { %>
-                                    <div class="text-center mt-8">
-                                        <button id="load-more" data-posts='<%- JSON.stringify(Posts) %>' class="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                                           โหลดเพิ่มเติม
-                                        </button>
-                                    </div>
-                                <% } %>  
                             <% } else { %>
                                 <p>ยังไม่ได้เขียนบทความ</p>
                             <% } %>
@@ -337,7 +329,7 @@
 
     <script src="/js/script.js"></script>
     <script src="/js/nextseason.js"></script>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const loadMoreButton = document.getElementById('load-more');
             const posts = JSON.parse(loadMoreButton.getAttribute('data-posts'));
@@ -391,7 +383,7 @@
                 }
             });
         });
-    </script>
+    </script> -->
     
     
     <script>

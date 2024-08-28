@@ -3,7 +3,7 @@ const Anime = require("../models/AnimeModel")
 const path = require("path")
 const fs = require("fs")
 const crypto = require("crypto")
-// const s3 = require("../aws")
+const s3 = require("../aws")
 require("dotenv").config
 
 const getAnime = async (req, res) => {
@@ -145,17 +145,49 @@ const CreateanimeItem = async (req, res) => {
         // อัปโหลด
         let posterFilename = generateFilename(poster);
         let posterUploadPath = path.join(__dirname, '..', 'public/uploads/posters', posterFilename);
-        await poster.mv(posterUploadPath);
 
-        // const params = {
-        //     Bucket: process.env.AWS_S3_BUCKET_NAME, 
-        //     Key: `posters/${posterFilename}`,
-        //     Body: poster.data,
-        //     ContentType: poster.mimetype,
-        //     ACL: 'public-read' 
-        // };
+        try {
+            await poster.mv(posterUploadPath);
+            console.log('Uploaded to local server:', posterUploadPath);
+        } catch (error) {
+            console.log('Local upload failed, attempting S3 upload or external server upload:', error.message);
 
-        //  const uploadResult = await s3.upload(params).promise();
+            const params = {
+                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Key: `posters/${posterFilename}`,
+                Body: poster.data,
+                ContentType: poster.mimetype,
+                ACL: 'public-read'
+            };
+
+            try {
+                // ลองอัปโหลดไปยัง S3
+                const uploadResult = await s3.upload(params).promise();
+                posterFilename = uploadResult.Location; // เก็บ URL ของไฟล์ที่ S3
+                console.log('Uploaded to S3:', posterFilename);
+            } catch (s3Error) {
+                console.log('S3 upload failed, attempting to upload to external server:', s3Error.message);
+
+                // ลองยิงภาพไปเก็บที่ server สำรอง
+                try {
+                    const uploadResponse = await axios.post('https://sv2-pic.ani-night.online/api/v2/upload/file/to/server', poster.data, {
+                        headers: {
+                            'Content-Type': poster.mimetype
+                        }
+                    });
+                    posterFilename = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
+                    console.log('Uploaded to external server:', posterFilename);
+                } catch (serverError) {
+                    console.error('External server upload failed:', serverError.message);
+                    return res.status(500).render('./pages/admin/add/anime', {
+                        error: 'ไม่สามารถอัปโหลด poster ได้',
+                        userID,
+                        translations: req.translations,
+                        lang
+                    });
+                }
+            }
+        }
 
         const postcreate = new Anime({
             title,

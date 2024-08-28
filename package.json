@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@tensorflow/tfjs": "^4.20.0",
+    "aws-sdk": "^2.1684.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
