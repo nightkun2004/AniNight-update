@@ -1,29 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
+    <title>AniNight | แพลตฟอร์มข่าวสาร อนิเมะ อัตเดตตารางสารอนิเมะ เรามีให้ติดตามที่นี่</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AniNight — อนิไนท์</title>
-    <meta name="title" content="Meta Tags — Preview, Edit and Generate" />
-    <meta name="description"
-        content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.ani-night.online" />
-    <meta property="og:title" content="AniNight — อนิไนท์" />
+    <meta name="title" content="AniNight | แพลตฟอร์มข่าวสาร อนิเมะ อัตเดตตารางสารอนิเมะ เรามีให้ติดตามที่นี่" />
+    <meta name="description" content />
+    <meta name="keywords" content="อ่านบทความ อ่านอนิเมะ ข่าวสาร อนิเมะ ตารางสารอนิเมะ พากย์ไทย ออนไลน์ มังงะ manga anime ได้ที่ AniNight อนิเมะไนท์">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta property="og:locale" content="th_TH">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.ani-night.online/" />
+    <meta property="og:title" content="AniNight | แพลตฟอร์มข่าวสาร อนิเมะ อัตเดตตารางสารอนิเมะ เรามีให้ติดตามที่นี่" />
     <meta property="og:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
-    <meta property="og:image" content="https://www.ani-night.online/seo/images" />
+    <meta property="og:image" content="https://www.ani-night.online/annight/logo_mini.png" />
+    <meta property="og:image:width" content="1280">
+    <meta property="og:image:height" content="800">
+    <meta property="og:site_name" content="ani-night.online/">
+    <meta property="og:type" content="website">
+    <meta property="og:image:type" content="image/png">
 
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://www.ani-night.online" />
-    <meta property="twitter:title" content="AniNight — อนิไนท์" />
+    <meta name="twitter:site" content="ANI-NIGHT.ONLINE">
+    <meta property="twitter:title" content="AniNight | แพลตฟอร์มข่าวสาร อนิเมะ อัตเดตตารางสารอนิเมะ เรามีให้ติดตามที่นี่" />
     <meta property="twitter:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !" />
-    <meta property="twitter:image" content="https://www.ani-night.online/seo/image" />
+    <meta property="twitter:image" content="https://www.ani-night.online/annight/logo_mini.png" />
+
 
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/pages/home.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
@@ -45,7 +53,7 @@
     <%- include('./Component/Sidebar') %>
     <%- include('./Component/Header') %>
     <div
-        class="ads-container my-8 p-4 bg-gray-50 mx-auto container mt-5 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+        class="ads-container overflow-hidden m-2 p-4 bg-white mx-auto container mt-5 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
         <!-- Ads Home -->
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
             crossorigin="anonymous"></script>
@@ -56,177 +64,105 @@
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
     </div>
-        <main class="h-auto lg:px-5 lg:w-full flex flex-col lg:flex-row md:justify-between max-w-full w-[970px] mt-5 mb-7">
+        <main class="container mx-auto px-4 py-8  mt-5 mb-7">
             <div class="mb-6 mt-4" >
                 <% if (typeof error !== 'undefined') { %>
                     <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= error %></div>
                 <% } %>
             </div>
-            <div class="main-content relative box-border min-h-1 lg:w-[calc(70%-var(--gap))] w-full">
-                <div class="Sidebar-before pt-0 pb-1 sticky transform-none top-0 left-5">
-                    <div class="blogs bg-white p-5 shadow-transparent rounded-lg">
-                        <div class="title-header relative flex items-center justify-between mt-0 mr-0 mb-5">
-                            <h3 class="flex items-center relative text-lg text-black">มาใหม่ >></h3>
-                            <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" target="_blank" class="title-link flex items-center flex-shrink-0 gap-1 text-lg text-blue-400 font-medium">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                        <div class="posts grid grid-cols-1 gap-6">
-                            <% if (Posts.length > 0) { %>
-                                <div class="post-container">
-                                    <% Posts.slice(0, 10).forEach(post => { %> 
-                                        <% if (post.published) { %>
-                                            <article class="flex flex-col md:flex-row gap-5">
-                                                <a href="/read/<%= post.urlslug %>" class="link-thumbnail block relative lg:w-[500px] h-64 mb-5 md:w-1/2">
-                                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>" 
-                                                         class="span-thumbnail pbt-lazy w-full rounded-lg h-72 md:h-64 object-cover bg-cover z-0" 
-                                                         alt="<%= post.title %>">
-                                                    <span class="absolute top-5 left-5 flex items-center w-fit h-5 px-2 py-4 text-white font-normal rounded-lg z-10" 
-                                                          style="background-color: #3b82f6;">
-                                                        <%= post.tags.slice(0, 2).join(', ') %>
-                                                        <% if (post.tags.length > 2) { %> ... <% } %>
-                                                    </span>
-                                                </a>
-                                                
-                                                <div class="p-6 md:w-1/2">
-                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
-                                                    </h1>
-                                                    <% if (post.creator && post.creator.id) { %>
-                                                        <div class="flex items-center space-x-4">
-                                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" 
-                                                                 class="w-12 h-12 rounded-full border border-gray-300">
-                                                            <p class="text-gray-700">
-                                                                <a class="hover:text-blue-400" href="/<%= lang %>/editor/<%= post.creator.username %>">
-                                                                    <%= post.creator.username %>
-                                                                </a>
-                                                            </p>
-                                                        </div>
-                                                    <% } %>
-                                                </div>
-                                            </article>
-                                        <% } %>
-                                    <% }) %>  
-                                </div>
-                            
-                            <% } else { %>
-                                <p>ยังไม่ได้เขียนบทความ</p>
-                            <% } %>
-                            
-                            
-                        </div>
+            <div class="main-content w-full flex flex-wrap lg:flex-nowrap">
+                <div class="w-full lg:w-3/4 px-2">
+                    <div class="title-header relative flex items-center justify-between mt-0 mr-0 mb-5">
+                        <h3 class="flex items-center relative text-lg text-black bg-white rounded-full px-5">มาใหม่ >></h3>
+                        <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" target="_blank" class="title-link flex items-center flex-shrink-0 gap-1 text-lg text-blue-400 font-medium">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
-                </div>
-            </div>
-            <aside class="w-full mt-5 lg:block lg:w-[30%] lg-pl-2 relative visible box-border min-h-1"> <!-- ส่วนนี้จะซ่อนในหน้าจอที่เล็กกว่า lg -->
-                <div style="padding-top: 0px;padding-bottom: 1px;position: static;transform: none;height: auto !important;">
-                    <div class="sidebar-main-home grid  grid-cols-1 gap-1">
-                        <!-- Ads right -->
-                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
-                            <div
-                                class="ads-container my-8 p-4 borderaspect-w-16 aspect-h-9">
-                                <!-- Ads Home -->
-                                <script async
-                                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                                    crossorigin="anonymous"></script>
-                                <!-- Ani Night -->
-                                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
-                                    data-ad-slot="9626337250" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                                <script>
-                                    (adsbygoogle = window.adsbygoogle || []).push({});
-                                </script>
-                            </div>
-                        </div>
-                        <!-- Tags -->
-                       <div class="bg-white rounded-lg p-5 shadow-lg mt-4 mb-6">
-                        <h2 class="font-semibold text-lg mb-5 mt-4 text-black">Tags ที่คุณอาจจะสนใจ</h2>
-                        <div class="flex flex-wrap bg-white  rounded-lg p-4">
-                            <% if (Posts.length > 0) { %>
-                                <% Posts.forEach(post => { %>
-                                    <% post.tags.forEach(tag => { %> <!-- Iterate over tags for each post -->
-                                        <a href="/tag/<%= tag %>" target="_blank" 
-                                        class="inline-block rounded-full border-2 mr-2 mb-2 bg-white border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
-                                            <%= tag %>
-                                        </a>
-                                    <% }) %>
-                                <% }) %>
-                            <% } else { %>
-                                <p>No tags available</p>
-                            <% } %>
-                        </div>
-                       </div>
-                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
-                            <h2 class="font-semibold text-lg text-black mb-5 mt-4">ติดตามเรา | ติดต่อเรา</h2>
-                            <a href="https://web.facebook.com/AniNightOffice.net" target="_blank" class="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded-lg">Facebook</a>
-                            <a href="#" target="_blank" class="px-4 py-2 bg-red-500 hover:bg-red-900 text-white rounded-lg">YouTube</a>
-                        </div>
-                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
-                            <h3 class="text-2xl font-medium text-black mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
-                            <div class="anime-list-nextseason grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-list-nextseason">
-                                <div class="anime-card bg-white shadow rounded">
-                                    <picture class="relative">
-                                        <a href="/anime/">
-                                            <img width="200px" height="400px" src="https://ani-night.online/uploads/posters/481939ef-43f1-446a-998f-ae9e3f017950.png" alt="title">
-                                        </a>
-                                        <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3">2024</span>
-                                        <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
-                                            <img src="/logo/crunchyroll_icon.png" alt="crunchyroll"
-                                                class="w-7 h-7 pointer-events-none rounded-full">
-                                            <img src="/logo/bilibili-icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
-                                            <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
-                                        </streeming>
-                                    </picture>
-                                    <div class="p-4">
-                                        <h3 class="text-lg font-semibold">
-                                            <a href="/anime/">
-                                                Lorem, ipsum.
+                        <% if (Posts.length > 0) { %>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <% Posts.slice(0, 10).forEach(post => { %> 
+                                    <% if (post.published) { %>
+                                        <article class="post-article bg-white">
+                                            <a href="/read/<%= post.urlslug %>" class="link-thumbnail block relative  h-64 mb-5">
+                                                <img src="/uploads/thumbnails/<%= post.thumbnail %>" 
+                                                     class="span-thumbnail w-full rounded h-72 object-cover bg-cover z-0" 
+                                                     alt="<%= post.title %>">
+                                                <span class="absolute top-5 left-5 flex items-center p-2 text-white font-normal rounded-lg z-1" 
+                                                      style="background-color: #3b82f6;">
+                                                    <%= post.tags.slice(0, 1).join(', ') %>
+                                                    <% if (post.tags.length > 1) { %> ... <% } %>
+                                                </span>
                                             </a>
-                                        </h3>
-                                        <p class="text-gray-600 text-sm">
-                                            เสียงพากย์> • [หมวดหมู่]
-                                        </p>
-                        
-                                    </div>
-                                </div>
-                        
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
-                            <h3 class="text-2xl font-medium text-black mb-5 mt-6">บทความมาแรงจาก 10 รายการ</h3>
-                            <div class="grid grid-cols-2 gap-5">
-                                <% if (TopViews.length > 0) { %>
-                                    <% TopViews.forEach(post => { %>
-                                        <% if (post.published) { %>
-                                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
-                                                <a href="/read/<%= post.urlslug %>">
-                                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
-                                                </a>
-                                                <div class="p-6 md:col-span-1">
-                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
-                                                    </h1>
-                                                    <% if (post.creator && post.creator.id) { %>
-                                                        <div class="flex items-center space-x-4">
-                                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
-                                                            <p class="text-gray-700"><%= post.creator.username %></p>
-                                                        </div>
-                                                    <% } %>
-                                                </div>
-                                            </article>
-                                        <% } %>
-                                    <% }) %>  
-                                    <% } else { %>
-                                    <p>ยังไม่ได้เขียนบทความ</p>
+                                            
+                                            <div class="p-6">
+                                                <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                    <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title.substring(0, 60) + "..." %></a>
+                                                </h1>
+                                                <% if (post.creator && post.creator.id) { %>
+                                                    <div class="flex items-center space-x-4">
+                                                        <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" 
+                                                             class="w-12 h-12 rounded-full border border-gray-300">
+                                                        <p class="text-gray-700">
+                                                            <a class="hover:text-blue-400" href="/<%= lang %>/editor/<%= post.creator.username %>">
+                                                                <%= post.creator.username %>
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </article>
                                     <% } %>
+                                <% }) %>  
                             </div>
+                        
+                        <% } else { %>
+                            <p>ยังไม่ได้เขียนบทความ</p>
+                        <% } %>
+                </div>
+                <aside class="hidden md:block lg:w-1/4 px-2 mt-8 lg:mt-0"> <!-- ส่วนนี้จะซ่อนในหน้าจอที่เล็กกว่า lg -->
+                    <div>
+                        <div class="sidebar-main-home grid  grid-cols-1 gap-1">
+                            <!-- Ads right -->
+                            <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                                <div
+                                    class="ads-container my-8 p-4 borderaspect-w-16 aspect-h-9">
+                                    <!-- Ads Home -->
+                                    <script async
+                                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                                        crossorigin="anonymous"></script>
+                                    <!-- Ani Night -->
+                                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
+                                        data-ad-slot="9626337250" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                                    <script>
+                                        (adsbygoogle = window.adsbygoogle || []).push({});
+                                    </script>
+                                </div>
+                            </div>
+                            <!-- Tags -->
+                           <div class="bg-white rounded-lg p-5 shadow-lg mt-4 mb-6">
+                            <h2 class="font-semibold text-lg mb-5 mt-4 text-black">Tags ที่คุณอาจจะสนใจ</h2>
+                            <div class="flex flex-wrap bg-white overflow-hidden  rounded-lg p-4">
+                                <% if (Posts.length > 0) { %>
+                                    <% Posts.forEach(post => { %>
+                                        <% post.tags.forEach(tag => { %> <!-- Iterate over tags for each post -->
+                                            <a href="/tag/<%= tag %>" target="_blank" 
+                                            class="inline-block rounded-full border-2 mr-2 mb-2 bg-white border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
+                                                <%= tag %>
+                                            </a>
+                                        <% }) %>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p>No tags available</p>
+                                <% } %>
+                            </div>
+                           </div>
+    
+                            
                         </div>
                     </div>
-                </div>
-            </aside>
-        </main>
+                </aside>
+            </div>
 
-
-            <!-- NEXT SESTION -->
-            <div class="bg-white shadow hidden">
-                <h3 class="text-2xl font-medium text-black pl-5 mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
+            <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                <h3 class="text-2xl font-medium text-black mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
                 <div class="anime-list-nextseason grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-list-nextseason">
                     <div class="anime-card bg-white shadow rounded">
                         <picture class="relative">
@@ -257,17 +193,30 @@
                 </div>
             </div>
 
-            <div id="loading-content" class="loading-content flex justify-center mt-5 mb-6" style="display: none;">
-                <div class="flex gap-2 items-center">
-                    <img src="/annight/Rolling@1x-0.6s-200px-200px.svg" alt="">
-                    <span>กำลังโหลดเนื้อหา.....</span>
-                </div>
-            </div>
-            <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6 hidden">มาใหม่</h3>
-            <div id="main-content">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
+             <!-- Tags -->
+             <div class="bg-white rounded-lg p-5 block md:hidden shadow-lg mt-4 mb-6">
+                <h2 class="font-semibold text-lg mb-5 mt-4 text-black">Tags ที่คุณอาจจะสนใจ</h2>
+                <div class="flex flex-wrap bg-white overflow-hidden  rounded-lg p-4">
                     <% if (Posts.length > 0) { %>
                         <% Posts.forEach(post => { %>
+                            <% post.tags.forEach(tag => { %> <!-- Iterate over tags for each post -->
+                                <a href="/tag/<%= tag %>" target="_blank" 
+                                class="inline-block rounded-full border-2 mr-2 mb-2 bg-white border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
+                                    <%= tag %>
+                                </a>
+                            <% }) %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No tags available</p>
+                    <% } %>
+                </div>
+               </div>
+
+            <div class="bg-white md:hidden rounded-lg p-5 shadow-md mt-4 mb-6">
+                <h3 class="text-2xl font-medium text-black mb-5 mt-6">บทความมาแรงจาก 10 รายการ</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% if (TopViews.length > 0) { %>
+                        <% TopViews.forEach(post => { %>
                             <% if (post.published) { %>
                                 <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
                                     <a href="/read/<%= post.urlslug %>">
@@ -291,39 +240,7 @@
                         <p>ยังไม่ได้เขียนบทความ</p>
                         <% } %>
                 </div>
-                
-                <h3 class="text-2xl font-medium border-l-4 border-sky-500 pl-5 mb-5 mt-6" hidden>แนะนำบทความที่มาแรงจาก 10 รายการ</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
-                <% if (TopViews.length > 0) { %>
-                    <% TopViews.forEach(post => { %>
-                        <% if (post.published) { %>
-                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
-                                <a href="/read/<%= post.urlslug %>">
-                                    <% if (post.thumbnail.startsWith('http')) { %>
-                                        <img src="<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
-                                      <% } else { %>
-                                        <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
-                                      <% } %>                                      
-                                </a>
-                                <div class="p-6 md:col-span-1">
-                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4"><a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a></h1>
-                                    <% if (post.creator && post.creator.id) { %>
-                                        <div class="flex items-center space-x-4">
-                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
-                                            <p class="text-gray-700"><%= post.creator.username %></p>
-                                        </div>
-                                    <% } %>
-                                </div>
-                            </article> 
-                        <% } %>
-                    <% }) %>  
-                    <% } else { %>
-                    <p>ยังไม่ได้เขียนบทความ</p>
-                    <% } %>
             </div>
-            </div>
-
-            
         </main>
 
 

@@ -1,0 +1,10 @@
+.post-article {
+    background-color: #fff;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.post-article:hover {
+    transform: scale(1.05);
+}

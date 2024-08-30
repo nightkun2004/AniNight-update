@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <title><%= post.title %> | ANINIGHT.ONLINE</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= post.title %></title>
-    <meta property="og:title" content="<%= post.title %>">
     <meta name="description" content="อัตเดตข่าวสารด้านอนิเมะที่คุณชอบ พร้อมเนื้อหาที่มีประโยนช์แ่คุณ!!">
+    <meta name="keywords" content="อ่านบทความ อ่านอนิเมะ ข่าวสาร อนิเมะ ตารางสารอนิเมะ พากย์ไทย ออนไลน์ มังงะ manga anime <%= post.title %>  ได้ที่ AniNight อนิเมะไนท์">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta property="og:locale" content="th_TH">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="<%= post.title %> | ANINIGHT.ONLINE">
+    <meta property="og:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !">
     <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="2000">
+    <meta property="og:image:height" content="2500">
     <meta property="og:site_name" content="ani-night.online">
-
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.ani-night.online" />
-    <meta property="og:title" content="<%= post.title %>" />
-    <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
+    <meta property="og:url" content="https://www.ani-night.online/read/<%= post.urlslug %>" />
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:type" content="image/jpg">
 
-    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= post.title %> | ANINIGHT.ONLINE">
     <meta name="twitter:description" content="เว็บที่ให้คุณเขียนบทความข่าวสารด้านอนิเมะ และรับรายได้จากค่าโฆษณา">
+    <meta property="twitter:url" content="ANI-NIGHT.ONLINE" />
+    <meta name="twitter:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>">
+    <meta name="twitter:site" content="ANI-NIGHT.ONLINE">
     <meta name="google-site-verification" content="eyTwMkNmyYZFyV7ag9MuAEh5uOPdc4uZ6ONSM3w5HRI">
-    <meta property="og:url" content="https://ani-night.online/read/<%= post.urlslug %>">
-    <meta name="twitter:title" content="<%= post.title %>">
 
-    <meta property="twitter:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" />
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>

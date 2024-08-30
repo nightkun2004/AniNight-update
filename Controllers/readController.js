@@ -10,7 +10,7 @@ const getRead = async (req, res, next) => {
     try {
         // Fetch all posts and populate the 'creator.id' field
         const post = await Article.findOne({ urlslug: urlslug}).populate('creator.id').exec();
-        const recentUpdates = await Article.find().sort({ createdAt: -1 }).populate('creator.id').exec();
+        const recentUpdates = await Article.find().sort({ createdAt: -1 }).limit(4).populate('creator.id').exec();
         if (!post) {
             return res.status(404).render('read', {
                 post: { title: "ไม่พบข้อมูล"},
