@@ -10,13 +10,13 @@ const fs = require("fs")
 
 
 const getChannel = async (req, res) => {
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     const username = req.params.username;
     try {
        
         const channelUser = await User.findOne({username: username}).populate('articles').exec()
-        res.render("./pages/channels/index", {
+        res.render("./th/pages/channels/index", {
             userID,
             channel: channelUser,
             translations: req.translations,lang  
@@ -24,7 +24,7 @@ const getChannel = async (req, res) => {
     } catch (error) {
         console.log(error.response ? error.response.data : error.message);
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render('./pages/channels/index', {
+        res.status(500).render('./th/pages/channels/index', {
             error: errorMessage,
             userID,
             translations: req.translations,lang  

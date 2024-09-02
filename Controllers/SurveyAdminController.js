@@ -3,7 +3,7 @@ const User = require("../models/UserModel")
 
 
 const getListsSurvey = async (req, res) => {
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
 
     try {
@@ -11,7 +11,7 @@ const getListsSurvey = async (req, res) => {
         const surveys = await SurveyAdmin.find().lean();
 
         // เรนเดอร์หน้าจัดการแบบสำรวจพร้อมส่งข้อมูลแบบสำรวจไปยังหน้าเว็บ
-        res.render("./pages/admin/manage/mana_survey", { 
+        res.render("./th/pages/admin/manage/mana_survey", { 
             active: "tags", 
             userID, 
             translations: req.translations,
@@ -20,7 +20,7 @@ const getListsSurvey = async (req, res) => {
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/admin/manage/mana_survey', {
+        res.status(500).render('./th/pages/admin/manage/mana_survey', {
             error: errorMessage,
             userID,
             translations: req.translations,
@@ -30,10 +30,10 @@ const getListsSurvey = async (req, res) => {
 }
 
 const getAdminSurveyCreate = async (req,res) => {
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
     try {
-        res.render("./pages/admin/add/survey/add", { 
+        res.render("./th/pages/admin/add/survey/add", { 
             active: "tags", 
             userID, 
             translations: req.translations,
@@ -41,7 +41,7 @@ const getAdminSurveyCreate = async (req,res) => {
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/admin/add/survey/add', {
+        res.status(500).render('./th/pages/admin/add/survey/add', {
             error: errorMessage,
             userID,
             translations: req.translations, lang  
@@ -51,7 +51,7 @@ const getAdminSurveyCreate = async (req,res) => {
 
 // ============================================================ EditSurvey GET =================================================
 const EditSurvey = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
     const surveyId = req.params.id; // รับ ID ของแบบสำรวจจากพารามิเตอร์ URL
 
@@ -63,7 +63,7 @@ const EditSurvey = async (req, res) => {
         }
 
         // ส่งข้อมูลแบบสำรวจไปยังฟอร์มแก้ไข
-        res.render('./pages/admin/edit/survey/edit', {
+        res.render('./th/pages/admin/edit/survey/edit', {
             survey,
             userID,
             translations: req.translations,
@@ -71,7 +71,7 @@ const EditSurvey = async (req, res) => {
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/admin/edit/survey/edit', {
+        res.status(500).render('./th/pages/admin/edit/survey/edit', {
             error: errorMessage,
             userID,
             translations: req.translations,
@@ -82,7 +82,7 @@ const EditSurvey = async (req, res) => {
 
 // ============================================================ CreateSurvey =================================================
 const CreateSurvey = async (req,res) => {
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
     const { surveyName, questions, score, published } = req.body;
 
@@ -104,7 +104,7 @@ const CreateSurvey = async (req,res) => {
           res.redirect('/admin/create/survey');
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/admin/add/survey/add', {
+        res.status(500).render('./th/pages/admin/add/survey/add', {
             error: errorMessage,
             userID,
             translations: req.translations, lang  
@@ -116,7 +116,7 @@ const CreateSurvey = async (req,res) => {
 const UpdateSurvey = async (req, res) => {
     const { surveyId } = req.params; // รับ surveyId จาก URL parameters
     const { surveyName, questions = [], score, published } = req.body;
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
 
     try {
@@ -150,7 +150,7 @@ const UpdateSurvey = async (req, res) => {
     } catch (error) {
         console.error(error);
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/admin/edit/survey/edit', {
+        res.status(500).render('./th/pages/admin/edit/survey/edit', {
             error: errorMessage,
             userID,
             translations: req.translations,

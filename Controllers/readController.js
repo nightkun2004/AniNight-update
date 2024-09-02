@@ -5,14 +5,14 @@ const Article = require("../models/ArticleModel")
 // GET : /api/posts
 const getRead = async (req, res, next) => {
     const { urlslug } = req.params;
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
         // Fetch all posts and populate the 'creator.id' field
         const post = await Article.findOne({ urlslug: urlslug}).populate('creator.id').exec();
         const recentUpdates = await Article.find().sort({ createdAt: -1 }).limit(4).populate('creator.id').exec();
         if (!post) {
-            return res.status(404).render('read', {
+            return res.status(404).render(`${lang}/read`, {
                 post: { title: "ไม่พบข้อมูล"},
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
                 userID,
@@ -29,10 +29,10 @@ const getRead = async (req, res, next) => {
         }
         // console.log(post)
         // Pass 'posts' to the template
-        res.render("read", { post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
+        res.render(`${lang}/read`, { post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('read', {
+        res.status(500).render(`${lang}/read`, {
             error: errorMessage,
             userID, 
             translations: req.translations,lang  

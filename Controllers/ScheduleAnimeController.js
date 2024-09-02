@@ -2,21 +2,21 @@ const User = require("../models/UserModel");
 const Anime = require("../models/AnimeModel")
 
 const getAnimeInfo = async (req, res) => {
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
-    const { urlslug } = req.params; // ดึงค่า urlslug จาก req.params
+    const { urlslug } = req.params;
     try {
-        const anime = await Anime.findOne({ urlslug }).exec(); // ค้นหาข้อมูลโดยใช้ urlslug
+        const anime = await Anime.findOne({ urlslug }).exec();
         if (!anime) {
-            return res.status(404).render('./pages/schedulePages/info', {
+            return res.status(404).render(`/th/pages/schedulePages/info`, {
                 error: 'Anime not found',
                 userID
             });
         }
-        res.render("./pages/schedulePages/info", { userID, anime, translations: req.translations,lang   });
+        res.render(`./th/pages/schedulePages/info`, { userID, anime, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/schedulePages/info', {
+        res.status(500).render(`./th/pages/schedulePages/info`, {
             error: errorMessage,
             userID,
             translations: req.translations,lang  
@@ -27,22 +27,22 @@ const getAnimeInfo = async (req, res) => {
 // ============================================== Stream ====================================================
 // ==========================================================================================================
 const getAnimeStream = async (req, res) => {
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     const { urlslug } = req.params; // ดึงค่า urlslug จาก req.params
     try {
         const anime = await Anime.findOne({ urlslug }).exec(); // ค้นหาข้อมูลโดยใช้ urlslug
         if (!anime) {
-            return res.status(404).render('./pages/schedulePages/streaming/index', {
+            return res.status(404).render(`./th/pages/schedulePages/streaming/index`, {
                 error: 'Anime not found',
                 userID,
                 translations: req.translations,lang  
             });
         }
-        res.render("./pages/schedulePages/streaming/index", { userID, anime, translations: req.translations,lang   });
+        res.render(`./th/pages/schedulePages/streaming/index`, { userID, anime, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/schedulePages/streaming/index', {
+        res.status(500).render(`./th/pages/schedulePages/streaming/index`, {
             error: errorMessage,
             userID,
             translations: req.translations,lang  

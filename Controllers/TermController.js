@@ -2,16 +2,16 @@
 
 const Term = async (req,res) => {
     const userID = req.session.userlogin;
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     try {
-        res.render("term", {
+        res.render("./th/term", {
             userID,
             lang ,
             translations: req.translations, 
         })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('index', {
+        res.status(500).render('./th/index', {
             error: errorMessage,
             userID,
             lang ,

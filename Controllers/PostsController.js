@@ -6,17 +6,17 @@ const { getRecommendations } = require("../lib/generateRecommen")
 // HOME PAGE MAIn
 const getPosts = async (req, res, next) => {
     const userID = req.session.userlogin;
-    const lang = req.params.lang || 'th'; 
+    const lang = res.locals.lang;
     try {
         // Fetch all posts and populate the 'creator.id' field
         const Posts = await Article.find().populate('creator.id').sort({createdAt: -1 }).limit(10).exec();
         const TopViews = await Article.find().populate('creator.id').sort({ views: -1}).limit(10)
 
         // Pass 'posts' to the template
-        res.render("index", { Posts, userID, TopViews, translations: req.translations,  lang});
+        res.render(`./th/index`, { Posts, userID, TopViews, translations: req.translations,  lang});
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('index', {
+        res.status(500).render('./th/index', {
             error: errorMessage,
             userID,
             lang ,

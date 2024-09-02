@@ -15,14 +15,14 @@ require("dotenv").config()
 
 // POST: /api/users/login
 const authLogin = async (req, res, next) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
         const { email, password } = req.body;
 
         // ตรวจสอบว่าข้อมูลที่ส่งมาครบถ้วนหรือไม่
         if (!email || !password) {
-            return res.status(400).render('./pages/authPages/login', { notdata: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/login`, { notdata: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, translations: req.translations, lang });
         }
 
         // Normalize email
@@ -31,14 +31,14 @@ const authLogin = async (req, res, next) => {
 
         // ตรวจสอบว่าผู้ใช้มีอยู่ในระบบหรือไม่
         if (!user) {
-            return res.status(404).render('./pages/authPages/login', { notsystem: 'ไม่พบผู้ใช้นี้ในระบบ', userID, translations: req.translations, lang });
+            return res.status(404).render(`${lang}/pages/authPages/login`, { notsystem: 'ไม่พบผู้ใช้นี้ในระบบ', userID, translations: req.translations, lang });
         }
 
         // ตรวจสอบความถูกต้องของรหัสผ่าน
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).render('./pages/authPages/login', { error: 'รหัสผ่านไม่ถูกต้อง', userID, translations: req.translations, lang });
+            return res.status(401).render(`${lang}/pages/authPages/login`, { error: 'รหัสผ่านไม่ถูกต้อง', userID, translations: req.translations, lang });
         }
 
         // สร้าง JWT token
@@ -58,7 +58,7 @@ const authLogin = async (req, res, next) => {
         res.redirect(303, returnTo);
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/authPages/login', {
+        res.status(500).render(`${lang}/pages/authPages/login`, {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -68,7 +68,7 @@ const authLogin = async (req, res, next) => {
 
 // POST: /api/users/register
 const authRegister = async (req, res, next) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const { username, email, password, password2, 'g-recaptcha-response': recaptchaResponse } = req.body;
     const userID = req.session.userlogin;
     const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA;
@@ -77,15 +77,15 @@ const authRegister = async (req, res, next) => {
 
         // ตรวจสอบข้อมูลที่จำเป็น
         if (!username || !email || !password) {
-            return res.status(400).render('./pages/authPages/register', { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, siteKey, translations: req.translations, lang });
         }
 
         if (password.length < 6) {
-            return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', userID, siteKey, translations: req.translations, lang });
         }
 
         if (password != password2) {
-            return res.status(400).render('./pages/authPages/register', { error: 'รหัสผ่านขอคุณไม่ตรงกัน', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'รหัสผ่านขอคุณไม่ตรงกัน', userID, siteKey, translations: req.translations, lang });
         }
 
         // ตรวจสอบ reCAPTCHA
@@ -97,7 +97,7 @@ const authRegister = async (req, res, next) => {
         });
 
         if (!recaptchaResponseData.data.success) {
-            return res.status(400).render('./pages/authPages/register', { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตนมัติ', userID, siteKey, translations: req.translations, lang, siteKey });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตนมัติ', userID, siteKey, translations: req.translations, lang, siteKey });
         }
 
         // ตรวจสอบความปลอดภัยของรหัสผ่าน (ตัวอย่างเช่น การมีอักขระต่างๆ)
@@ -109,12 +109,12 @@ const authRegister = async (req, res, next) => {
         // ตรวจสอบอีเมลที่ซ้ำ
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).render('./pages/authPages/register', { error: 'อีเมลนี้ถูกใช้ไปแล้ว', siteKey, userID, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'อีเมลนี้ถูกใช้ไปแล้ว', siteKey, userID, translations: req.translations, lang });
         }
         // ตรวจสอบชื่อผู้ใช้ที่ซ้ำ
         const existingUsername = await User.findOne({ username });
         if (existingUsername) {
-            return res.status(400).render('./pages/authPages/register', { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, siteKey, translations: req.translations, lang });
         }
 
         // เข้ารหัสรหัสผ่าน
@@ -134,7 +134,7 @@ const authRegister = async (req, res, next) => {
         );
         console.log(token)
         res.cookie('token', token, { httpOnly: true, secure: true });
-        res.status(200).render('./pages/authPages/register', {
+        res.status(200).render(`${lang}/pages/authPages/register`, {
             token,
             message: "สมัครสำเร็จ กดด้านล่างเพื่อเข้าสู่ระบบ",
             userID,
@@ -149,7 +149,7 @@ const authRegister = async (req, res, next) => {
 
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render('./pages/authPages/register', {
+        res.status(500).render(`${lang}/pages/authPages/register`, {
             error: errorMessage,
             userID,
             translations: req.translations, lang, siteKey
@@ -175,16 +175,16 @@ const GoogleSingin = async (req, res) => {
 }
 
 const authProfile = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
         // ใช้ฟังก์ชัน checkAuth เพื่อทำการตรวจสอบการเข้าสู่ระบบ
         checkAuth(req, res, async () => {
             const user = await User.findById(userID.user._id).select('-password').populate('articles').exec();
             if (!user) {
-                return res.status(404).render('./pages/authPages/profile', { error: 'ไม่พบผู้ใช้นี้ในระบบ', translations: req.translations, lang });
+                return res.status(404).render(`${lang}/pages/authPages/profile`, { error: 'ไม่พบผู้ใช้นี้ในระบบ', translations: req.translations, lang });
             }
-            res.render("./pages/authPages/profile", {
+            res.render(`${lang}/pages/authPages/profile`, {
                 user,
                 userID,
                 message: "โหลดโปรไฟล์เรียบร้อยแล้ว",
@@ -193,7 +193,7 @@ const authProfile = async (req, res) => {
         });
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render('./pages/authPages/profile', {
+        res.status(500).render(`${lang}/pages/authPages/profile`, {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -205,16 +205,16 @@ const authProfile = async (req, res) => {
 // =============================================== Profile Save Anime =========================================
 // ============================================================================================================
 const authProfileSaveAnime = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
         // ใช้ฟังก์ชัน checkAuth เพื่อทำการตรวจสอบการเข้าสู่ระบบ
         checkAuth(req, res, async () => {
             const user = await User.findById(userID.user._id).select('-password').populate('saveanime').exec();
             if (!user) {
-                return res.status(404).render('./pages/authPages/pages/saveAnime', { error: 'ไม่พบผู้ใช้นี้ในระบบ', translations: req.translations, lang });
+                return res.status(404).render(`${lang}/pages/authPages/pages/saveAnime`, { error: 'ไม่พบผู้ใช้นี้ในระบบ', translations: req.translations, lang });
             }
-            res.render("./pages/authPages/pages/saveAnime", {
+            res.render(`${lang}/pages/authPages/pages/saveAnime`, {
                 user,
                 userID,
                 message: "โหลดโปรไฟล์เรียบร้อยแล้ว",
@@ -223,7 +223,7 @@ const authProfileSaveAnime = async (req, res) => {
         });
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render('./pages/authPages/pages/saveAnime', {
+        res.status(500).render(`${lang}/pages/authPages/pages/saveAnime`, {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -234,14 +234,14 @@ const authProfileSaveAnime = async (req, res) => {
 
 
 const getEditProfile = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
-        res.render("./pages/authPages/Edits/EditProfile", { userID, translations: req.translations, lang })
+        res.render(`${lang}/pages/authPages/Edits/EditProfile`, { userID, translations: req.translations, lang })
     } catch (error) {
         // console.log(error.response ? error.response.data : error.message);
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render("./pages/authPages/Edits/EditProfile", {
+        res.status(500).render(`${lang}/pages/authPages/Edits/EditProfile`, {
             userID,
             message: "เกิดข้อผิดพลาดข้อมูลยกเลิกติดตามไปยัง API Server แล้ว",
             error: errorMessage,
@@ -252,27 +252,27 @@ const getEditProfile = async (req, res) => {
 
 
 const EditProfile = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     // console.log('Request Body:', req.body);
     try {
         const { username, email, currentPassword, bio } = req.body;
 
         if (!currentPassword) {
-            return res.status(400).render("./pages/authPages/Edits/EditProfile", { error: 'กรุณากรอกรหัสผ่านปัจจุบัน', userID, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/Edits/EditProfile`, { error: 'กรุณากรอกรหัสผ่านปัจจุบัน', userID, translations: req.translations, lang });
         }
 
         // Get user from database
         const user = await User.findById(req.user.id);
         if (!user) {
-            return res.status(403).render("./pages/authPages/Edits/EditProfile", { error: 'ไม่พบผู้ใช้', userID, translations: req.translations, lang });
+            return res.status(403).render(`${lang}/pages/authPages/Edits/EditProfile`, { error: 'ไม่พบผู้ใช้', userID, translations: req.translations, lang });
         }
 
         // Validate current password
-        const validateUserPassword = await bcrypt.compare(currentPassword, user.password);
-        if (!validateUserPassword) {
-            return res.status(422).render("./pages/authPages/Edits/EditProfile", { error: 'รหัสผ่านเดิมไม่ถูกต้อง', userID, translations: req.translations, lang });
-        }
+        // const validateUserPassword = await bcrypt.compare(currentPassword, user.password);
+        // if (!validateUserPassword) {
+        //     return res.status(422).render(`${lang}/pages/authPages/Edits/EditProfile`, { error: 'รหัสผ่านเดิมไม่ถูกต้อง', userID, translations: req.translations, lang });
+        // }
 
         // Update user info in database
         const updatedUser = await User.findByIdAndUpdate(
@@ -286,14 +286,14 @@ const EditProfile = async (req, res) => {
         );
 
         if (!updatedUser) {
-            return res.status(500).render("./pages/authPages/Edits/EditProfile", { message: 'ไม่สามารถอัปเดตข้อมูลได้.', userID, translations: req.translations, lang });
+            return res.status(500).render(`${lang}/pages/authPages/Edits/EditProfile`, { message: 'ไม่สามารถอัปเดตข้อมูลได้.', userID, translations: req.translations, lang });
         }
 
-        res.status(200).render("./pages/authPages/Edits/EditProfile", { message: 'แก้ไขรายละเอียดโปรไฟลืของคุณแล้วครับ.', userID, translations: req.translations, lang });
+        res.status(200).render(`${lang}/pages/authPages/Edits/EditProfile`, { message: 'แก้ไขรายละเอียดโปรไฟลืของคุณแล้วครับ.', userID, translations: req.translations, lang });
     } catch (error) {
         console.log(error.response ? error.response.data : error.message);
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render("./pages/authPages/Edits/EditProfile", {
+        res.status(500).render(`${lang}/pages/authPages/Edits/EditProfile`, {
             userID,
             message: errorMessage,
             translations: req.translations, lang
@@ -302,11 +302,11 @@ const EditProfile = async (req, res) => {
 }
 
 const EditProfileAvater = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
         if (!req.files || !req.files.avatar) {
-            return res.status(422).render("./pages/authPages/Edits/EditProfile", {
+            return res.status(422).render(`${lang}/pages/authPages/Edits/EditProfile`, {
                 message: 'กรุณาเลือกรูปภาพ',
                 userID,
                 translations: req.translations, lang
@@ -316,12 +316,12 @@ const EditProfileAvater = async (req, res) => {
         const avatar = req.files.avatar;
         const user = await User.findById(req.user.id);
         if (!user) {
-            return res.status(403).render("./pages/authPages/Edits/EditProfile", { message: 'ไม่พบผู้ใช้', userID, translations: req.translations, lang });
+            return res.status(403).render(`${lang}/pages/authPages/Edits/EditProfile`, { message: 'ไม่พบผู้ใช้', userID, translations: req.translations, lang });
         }
 
         // ตรวจสอบขนาดไฟล์
         if (avatar.size > 5000000) {
-            return res.status(422).render("./pages/authPages/Edits/EditProfile", { message: 'รูปภาพของคุณต้องมีขนาดไม่เกิน 5MB', userID, translations: req.translations, lang });
+            return res.status(422).render(`${lang}/pages/authPages/Edits/EditProfile`, { message: 'รูปภาพของคุณต้องมีขนาดไม่เกิน 5MB', userID, translations: req.translations, lang });
         }
 
         // ลบอวาตาร์เก่าถ้ามี
@@ -343,25 +343,25 @@ const EditProfileAvater = async (req, res) => {
         const newFilePath = path.join(__dirname, '..', 'public/uploads/profiles', newFilename);
         avatar.mv(newFilePath, async (err) => {
             if (err) {
-                return res.status(500).render("./pages/authPages/Edits/EditProfile", { error: err, userID, translations: req.translations, lang });
+                return res.status(500).render(`${lang}/pages/authPages/Edits/EditProfile`, { error: err, userID, translations: req.translations, lang });
             }
 
             // อัปเดตข้อมูลในฐานข้อมูล
             const updateAvatar = await User.findByIdAndUpdate(req.user.id, { profilePicture: newFilename }, { new: true });
 
             if (!updateAvatar) {
-                return res.status(422).render("./pages/authPages/Edits/EditProfile", { error: "ไม่สามารถเปลี่ยนอวาตาร์ได้", userID, translations: req.translations, lang });
+                return res.status(422).render(`${lang}/pages/authPages/Edits/EditProfile`, { error: "ไม่สามารถเปลี่ยนอวาตาร์ได้", userID, translations: req.translations, lang });
             }
 
             // อัปเดตเซสชัน
             req.session.userlogin = { ...req.session.userlogin, user: updateAvatar.toObject() };
             console.log("ข้อมูลอัพเดต session", req.session.userlogin);
 
-            res.status(200).render("./pages/authPages/Edits/EditProfile", { message: 'เปลี่ยนโปรไฟล์เรียบร้อย', translations: req.translations, lang, dataprofile: updateAvatar.profilePicture, userID });
+            res.status(200).render(`${lang}/pages/authPages/Edits/EditProfile`, { message: 'เปลี่ยนโปรไฟล์เรียบร้อย', translations: req.translations, lang, dataprofile: updateAvatar.profilePicture, userID });
         });
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render("./pages/authPages/Edits/EditProfile", {
+        res.status(500).render(`${lang}/pages/authPages/Edits/EditProfile`, {
             userID,
             message: errorMessage,
             error: errorMessage,
@@ -371,14 +371,14 @@ const EditProfileAvater = async (req, res) => {
 };
 
 const EditBanner = async (req, res) => {
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
 
-        res.render("./pages/authPages/Edits/EditBanner", { userID, translations: req.translations, lang });
+        res.render(`${lang}/pages/authPages/Edits/EditBanner`, { userID, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render("./pages/authPages/Edits/EditBanner", {
+        res.status(500).render(`${lang}/pages/authPages/Edits/EditBanner`, {
             userID,
             message: errorMessage,
             error: errorMessage,

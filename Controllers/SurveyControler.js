@@ -29,7 +29,7 @@ function isDemoMode(url) {
 const getSurvey = async (req, res) => {
     const userID = req.session.userlogin;
     console.log(userID.user._id)
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     try {
         const options = {
             method: 'GET',
@@ -46,7 +46,7 @@ const getSurvey = async (req, res) => {
         console.log('Surveys:', response.data.data.surveys);
 
         // ตรวจสอบว่าตัวแปร surveys ถูกส่งไปยัง EJS
-        res.render('./pages/Survey/index', {
+        res.render('./th/pages/Survey/index', {
             surveys,
             surveyNpat,
             translations: req.translations,
@@ -55,7 +55,7 @@ const getSurvey = async (req, res) => {
         });
     } catch (error) {
         const errorMessage = error.message || 'Error fetching surveys';
-        res.status(500).render('./pages/Survey/index', {
+        res.status(500).render('./th/pages/Survey/index', {
             surveys: [],
             error: errorMessage,
             userID,
@@ -70,13 +70,13 @@ const getSurvey = async (req, res) => {
 const OfferRewardCallback = async (req, res) => {
     const userID = req.session.userlogin;
 
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     try {
         console.log('Offer Reward Callback:', req.body);
         res.status(200).send('Offer Reward Callback received successfully');
     } catch (error) {
         const errorMessage = error.message || 'Error fetching surveys';
-        res.status(500).render('./pages/Survey/index', {
+        res.status(500).render('./th/pages/Survey/index', {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -110,7 +110,7 @@ const RewardCallback = async (req, res) => {
 const OfferReconciliationCallback = async (req, res) => {
     const userID = req.session.userlogin;
 
-    const lang = req.params.lang || 'th';
+    const lang = res.locals.lang;
     try {
         const secretKey = process.env.BITLABS_SECRET_KEY;
 
@@ -144,7 +144,7 @@ const FirstQualificationCallback = async (req, res) => {
         res.status(200).send('First Qualification Callback received successfully');
     } catch (error) {
         const errorMessage = error.message || 'Error fetching surveys';
-        res.status(500).render('./pages/Survey/index', {
+        res.status(500).render('./th/pages/Survey/index', {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -164,7 +164,7 @@ const MagicReceiptsCallback = async (req, res) => {
         res.status(200).send('Magic Receipts Callback received successfully');
     } catch (error) {
         const errorMessage = error.message || 'Error fetching surveys';
-        res.status(500).render('./pages/Survey/index', {
+        res.status(500).render('./th/pages/Survey/index', {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -184,7 +184,7 @@ const ReconciliationCallback = async (req, res) => {
         res.status(200).send('Reconciliation Callback received successfully');
     } catch (error) {
         const errorMessage = error.message || 'Error fetching surveys';
-        res.status(500).render('./pages/Survey/index', {
+        res.status(500).render('./th/pages/Survey/index', {
             error: errorMessage,
             userID,
             translations: req.translations, lang

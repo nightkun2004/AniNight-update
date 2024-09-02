@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตารางอนิเมะ</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <title>ตารางฉายอนิเมะ 2024 -2025 และช่องทางการฉายออนไลน์ แบบถูกลิขสิทธิ์ | AniNight</title>
+    <link rel="stylesheet" href="https://cdn.ani-night.online/aninight/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     
     <meta property="og:image" content="https://m1r.ai/ycqx2.jpg">
@@ -23,111 +23,111 @@
         <main class="flex flex-col md:flex-row gap-4">
             <div class="container mx-auto p-4">
                 <div class="mb-4 flex gap-4 items-center">
-                    <h1 class="text-xl font-bold border-black border-b-2"><%= translations.welcome %></h1>
+                    <h1 class="text-xl font-bold border-black border-b-2">ตารางฉายอนิเมะและช่องทางการฉายออนไลน์</h1>
                 </div>
                 <div class="bg-white shadow rounded p-4">
                     <!-- ประเภทอนิเมะ -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.animetype %></h3>
+                        <h3 class="font-semibold mb-2">ประเภทอนิเมะ</h3>
                         <div class="flex flex-wrap gap-2">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-animetype="all"><%= translations.pages.schedule.all %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-animetype="japan"><%= translations.pages.schedule.japanlang %></button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-animetype="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-animetype="japan">ญี่ปุ่น</button>
                         </div>
                     </div>
         
                     <!-- categories -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.stylesesstion %></h3>
+                        <h3 class="font-semibold mb-2">เลือกหมวดหมู่</h3>
                         <div class="flex flex-wrap gap-2">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-style="ทั้งหมด"><%= translations.pages.schedule.all %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="อนิเมะ"><%= translations.pages.schedule.japanlang %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="มังงะ"><%= translations.pages.schedule.mangacat %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ชีวิตประจำวัน"><%= translations.pages.schedule.lifecat %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="sci-fi"><%= translations.pages.schedule.scificat %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="นิยาย"><%= translations.pages.schedule.lncat %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ผจญภัย"><%= translations.pages.schedule.adventurecat %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="โมเอะ"><%= translations.pages.schedule.Moecat %></button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-style="ทั้งหมด">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="อนิเมะ">อนิเมะ</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="มังงะ">มังงะ</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ชีวิตประจำวัน">ชีวิตประจำวัน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="sci-fi">sci-fi</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="นิยาย">นิยาย></button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ผจญภัย">ผจญภัย></button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="โมเอะ">โมเอะ</button>
                         </div>
                     </div>
         
                    <!-- Voice Actors -->
         <div class="mb-4">
-            <h3 class="font-semibold mb-2"><%= translations.pages.schedule.voiceActors.title %></h3>
+            <h3 class="font-semibold mb-2">เสียงพากย์</h3>
             <div class="flex flex-wrap gap-2">
-                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-voice="all"><%= translations.pages.schedule.voiceActors.all %></button>
-                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ไทย"><%= translations.pages.schedule.voiceActors.thai %></button>
-                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ญี่ปุ่น"><%= translations.pages.schedule.voiceActors.japan %></button>
+                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-voice="all">ทั้งหมด</button>
+                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ไทย">พากย์ไทย</button>
+                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ญี่ปุ่น">พากย์ญี่ปุ่น</button>
             </div>
         </div>
 
         <!-- Price -->
         <div class="mb-4">
-            <h3 class="font-semibold mb-2"><%= translations.pages.schedule.price.title %></h3>
+            <h3 class="font-semibold mb-2">รูปแบบริการ</h3>
             <div class="flex flex-wrap gap-2">
-                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-price="all"><%= translations.pages.schedule.price.all %></button>
-                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="free"><%= translations.pages.schedule.price.free %></button>
-                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="premium"><%= translations.pages.schedule.price.premium %></button>
+                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-price="all">ทั้งหมด</button>
+                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="free">free</button>
+                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="premium">premium</button>
             </div>
         </div>
         
                    <!-- season -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.season.title %></h3>
+                        <h3 class="font-semibold mb-2">season</h3>
                         <div class="flex flex-wrap gap-2">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-season="all"><%= translations.pages.schedule.season.all %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Spring"><%= translations.pages.schedule.season.spring %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Summer"><%= translations.pages.schedule.season.summer %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Fall"><%= translations.pages.schedule.season.fall %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Winter"><%= translations.pages.schedule.season.winter %></button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-season="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Spring">Spring</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Summer">Summer</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Fall">Fall</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Winter">Winter</button>
                         </div>
                     </div>
 
                     
                 <!-- Year -->
                 <div class="mb-4">
-                    <h3 class="font-semibold mb-2"><%= translations.pages.schedule.year.title %></h3>
+                    <h3 class="font-semibold mb-2">ปี</h3>
                     <div class="flex flex-wrap gap-2 year">
-                        <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-year="all"><%= translations.pages.schedule.year.all %></button>
-                        <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2025"><%= translations.pages.schedule.year.year2025 %></button>
-                        <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2024"><%= translations.pages.schedule.year.year2024 %></button>
-                        <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2023"><%= translations.pages.schedule.year.year2023 %></button>
+                        <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-year="all">ทั้งหมด</button>
+                        <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2025">2025</button>
+                        <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2024">2024</button>
+                        <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2023">2023</button>
                     </div>
                 </div>
         
                       <!-- เดือน -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.month.title %></h3>
+                        <h3 class="font-semibold mb-2">เดือน</h3>
                         <div class="flex flex-wrap gap-2 year">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-month="all"><%= translations.pages.schedule.month.all %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มกราคม"><%= translations.pages.schedule.month.january %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กุมภาพันธ์"><%= translations.pages.schedule.month.february %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มีนาคม"><%= translations.pages.schedule.month.march %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="เมษายน"><%= translations.pages.schedule.month.april %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤษภาคม"><%= translations.pages.schedule.month.may %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มิถุนายน"><%= translations.pages.schedule.month.june %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กรกฎาคม"><%= translations.pages.schedule.month.july %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="สิงหาคม"><%= translations.pages.schedule.month.august %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กันยายน"><%= translations.pages.schedule.month.september %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ตุลาคม"><%= translations.pages.schedule.month.october %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤศจิกายน"><%= translations.pages.schedule.month.november %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ธันวาคม"><%= translations.pages.schedule.month.december %></button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-month="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มกราคม">มกราคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กุมภาพันธ์">กุมภาพันธ์</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มีนาคม">มีนาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="เมษายน">เมษายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤษภาคม">พฤษภาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มิถุนายน">มิถุนายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กรกฎาคม">กรกฎาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="สิงหาคม">สิงหาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กันยายน">กันยายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ตุลาคม">ตุลาคม</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤศจิกายน">พฤศจิกายน</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ธันวาคม">ธันวาคม</button>
                         </div>
                     </div>
         
                     <!-- Status --> 
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.status.title %></h3>
+                        <h3 class="font-semibold mb-2">การฉาย</h3>
                         <div class="flex flex-wrap gap-2">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-status="all"><%= translations.pages.schedule.status.all %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="completed"><%= translations.pages.schedule.status.completed %></button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="incomplete"><%= translations.pages.schedule.status.incomplete %></button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-status="all">ทั้งหมด</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="completed">ฉายแล้ว</button>
+                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="incomplete">ยังไม่ฉาย</button>
                         </div>
                     </div>
                     <!-- แพลตฟอร์ม -->
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.platform.title %></h3>
+                        <h3 class="font-semibold mb-2">แพลตฟอร์มสตืม</h3>
                         <div class="flex flex-wrap gap-2">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-platform="all"><%= translations.pages.schedule.platform.all %></button>
+                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-platform="all">ทั้งหมด</button>
                             <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
                                 data-platform="bilibili">BILIBILI</button>
                             <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
@@ -138,8 +138,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <h3 class="font-semibold mb-2"><%= translations.pages.schedule.search.title %></h3>
-                        <input type="text" id="search-input" class="p-2 border rounded outline-none" placeholder="<%= translations.pages.schedule.search.placeholder %>">
+                        <h3 class="font-semibold mb-2">ค้นหาอนิเมะ</h3>
+                        <input type="text" id="search-input" class="p-2 border rounded outline-none" placeholder="ค้นหาอนิเมะ">
                     </div>
 
 

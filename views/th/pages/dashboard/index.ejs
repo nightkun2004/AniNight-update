@@ -10,16 +10,13 @@
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
-        /* Styling for progress bar container */
         .progress-bar-bg {
             position: relative;
             background-color: #f3f4f6;
         }
     
-        /* Styling for progress bar fill */
         .progress-bar-fill {
             width: 0%;
-            /* Default width, will be updated with JavaScript */
             transition: width 0.3s ease-in-out;
         }
     </style>
@@ -87,14 +84,14 @@
             <!-- Articles Management Section -->
             <section>
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-gray-800">บทความ</h2>
+                    <h2 class="text-xl font-bold">บทความ</h2>
                     <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <a href="/uploads/create/article">เพิ่มบทความใหม่</a>
                     </button>
                 </div>
                 <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
                     <thead class="bg-gray-100 text-gray-600">
-                        <tr>
+                        <tr class="text-black">
                             <th class="py-2 px-4 border-b">#</th>
                             <th class="py-2 px-4 border-b">ชื่อบทความ</th>
                             <th class="py-2 px-4 border-b">สถานะ</th>
@@ -105,7 +102,7 @@
                     <tbody>
                         <% if (userDatas && userDatas.articles.length > 0) { %>
                             <% userDatas.articles.forEach((article, index) => { %>
-                            <tr>
+                            <tr class="text-black">
                                 <td class="py-2 px-4 border-b text-center"><%= index + 1 %></td>
                                 <td class="py-2 px-4 border-b">
                                     <%= article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %>

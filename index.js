@@ -57,57 +57,40 @@ const Router = require("./lib/routers/router")
 const ApiService = require("./lib/routers/serverApis")
 const {checkAuth} = require("./lib/auth")
 
-// กำหนดค่า CORS
-app.use(cors({
-  origin: 'http://localhost:8000',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
-}));
+const allowedOrigins = [
+  'https://live-aninight.ani-night.online',
+  'https://ani-night.online',
+  'https://studio.ani-night.online',
+  'https://anime.ani-night.online',
+];
 
-
-function setLanguage(req, res, next) {
-  let lang = req.query.lang;
-
-  // ถ้าไม่ได้ระบุภาษาใน query parameter ให้ใช้ภาษาจาก Header Accept-Language หรือถ้าไม่มีให้ใช้เป็นอังกฤษ
-  if (!lang) {
-      const acceptLang = req.headers['accept-language'];
-      if (acceptLang) {
-          // เลือกภาษาที่มีความสำคัญสูงสุดจาก header
-          if (acceptLang.includes('th')) {
-              lang = 'th';
-          } else if (acceptLang.includes('jp')) {
-              lang = 'jp';
-          } else {
-              lang = 'en';
-          }
-      } else {
-          lang = 'th';
-      }
+// Middleware สำหรับกำหนดการอนุญาตของ CORS 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
-
-  // ตรวจสอบ path และตั้งค่าภาษาตามเส้นทาง
-  if (req.path.startsWith('/en/')) {
-      lang = 'en';
-  } else if (req.path.startsWith('/jp/')) {
-      lang = 'jp';
-  } else if (req.path.startsWith('/th/')) {
-      lang = 'th';
-  }
-
-  req.lang = lang; // เก็บภาษาที่เลือกไว้ใน req.lang
-
-  try {
-      req.translations = require(`./translations/${lang}.json`); // โหลดไฟล์การแปล
-  } catch (error) {
-      console.error(`Translation file for ${lang} not found.`);
-      req.translations = require('./translations/th.json'); // โหลดไฟล์การแปลค่าเริ่มต้น
-  }
-
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
-}
+});
 
-// ใช้ middleware
-app.use(setLanguage);
+
+app.use((req, res, next) => {
+  // รับค่า `header-lang` จาก header ของ request
+  let lang = req.headers['header-lang'] ||  req.path.split('/')[1];
+
+  // ตรวจสอบว่า lang มีค่าถูกต้องหรือไม่ (th, en, jp)
+  const supportedLanguages = ['th', 'en', 'jp'];
+  if (!supportedLanguages.includes(lang)) {
+    lang = 'th'; // ค่าเริ่มต้นคือภาษาไทย
+  }
+
+  // กำหนดค่า res.locals.lang เพื่อให้ EJS ใช้
+  res.locals.lang = lang;
+  next();
+});
 
 
 
