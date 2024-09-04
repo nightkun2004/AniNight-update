@@ -29,10 +29,10 @@ const getRead = async (req, res, next) => {
         }
         // console.log(post)
         // Pass 'posts' to the template
-        res.render(`${lang}/read`, { post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
+        res.render(`./th/read`, { post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render(`${lang}/read`, {
+        res.status(500).render(`./th/read`, {
             error: errorMessage,
             userID, 
             translations: req.translations,lang  
