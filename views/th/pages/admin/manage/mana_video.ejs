@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการวีดีโอ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../Component/Header') %>
+    <%- include('../../../Component/Sidebar') %>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">จัดการวีดีโอ</h1>
+
+        <!-- Survey List Table -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <tr>
+                        <th class="py-3 px-6 text-left">ID</th>
+                        <th class="py-3 px-6 text-center">ชื่อวีดีโอ</th>
+                        <th class="py-3 px-6 text-center">คอมเม้น</th>
+                        <th class="py-3 px-6 text-center">สถานะ</th>
+                        <th class="py-3 px-6 text-center">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm font-light">
+                    <% if (videolists && videolists.length > 0) { %>
+                        <% videolists.forEach(video => { %>
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium"><%= video._id %></span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center"><%= video.namepv %></td>
+                                <td class="py-3 px-6 text-center"></td>
+                                <td class="py-3 px-6 text-center">
+                                    <% if (video.published) { %>
+                                        <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">เผยแพร่แล้ว</span>
+                                    <% } else { %>
+                                        <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">รอเผยแพร่</span>
+                                    <% } %>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex item-center justify-center space-x-4">
+                                        <a href="/admin/edit/video/anime/<%= video._id  %>" class="text-blue-600 hover:underline">
+                                            <i class="fas fa-edit"></i> แก้ไข
+                                        </a>
+                                        <a href="/add/episodes/anime/<%= video._id  %>" class="text-sky-600 hover:underline">
+                                            <i class="fas fa-edit"></i> เพิ่มตอน
+                                        </a>
+                                        <form action="/api/v2/admin/delete/survey/" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแบบสำรวจนี้?');">
+                                            <button type="submit" class="text-red-600 hover:underline">
+                                                <i class="fas fa-trash-alt"></i> ลบ
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <p>ไม่มีวีดีโอ</p>
+                    <% } %>
+                </tbody>
+            </table>
+            
+        </div>
+
+        <!-- Create New Survey Button -->
+        <div class="flex justify-end mt-6">
+            <a href="/upload/pv/anime" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-plus-circle"></i> เพิ่มตอนของวีดีโอ
+            </a>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -3,8 +3,17 @@ const Anime = require("../models/AnimeModel")
 const path = require("path")
 const fs = require("fs")
 const crypto = require("crypto")
+const cloudinary = require('cloudinary').v2;
+const axios = require('axios');
 const s3 = require("../aws")
 require("dotenv").config
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const getAnime = async (req, res) => {
     const userID = req.session.userlogin;
@@ -123,12 +132,14 @@ const CreateanimeItem = async (req, res) => {
     const lang = res.locals.lang;
     const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories } = req.body;
     const poster = req.files.poster;
+    
     try {
-        if (!title || !animetype || !year || !month || !status || !urlslug)
-            return res.status(404).render(`${lang}/pages/admin/add/anime`, { message: "โปรดกรองข้อมูลให้ครบทุกช่องที่จำเป็น", userID, translations: req.translations, lang })
+        if (!title || !animetype || !year || !month || !status || !urlslug) {
+            return res.status(404).render(`${lang}/pages/admin/add/anime`, { message: "โปรดกรองข้อมูลให้ครบทุกช่องที่จำเป็น", userID, translations: req.translations, lang });
+        }
 
         if (!poster) {
-            return res.status(404).render(`${lang}/pages/admin/add/anime`, { message: "ไม่พบ poster", userID, translations: req.translations, lang })
+            return res.status(404).render(`${lang}/pages/admin/add/anime`, { message: "ไม่พบ poster", userID, translations: req.translations, lang });
         }
 
         // ตรวจสอบ urlslug
@@ -142,20 +153,20 @@ const CreateanimeItem = async (req, res) => {
             return crypto.randomUUID() + '.' + splittedFilename[splittedFilename.length - 1];
         };
 
-        // อัปโหลด
         let posterFilename = generateFilename(poster);
         let posterUploadPath = path.join(__dirname, '..', 'public/uploads/posters', posterFilename);
 
         try {
+            // อัปโหลดไปยัง local server
             await poster.mv(posterUploadPath);
             console.log('Uploaded to local server:', posterUploadPath);
         } catch (error) {
             console.log('Local upload failed, attempting S3 upload or external server upload:', error.message);
 
             const params = {
-                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Bucket: process.env.AWS_S3_BUCKET_NAME, // แก้ไขการสะกด
                 Key: `posters/${posterFilename}`,
-                Body: poster.data,
+                Body: poster.data, // แก้ไขการสะกด
                 ContentType: poster.mimetype,
                 ACL: 'public-read'
             };
@@ -178,13 +189,33 @@ const CreateanimeItem = async (req, res) => {
                     posterFilename = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
                     console.log('Uploaded to external server:', posterFilename);
                 } catch (serverError) {
-                    console.error('External server upload failed:', serverError.message);
-                    return res.status(500).render(`${lang}/pages/admin/add/anime`, {
-                        error: 'ไม่สามารถอัปโหลด poster ได้',
-                        userID,
-                        translations: req.translations,
-                        lang
-                    });
+                    console.error('External server upload failed, attempting Cloudinary upload:', serverError.message);
+
+                    // Attempt Cloudinary upload
+                    try {
+                        const uploadResponse = await new Promise((resolve, reject) => {
+                            cloudinary.uploader.upload_stream(
+                                { resource_type: 'image', public_id: `posters/${generateFilename(poster)}` },
+                                (error, result) => {
+                                    if (error) {
+                                        reject(error);
+                                    } else {
+                                        resolve(result.secure_url);
+                                    }
+                                }
+                            ).end(poster.data); // ส่งข้อมูลไฟล์ไปยัง Cloudinary
+                        });
+                        posterFilename = uploadResponse;
+                        console.log('Uploaded to Cloudinary:', posterFilename);
+                    } catch (cloudinaryError) {
+                        console.error('Cloudinary upload failed:', cloudinaryError.message);
+                        return res.status(500).render(`${lang}/pages/admin/add/anime`, {
+                            error: 'ไม่สามารถอัปโหลด poster ได้',
+                            userID,
+                            translations: req.translations,
+                            lang
+                        });
+                    }
                 }
             }
         }
@@ -207,18 +238,20 @@ const CreateanimeItem = async (req, res) => {
         });
 
         await postcreate.save();
-        console.log(postcreate)
+        console.log(postcreate);
         await User.findByIdAndUpdate(req.user.id, { $push: { animelists: postcreate._id } }, { new: true });
-        res.status(200).render(`${lang}/pages/admin/add/anime`, { message: "สร้างสำเร็จ", userID, translations: req.translations, lang })
+        res.status(200).render(`${lang}/pages/admin/add/anime`, { message: "สร้างสำเร็จ", userID, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`${lang}/pages/admin/add/anime`, {
             error: errorMessage,
             userID,
-            translations: req.translations, lang
+            translations: req.translations,
+            lang
         });
     }
 }
+
 
 
 // ============================================================ Edit Anime Post INFO ==============================

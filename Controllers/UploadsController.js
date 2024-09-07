@@ -17,9 +17,9 @@ const CreateArticle = async (req, res, next) => {
             return res.status(404).render("./th/pages/uploads/createarticle", {message: "ไม่พบรูปภาพ", userID, translations: req.translations,lang  })
         }
 
-        if (!images || images.length === 0) {
-            return res.status(404).render("./th/pages/uploads/createarticle", {message: "ไม่พบรูปภาพประกอบ", userID, translations: req.translations,lang  })
-        }
+        // if (!images || images.length === 0) {
+        //     return res.status(404).render("./th/pages/uploads/createarticle", {message: "ไม่พบรูปภาพประกอบ", userID, translations: req.translations,lang  })
+        // }
 
         const tagsArray = tags ? tags.split('#').map(tag => tag.trim()).filter(tag => tag) : [];
 

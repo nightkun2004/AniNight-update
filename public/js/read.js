@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fullscreenImage = document.getElementById('fullscreenImage');
     const closeFullscreen = document.getElementById('closeFullscreen');
     const prevImage = document.getElementById('prevImage');
-    const nextImage = document.getElementById('nextImage');
+    const nextImage = document.getElementById('nextImage'); 
     const toggleFullScreen = document.getElementById('toggleFullScreen');
     const toggleFullScreen_Read = document.getElementById('btn-read-fullscreen');
 
@@ -200,10 +200,8 @@ async function likeArticle(articleId) {
         Swal.fire({
             icon: 'error',
             title: 'ข้อผิดพลาด',
-            text: 'เกิดข้อผิดพลาดในการไลค์บทความ || เซสชันของคุณหมดอายุโปรออกจากระบบแล้วเข้าสู่ระบบใหม่',
-            didClose: () => {
-                location.reload();
-            }
+            confirmButtonColor: '#333',
+            text: 'เกิดข้อผิดพลาดในการไลค์บทความที่ไม่รู้จัก',
         });
     }
 }

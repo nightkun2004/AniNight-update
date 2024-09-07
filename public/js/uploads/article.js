@@ -42,48 +42,20 @@ function previewImages(input) {
     previewContainer.style.display = 'block'; // Show the container if images are present
 }
 
-// Initialize Quill editor
-var quill = new Quill('#editor', {
-    theme: 'snow',
-    modules: {
-        toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['link', 'video', 'image'],
-            [{ 'color': [] }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            ['align', 'script', 'code-block'],
-            [{ 'header': [1, 2, 3, 4, 5, 6] }],
-            ['clean']
-        ]
-    },
-    formats: [
-        'bold', 'italic', 'header', 'underline', 'strike', 'link', 'color', 'list', 'bullet', 'indent',
-        'video', 'align', 'script', 'code-block', 'image'
-    ]
-});
-
-var contentInput = document.getElementById('content');
-
-quill.on('text-change', function() {
-    contentInput.value = quill.root.innerHTML;
-});
-
-quill.getModule('toolbar').addHandler('video', function() {
-    var url = prompt('Enter the URL of the video:');
-    if (url) {
-        insertVideo(url);
+// Initialize editor
+tinymce.init({
+    selector: '#editor',
+    height: 500,
+    plugins: 'link image media lists',
+    toolbar: 'undo redo | image | formatselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright | bullist numlist | link image media | removeformat',
+    menubar: false,  // ซ่อนเมนูบาร์
+    setup: function (editor) {
+        editor.on('change', function () {
+            var content = editor.getContent();
+            document.getElementById('content').value = content;  // อัพเดทค่าใน input hidden
+        });
     }
 });
-
-quill.getModule('toolbar').addHandler('image', function() {
-    selectLocalImage();
-});
-
-function insertVideo(url) {
-    var range = quill.getSelection();
-    quill.insertEmbed(range.index, 'video', url, Quill.sources.USER);
-}
 
 function selectLocalImage() {
     const input = document.createElement('input');

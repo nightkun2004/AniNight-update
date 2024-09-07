@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const Play = require("../models/PlayModel")
 const Article = require("../models/ArticleModel")
 const Anime = require("../models/AnimeModel")
 
@@ -41,6 +42,22 @@ const ManageAnimes = async (req, res) => {
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/admin/manage/manage_anime', {
+            error: errorMessage,
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+}
+
+const ManageVideos = async (req, res) => {
+    const lang = req.params.lang || 'th'; 
+    const userID = req.session.userlogin;
+    try {
+        const videolists = await Play.find().exec();
+        res.render("./th/pages/admin/manage/mana_video", { userID, videolists, translations: req.translations,lang  })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/admin/manage/mana_video', {
             error: errorMessage,
             userID,
             translations: req.translations,lang  
@@ -101,6 +118,7 @@ const filterUsers = async (req, res) => {
 module.exports = {
     getAdmin,
     ManageAnimes,
+    ManageVideos,
     updateUserRole,
     filterUsers
 }

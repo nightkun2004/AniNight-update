@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มตอนของวีดีโอ</title>
+    <link rel="stylesheet" href="https://cdn.ani-night.online/aninight/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../Component/Header') %>
+    <%- include('../../../Component/Sidebar') %>
+
+    <main class="w-full h-full flex flex-col justify-center p-6 bg-white rounded-lg shadow-lg">
+        <div>
+            <form id="uploadEpisodeForm" enctype="multipart/form-data">
+                <label for="playId">playId</label>
+                <input type="text" name="playId" id="playId" class="mt-1 block outline-none w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4" value="<%= anime._id %>" readonly>
+    
+                <label for="namepv">ชื่อตอน</label>
+                <input type="text" name="namepv" id="namepv" class="mt-1 block outline-none w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4" required>
+            
+                <label for="decpv">คำอธิบายตอน</label>
+                <textarea name="decpv" id="decpv" class="mt-1 block outline-none w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4"></textarea>
+            
+                <label for="videoFile">อัปโหลดวีดีโอ (ไม่เกิน 100MB)</label>
+                <input type="file" id="videoFile" name="videoFile" accept="video/mp4" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4" required>
+            
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">อัปโหลดตอนใหม่</button>
+            </form>
+        </div>
+
+        <div id="progressContainer" class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+            <div id="progressBar" class="bg-blue-500 h-2.5 rounded-full" style="width: 0;"></div>
+        </div>
+        
+        <p id="message" class="mt-4 text-red-500"></p>
+    </main>
+
+    <script>
+        const form = document.getElementById('uploadEpisodeForm');
+        const progressBar = document.getElementById('progressBar');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const videoFile = document.getElementById('videoFile').files[0];
+
+            if (videoFile.size > 100 * 1024 * 1024) {
+                alert("ขนาดไฟล์ต้องไม่เกิน 100MB");
+                return;
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/add/episode/video', true);
+
+            // ติดตามความก้าวหน้า
+            xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    progressBar.style.width = percentComplete + '%';
+                }
+            };
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    message.textContent = 'ตอนใหม่ถูกอัปโหลดสำเร็จ!';
+                    message.classList.remove('text-red-500');
+                    message.classList.add('text-green-500');
+                } else {
+                    message.textContent = `เกิดข้อผิดพลาด: ${xhr.responseText}`;
+                }
+            };
+
+            xhr.onerror = () => {
+                message.textContent = 'เกิดข้อผิดพลาดในการอัปโหลด!';
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
+    

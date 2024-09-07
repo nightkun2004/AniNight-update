@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เล่นวีดีโอ</title>
+    <title><%= play.namepv %> | <%= episode ? episode.namepv : play.namepv %></title>
     <link rel="stylesheet" href="https://cdn.ani-night.online/aninight/css/index.css">
+    <!-- <link rel="stylesheet" href="/css/player.css"> -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         .draggable {
             cursor: move;
@@ -19,37 +21,76 @@
     <%- include('./Component/Header') %>
     <%- include('./Component/Sidebar') %>
 
-    <main class="main-section flex flex-col md:flex-row md:justify-between md:gap-3 md:m-5">
+    <main class="main-section  flex flex-col md:flex-row md:justify-between md:gap-3 md:m-5">
         <!-- Left Content -->
         <div class="md:w-3/4 w-full h-64 md:h-auto">
             <div id="mini-player" class="hidden bg-red-200 p-2 rounded-lg">
                 สามารถเคลื่อนที่ตัวเล่นวีดีโอได้
             </div>
             <div id="videoPlayerContainer"
-             class="relative w-full h-64 md:h-[calc(100vh-100px)] bg-black md:rounded-lg overflow-hidden transition-all duration-300 cursor-pointe">
-                <div class="w-full h-full bg-black rounded-lg">
-                    <iframe id="videoPlayer" class="w-full h-full rounded-md" src="https://www.youtube.com/embed/W7-F3p4HWc0" frameborder="0"
-                        allowfullscreen></iframe>
-                </div>
-                <!-- https://www.youtube.com/embed/W7-F3p4HWc0 -->
+            class="relative w-full h-64 md:h-[calc(100vh-100px)] bg-black md:rounded-lg overflow-hidden transition-all duration-300 cursor-pointer">
+            <div class="w-full h-full bg-black rounded-lg ">
+                <% if (play && play.published) { %> 
+                    <% if (episode && episode.videoUrl) { %>  
+                        <iframe src="https://play.ani-night.online/?videoId=<%= play._id %>&episodeId=<%= episode._id %>" class="w-full h-full rounded-md"
+                        frameborder="0" allowfullscreen></iframe>
+                    <% } else { %>
+                        <iframe src="https://play.ani-night.online/?videoId=<%= play._id %>" class="w-full h-full rounded-md"
+                        frameborder="0" allowfullscreen></iframe>
+                    <% } %>
+                <% } else { %>
+                    <div class="text-red-600 text-center flex justify-center items-center h-full">
+                        <div>
+                            <h3 class="md:text-6xl font-bold text-red-500">404 Error</h3>
+                            <p class="font-normal text-base md:text-2xl">
+                                ตามคำขอผู้ดูแลลิขสิทธิ์เราได้นำเนื้อหาออกแล้ว !
+                            </p>
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
+        
+        </div>
+       <!-- https://www.youtube.com/embed/W7-F3p4HWc0 -->
+    </iframe>
+
         <!-- Right Content -->
         <div class="bg-white md:w-2/6 w-full mt-3 md:mt-0 rounded-md shadow-md p-4">
             <div class="mb-4">
-                <h3 class="text-2xl text-black font-bold">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, natus.</h3>
+                <h3 class="text-2xl text-black font-bold"><%= play.namepv %></h3>
             </div><hr class="mb-4">
+            <h3 class="mb-6 font-light text-black">รายการเนื้อหา</h3>
+            <div class="mb-4">
+                <ul class="flex flex-wrap gap-2">
+                    <li>
+                        <a href="/play/<%= play._id %>" class="bg-gray-100 hover:bg-gray-400 rounded-md px-4 py-1 hover:underline">
+                            <%= play.namepv %>
+                        </a>
+                    </li>
+                
+                    <% play.Episodes.forEach((ep, index) => { %> 
+                        <li>
+                            <a href="/play/<%= play._id %>/<%= ep._id %>" class="bg-gray-100 hover:bg-gray-400 rounded-md px-4 py-1 hover:underline">
+                                ตอนที่ <%= index + 1 %> 
+                            </a>
+                        </li>
+                    <% }); %>
+                    
+                </ul>
+                
+            </div>
            <div class="mb-4 flex items-center gap-2">
             <p class="text-2xl m-2 flex items-center gap-2">
-                <i class="fa-solid fa-heart cursor-pointer"></i>
-                <span class="text-sm text-gray-800">0</span>
+                <i id="like-btn" class="fa-solid fa-heart cursor-pointer <%= liked ? 'text-blue-500' : '' %>" data-video-id="<%= play._id %>"></i>
+                <span id="like-count" class="text-sm text-gray-800"><%= play.likes %></span>
             </p>
             <p class="text-2xl m-2 flex items-center gap-2">
                 <i class="fa-solid fa-comment cursor-pointer"></i>
                 <span class="text-sm text-gray-800">0</span>
             </p>
            </div>
-            <div class="mb-4">
+            <!-- <div class="mb-4">
                 <h3 class="text-md font-semibold text-gray-700">Related Videos</h3>
                 <ul class="text-sm bg-gray-600 text-white overflow-x-auto w-full h-[180px] flex">
                     <li class="mt-2 flex w-[320px] h-[180px] ">
@@ -67,14 +108,14 @@
                         <a href="#" class="hover:text-blue-600">Related Video 3</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
             <div class="mb-4 bg-white flex w-full items-center gap-3">
                 <div class="bg-gray-300 m-2 flex w-full border-2 border-gray-200 rounded-md">
                     <input type="text" class="outline-none px-4 py-2 w-full" name="commentinput" id="commentinput" placeholder="แสดงความคิดเห็น">
                     <button class="bg-blue-400 px-2 py-2 text-white" type="submit">ส่ง</button>
                 </div>
             </div>  
-            <div>
+            <!-- <div>
                 <h3 class="text-md font-semibold text-gray-700">คอมเม้นท์ (0)</h3>
                 <ul class="text-sm text-gray-600">
                     <li class="mt-2">
@@ -84,67 +125,143 @@
                         <p><strong>User 2:</strong> This is another comment.</p>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </main>
 
     <script>
-        window.addEventListener('scroll', function () {
-            const videoPlayerContainer = document.getElementById('videoPlayerContainer');
-            const miniPlayer = document.getElementById('mini-player');
+        // window.addEventListener('scroll', function () {
+        //     const videoPlayerContainer = document.getElementById('videoPlayerContainer');
+        //     const miniPlayer = document.getElementById('mini-player');
       
-            const scrollPosition = window.scrollY;
+        //     const scrollPosition = window.scrollY;
 
-            if (scrollPosition > 50) {
-                videoPlayerContainer.classList.remove('md:h-[calc(100vh-100px)]');
-                videoPlayerContainer.classList.remove('relative');
-                videoPlayerContainer.classList.add('fixed', 'bottom-4', 'left-4', 'w-[320px]', 'h-[180px]', 'md:rounded-md', 'z-50');
-                videoPlayerContainer.classList.add('draggable');
-                miniPlayer.style.display = 'block';
-                dragElement(videoPlayerContainer); // Ensure dragging is applied to the mini player
-            } else {
-                videoPlayerContainer.classList.add('md:h-[calc(100vh-100px)]');
-                videoPlayerContainer.classList.add('relative');
-                videoPlayerContainer.classList.remove('fixed', 'bottom-4', 'left-4', 'w-[320px]', 'h-[180px]', 'md:rounded-md', 'z-50');
-                videoPlayerContainer.classList.remove('draggable');
-                miniPlayer.style.display = 'none';
-            }
-        });
+        //     if (scrollPosition > 50) {
+        //         videoPlayerContainer.classList.remove('md:h-[calc(100vh-100px)]');
+        //         videoPlayerContainer.classList.remove('relative');
+        //         videoPlayerContainer.classList.add('fixed', 'bottom-4', 'left-4', 'w-[320px]', 'h-[180px]', 'md:rounded-md', 'z-50');
+        //         videoPlayerContainer.classList.add('draggable');
+        //         miniPlayer.style.display = 'block';
+        //         dragElement(videoPlayerContainer); // Ensure dragging is applied to the mini player
+        //     } else {
+        //         videoPlayerContainer.classList.add('md:h-[calc(100vh-100px)]');
+        //         videoPlayerContainer.classList.add('relative');
+        //         videoPlayerContainer.classList.remove('fixed', 'bottom-4', 'left-4', 'w-[320px]', 'h-[180px]', 'md:rounded-md', 'z-50');
+        //         videoPlayerContainer.classList.remove('draggable');
+        //         miniPlayer.style.display = 'none';
+        //     }
+        // });
 
-        function dragElement(element) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        // function dragElement(element) {
+        //     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-            element.onmousedown = dragMouseDown;
+        //     element.onmousedown = dragMouseDown;
 
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            }
+        //     function dragMouseDown(e) {
+        //         e = e || window.event;
+        //         e.preventDefault();
+        //         pos3 = e.clientX;
+        //         pos4 = e.clientY;
+        //         document.onmouseup = closeDragElement;
+        //         document.onmousemove = elementDrag;
+        //     }
 
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                element.style.top = (element.offsetTop - pos2) + "px";
-                element.style.left = (element.offsetLeft - pos1) + "px";
-            }
+        //     function elementDrag(e) {
+        //         e = e || window.event;
+        //         e.preventDefault();
+        //         pos1 = pos3 - e.clientX;
+        //         pos2 = pos4 - e.clientY;
+        //         pos3 = e.clientX;
+        //         pos4 = e.clientY;
+        //         element.style.top = (element.offsetTop - pos2) + "px";
+        //         element.style.left = (element.offsetLeft - pos1) + "px";
+        //     }
 
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-            }
-        }
+        //     function closeDragElement() {
+        //         document.onmouseup = null;
+        //         document.onmousemove = null;
+        //     }
+        // }
 
         // Apply the drag function to the mini player container
         // Ensure this is called after the element is in the DOM and has been properly styled
     </script>
+    <!-- <script src="/js/player.js" defer></script> -->
     <script src="/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const likeBtn = document.getElementById('like-btn');
+            const likeCount = document.getElementById('like-count');
+            const videoId = likeBtn.dataset.videoId;  // Retrieve the video ID from the data attribute
+
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+            const token = getCookie('tksave');
+
+            if (!token) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'คุณยังไม่ได้เข้าสู่ระบบ',
+                    text: 'กรุณาเข้าสู่ระบบก่อนบันทึกบทความ',
+                    confirmButtonText: 'เข้าสู่ระบบ',
+                    cancelButtonText: 'ยกเลิก',
+                    showCancelButton: true,
+                    confirmButtonColor: '#333',
+                    preConfirm: () => {
+                        window.location.href = '/auth/login';
+                    }
+                });
+                return;
+            }
+
+            async function checkLiked() {
+                try {
+                    const response = await fetch(`/api/check-like/${videoId}`);
+                    const data = await response.json();
+                    if (data.liked) {
+                        likeBtn.classList.add('text-blue-500');  // Change to blue if liked
+                    }
+                } catch (error) {
+                    console.error('Error checking like status:', error);
+                }
+            }
+
+            // Check if the user has liked the video on page load
+            checkLiked();
+
+            // Handle the like button click
+            likeBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch(`/api/v2/like/video/${videoId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                             'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const data = await response.json();
+
+                    if (data.message === 'Like added successfully') {
+                        likeCount.textContent = data.likes;
+                        likeBtn.classList.add('text-blue-500');
+                        Swal.fire({
+                            icon: 'success',
+                            title: data.message || 'สำเร็จ',
+                        });
+                    } else if (data.message === 'Like removed successfully') {
+                        likeCount.textContent = data.likes;
+                        likeBtn.classList.remove('text-blue-500');  // Revert to default color after unliking
+                    }
+                } catch (error) {
+                    console.error('Error liking video:', error);
+                }
+            });
+        });
+
+    </script>
+    
 </body>
 </html>

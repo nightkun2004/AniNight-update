@@ -179,10 +179,19 @@
                     
                         <picture class="relative">
                             <a href="/anime/<%= anime.urlslug %>">
-                                <img width="400px" height="600px"
-                            src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
-                            alt="<%= anime.title %>">
+                                <% if (anime.poster.startsWith('http')) { %>
+                                    <!-- External image URL -->
+                                    <img width="400px" height="600px"
+                                        src="<%= anime.poster %>"
+                                        alt="<%= anime.title %>">
+                                <% } else { %>
+                                    <!-- Local server image path -->
+                                    <img width="400px" height="600px"
+                                        src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                                        alt="<%= anime.title %>">
+                                <% } %>
                             </a>
+                            
                             <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3"><%= anime.year %></span>
                             <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
                                 <% if (anime.platforms.includes('crunchyroll')) { %>

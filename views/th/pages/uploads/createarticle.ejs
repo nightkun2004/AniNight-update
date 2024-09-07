@@ -47,10 +47,11 @@
                          <p class="text-gray-500 text-sm">Tip: ตัวอย่างแท็กที่สมบูรณ์: #9test #anime #ตัวอย่าง #ทดสอบแท็ก</p>
                      </div>
                      <div class="mb-4">
-                         <label for="content" class="block text-sm font-medium text-gray-700">เนื้อหา</label>
-                         <div id="editor" class="mt-1 block w-full h-[300px] md:h-[500px] shadow-sm sm:text-sm border border-gray-300 rounded-md"></div>
-                         <input type="hidden" id="content" name="content">
-                     </div>
+                        <label for="content" class="block text-sm font-medium text-gray-700">เนื้อหา</label>
+                        <textarea id="editor" class="mt-1 block w-full h-[300px] md:h-[500px] shadow-sm sm:text-sm border border-gray-300 rounded-md"></textarea>
+                        <input type="hidden" id="content" name="content">
+                    </div>
+                    
                      <div class="mb-4">
                          <label class="block text-sm font-medium text-gray-700">หมวดหมู่</label>
                          <div class="flex flex-wrap gap-2 mt-2">
@@ -153,7 +154,7 @@
         </main>
     </div>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.tiny.cloud/1/k10l81kijx2sgrr3h6dofsi509gkpluq1ugssphl6wz0kp53/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="/js/script.js"></script>
     <script src="/js/uploads/article.js"></script>
 </body>

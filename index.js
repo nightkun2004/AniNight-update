@@ -63,6 +63,8 @@ const allowedOrigins = [
   'https://ani-night.online',
   'https://studio.ani-night.online',
   'https://anime.ani-night.online',
+  'http://localhost:7000',
+  'https://play.ani-night.online',
 ];
 
 // Middleware สำหรับกำหนดการอนุญาตของ CORS 

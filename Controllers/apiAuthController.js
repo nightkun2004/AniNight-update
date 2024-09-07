@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
+const Play = require("../models/PlayModel")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
@@ -83,8 +84,59 @@ const getPosts = async (req,res, next) =>{
         return next(new HttpError(error.message || 'เกิดข้อผิดพลาดในการค้นหาโพสต์', 500));
     }
 }
+
+const getPlay = async (req, res) => {
+    const { videoid } = req.params;
+    try {
+        const play = await Play.findById(videoid).populate('Episodes');
+        if (!play) {
+            return res.status(404).json({ error: 'Video not found.' });
+        }
+        res.json({
+            videoUrl: play.videoUrl,
+            episodes: play.Episodes.map(ep => ({
+                id: ep._id,
+                name: ep.namepv,
+                videoUrl: ep.videoUrl
+            }))
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ error: errorMessage });
+    }
+};
+
+const getPlayEpisodes = async (req, res) => {
+    const { videoid, episodeid } = req.params;
+    try {
+        const play = await Play.findById(videoid).populate('Episodes');
+        if (!play) {
+            return res.status(404).json({ error: 'Video not found.' });
+        }
+
+        const episode = play.Episodes.id(episodeid);
+        if (!episode) {
+            return res.status(404).json({ error: 'Episode not found.' });
+        }
+
+        res.json({
+            videoUrl: play.videoUrl,
+            episode: {
+                id: episode._id,
+                name: episode.namepv,
+                videoUrl: episode.videoUrl
+            }
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ error: errorMessage });
+    }
+};
+
 module.exports = {
     APIauthLogin,
     APIauthProfile,
-    getPosts
+    getPosts,
+    getPlay,
+    getPlayEpisodes
 };

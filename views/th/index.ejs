@@ -82,26 +82,21 @@
                     <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= error %></div>
                 <% } %>
             </div>
-            <div class="main-content w-full flex flex-wrap lg:flex-nowrap">
-                <div class="w-full lg:w-3/4 px-2">
+            <div class="main-content w-full">
+                <div class="w-full bg-white p-4">
                     <div class="title-header relative flex items-center justify-between mt-0 mr-0 mb-5">
-                        <h3 class="flex items-center relative text-lg text-black bg-white rounded-full px-5">มาใหม่ >></h3>
+                        <h3 class="border-l-4 border-red-600 p-2">มาใหม่ >></h3>
                         <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" target="_blank" class="title-link flex items-center flex-shrink-0 gap-1 text-lg text-blue-400 font-medium">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                         <% if (Posts.length > 0) { %>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <% Posts.slice(0, 10).forEach(post => { %> 
                                     <% if (post.published) { %>
-                                        <article class="post-article bg-white">
+                                        <article class="bg-white shadow-md rounded-lg">
                                             <a href="/read/<%= post.urlslug %>" class="link-thumbnail block relative  h-64 mb-5">
                                                 <img src="/uploads/thumbnails/<%= post.thumbnail %>" 
                                                      class="span-thumbnail w-full rounded h-72 object-cover bg-cover z-0" 
                                                      alt="<%= post.title %>">
-                                                <span class="absolute top-5 left-5 flex items-center p-2 text-white font-normal rounded-lg z-1" 
-                                                      style="background-color: #3b82f6;">
-                                                    <%= post.tags.slice(0, 1).join(', ') %>
-                                                    <% if (post.tags.length > 1) { %> ... <% } %>
-                                                </span>
                                             </a>
                                             
                                             <div class="p-6">
@@ -129,7 +124,7 @@
                             <p>ยังไม่ได้เขียนบทความ</p>
                         <% } %>
                 </div>
-                <aside class="hidden md:block lg:w-1/4 px-2 mt-8 lg:mt-0"> <!-- ส่วนนี้จะซ่อนในหน้าจอที่เล็กกว่า lg -->
+                <aside class="hidden md:block"> <!-- ส่วนนี้จะซ่อนในหน้าจอที่เล็กกว่า lg -->
                     <div>
                         <div class="sidebar-main-home grid  grid-cols-1 gap-1">
                             <!-- Ads right -->
@@ -174,7 +169,7 @@
             </div>
 
             <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
-                <h3 class="text-2xl font-medium text-black mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
+                <h3 class="border-l-4 border-red-600 p-2 text-2xl font-medium text-black mb-5 mt-6">อนิเมะ season หน้า ที่กำลังจะมาถึง เช็คเลย !!</h3>
                 <div class="anime-list-nextseason grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-list-nextseason">
                     <div class="anime-card bg-white shadow rounded">
                         <picture class="relative">
@@ -225,7 +220,7 @@
                </div>
 
             <div class="bg-white md:hidden rounded-lg p-5 shadow-md mt-4 mb-6">
-                <h3 class="text-2xl font-medium text-black mb-5 mt-6">บทความมาแรงจาก 10 รายการ</h3>
+                <h3 class="border-l-4 border-red-600 p-2 text-2xl font-medium text-black mb-5 mt-6">บทความมาแรงจาก 10 รายการ</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <% if (TopViews.length > 0) { %>
                         <% TopViews.forEach(post => { %>
