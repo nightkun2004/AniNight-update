@@ -44,7 +44,6 @@ const getPlayEpisodes = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
-        // ดึงข้อมูล play พร้อมตอนทั้งหมด
         const play = await Play.findById(videoid).populate('Episodes');
         if (!play) {
             return res.status(404).send('Video not found.');
@@ -57,7 +56,6 @@ const getPlayEpisodes = async (req, res) => {
             return res.status(404).send('Episode not found.');
         }
 
-        // ใช้หน้า 'play.ejs' เหมือนเดิม แต่ส่งข้อมูล episode เพิ่มเข้าไป
         res.render(`./th/play`, {
             userID,
             play,
@@ -126,6 +124,46 @@ const getEditPv = async (req, res) => {
         });
     }
 }
+
+const postEditPV = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const { videoid } = req.params;
+
+    try {
+        // รับข้อมูลจากฟอร์ม
+        let { namepv, decpv, published } = req.body;
+
+        // หา video ที่ต้องการแก้ไข
+        const anime = await Play.findById(videoid).exec();
+        if (!anime) {
+            return res.status(404).send('Video not found.');
+        }
+
+        // อัปเดตข้อมูลวิดีโอ
+        anime.namepv = namepv || anime.namepv; // อัปเดตชื่อถ้ามีค่า
+        anime.decpv = decpv || anime.decpv; // อัปเดตคำอธิบายถ้ามีค่า
+
+        // อัปเดตสถานะเผยแพร่ (published จะเป็น "on" ถ้า checkbox ถูกเลือก)
+        anime.published = published === 'on';
+
+        // บันทึกข้อมูลวิดีโอที่อัปเดตแล้วลงฐานข้อมูล
+        await anime.save();
+
+        // ส่งข้อความยืนยันการแก้ไข
+        res.render(`./th/pages/admin/edit/Editvideo`, { message: "แก้ไขแล้ว", userID, anime, lang });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render(`./th/pages/admin/edit/Editvideo`, {
+            error: errorMessage,
+            userID,
+            translations: req.translations,
+            lang
+        });
+    }
+}
+
+
 
 const getepisodes = async (req, res) => {
     const lang = res.locals.lang;
@@ -304,6 +342,7 @@ module.exports = {
     getEditPv,
     getUploadPv,
     uploadPV,
+    postEditPV,
     addEpisode,
     likeVideo
 }

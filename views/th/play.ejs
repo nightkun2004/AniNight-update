@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= play.namepv %> | <%= episode ? episode.namepv : play.namepv %></title>
+    <title><%= episode ? episode.namepv : play.namepv %></title>
     <link rel="stylesheet" href="https://cdn.ani-night.online/aninight/css/index.css">
     <!-- <link rel="stylesheet" href="/css/player.css"> -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
@@ -62,7 +62,7 @@
             </div><hr class="mb-4">
             <h3 class="mb-6 font-light text-black">รายการเนื้อหา</h3>
             <div class="mb-4">
-                <ul class="flex flex-wrap gap-2">
+                <ul class="flex flex-wrap gap-6">
                     <li>
                         <a href="/play/<%= play._id %>" class="bg-gray-100 hover:bg-gray-400 rounded-md px-4 py-1 hover:underline">
                             <%= play.namepv %>
@@ -72,7 +72,7 @@
                     <% play.Episodes.forEach((ep, index) => { %> 
                         <li>
                             <a href="/play/<%= play._id %>/<%= ep._id %>" class="bg-gray-100 hover:bg-gray-400 rounded-md px-4 py-1 hover:underline">
-                                ตอนที่ <%= index + 1 %> 
+                                บทที่ <%= index + 1 %>  <%= ep.namepv %>
                             </a>
                         </li>
                     <% }); %>

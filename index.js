@@ -44,7 +44,7 @@ app.get('/sitemap.xml', async (req, res) => {
       const animes = await Anime.find().sort({ createdAt: 'desc' });
 
       res.setHeader('Content-Type', 'application/xml');
-      res.render('sitemap', { 
+      res.render('./th/sitemap', { 
         articles,
         animes
        });

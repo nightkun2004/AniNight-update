@@ -16,70 +16,32 @@
     <main class="w-full flex justify-center p-6 bg-white rounded-lg shadow-lg">
         <div>
             <h2 class="text-2xl font-bold text-center mb-6">แก้ไข PV อนิเมะ</h2>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <label for="namepv" class="block text-sm font-medium text-gray-700">ชื่อเนื้อหา</label>
-            <input type="text" name="namepv" id="namepv" value="<%= anime.namepv %>" class="mt-1 block outline-none w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4">
-
-            <label for="decpv" class="block text-sm font-medium text-gray-700">คำอธิบาย</label>
-            <textarea name="decpv" id="decpv" class="mt-1 block outline-none w-full h-[200px] border border-gray-300 rounded-md shadow-sm p-2 mb-4"><%= anime.decpv %></textarea>
-
-            <div class="flex items-center mb-4">
-                <input id="published"  <% if (anime.published) { %> checked <% } %> name="published" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                <label for="published" class="ml-2 text-sm font-medium text-gray-900">เผยแพร่ตอนนี้</label>
+            <div class="mb-6 mt-4">
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= message %></div>
+                <% } %>
             </div>
-
-            <span id="statusnumber">0</span>
-
-            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">เผยแพร่วีดีโอ</button>
-        </form>
-        <p id="message" class="mt-4 text-red-500"></p>
-        <p>เพิ่มตอนของวีดีโอ <span><a href="/add/episodes/anime">เพิ่ม</a></span></p>
+            <form action="/api/v2/edit/video/<%= anime._id %>" method="post" enctype="multipart/form-data">
+                <label for="namepv" class="block text-sm font-medium text-gray-700">ชื่อเนื้อหา</label>
+                <input type="text" name="namepv" id="namepv" value="<%= anime.namepv %>" class="mt-1 block outline-none w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4">
+            
+                <label for="decpv" class="block text-sm font-medium text-gray-700">คำอธิบาย</label>
+                <textarea name="decpv" id="decpv" class="mt-1 block outline-none w-full h-[200px] border border-gray-300 rounded-md shadow-sm p-2 mb-4"><%= anime.decpv %></textarea>
+            
+                <div class="flex items-center mb-4">
+                    <input id="published" name="published" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" <% if (anime.published) { %> checked <% } %>>
+                    <label for="published" class="ml-2 text-sm font-medium text-gray-900">เผยแพร่ตอนนี้</label>
+                </div>
+            
+                <span id="statusnumber">0</span>
+            
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">เผยแพร่วีดีโอ</button>
+            </form>
+            
         </div>
     </main>
 
     <script src="/js/script.js"></script>
-    <script>
-        const form = document.getElementById('uploadForm');
-        const progressBar = document.getElementById('progressBar');
-        const statusnumber = document.getElementById('statusnumber');
-        const message = document.getElementById('message');
-    
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-    
-            const formData = new FormData(form);
-    
-            message.textContent = '';
-    
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/upload-video', true);
-    
-            xhr.upload.onprogress = (e) => {
-                if (e.lengthComputable) {
-                    const percentComplete = (e.loaded / e.total) * 100;
-                    console.log(`Progress: ${percentComplete}%`); // debug
-                    progressBar.style.width = percentComplete + '%';
-                    statusnumber.innerText = percentComplete + '%';
-                }
-            };
-    
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    message.textContent = 'อัปโหลดสำเร็จ!';
-                    message.classList.remove('text-red-500');
-                    message.classList.add('text-green-500');
-                } else {
-                    message.textContent = 'อัปโหลดล้มเหลว!';
-                }
-            };
-    
-            xhr.onerror = function () {
-                message.textContent = 'เกิดข้อผิดพลาดในการอัปโหลด!';
-            };
-    
-            xhr.send(formData);
-        });
-    </script>
     
 </body>
 </html>

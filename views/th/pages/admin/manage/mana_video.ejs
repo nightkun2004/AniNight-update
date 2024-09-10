@@ -18,6 +18,9 @@
 
         <!-- Survey List Table -->
         <div class="bg-white shadow-md rounded-lg p-4">
+            <div class="mb-6">
+                <input type="search" class="outline-none border-2 px-4 py-3 rounded" name="searchid" id="searchid" placeholder="ค้นหา ID VIDEO">
+            </div>
             <table class="min-w-full bg-white">
                 <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <tr>
@@ -28,16 +31,16 @@
                         <th class="py-3 px-6 text-center">การจัดการ</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 text-sm font-light">
+                <tbody id="videoTable" class="text-gray-600 text-sm font-light">
                     <% if (videolists && videolists.length > 0) { %>
                         <% videolists.forEach(video => { %>
-                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <tr class="video-row border-b border-gray-200 hover:bg-gray-100">
                                 <td class="py-3 px-6 text-left whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <span class="font-medium"><%= video._id %></span>
+                                        <span class="font-medium video-id"><%= video._id %></span>
                                     </div>
                                 </td>
-                                <td class="py-3 px-6 text-center"><%= video.namepv %></td>
+                                <td class="py-3 px-6 text-center video-name"><%= video.namepv %></td>
                                 <td class="py-3 px-6 text-center"></td>
                                 <td class="py-3 px-6 text-center">
                                     <% if (video.published) { %>
@@ -68,8 +71,10 @@
                     <% } %>
                 </tbody>
             </table>
-            
         </div>
+        
+       
+        
 
         <!-- Create New Survey Button -->
         <div class="flex justify-end mt-6">
@@ -80,5 +85,23 @@
     </div>
 
     <script src="/js/script.js"></script>
+    <script>
+        document.getElementById('searchid').addEventListener('input', function() {
+            const searchQuery = this.value.toLowerCase();
+            const videoRows = document.querySelectorAll('.video-row');
+            
+            videoRows.forEach(row => {
+                const videoId = row.querySelector('.video-id').textContent.toLowerCase();
+                const videoName = row.querySelector('.video-name').textContent.toLowerCase();
+    
+                // ตรวจสอบว่า id หรือชื่อวิดีโอตรงกับการค้นหาไหม
+                if (videoId.includes(searchQuery) || videoName.includes(searchQuery)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
