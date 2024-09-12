@@ -64,10 +64,10 @@ const allowedOrigins = [
   'https://studio.ani-night.online',
   'https://anime.ani-night.online',
   'http://localhost:7000',
+  'http://localhost:5173',
   'https://play.ani-night.online',
 ];
 
-// Middleware สำหรับกำหนดการอนุญาตของ CORS 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
