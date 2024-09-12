@@ -29,9 +29,9 @@ const getPosts = async (req, res, next) => {
 
 // ============================= get API Doraemon Thailand
 const getAPINextdoraemon = async (req, res, next) => {
-    const { urlslug } = req.params;
+    const { tags } = req.params;
     try {
-        const Posts = await Article.find({ urlslug }).populate('creator.id').sort({ createdAt: -1 }).exec();
+        const Posts = await Article.find({ tags }).sort({ createdAt: -1 }).exec();
         res.json({ msg: "ข้อมูลโดราเอมอน", Posts });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
