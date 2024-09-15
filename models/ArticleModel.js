@@ -57,7 +57,7 @@ const ArticleSchema = new mongoose.Schema({
     },
     replies: [ReplySchema],
     tags: {
-        type: [String],
+        type: [String], 
         required: true
     },
     published: {

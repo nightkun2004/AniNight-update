@@ -10,6 +10,7 @@ const fs = require('fs')
 const Article = require("./models/ArticleModel")
 const Anime = require("./models/AnimeModel")
 const session = require('express-session');
+// const { verifyApiKey } = require("./Middlewares/ApiKeyMiddleware")
 const moment = require('moment');
 const cookieParser = require('cookie-parser');
 require("dotenv").config();
@@ -74,7 +75,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
