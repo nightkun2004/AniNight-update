@@ -124,4 +124,47 @@ const getScheduleInfo = async (req, res) => {
 
 
 
-module.exports = { getAnimeInfo, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo }
+
+
+
+
+// ============================================= GET ANIME Stream ===========================================
+const getAnimeStreamAPI = async (req, res) => {
+    const lang = res.locals.lang;
+    const { urlslug } = req.params; 
+    try {
+        const anime = await Anime.findOne({ urlslug }).exec(); 
+        if (!anime) {
+            return res.status(404).json({
+                error: 'Anime not found',
+                userID,
+                translations: req.translations, lang
+            });
+        }
+        res.json({ msg: "ดึงข้อมูล Anime Stream แล้ว",userID, anime, translations: req.translations, lang });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang
+        });
+    }
+}
+
+// ============================================= GET ANIME Winter ===========================================
+const getAnimeWinterAPI = async (req, res) => {
+    const { year,season } = req.query;
+    try {
+        const animes = await Anime.find({ year: year, season: season }).sort({ createdAt: -1 }).exec();
+        if (animes.length === 0) {
+            return res.status(404).json({ message: "No anime found" });
+        }
+        res.status(200).json({ animes });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ errorMessage });
+    }
+}
+
+module.exports = { getAnimeInfo, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }
