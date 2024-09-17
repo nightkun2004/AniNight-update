@@ -39,10 +39,25 @@ const APIauthLogin = async (req, res, next) => {
         const token = jwt.sign({ id, username, role, profilePicture }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
         // ส่ง token ใน HTTP header
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',  // ใช้ secure ใน production เท่านั้น
+            sameSite: 'Strict',  // ป้องกัน CSRF
+            maxAge: 24 * 60 * 60 * 1000  // 1 วัน
+        });
 
         // ส่งข้อมูลที่จำเป็นกลับไปที่ Client
-        res.status(200).json({ message: 'เข้าสู่ระบบสำเร็จ', token, user: { id, username, role, profilePicture } });
+        res.status(200).json({
+            message: 'เข้าสู่ระบบสำเร็จ',
+            token,
+            id: user._id,
+            user: {
+                id,
+                username,
+                role,
+                profilePicture
+            }
+        });
     } catch (error) {
         console.error('Error during login:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -50,23 +65,21 @@ const APIauthLogin = async (req, res, next) => {
 };
 
 const APIauthProfile = async (req, res) => {
-    const userID = req.paraw
+    const {userID } = req.query
 
     try {
-        const user = await User.findById(userID.user._id).select('-password'); // ไม่รวม field password
+        const user = await User.findById(userID).select('-password'); // ไม่รวม field password
         if (!user) {
             return res.status(404).json( { error: 'ไม่พบผู้ใช้นี้ในระบบ' });
         }
         res.json( {
             user,
-            userID,
             message: "โหลดโปรไฟล์เรียบร้อยแล้ว"
         });
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
         res.status(500).json( {
             error: errorMessage,
-            userID
         });
     }
 };
