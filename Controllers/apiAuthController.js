@@ -82,7 +82,7 @@ const APIauthProfile = async (req, res) => {
             error: errorMessage,
         });
     }
-};
+}; 
 
 // ============================= get SINGLE POST
 // GET : /api/posts
