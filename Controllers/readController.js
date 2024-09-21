@@ -40,6 +40,62 @@ const getRead = async (req, res, next) => {
     }
 };
 
+// GET : API
+const getReadAPI = async (req, res, next) => {
+    const { urlslug } = req.params;
+    const lang = res.locals.lang || 'default-lang';
+    const userID = req.session.userlogin || null;
+
+    try {
+        // Fetch the post and populate the 'creator.id' field without password
+        const post = await Article.findOne({ urlslug: urlslug })
+            .populate({
+                path: 'creator.id',
+                select: '-password' // ไม่ให้แสดงฟิลด์ password
+            })
+            .select("-password")
+            .exec();
+
+        const recentUpdates = await Article.find()
+            .sort({ createdAt: -1 })
+            .limit(4)
+            .populate({
+                path: 'creator.id',
+                select: '-password' // ไม่ให้แสดงฟิลด์ password
+            })
+            .select("-password")
+            .exec();
+
+        if (!post) {
+            return res.status(404).json({
+                post: { title: "ไม่พบข้อมูล" },
+                error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
+                userID,
+                translations: req.translations || {},
+                lang  
+            });
+        }
+
+        post.views = (post.views || 0) + 1;
+        await post.save();
+
+        let isSaved = false;
+        if (userID && userID.user && userID.user._id && post.savearticles) {
+            isSaved = post.savearticles.includes(userID.user._id.toString());
+        }
+
+        res.json({ post, recentUpdates, userID, isSaved, translations: req.translations || {}, lang });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+            userID, 
+            translations: req.translations || {},
+            lang  
+        });
+    }
+};
+
 
 const saveArticle = async (req,res) => {
     const userID = req.session.userlogin;
@@ -141,5 +197,6 @@ module.exports = {
     getRead,
     saveArticle,
     likeArticle,
-    updateAdsDisplayed
+    updateAdsDisplayed,
+    getReadAPI
 }

@@ -64,8 +64,8 @@ const allowedOrigins = [
   'https://ani-night.online',
   'https://studio.ani-night.online',
   'https://anime.ani-night.online',
-  'http://localhost:5100',
-  'http://localhost:7000',
+  'https://read.ani-night.online',
+  'http://localhost:5050',
   'https://anime-lists.ani-night.online',
   'https://play.ani-night.online',
 ];
