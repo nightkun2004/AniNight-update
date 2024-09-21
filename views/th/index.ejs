@@ -110,7 +110,7 @@
                                 <% Posts.slice(0, 10).forEach(post => { %> 
                                     <% if (post.published) { %>
                                         <article class="bg-white shadow-md rounded-lg">
-                                            <a href="/read/<%= post.urlslug %>" class="link-thumbnail block relative  h-64 mb-5">
+                                            <a href="https://read.ani-night.online/read/<%= post.urlslug %>" target="_blank" class="link-thumbnail block relative  h-64 mb-5">
                                                 <img src="/uploads/thumbnails/<%= post.thumbnail %>" 
                                                      class="span-thumbnail w-full rounded h-72 object-cover bg-cover z-0" 
                                                      alt="<%= post.title %>">
@@ -118,7 +118,7 @@
                                             
                                             <div class="p-6">
                                                 <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                                                    <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title.substring(0, 60) + "..." %></a>
+                                                    <a href="https://read.ani-night.online/read/<%= post.urlslug %>" target="_blank" class="hover:text-blue-500"><%= post.title.substring(0, 60) + "..." %></a>
                                                 </h1>
                                                 <% if (post.creator && post.creator.id) { %>
                                                     <div class="flex items-center space-x-4">

@@ -30,12 +30,12 @@
                 <% if (articles && articles.length > 0) { %>
                     <% articles.forEach(post => { %>
                       <article class="bg-white text-black shadow-lg md:rounded-lg overflow-hidden">
-                        <a href="/read/<%= post.urlslug %>">
+                        <a href="https://read.ani-night.online/read/<%= post.urlslug %>" target="_blank">
                           <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
                         </a>
                         <div class="p-6 md:col-span-1">
                           <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                            <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500"><%= post.title %></a>
+                            <a href="https://read.ani-night.online/read/<%= post.urlslug %>" target="_blank" class="hover:text-blue-500"><%= post.title %></a>
                           </h1>
                           <p>ยอดวิว: <%= post.views %></p>
                           <p>ยอดไลค์: <%= post.likes.length %></p>
