@@ -198,13 +198,27 @@
                                 <p class="text-sm text-gray-500 " style="user-select: none;">Sponsored</p>
                             </div>
                             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                                crossorigin="anonymous"></script>
-                            <ins class="adsbygoogle block mx-auto" style="display:block; text-align:center; width: 50%;"
-                                data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-6579807593228261"
-                                data-ad-slot="5440757573"></ins>
-                            <script>
-                                (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
+                            crossorigin="anonymous"></script>
+                        <ins class="adsbygoogle block mx-auto" style="display:block; text-align:center; width: 50%;"
+                            data-ad-layout="in-article" data-ad-format="video" data-ad-client="ca-pub-6579807593228261"
+                            data-ad-slot="5440757573"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        
+                            // เพิ่มฟังก์ชันการนับถอยหลัง 15 วินาที
+                            let countdown = 15;
+                            const interval = setInterval(() => {
+                                console.log(`เหลือเวลา: ${countdown} วินาที`);
+                                countdown--;
+                        
+                                if (countdown === 0) {
+                                    clearInterval(interval);
+                                    console.log("โฆษณาสิ้นสุดแล้ว");
+                                    // สามารถใส่โค้ดเพื่อดำเนินการหลังจากดูโฆษณาจบได้ที่นี่
+                                }
+                            }, 1000); // ทำงานทุก 1 วินาที
+                        </script>
+                        
                         </div>
 
                         <p><%- post.content %></p>

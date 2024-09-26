@@ -6,6 +6,13 @@ const StreamSchema = new mongoose.Schema({
     iqiyi: String,
 }, { timestamps: true });
 
+
+const charactersSchema = new mongoose.Schema({
+    name: String,
+    role: String,
+    imageUrl: String
+}, {timestamps: true })
+
 const AnimeSchema = new mongoose.Schema({
     type: String,
     title: String,
@@ -61,6 +68,7 @@ const AnimeSchema = new mongoose.Schema({
         required: false
     },
     streaming: [StreamSchema],
+    characters: [charactersSchema],
     urlslug: {
         type: String,
         required: true,

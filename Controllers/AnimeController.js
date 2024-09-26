@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const Anime = require("../models/AnimeModel")
 const path = require("path")
+const FormData = require('form-data');
 const fs = require("fs")
 const crypto = require("crypto")
 const cloudinary = require('cloudinary').v2;
@@ -23,6 +24,40 @@ const getAnime = async (req, res) => {
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`${lang}/pages/admin/add/anime`, {
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang
+        });
+    }
+}
+
+const getCharacters = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const { id } = req.query;
+    try {
+        const anime = await Anime.findById(id).exec();
+        res.render(`./th/pages/admin/add/characters`, { userID, anime, translations: req.translations, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render(`./th/pages/admin/add/characters`, {
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang
+        });
+    }
+}
+
+const getPVAnime = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const { id } = req.query;
+    try {
+        const anime = await Anime.findById(id).exec();
+        res.render(`./th/pages/admin/add/pvAnime`, { userID, anime, translations: req.translations, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render(`./th/pages/admin/add/pvAnime`, {
             error: errorMessage,
             userID,
             translations: req.translations, lang
@@ -254,6 +289,76 @@ const CreateanimeItem = async (req, res) => {
 
 
 
+// ============================================= Crate characters ================================
+// ===============================================================================================
+const Createcharacters = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const animeId = req.body.animeId; 
+    const { name, role } = req.body;
+    const imagecharacters = req.files.image;
+
+    try {
+        // เช็คว่ามีรูปภาพหรือไม่
+        if (!imagecharacters) {
+            throw new Error('กรุณาเลือกรูปภาพสำหรับตัวละคร');
+        }
+
+        // สร้าง formData สำหรับการอัปโหลดรูปภาพ
+        const formData = new FormData();
+        formData.append('image', imagecharacters.data, imagecharacters.name);
+
+        const uploadResponse = await axios.post('https://sv5.ani-night.online/api/upload/characters', formData, {
+            headers: {
+                ...formData.getHeaders() 
+            }
+        });
+
+        // รับ URL ของรูปภาพที่อัปโหลดสำเร็จ
+        const imageUrl = uploadResponse.data.url;
+
+        // สร้างตัวละครใหม่
+        const newCharacter = {
+            name,
+            role,
+            imageUrl
+        };
+        const anime = await Anime.findById(animeId);
+
+        if (!anime) {
+            throw new Error('ไม่พบอนิเมะที่ระบุ');
+        }
+
+        // เพิ่มตัวละครลงในรายการตัวละครของอนิเมะ
+        anime.characters.push(newCharacter);
+        await anime.save();
+        // console.log("บันทึกตัวละคร", anime.characters);
+
+        // อัปเดตข้อมูลของผู้ใช้
+        await User.findByIdAndUpdate(req.user.id, { $push: { animelists: anime._id } }, { new: true });
+
+        // ตอบกลับสำเร็จ
+        res.status(200).render(`./th/pages/admin/add/characters`, { 
+            message: "สร้างสำเร็จ", 
+            anime,
+            userID, 
+            translations: req.translations, 
+            lang 
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render(`./th/pages/admin/add/characters`, {
+            error: errorMessage,
+            userID,
+            anime: animeId,
+            translations: req.translations,
+            lang
+        });
+    }
+}
+
+
+
 // ============================================================ Edit Anime Post INFO ==============================
 // ================================================================================================================
 const EditAnimeinfo = async (req, res) => {
@@ -394,6 +499,7 @@ const getSchedule = async (req, res) => {
         });
     }
 }
+
 // =========================================================== scheduleAnime API V2 ======================================
 // ===================================================================================================
 const getScheduleAPI = async (req, res) => {
@@ -548,8 +654,11 @@ const getInfiniteScroll = async (req, res) => {
 
 module.exports = {
     getAnime,
+    getCharacters,
+    getPVAnime,
     getAnimeStreem,
     CreateanimeItem,
+    Createcharacters,
     getSchedule,
     getScheduleAPI,
     getInfiniteScroll,

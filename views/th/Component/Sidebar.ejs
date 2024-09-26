@@ -13,23 +13,23 @@
     <hr class="mt-4 mb-6">
     <nav class="space-y-4">
         <a href="/" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">หน้าหลัก</a>
-        <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">สำหรับคุณ</a>
+        <a href="/foryou?recomment=0&i-0&sortBy=views" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">สำหรับคุณ</a>
         <a href="#" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">บทความ</a>
-        <a href="/<%= lang %>/schedule/anime" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ตารางอนิเมะ</a>
+        <a href="/schedule/anime" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ตารางอนิเมะ</a>
         <% if (userID) {%>
-            <a href="/<%= lang %>/<%= userID.user.username %>" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">โปรไฟล์ของคุณ   </a>
+            <a href="/<%= userID.user.username %>" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">โปรไฟล์ของคุณ   </a>
             <a href="/top/coin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เติมเงิน</a>
             <% if (userID.user.role === 'content_creator' || userID.user.username === 'pino2004') {%>
-                <a href="/<%= lang %>/dashboard" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">จัดการเนื้อหา</a>
+                <a href="/dashboard" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">จัดการเนื้อหา</a>
             <% } %>
             <% if (userID.user.role === 'admin') { %>
                 <a href="/admin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เข้าสู่ผู้ดูแล</a>
             <% } %>
         <% } %>
         <hr class="mt-4 mb-6">
-        <p class="text-sm font-medium text-gray-400 pl-2">การสำรวจของเราและแลกรางวัล</p>
-        <a href="/survey/reward" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แบบสำรวจ</a>
-        <a href="/reward/withdraws" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แลกรางวัล</a>
+        <!-- <p class="text-sm font-medium text-gray-400 pl-2">การสำรวจของเราและแลกรางวัล</p> -->
+        <!-- <a href="/survey/reward" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แบบสำรวจ</a>
+        <a href="/reward/withdraws" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แลกรางวัล</a> -->
     </nav>
     <hr class="mt-4 mb-6">
     <div class="footer flex gap-1 flex-wrap p-2 bg-white">

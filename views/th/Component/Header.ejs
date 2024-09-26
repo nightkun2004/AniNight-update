@@ -1,6 +1,6 @@
 <div id="progress-bar"></div>
 <header class="bg-white shadow-md border-b border-gray-200 sticky max-w-full top-0 w-full z-10">
-    <div class="px-4 flex items-center justify-between">
+    <div class="px-4 flex items-center justify-between mx-auto xl:max-w-7xl">
         <!-- Logo left -->
         <div class="flex items-center space-x-4">
             <!-- Toggle Sidebar Button -->
@@ -19,20 +19,18 @@
             <!-- Navigation Links -->
             <nav class="hidden md:hidden lg:flex">
                 <a href="/" class="text-gray-600 text-md md:text-text-1xl px-5">หน้าหลัก</a>
-                <a href="/<%= lang %>/foryou?recomment=0&i-0&sortBy=views" class="text-gray-600 text-md md:text-text-1xl  px-5">สำหรับคุณ</a>
-                <a href="/<%= lang %>/schedule/anime" class="text-gray-600 text-md md:text-text-1xl  px-5">ตารางอนิเมะ</a>
+                <a href="/foryou?recomment=0&i-0&sortBy=views" class="text-gray-600 text-md md:text-text-1xl  px-5">สำหรับคุณ</a>
+                <a href="/schedule/anime" class="text-gray-600 text-md md:text-text-1xl  px-5">ตารางอนิเมะ</a>
                 <div class="relative group">
                     <a href="#" class="text-gray-600 text-md md:text-text-1xl  px-5">เพิ่มเติม</a>
                     <div class="absolute right-1 transform hidden group-hover:block w-64 p-4 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
                         <div class="flex flex-col">
-                            <a href="/<%= lang %>/uploads/create/article" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เขียนบทความ</a>
-                            <a href="/survey/reward" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">แบบสำรวจ</a>
-                            <a href="/reward/withdraws" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">แลกรางวัล</a>
+                            <a href="/uploads/create/article" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เขียนบทความ</a>
                             <% if (userID) {%>
-                            <a href="/<%= lang %>/<%= userID.user.username %>" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">โปรไฟล์ของคุณ   </a>
+                            <a href="/<%= userID.user.username %>" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">โปรไฟล์ของคุณ   </a>
                             <a href="/top/coin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เติมเงิน</a>
                             <% if (userID.user.role === 'content_creator' || userID.user.username === 'Night') { %>
-                                <a href="/<%= lang %>/dashboard" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">จัดการเนื้อหา</a>
+                                <a href="/dashboard" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">จัดการเนื้อหา</a>
                             <% } %>
                             <% if (userID.user.role === 'admin' || userID.user.role === 'moderator' || userID.user.username === 'Night') { %>
                                 <a href="/admin" class="text-gray-600 text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded">เข้าสู่ผู้ดูแล</a>
