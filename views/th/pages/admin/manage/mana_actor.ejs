@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการอนิเมะ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../Component/Sidebar') %>
+    <%- include('../../../Component/Header') %>
+    <main class="p-6">
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-xl font-semibold text-gray-800">จัดการตัวละครและนักพากย์</h1>
+                <a href="/admin/add/characters" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                    <i class="fas fa-plus"></i> เพิ่มตัวละคร
+                </a>
+            </div>
+
+            <div class="mb-4">
+                <input type="text" id="search" placeholder="ค้นหาอนิเมะ..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div class="mb-4">
+                <h3>อนิเมะทั้งหมด (<%= animelists.length %>)</h3>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">ID</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">ชื่อเรื่อง</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">characterId</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">ตัวละคร</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">รูปภาพ</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-right text-sm font-semibold text-gray-600">สถานะ</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-right text-sm font-semibold text-gray-600">การกระทำ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="anime-list">
+                        <% if (animelists && animelists.length > 0) { %>
+                            <% animelists.forEach((anime, index) => { %>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= index + 1 %></td>
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.title %></td>
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">
+                                        <% if (anime.characters && anime.characters.length > 0) { %>
+                                            <%= anime.characters[0]._id %>
+                                        <% } else { %>
+                                            ไม่มีตัวละคร
+                                        <% } %>
+                                    </td>
+                                    <td class="px-6 flex flex-wrap gap-4 py-4 border-b border-gray-200 text-sm text-gray-700">
+                                        <% if (anime.characters && anime.characters.length > 0) { %>
+                                            <% anime.characters.forEach(character => { %>
+                                                <a href="/admin/edit/anime/voice/actor?animeId=<%= anime._id %>&characterId=<%= character._id %>" class="text-blue-500 hover:underline"><%= character.name %></a>
+                                                <% if (character !== anime.characters[anime.characters.length - 1]) { %>, <% } %>
+                                            <% }) %>
+                                        <% } else { %>
+                                            ไม่มีตัวละคร
+                                        <% } %>
+                                    </td>
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">
+                                        <% if (anime.characters && anime.characters.length > 0) { %>
+                                            <img src="<%= anime.characters[0].imageUrl %>" alt="<%= anime.characters[0].name %>" class="w-16 h-16 object-cover rounded-md">
+                                        <% } else { %>
+                                            ไม่มีรูปภาพ
+                                        <% } %>
+                                    </td>
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">
+                                        <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs"><%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></span>
+                                    </td>
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700 flex flex-col items-center">
+                                        <% if (anime.characters && anime.characters.length > 0) { %>
+                                            <a class="text-blue-500 hover:underline mr-2" href="/admin/edit/anime/voice/actor?animeId=<%= anime._id %>&characterId=<%= anime.characters[0]._id %>">
+                                                แก้ไข
+                                            </a>
+                                        <% } else { %>
+                                            ไม่มีตัวละคร
+                                        <% } %>
+                                        <form action="/delete/anime" method="post" onsubmit="return confirm('คุณแน่ใจหรือว่าต้องการลบอนิเมะนี้?');">
+                                            <input type="hidden" name="anime_id" value="<%= anime._id %>">
+                                            <button class="text-red-500 hover:underline" type="submit">ลบ</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 border-b border-gray-200 text-center text-sm text-gray-700">ยังไม่พบข้อมูล !!</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/script.js"></script>
+    <script>
+        document.getElementById('search').addEventListener('input', function () {
+            const searchQuery = this.value.toLowerCase();
+            const animeList = document.getElementById('anime-list').getElementsByTagName('tr');
+            
+            for (let i = 0; i < animeList.length; i++) {
+                const animeName = animeList[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+                
+                if (animeName.includes(searchQuery)) {
+                    animeList[i].style.display = '';
+                } else {
+                    animeList[i].style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

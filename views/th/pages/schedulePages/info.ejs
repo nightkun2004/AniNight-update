@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= anime.title %></title>
+    <title><%= anime.title %> | AniNight</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="canonical" href="https://www.ani-night.online/anime/<%= anime.urlslug %>">
@@ -124,6 +124,118 @@
                     </div>
                 </div>
 
+                <!-- สำหรับแสดงช่องทางการฉาย -->
+                <div class="mb-6 bg-white rounded p-5 mt-5">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">ช่องทางการฉาย</h2>
+                    <div class="bg-white rounded px-4 py-4">
+                    
+                        <% let hasPlatforms = false; %> <!-- ตัวแปรเพื่อตรวจสอบว่ามีแพลตฟอร์มใด ๆ หรือไม่ -->
+                    
+                        <!-- ตรวจสอบแพลตฟอร์มทั่วไป -->
+                        <% if (anime.streaming && anime.streaming.length > 0) { %>
+                            <h2 class="text-lg font-semibold text-gray-800 mb-2">บนแพลตฟอร์ม OTT</h2>
+                            <% anime.streaming.forEach(stream => { %>
+                                <% if (stream.crunchyroll || stream.iqiyi || stream.bilibili) { %>
+                                    <!-- แสดงแพลตฟอร์ม Crunchyroll -->
+                                    <% if (stream.crunchyroll) { %>
+                                        <div class="crunchyroll bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.crunchyroll %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>Crunchyroll</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                    
+                                    <!-- แสดงแพลตฟอร์ม IQIYI -->
+                                    <% if (stream.iqiyi) { %>
+                                        <div class="iqiyi bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.iqiyi %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/iqiyi_icon.png" alt="iqiyi" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>IQIYI</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                    
+                                    <!-- แสดงแพลตฟอร์ม Bilibili -->
+                                    <% if (stream.bilibili) { %>
+                                        <div class="bilibili bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.bilibili %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/bilibili_icon.png" alt="bilibili" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>Bilibili</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                                <% } %>
+                            <% }); %>
+                        <% } %>
+                    
+                        <hr>
+                        <!-- ตรวจสอบแพลตฟอร์ม YouTube -->
+                        <% if (anime.streaming && anime.streaming.length > 0) { %>
+                            <h2 class="text-lg font-semibold text-gray-800 mb-2">บน YouTube</h2>
+                            <% anime.streaming.forEach(stream => { %>
+                                <% if (stream.youtubes && stream.youtubes.length > 0) { %>
+                                    <% stream.youtubes.forEach(youtube => { %>
+                                        <!-- ตรวจสอบแต่ละ YouTube -->
+                                        <% if (youtube.muse) { %>
+                                            <div class="muse bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                                <a href="<%= youtube.muse %>" class="flex items-center gap-3" target="_blank">
+                                                    <div class="image">
+                                                        <img src="/logo/muse.png" alt="Muse" width="50px" height="50px" class="rounded">
+                                                    </div>
+                                                    <h2>Muse</h2>
+                                                </a>
+                                            </div>
+                                            <% hasPlatforms = true; %>
+                                        <% } %>
+                    
+                                        <% if (youtube.anione) { %>
+                                            <div class="anione bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                                <a href="<%= youtube.anione %>" class="flex items-center gap-3" target="_blank">
+                                                    <div class="image">
+                                                        <img src="/logo/anione.jpg" alt="Ani-One" width="50px" height="50px" class="rounded-full">
+                                                    </div>
+                                                    <h2>Ani-One</h2>
+                                                </a>
+                                            </div>
+                                            <% hasPlatforms = true; %>
+                                        <% } %>
+                    
+                                        <% if (youtube.pops) { %>
+                                            <div class="pops bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                                <a href="<%= youtube.pops %>" class="flex items-center gap-3" target="_blank">
+                                                    <div class="image">
+                                                        <img src="/logo/pops.jpg" alt="Pops" width="50px" height="50px" class="rounded-full">
+                                                    </div>
+                                                    <h2>Pops</h2>
+                                                </a>
+                                            </div>
+                                            <% hasPlatforms = true; %>
+                                        <% } %>
+                                    <% }); %>
+                                <% } else { %>
+                                    <p>ไม่มีบน YouTube</p>
+                                <% } %>
+                            <% }); %>
+                        <% } %>
+                    
+                        <!-- ถ้าไม่มีแพลตฟอร์มแสดงข้อความ -->
+                        <% if (!hasPlatforms) { %>
+                            <p class="text-center text-sm text-black">ยังไม่มีแพลตฟอร์มสตีม</p>
+                        <% } %>
+                    </div>
+                    
+                </div>
+
                 <!-- Characters Section -->
                 <div class="mb-6 mt-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">ตัวละคร | Characters</h2>
@@ -143,58 +255,7 @@
                             </div>
                         <% } %>                        
                     </div>
-                </div>
-
-                <div class="mb-6 bg-white rounded p-5">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">ช่องทางการฉาย</h2>
-                    <div class="bg-white rounded px-4 py-4">
-                        <% let hasPlatforms = false; %> <!-- ตัวแปรเพื่อตรวจสอบว่ามีแพลตฟอร์มใด ๆ หรือไม่ -->
-                        
-                        <% if (anime.streaming && anime.streaming.length > 0) { %>
-                            <% anime.streaming.forEach(stream => { %>
-                                <% if (stream.crunchyroll) { %>
-                                    <div class="crunchyroll bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                        <a href="<%= stream.crunchyroll %>" class="flex items-center gap-3" target="_blank">
-                                            <div class="image">
-                                                <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" width="50px" height="50px" class="rounded-full">
-                                            </div>
-                                            <h2>Crunchyroll</h2>
-                                        </a>
-                                    </div>
-                                    <% hasPlatforms = true; %> <!-- ตั้งค่าตัวแปรเพื่อตรวจสอบว่าอย่างน้อยมีแพลตฟอร์มหนึ่งที่มีข้อมูล -->
-                                <% } %>
-                    
-                                <% if (stream.iqiyi) { %>
-                                    <div class="iqiyi bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                        <a href="<%= stream.iqiyi %>" class="flex items-center gap-3" target="_blank">
-                                            <div class="image">
-                                                <img src="/logo/iqiyi_icon.png" alt="iqiyi" width="50px" height="50px" class="rounded-full">
-                                            </div>
-                                            <h2>IQIYI</h2>
-                                        </a>
-                                    </div>
-                                    <% hasPlatforms = true; %>
-                                <% } %>
-                    
-                                <% if (stream.bilibili) { %>
-                                    <div class="bilibili bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                        <a href="<%= stream.bilibili %>" class="flex items-center gap-3" target="_blank">
-                                            <div class="image">
-                                                <img src="/logo/bilibili_icon.png" alt="bilibili" width="50px" height="50px" class="rounded-full">
-                                            </div>
-                                            <h2>bilibili</h2>
-                                        </a>
-                                    </div>
-                                    <% hasPlatforms = true; %>
-                                <% } %>
-                            <% }); %>
-                        <% } %>
-                    
-                        <% if (!hasPlatforms) { %>
-                            <p class="text-center text-sm text-black">ยังไม่มีแพลตฟอร์มสตีม</p>
-                        <% } %>
-                    </div>
-                </div>
+                </div> 
 
                 <!-- Watch Trailer Button -->
                 <div class="text-center">

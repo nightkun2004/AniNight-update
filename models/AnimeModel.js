@@ -1,16 +1,30 @@
 const mongoose = require("../config/db");
 
+const youtubeSchema = new mongoose.Schema({
+    muse: String,
+    anione: String,
+    pops: String,
+}, { timestamps: true });
+
 const StreamSchema = new mongoose.Schema({
     crunchyroll: String,
     bilibili: String,
     iqiyi: String,
+    youtubes: [youtubeSchema]
 }, { timestamps: true });
 
+
+const actorSchema = new mongoose.Schema({
+    name: String,
+    role: String,
+    imageUrl: String
+}, {timestamps: true })
 
 const charactersSchema = new mongoose.Schema({
     name: String,
     role: String,
-    imageUrl: String
+    imageUrl: String,
+    actor: [actorSchema]
 }, {timestamps: true })
 
 const AnimeSchema = new mongoose.Schema({

@@ -89,6 +89,24 @@ const ManageAnimes = async (req, res) => {
     }
 }
 
+const ManageActor = async (req, res) => {
+    const lang = req.params.lang || 'th';
+    const userID = req.session.userlogin;
+    try {
+        const animelists = await Anime.find().exec();
+        // console.log(animelists)
+        res.render("./th/pages/admin/manage/mana_actor", { userID, animelists, translations: req.translations, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/admin/manage/mana_actor', {
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang
+        });
+    }
+}
+
+
 const ManageVideos = async (req, res) => {
     const lang = req.params.lang || 'th';
     const userID = req.session.userlogin;
@@ -160,6 +178,7 @@ module.exports = {
     getAdminAPIKEY,
     generateAPIKEY,
     ManageAnimes,
+    ManageActor,
     ManageVideos,
     updateUserRole,
     filterUsers

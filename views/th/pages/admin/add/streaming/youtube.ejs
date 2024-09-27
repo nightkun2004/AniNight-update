@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มแพลตฟอร์ม YouTube</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../../Component/Sidebar') %>
+    <div class="flex-1">
+        <%- include('../../../../Component/Header') %>
+        <main class="max-w-7xl mx-auto p-4">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6">
+              <a href="/admin"><i class="fa-solid fa-arrow-left"></i> กลับ</a>
+            </h1>
+            <div class="bg-white p-4 rounded shadow-md">
+              <h2 class="text-xl font-bold mb-4">อัพเดตลิงก์ YouTube ของอนิเมะ</h2>
+              <% if (anime && anime.streaming && anime.streaming[0] && anime.streaming[0].youtubes.length > 0) { %>
+                <% const youtubeLinks = anime.streaming[0].youtubes[0]; %>
+                <!-- ถ้ามีข้อมูลใน youtubes อยู่แล้ว ให้แสดงฟอร์มอัพเดต -->
+                <form action="/anime/add/streem/youtube/<%= anime._id %>" method="post" class="space-y-4">
+                  <div>
+                    <label for="muse" class="block text-sm font-medium text-gray-900">Muse</label>
+                    <input type="text" name="muse" id="muse" class="outline-none w-full border-gray-300 border-2 rounded px-2 py-1" 
+                      value="<%= youtubeLinks.muse || '' %>" placeholder="ลิงก์ Muse ใหม่">
+                  </div>
+          
+                  <div>
+                    <label for="anione" class="block text-sm font-medium text-gray-900">Anione</label>
+                    <input type="text" name="anione" id="anione" class="outline-none w-full border-gray-300 border-2 rounded px-2 py-1" 
+                      value="<%= youtubeLinks.anione || '' %>" placeholder="ลิงก์ Anione ใหม่">
+                  </div>
+          
+                  <div>
+                    <label for="pops" class="block text-sm font-medium text-gray-900">Pops</label>
+                    <input type="text" name="pops" id="pops" class="outline-none w-full border-gray-300 border-2 rounded px-2 py-1" 
+                      value="<%= youtubeLinks.pops || '' %>" placeholder="ลิงก์ Pops ใหม่">
+                  </div>
+          
+                  <!-- ปุ่มอัพเดต -->
+                  <button type="submit" class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    อัพเดตลิงก์
+                  </button>
+                </form>
+              <% } else { %>
+                <!-- กรณีไม่มีข้อมูล youtubes ให้สร้างฟอร์มเพิ่มลิงก์ใหม่ -->
+                <form action="/anime/add/streem/youtube/<%= anime._id %>" method="post" class="space-y-4">
+                  <h3 class="text-lg font-semibold text-gray-700">เพิ่มลิงก์ YouTube ใหม่</h3>
+          
+                  <div>
+                    <label for="muse" class="block text-sm font-medium text-gray-900">Muse</label>
+                    <input type="text" name="muse" id="muse" class="outline-none w-full border-gray-300 border-2 rounded px-2 py-1" 
+                      value="" placeholder="ลิงก์ Muse ใหม่">
+                  </div>
+          
+                  <div>
+                    <label for="anione" class="block text-sm font-medium text-gray-900">Anione</label>
+                    <input type="text" name="anione" id="anione" class="outline-none w-full border-gray-300 border-2 rounded px-2 py-1" 
+                      value="" placeholder="ลิงก์ Anione ใหม่">
+                  </div>
+          
+                  <div>
+                    <label for="pops" class="block text-sm font-medium text-gray-900">Pops</label>
+                    <input type="text" name="pops" id="pops" class="outline-none w-full border-gray-300 border-2 rounded px-2 py-1" 
+                      value="" placeholder="ลิงก์ Pops ใหม่">
+                  </div>
+          
+                  <!-- ปุ่มเพิ่มข้อมูล -->
+                  <button type="submit" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    เพิ่มลิงก์ใหม่
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          </main>
+          
+          
+    </div>
+
+    <script src="/js/script.js" defer></script>
+</body>
+</html>

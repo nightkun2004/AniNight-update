@@ -20,6 +20,13 @@
                 </a>
             </h1>
             <div class="flex-1 bg-white p-4 rounded shadow-md">
+                <div class="bg-gray-100 rounded p-2">
+                    <ul>
+                        <li class="text-red-600 font-medium/admin/add/anime/streem/youtube">
+                            <a href="/admin/add/anime/streem/youtube?id=<%= anime._id %>">เพิ่มแพลตฟอร์ม YouTube</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="mb-6 mt-4">
                     <% if (typeof message !== 'undefined') { %>
                         <div class="mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center"><%= message %></div>
