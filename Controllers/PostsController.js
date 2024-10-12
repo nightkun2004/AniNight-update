@@ -13,8 +13,9 @@ const getPosts = async (req, res, next) => {
         // Fetch all posts and populate the 'creator.id' field
         const Posts = await Article.find()
             .populate('creator.id')
-            .skip((page - 1) * limit) // ข้ามโพสต์ก่อนหน้านี้
-            .limit(limit) // จำกัดจำนวนโพสต์ที่ดึงมา
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort({ updatedAt: -1 })
             .exec();
 
         const totalPosts = await Article.countDocuments(); 
