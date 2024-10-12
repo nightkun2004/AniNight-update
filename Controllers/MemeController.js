@@ -1,4 +1,4 @@
-const Meme = require("../Models/MemeModel");
+const Meme = require("../models/MemeModel");
 const User = require("../models/UserModel");
 const FormData = require('form-data');
 const axios = require('axios');
