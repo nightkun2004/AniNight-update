@@ -21,7 +21,7 @@ const getRead = async (req, res, next) => {
         }
 
         post.views = (post.views || 0) + 1;
-        await post.save();
+        await post.save(); 
 
         let isSaved = false;
         if (userID && userID.user._id && post.savearticles) {
@@ -29,7 +29,7 @@ const getRead = async (req, res, next) => {
         }
         // console.log(post)
         // Pass 'posts' to the template
-        res.render(`./th/read`, { post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
+        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/read`, {

@@ -73,7 +73,7 @@ const getAnimeStreem = async (req, res) => {
     const { id } = req.query;
     try {
         const anime = await Anime.findById(id).exec();
-        res.render(`${lang}/pages/admin/add/streaming/stream`, { userID, anime, translations: req.translations, lang })
+        res.render(`${lang}/pages/admin/add/streaming/stream`, { userID, active: "ScheduleAnime", anime, translations: req.translations, lang })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`${lang}/pages/admin/add/streaming/stream`, {
@@ -650,7 +650,11 @@ const getSchedule = async (req, res) => {
     try {
         const Animelists = await Anime.find().sort({ createdAt: -1 }).exec();
 
-        res.render(`./th/pages/schedulePages/index`, { userID, Animelists, translations: req.translations, lang })
+        res.render(`./th/pages/schedulePages/index`, { 
+            userID, 
+            Animelists, 
+            active: "ScheduleAnime",
+            lang })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/pages/schedulePages/index`, {

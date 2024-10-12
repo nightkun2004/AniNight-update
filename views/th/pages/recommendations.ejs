@@ -7,6 +7,8 @@
     <title>แนะนำบทความ</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="/cdn/tailwincss.js"></script>
     <script src="/cdn/fontawesome.js" crossorigin="anonymous"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
@@ -20,60 +22,70 @@
 
         gtag('config', 'G-LTJP520FN4');
     </script>
+    <style>
+      body::-webkit-scrollbar {
+         display: none;
+     }
+
+     section {
+         overflow-y: auto;
+         overflow-x: hidden;
+     }
+ </style>
 </head>
-<body>
-    <%- include('../Component/Sidebar') %>
-    <div class="flex-1 flex flex-col">
-        <%- include('../Component/Header') %>
-        <main class="flex-grow flex flex-col justify-center items-center text-center p-6">
+<body class="overflow-hidden">
+   
+        <main class="bg-white flex flex-row w-full h-screen">
+          <%- include('../Component/Sidebar') %>
+
+          <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                <% if (articles && articles.length > 0) { %>
-                    <% articles.forEach(post => { %>
-                      <article class="bg-white text-black shadow-lg md:rounded-lg overflow-hidden">
-                        <a href="/read/<%= post.urlslug %>" target="_blank">
-                          <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
-                        </a>
-                        <div class="p-6 md:col-span-1">
-                          <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                            <a href="/read/<%= post.urlslug %>" target="_blank" class="hover:text-blue-500"><%= post.title %></a>
-                          </h1>
-                          <p>ยอดวิว: <%= post.views %></p>
-                          <p>ยอดไลค์: <%= post.likes.length %></p>
-                          <% if (post.creator && post.creator.profilePicture) { %>
-                            <div class="flex items-center space-x-4">
-                              <img src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
-                              <p class="text-gray-700"><%= post.creator.username %></p>
-                            </div>
-                          <% } %>
-                        </div>
-                      </article>
-                    <% }) %>
-
-
-                    <!-- Pagination Controls -->
-                    <div class="pagination">
-                        <% if (currentPage > 1) { %>
-                        <a href="/foryou?sortBy=<%= sortBy %>&page=<%= currentPage - 1 %>">หน้าก่อนหน้า</a>
+              <% if (articles && articles.length > 0) { %>
+                  <% articles.forEach(post => { %>
+                    <article class="bg-white text-black shadow-lg md:rounded-lg overflow-hidden">
+                      <a href="/read/<%= post.urlslug %>" target="_blank">
+                        <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full h-60 object-cover md:h-48">
+                      </a>
+                      <div class="p-6 md:col-span-1">
+                        <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                          <a href="/read/<%= post.urlslug %>" target="_blank" class="hover:text-blue-500"><%= post.title %></a>
+                        </h1>
+                        <p>ยอดวิว: <%= post.views %></p>
+                        <p>ยอดไลค์: <%= post.likes.length %></p>
+                        <% if (post.creator && post.creator.profilePicture) { %>
+                          <div class="flex items-center space-x-4">
+                            <img src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="<%= post.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                            <p class="text-gray-700"><%= post.creator.username %></p>
+                          </div>
                         <% } %>
-                
-                        <% if (currentPage < totalPages) { %>
-                        <a href="/foryou?sortBy=<%= sortBy %>&page=<%= currentPage + 1 %>">หน้าถัดไป</a>
-                        <% } %>
-                    </div>
+                      </div>
+                    </article>
+                  <% }) %>
 
-      
-                  <% } else { %>
-                    <p>ยังไม่มีบทความที่จะแนะนำ</p>
-                  <% } %>
-            </div>
-            <!-- <div class="text-center bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-                <h1 class="text-5xl font-bold text-red-600 mb-4">โอ้  !!</h1>
-                <img src="/annight/error.png" alt="" class="h-60 object-contain w-full pointer-events-none select-none">
-                <p class="text-lg text-gray-700 mb-6">บริการนี้ยังไม่พร้อมให้บริการในขณะนี้</p>
-                <a href="/" class="inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">กลับไปหน้าแรก</a>
-            </div> -->
+
+                  <!-- Pagination Controls -->
+                  <div class="pagination">
+                      <% if (currentPage > 1) { %>
+                      <a href="/foryou?sortBy=<%= sortBy %>&page=<%= currentPage - 1 %>">หน้าก่อนหน้า</a>
+                      <% } %>
+              
+                      <% if (currentPage < totalPages) { %>
+                      <a href="/foryou?sortBy=<%= sortBy %>&page=<%= currentPage + 1 %>">หน้าถัดไป</a>
+                      <% } %>
+                  </div>
+
+    
+                <% } else { %>
+                  <p>ยังไม่มีบทความที่จะแนะนำ</p>
+                <% } %>
+          </div>
+          <!-- <div class="text-center bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
+              <h1 class="text-5xl font-bold text-red-600 mb-4">โอ้  !!</h1>
+              <img src="/annight/error.png" alt="" class="h-60 object-contain w-full pointer-events-none select-none">
+              <p class="text-lg text-gray-700 mb-6">บริการนี้ยังไม่พร้อมให้บริการในขณะนี้</p>
+              <a href="/" class="inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">กลับไปหน้าแรก</a>
+          </div> -->
+          </section>
         </main>
-    </div>
-    <script src="/js/script.js"></script>
 </body>
 </html>

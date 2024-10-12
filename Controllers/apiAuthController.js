@@ -65,38 +65,119 @@ const APIauthLogin = async (req, res, next) => {
 };
 
 const APIauthProfile = async (req, res) => {
-    const {userID } = req.query
+    const { userID } = req.query
 
     try {
         const user = await User.findById(userID).select('-password'); // ไม่รวม field password
         if (!user) {
-            return res.status(404).json( { error: 'ไม่พบผู้ใช้นี้ในระบบ' });
+            return res.status(404).json({ error: 'ไม่พบผู้ใช้นี้ในระบบ' });
         }
-        res.json( {
+        res.json({
             user,
             message: "โหลดโปรไฟล์เรียบร้อยแล้ว"
         });
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).json( {
+        res.status(500).json({
             error: errorMessage,
         });
     }
-}; 
+};
 
 // ============================= get SINGLE POST
 // GET : /api/posts
-const getPosts = async (req,res, next) =>{
+const getPosts = async (req, res, next) => {
     const { id } = req.params;
     try {
         // Find the post by the 'urlslug'
-        const posts = await User.findById(id).populate('articles').exec()
+        const posts = await User.findById(id).select('-password').populate('articles').exec()
         // Return the found post
         res.status(200).json(posts);
     } catch (error) {
         return next(new HttpError(error.message || 'เกิดข้อผิดพลาดในการค้นหาโพสต์', 500));
     }
 }
+
+const getArticle = async (req, res) => {
+    const postId = req.params.update_id;
+    try {
+        const searcharticle = await Article.findById(postId).exec();
+        res.json(searcharticle)
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+
+// ================================= POST API Edit Article ===================================
+const EditPostArticle = async (req, res, next) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    try {
+        const postId = req.params.update_id;
+        let { title, tags, categories, published, urlslug } = req.body;
+
+        const searcharticle = await Article.findById(postId).exec();
+
+        if (!searcharticle) {
+            return res.status(404).json({ error: "Post not found.", userID, translations: req.translations, lang });
+        }
+
+        const tagsArray = tags ? tags.split(' ').map(tag => tag.replace('#', '').trim()).filter(tag => tag) : [];
+
+        const validCategories = ["อาหาร", "การท่องเที่ยว", "ข่าวสาร", "การ์ตูน", "เพลง", "บันเทิง", "อนิเมะ"];
+        categories = Array.isArray(categories) ? categories : [categories];
+        categories = categories.filter(cat => validCategories.includes(cat));
+
+        published = published === 'on' || published === true;
+
+        let updateData = { title, tags: tagsArray, content, categories, published, urlslug };
+
+        if (req.files && req.files.thumbnail) {
+            const { thumbnail } = req.files;
+            if (thumbnail.size > 5000000) {
+                return res.status(400).json({ error: `Image size exceeds 5MB limit`, translations: req.translations, lang, userID, article: searcharticle });
+            }
+
+            const fileName = thumbnail.name;
+            const splittedFilename = fileName.split('.');
+            const newFilename = crypto.randomUUID() + "." + splittedFilename[splittedFilename.length - 1];
+            const newThumbnailPath = path.join(__dirname, '..', 'public/uploads/thumbnails', newFilename);
+
+            try {
+                await thumbnail.mv(newThumbnailPath);
+                updateData.thumbnail = newFilename;
+
+                // Delete old thumbnail if exists
+                if (searcharticle.thumbnail) {
+                    const oldThumbnailPath = path.join(__dirname, '..', 'public/uploads/thumbnails', searcharticle.thumbnail);
+                    fs.unlink(oldThumbnailPath, (err) => {
+                        if (err) console.error("Error deleting old thumbnail:", err);
+                    });
+                }
+            } catch (err) {
+                return res.status(500).json({ error: `Error uploading new thumbnail: ${err}`, userID, translations: req.translations, lang, article: searcharticle });
+            }
+        }
+
+        const updatedPost = await Article.findByIdAndUpdate(postId, updateData, { new: true });
+
+        if (!updatedPost) {
+            return res.status(400).json({ error: "Couldn't update post.", userID, translations: req.translations, lang, article: searcharticle });
+        }
+
+        res.status(200).json({ message: `อัปเดตสำเร็จ`, userID, translations: req.translations, lang, article: updatedPost });
+
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+            userID,
+            article: updatedPost,
+            translations: req.translations, lang
+        });
+    }
+};
 
 const getPlay = async (req, res) => {
     const { videoid } = req.params;
@@ -150,6 +231,8 @@ module.exports = {
     APIauthLogin,
     APIauthProfile,
     getPosts,
+    getArticle,
+    EditPostArticle,
     getPlay,
     getPlayEpisodes
 };

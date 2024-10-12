@@ -21,7 +21,14 @@ const getRecommen = async (req, res) => {
         const totalArticles = await Article.countDocuments({ published: true });
         const totalPages = Math.ceil(totalArticles / limit);
 
-        res.render(`${lang}/pages/recommendations`, { articles, currentPage: page, totalPages, sortBy , userID, translations: req.translations,lang   });
+        res.render(`./th/pages/recommendations`, { 
+            articles, 
+            currentPage: page, 
+            totalPages, 
+            sortBy , 
+            userID, 
+            active: "foryou",
+            lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`${lang}/pages/recommendations`, {

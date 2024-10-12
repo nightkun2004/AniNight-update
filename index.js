@@ -1,5 +1,12 @@
 const express = require("express")
+const PORT = process.env.PORT || 5000;
+const http = require('http');
+const WebSocket = require('ws');
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+const { addComment } = require('./Controllers/MemeController')
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const fileUpload = require('express-fileupload');
@@ -30,7 +37,7 @@ const channalRouter = require("./routers/ChannelRouter")
 const SurveyRouter = require("./routers/SurveyRouter")
 const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
 const PlaymentRoute = require("./routers/PlaymentRouter")
-
+const MemeRouter = require("./routers/MemeRouter")
 
 app.get('/ads.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/ads.txt'));
@@ -41,23 +48,41 @@ app.get('/robots.txt', (req, res) => {
 
 app.get('/sitemap.xml', async (req, res) => {
   try {
-      const articles = await Article.find().sort({ createdAt: 'desc' });
-      const animes = await Anime.find().sort({ createdAt: 'desc' });
+    const articles = await Article.find().sort({ createdAt: 'desc' });
+    const animes = await Anime.find().sort({ createdAt: 'desc' });
 
-      res.setHeader('Content-Type', 'application/xml');
-      res.render('./th/sitemap', { 
-        articles,
-        animes
-       });
+    res.setHeader('Content-Type', 'application/xml');
+    res.render('./th/sitemap', {
+      articles,
+      animes
+    });
   } catch (err) {
-      res.status(500).send('Error generating sitemap.');
+    res.status(500).send('Error generating sitemap.');
   }
+});
+
+
+// ตั้งค่า WebSocket
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+
+  ws.on('message', (message) => {
+      const data = JSON.parse(message);
+      // ตรวจสอบข้อมูลและเรียกฟังก์ชันสำหรับเพิ่มคอมเมนต์
+      if (data.action === 'addComment') {
+          addComment(data, ws, wss);
+      }
+  });
+
+  ws.on('close', () => {
+      console.log('Client disconnected');
+  });
 });
 
 // เส้นทาง router สำหรับ lib
 const Router = require("./lib/routers/router")
 const ApiService = require("./lib/routers/serverApis")
-const {checkAuth} = require("./lib/auth")
+const { checkAuth } = require("./lib/auth")
 
 const allowedOrigins = [
   'https://live-aninight.ani-night.online',
@@ -66,6 +91,7 @@ const allowedOrigins = [
   'https://anime.ani-night.online',
   'https://read.ani-night.online',
   'http://localhost:5050',
+  'http://localhost:7000',
   'https://anime-lists.ani-night.online',
   'https://play.ani-night.online',
 ];
@@ -84,7 +110,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   // รับค่า `header-lang` จาก header ของ request
-  let lang = req.headers['header-lang'] ||  req.path.split('/')[1];
+  let lang = req.headers['header-lang'] || req.path.split('/')[1];
 
   // ตรวจสอบว่า lang มีค่าถูกต้องหรือไม่ (th, en, jp)
   const supportedLanguages = ['th', 'en', 'jp'];
@@ -113,7 +139,10 @@ app.use((req, res, next) => {
 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
-app.use(fileUpload());
+app.use(fileUpload({
+  limits: { fileSize: 2 * 1024 * 1024 * 1024 },
+}));
+
 app.locals.moment = moment;
 app.use(bodyParser.json({ limit: '1000mb' }));
 app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
@@ -126,7 +155,7 @@ app.use(session({
   secret: process.env.ACCESS_TOKEN_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false}
+  cookie: { secure: false }
 }));
 app.use(session({
   secret: process.env.ACCESS_TOKEN_SECRET,
@@ -147,6 +176,7 @@ app.use(TopCoinRouter)
 
 app.use("/auth", checkAuth)
 app.use("/api/v2", authRouter)
+app.use("/api/v2", MemeRouter)
 app.use("/api/v2", UploadsRouter)
 app.use("/api/v2", PostsRouter)
 app.use("/api/v2", DashboardRouter)
@@ -167,13 +197,13 @@ app.use(limiter);
 
 app.use((req, res, next) => {
   const userID = req.session.userlogin;
-  res.status(404).render('./errors/404', {userID});
-}); 
+  res.status(404).render('./errors/404', { userID });
+});
 
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  res.render('./errors/ejs/error', 
+  res.render('./errors/ejs/error',
     {
       error: {
         message: err.message,
@@ -182,6 +212,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`server Client in runng to port ${process.env.PORT}`)
-})
+// เริ่มต้นเซิร์ฟเวอร์
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

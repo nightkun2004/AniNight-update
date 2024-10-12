@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th_TH">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>มีม - Meme</title>
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  <script src="/cdn/tailwincss.js"></script>
+  <script src="/cdn/fontawesome.js" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+    crossorigin="anonymous"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-LTJP520FN4');
+  </script>
+  <style>
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    section {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+
+<body class="overflow-hidden">
+  <div class="bg-white flex flex-row w-full h-screen">
+    <%- include('../Component/Sidebar') %>
+      <section class="flex-1 w-full h-full p-5 overflow-y-scroll">
+        <h2 class="font-normal text-2xl">อัพโหลดมีมของคุณที่นี่</h2>
+        <!-- Display success or error messages -->
+        <% if (typeof msg !=='undefined' ) { %>
+          <p class="text-center bg-gray-200 rounded-lg text-green-500 font-bold p-5 mb-4">
+            <%= msg %>
+          </p>
+          <% } %>
+
+            <% if (typeof error !=='undefined' ) { %>
+              <p class="text-center bg-gray-200 rounded-lg text-red-500 font-bold p-5 mb-4">
+                <%= error %>
+              </p>
+              <% } %>
+
+                <form id="memeForm" action="/api/v2/post/meme/new" method="POST" enctype="multipart/form-data"
+                  class="space-y-4">
+                  <!-- Meme Description -->
+                  <div class="mt-5">
+                    <label for="description" class="block text-gray-600 font-bold mb-2">คำอธิบายมีมของคุณ</label>
+                    <textarea name="description" id="description" cols="30"
+                      class="w-full h-64 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"></textarea>
+                  </div> 
+
+                  <div class="mb-5">
+                    <div class="flex">
+                      <label for="t">คุณสามารถเลือกได้ว่าจะเผยแพร่ตอนนี้ไหม</label>
+                        <div class="flex items-center h-5">
+                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" id="published" name="published"
+                             class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ms-2 text-sm">
+                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่ตอนนี้</label>
+                        </div>
+                    </div>
+                </div>
+
+                  <!-- Meme Image Upload -->
+                  <div>
+                    <label for="file" class="block text-gray-600 font-bold mb-2">ภาพมีมของคุณ</label>
+                    <input type="file" id="file" name="file" accept=".mp4,.jpg,.jpeg"
+                      class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                      required>
+                    <p class="font-light text-sm">โปรดส่งภาพที่มีขนาดน้อยกว่า 1GB หากภาพมีขนาดใหม่จะใช้เวลาประมวลผลนาน
+                    </p>
+                    <p class="font-light text-sm">รองรับไฟล์ .jpg .jpeg .mp4 เท่านั้น !
+                    </p>
+                  </div>
+
+                  <!-- Upload Status Bar -->
+                  <div class="mt-3">
+                    <div id="statusBar" class="bg-gray-200 rounded-md h-2">
+                      <div id="progressBar" class="bg-blue-500 h-2 rounded-md" style="width: 0%;"></div>
+                    </div>
+                    <p class="text-red-500 font-light text-base">ดูสถานะตรงนี้ 👇🏻</p>
+                    <p id="statusText" class="text-sm font-bold text-gray-600 mt-1"></p>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <button type="submit"
+                    class="w-full bg-blue-500 text-white p-3 rounded-md font-bold hover:bg-blue-600 transition duration-300">
+                    ส่งมีม
+                  </button>
+                </form>
+
+                <footer class="bg-white shadow mt-8">
+                  <div class="container mx-auto px-4 py-4 text-center text-gray-600">
+                    Design By AniNight 2024 &copy; 2024 MemePost - All Rights Reserved.
+                  </div>
+                </footer>
+      </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('memeForm');
+    const progressBar = document.getElementById('progressBar');
+    const statusText = document.getElementById('statusText');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('POST', form.action, true);
+
+      // ติดตามความก้าวหน้า
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          // หยุดที่ 90%
+          const progressPercent = percent < 90 ? percent : 90;
+          progressBar.style.width = progressPercent + '%';
+          statusText.textContent = `กำลังอัปโหลด... ${progressPercent}%`;
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response && response.status === 'ok') {
+              // ตั้งค่าบาร์ความก้าวหน้าเป็น 90%
+              progressBar.style.width = '90%';
+              statusText.textContent = 'การอัปโหลดสำเร็จ! รอส่งข้อมูลไปยังเซิร์ฟเวอร์...';
+
+              // รอ 1 วินาทีก่อนขึ้น 100%
+              setTimeout(() => {
+                progressBar.style.width = '100%';
+                statusText.textContent = `ส่งข้อมูลเสร็จสมบูรณ์! ${response.msg}`;
+                form.reset();
+              }, 5000);
+            } else {
+              statusText.textContent = 'เกิดข้อผิดพลาด: ' + (response.msg || 'ไม่ทราบข้อผิดพลาด'); // แสดงข้อความจากเซิร์ฟเวอร์
+            }
+          } catch (e) {
+            console.error('Error parsing server response:', e);
+            statusText.textContent = 'เกิดข้อผิดพลาดในการประมวลผลข้อมูลที่ตอบกลับจากเซิร์ฟเวอร์';
+          }
+        } else {
+          console.error('Upload failed:', xhr.statusText || 'Unknown error');
+          statusText.textContent = `การอัปโหลดล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`;
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error('Upload failed:', xhr.statusText || 'Unknown error');
+        statusText.textContent = `การอัปโหลดล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`;
+      };
+
+      // ส่งข้อมูลฟอร์ม
+      xhr.send(formData);
+    });
+  </script>
+
+
+</body>
+
+</html>

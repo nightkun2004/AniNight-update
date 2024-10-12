@@ -6,23 +6,45 @@
     <title>เติมเหรียญ</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
-</head>
-<body>
-    <%- include('./Component/Sidebar') %>
-    <div class="flex-1 flex flex-col">
-        <%- include('./Component/Header') %>
+    <style>
+        body::-webkit-scrollbar {
+           display: none;
+       }
 
-        <div class="container mx-auto p-2 max-w-7xl shadow-md bg-gradient-to-b from-sky-100">
+       section {
+           overflow-y: auto;
+           overflow-x: hidden;
+       }
+   </style>
+</head>
+<body class="overflow-hidden">
+
+    <main class="bg-white flex flex-row w-full h-screen">
+        <%- include('./Component/Sidebar') %>
+
+        <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
             <div class="header__profile z-4 p-5 rounded flex justify-between ">
                 <!-- Left -->
                 <div class="profile flex items-center">
-                    <img src="https://ani-night.online/profiles/3013c1083d9ea2694d1cc6851d79411be01e48cb-9b05-4233-8b43-3cc5b933d272.jpg"
+                    <% if ( userID.user.profilePicture &&  userID.user.profilePicture.startsWith('http')) { %>
+                        <img src="<%=  userID.user.profilePicture %>"
                         class="w-10 h-10 rounded-full " alt="profile__user">
+                    <% } else { %>
+                        <% if ( userID.user.profilePicture) { %>
+                            <img src="/uploads/profiles/<%=  userID.user.profilePicture %>"
+                        class="w-10 h-10 rounded-full " alt="profile__user">
+                        <% } else { %>
+                            <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                        <% } %>
+                    <% } %>        
+                    
                     <div class="flex flex-col pl-5 profile-content" id="profile-content" data-useremail="user@example.com">
-                        <h3>Username</h3>
-                        <p>Email</p>
+                        <h3><%= userID.user.username %></h3>
+                        <p><%= userID.user.email %></p>
                     </div>
                 </div>
 
@@ -67,8 +89,8 @@
                 </div>
                 
              </main>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.js"></script>
     <script src="/js/script.js"></script>

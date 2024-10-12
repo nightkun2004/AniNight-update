@@ -69,6 +69,10 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Article'
     }],
+    Mememes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Meme'
+    }],
     surveyadmin: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SurveyAdmin'

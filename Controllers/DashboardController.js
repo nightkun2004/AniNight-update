@@ -116,7 +116,7 @@ const gatPlaymentEdit = async (req, res) => {
 
 
 // POST: /api/v2/edit/post/article/:id
-const EditPostArticle = async (req, res, next) => {
+const EditPostArticle = async (req, res, next) => { 
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {

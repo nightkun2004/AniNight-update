@@ -34,6 +34,6 @@ router.post('/track-ad-display/:articleId', async (req, res) => {
 // ============================== API =====================================================
 // ========================================================================================
 
-router.get("/posts/:id", getPosts)
+router.get("/posts/:id", getPosts) 
 
 module.exports = router;

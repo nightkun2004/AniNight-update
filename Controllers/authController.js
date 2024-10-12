@@ -22,7 +22,7 @@ const authLogin = async (req, res, next) => {
 
         // ตรวจสอบว่าข้อมูลที่ส่งมาครบถ้วนหรือไม่
         if (!email || !password) {
-            return res.status(400).render(`${lang}/pages/authPages/login`, { notdata: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/login`, { notdata: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID,  active: "profile", translations: req.translations, lang });
         }
 
         // Normalize email
@@ -31,14 +31,14 @@ const authLogin = async (req, res, next) => {
 
         // ตรวจสอบว่าผู้ใช้มีอยู่ในระบบหรือไม่
         if (!user) {
-            return res.status(404).render(`${lang}/pages/authPages/login`, { notsystem: 'ไม่พบผู้ใช้นี้ในระบบ', userID, translations: req.translations, lang });
+            return res.status(404).render(`./th/pages/authPages/login`, { notsystem: 'ไม่พบผู้ใช้นี้ในระบบ', userID,  active: "profile", translations: req.translations, lang });
         }
 
         // ตรวจสอบความถูกต้องของรหัสผ่าน
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).render(`${lang}/pages/authPages/login`, { error: 'รหัสผ่านไม่ถูกต้อง', userID, translations: req.translations, lang });
+            return res.status(401).render(`./th/pages/authPages/login`, { error: 'รหัสผ่านไม่ถูกต้อง', userID,  active: "profile", translations: req.translations, lang });
         }
 
         // สร้าง JWT token
@@ -61,7 +61,8 @@ const authLogin = async (req, res, next) => {
         res.status(500).render(`${lang}/pages/authPages/login`, {
             error: errorMessage,
             userID,
-            translations: req.translations, lang
+            translations: req.translations, lang,
+            active: "profile",
         });
     }
 };
@@ -77,15 +78,15 @@ const authRegister = async (req, res, next) => {
 
         // ตรวจสอบข้อมูลที่จำเป็น
         if (!username || !email || !password) {
-            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID,  active: "register", siteKey, translations: req.translations, lang });
         }
 
         if (password.length < 6) {
-            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', active: "register", userID, siteKey, translations: req.translations, lang });
         }
 
         if (password != password2) {
-            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'รหัสผ่านขอคุณไม่ตรงกัน', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'รหัสผ่านขอคุณไม่ตรงกัน', active: "register", userID, siteKey, translations: req.translations, lang });
         }
 
         // ตรวจสอบ reCAPTCHA
@@ -97,7 +98,7 @@ const authRegister = async (req, res, next) => {
         });
 
         if (!recaptchaResponseData.data.success) {
-            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตนมัติ', userID, siteKey, translations: req.translations, lang, siteKey });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตนมัติ', active: "register", userID, siteKey, translations: req.translations, lang, siteKey });
         }
 
         // ตรวจสอบความปลอดภัยของรหัสผ่าน (ตัวอย่างเช่น การมีอักขระต่างๆ)
@@ -109,12 +110,12 @@ const authRegister = async (req, res, next) => {
         // ตรวจสอบอีเมลที่ซ้ำ
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'อีเมลนี้ถูกใช้ไปแล้ว', siteKey, userID, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'อีเมลนี้ถูกใช้ไปแล้ว', active: "register", siteKey, userID, translations: req.translations, lang });
         }
         // ตรวจสอบชื่อผู้ใช้ที่ซ้ำ
         const existingUsername = await User.findOne({ username });
         if (existingUsername) {
-            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, siteKey, translations: req.translations, lang });
+            return res.status(400).render(`${lang}/pages/authPages/register`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', active: "register", userID, siteKey, translations: req.translations, lang });
         }
 
         // เข้ารหัสรหัสผ่าน
@@ -144,7 +145,8 @@ const authRegister = async (req, res, next) => {
                 email: newUser.email
             },
             siteKey,
-            translations: req.translations, lang
+            translations: req.translations, lang,
+            active: "register",
         });
 
     } catch (error) {
@@ -152,7 +154,8 @@ const authRegister = async (req, res, next) => {
         res.status(500).render(`${lang}/pages/authPages/register`, {
             error: errorMessage,
             userID,
-            translations: req.translations, lang, siteKey
+            translations: req.translations, lang, siteKey,
+            active: "register",
         });
     }
 }
@@ -182,9 +185,10 @@ const authProfile = async (req, res) => {
         checkAuth(req, res, async () => {
             const user = await User.findById(userID.user._id).select('-password').populate('articles').exec();
             if (!user) {
-                return res.status(404).render(`${lang}/pages/authPages/profile`, { error: 'ไม่พบผู้ใช้นี้ในระบบ', translations: req.translations, lang });
+                return res.status(404).render(`./th/pages/authPages/profile`, { error: 'ไม่พบผู้ใช้นี้ในระบบ',  active: "profile", translations: req.translations, lang });
             }
-            res.render(`${lang}/pages/authPages/profile`, {
+            res.render(`./th/pages/authPages/profile`, {
+                active: "profile",
                 user,
                 userID,
                 message: "โหลดโปรไฟล์เรียบร้อยแล้ว",

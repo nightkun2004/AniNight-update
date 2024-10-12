@@ -60,8 +60,8 @@ const CreateArticle = async (req, res, next) => {
             content: content,
             categories: Array.isArray(categories) ? categories : [categories],
             tags: tagsArray,
-            thumbnail: `${thumbnailFilename}`, // ภาพ thumbnail
-            imagesarticle: imageUrls, // ภาพประกอบหลายไฟล์
+            thumbnail: `${thumbnailFilename}`, 
+            imagesarticle: imageUrls,
             urlslug: urlslug || postId,
             published: req.body.published === 'on',
             creator: {

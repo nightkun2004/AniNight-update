@@ -1,81 +1,162 @@
-<!-- Sidebar -->
-<div id="sidebar" class="fixed inset-y-0 left-0 md:left-0 w-64 text-black backdrop-blur-sm bg-white/5 overflow-auto shadow-md sidebar z-50">
-    <div class="p-6 flex justify-between items-center">
-        <h2 class="text-blue-500 text-2xl font-bold">
-            <a href="/">AniNight</a>
-        </h2>
-        <button id="closeSidebar">
-            <svg class="h-10 w-10 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
-    <hr class="mt-4 mb-6">
-    <nav class="space-y-4">
-        <a href="/" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">หน้าหลัก</a>
-        <a href="/foryou?recomment=0&i-0&sortBy=views" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">สำหรับคุณ</a>
-        <a href="#" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">บทความ</a>
-        <a href="/schedule/anime" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">ตารางอนิเมะ</a>
-        <% if (userID) {%>
-            <a href="/<%= userID.user.username %>" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">โปรไฟล์ของคุณ   </a>
-            <a href="/top/coin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เติมเงิน</a>
-            <% if (userID.user.role === 'content_creator' || userID.user.username === 'pino2004') {%>
-                <a href="/dashboard" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">จัดการเนื้อหา</a>
-            <% } %>
-            <% if (userID.user.role === 'admin') { %>
-                <a href="/admin" class="text-gray-600 px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">เข้าสู่ผู้ดูแล</a>
-            <% } %>
-        <% } %>
-        <hr class="mt-4 mb-6">
-        <!-- <p class="text-sm font-medium text-gray-400 pl-2">การสำรวจของเราและแลกรางวัล</p> -->
-        <!-- <a href="/survey/reward" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แบบสำรวจ</a>
-        <a href="/reward/withdraws" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แลกรางวัล</a> -->
-    </nav>
-    <hr class="mt-4 mb-6">
-    <div class="footer flex gap-1 flex-wrap p-2 bg-white">
-        <p class="font-medium text-black text-sm"><i class="fa-regular fa-copyright"></i> 2024 AniNight |</p>
-        <p class="font-medium text-black text-sm"><a href="https://web.facebook.com/AniNightOffice.net">ติดต่อเรา</a></p>
-        <p class="font-medium text-black text-sm"><a href="/term#OurPolicy">นโยบายของเรา</a></p>
-        <p class="font-medium text-black text-sm"><a href="/term#Privacy">ความเป็นส่วนตัว</a></p>
-        <p class="font-medium text-black text-sm"><a href="#">กฏการใช้งาน</a></p>
+<!--  <a href="/survey/reward" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แบบสำรวจ</a>
+        <a href="/reward/withdraws" class="text-black px-5 py-2 hover:bg-gray-100 hover:text-sky-500 block">แลกรางวัล</a>  -->
 
-        <p class="font-normal text-gray-500">
+<style>
+    .sidebarlet::-webkit-scrollbar {
+        width: 8px;
+        height: 6px;
+        background-color: #f6f6f6;
+        /* สีพื้นหลังของสกอบาร์ */
+        border-radius: 10px;
+    }
+
+    .sidebarlet::-webkit-scrollbar-thumb {
+        width: 8px;
+        height: 6px;
+        background-color: #888;
+        /* สีของแถบเลื่อน */
+        border-radius: 10px;
+    }
+</style>
+
+<div class="sidebarlet w-16 md:w-64 h-screen md:p-3 flex flex-col items-center overflow-auto"
+    style="background-color: rgb(218, 230, 238);">
+    <div class="logo mb-4">
+        <a href="/">
+            <img src="/annight/logo_mini.png" alt="logo_mini"
+                class="w-full h-12 md:h-16 object-cover select-none pointer-events-none">
+            <h2 class="hidden md:block text-xl font-bold">AniNight</h2>
+            <p class="text-sm text-red-600 text-center">Beta</p>
+            <p class="hidden mb:block text-red-600 text-center">เวอร์ชั่นทดลอง</p>
+        </a>
+    </div>
+    <ul class="menu w-full p-0 m-0">
+        <li class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer 
+            <%= active === 'Home' ? 'bg-blue-300' : '' %>">
+            <a href="/" class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                <i class='bx bx-home-alt-2 text-2xl'></i>
+                <span class="hidden md:block md:px-5">หน้าหลัก</span>
+            </a>
+        </li>
+
+        <li class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer 
+            <%= active === 'ScheduleAnime' ? 'bg-blue-300' : '' %>">
+            <a href="/schedule/anime"
+                class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                <i class='bx bx-tv text-2xl '></i>
+                <span class="hidden md:block md:px-5">ตารางอนิเมะ</span>
+            </a>
+        </li>
+
+        <li class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer 
+            <%= active === 'foryou' ? 'bg-blue-300' : '' %>">
+            <a href="/foryou?recomment=0&i-0&sortBy=views"
+                class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                <img src="/icons/foyyou_icon.svg" alt="foyyou_icon" class="text-2xl w-7 h-7">
+                <span class="hidden md:block md:px-5">สำหรับคุณ</span>
+            </a>
+        </li>
+
+        <li class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer 
+            <%= active === 'Memes' ? 'bg-blue-300' : '' %>">
+            <a href="/memes" class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                <i class='bx bx-bulb text-2xl'></i>
+                <span class="hidden md:block md:px-5">มีม</span>
+            </a>
+        </li>
+
+        <li class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer
+            <%= active === 'creatememe' ? 'bg-blue-300' : '' %>">
+            <a href="/create/meme/new"
+                class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                <i class='bx bx-upload text-2xl text-center'></i>
+                <span class="hidden md:block md:px-5">โพสต์มีม</span>
+            </a>
+        </li>
+
+        <% if (!userID) {%>
+            <li
+                class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] bg-black cursor-pointer">
+                <a href="/auth/login"
+                    class="active flex items-center text-center text-white md:pl-5 md:w-full md:h-full">
+                    <i class='bx bx-log-in text-2xl text-center'></i>
+                    <span class="hidden md:block md:px-5">เข้าสู่ระบบ</span>
+                </a>
+            </li>
+            <% } else {%>
+                <li
+                    class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer
+                    <%= active === 'profile' ? 'bg-blue-300' : '' %>">
+                    <a href="/<%= userID.user.username %>"
+                        class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                        <i class='bx bxs-user text-2xl text-center'></i>
+                        <span class="hidden md:block md:px-5">โปรไฟล์</span>
+                    </a>
+                </li>
+                <li
+                    class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer
+                    <%= active === 'CreateArticle' ? 'bg-blue-300' : '' %>">
+                    <a href="/uploads/create/article"
+                        class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                        <i class='bx bx-highlight text-2xl text-center'></i>
+                        <span class="hidden md:block md:px-5">เขียนบทความ</span>
+                    </a>
+                </li>
+                <li
+                    class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer
+                    <%= active === 'topcoin' ? 'bg-blue-300' : '' %>">
+                    <a href="/top/coin"
+                        class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                        <i class='bx bxs-coin text-2xl text-center'></i>
+                        <span class="hidden md:block md:px-5">เติมเงิน</span>
+                    </a>
+                </li>
+                <% if (userID.user.role==='content_creator' || userID.user.username==='pino2004' ) {%>
+                    <li
+                        class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer">
+                        <a href="/dashboard"
+                            class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                            <i class='bx bxs-grid-alt text-2xl text-center'></i>
+                            <span class="hidden md:block md:px-5">จัดการเนื้อหา</span>
+                        </a>
+                    </li>
+                    <% } %>
+                        <% if (userID.user.role==='admin' ) { %>
+                            <li
+                                class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] hover:bg-blue-300 cursor-pointer">
+                                <a href="/admin"
+                                    class="active flex items-center text-center text-black md:pl-5 md:w-full md:h-full">
+                                    <i class='bx bxs-user-plus text-2xl text-center'></i>
+                                    <span class="hidden md:block md:px-5">เข้าสู่ผู้ดูแล</span>
+                                </a>
+                            </li>
+                            <% } %>
+                                <form id="logoutForm" action="/api/v2/logout" method="post">
+                                    <li
+                                        class="item flex m-2 md:m-0 py-1 px-3 rounded-lg md:py-2 md:my-2 items-center md:w-full md:h-[40px] bg-red-500 cursor-pointer">
+                                        <a href="/auth/login"
+                                            class="active flex items-center text-center text-white md:pl-5 md:w-full md:h-full">
+                                            <i class='bx bx-log-out text-2xl text-center pr-5'></i>
+                                            <button type="submit" onclick="logout(event)">ออกจากระบบ</button>
+                                        </a>
+                                    </li>
+                                </form>
+                                <% } %>
+    </ul>
+    <div class="footer flex gap-1 flex-wrap p-2 ">
+        <p class="font-medium text-black text-sm hidden md:block"><i class="fa-regular fa-copyright"></i> 2024 AniNight
+            |</p>
+        <p class="font-medium text-black text-sm hidden md:block"><a
+                href="https://web.facebook.com/AniNightOffice.net">ติดต่อเรา</a>
+        </p>
+        <p class="font-medium text-black text-sm hidden md:block"><a href="/term#OurPolicy">นโยบายของเรา</a></p>
+        <p class="font-medium text-black text-sm hidden md:block"><a href="/term#Privacy">ความเป็นส่วนตัว</a></p>
+        <p class="font-medium text-black text-sm hidden md:block"><a href="#">กฏการใช้งาน</a></p>
+
+        <p class="font-normal text-sm text-gray-500 hidden md:block">
             Provided by NPatPublisher
         </p>
     </div>
-    <hr class="mt-4 mb-6">
-    <div class="relative inline-block group">
-        <button class="p-3">
-            <i class="fa-solid fa-earth-americas"></i>  ภาษา/language
-        </button>
-        <div class="absolute top-0 left-10 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
-            <ul>
-                <li><a href="/th/schedule/anime" class="block px-4 py-2 hover:bg-gray-100">ไทย</a></li>
-                <li><a href="/en/schedule/anime" class="block px-4 py-2 hover:bg-gray-100">English</a></li>
-                <li><a href="/jp/schedule/anime" class="px-4 py-2 hover:bg-gray-100 flex items-center">
-                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                    width="28px" height="28px" viewBox="0 0 800 800" enable-background="new 0 0 800 800" xml:space="preserve">
-                    <g>
-                        <path fill="#FFFFFF" d="M116.129,154.839H25.807v490.322h748.387V154.839H167.742c-7.126,0-12.903-5.775-12.903-12.903h-25.807
-                C129.032,149.063,123.255,154.839,116.129,154.839z M400,258.064c78.264,0,141.936,63.673,141.936,141.936
-                c0,78.263-63.672,141.936-141.936,141.936S258.064,478.263,258.064,400C258.064,321.738,321.736,258.064,400,258.064z" />
-                        <path d="M787.097,129.032H167.742c-7.126,0-12.903,5.775-12.903,12.903s5.777,12.903,12.903,12.903h606.451v490.322H25.807V154.839
-                h90.322c7.126,0,12.903-5.775,12.903-12.903s-5.777-12.903-12.903-12.903H12.903C5.777,129.032,0,134.808,0,141.936v516.129
-                c0,7.128,5.777,12.903,12.903,12.903h774.193c7.126,0,12.903-5.775,12.903-12.903V141.936
-                C800,134.808,794.223,129.032,787.097,129.032z" />
-                        <path fill="#ED1F34" d="M400,517.129c-64.585,0-117.129-52.544-117.129-117.129S335.415,282.871,400,282.871
-                S517.129,335.415,517.129,400S464.585,517.129,400,517.129z" />
-                        <path fill="#ED1F34" d="M400,516.129c64.034,0,116.129-52.095,116.129-116.129S464.034,283.871,400,283.871
-                S283.871,335.966,283.871,400S335.966,516.129,400,516.129z" />
-                        <path d="M400,541.936c78.264,0,141.936-63.673,141.936-141.936c0-78.262-63.672-141.936-141.936-141.936
-                S258.064,321.738,258.064,400C258.064,478.263,321.736,541.936,400,541.936z M400,283.871c64.034,0,116.129,52.095,116.129,116.129
-                S464.034,516.129,400,516.129S283.871,464.034,283.871,400S335.966,283.871,400,283.871z" />
-                    </g>
-                </svg>
-                日本語</a>
-            </li>
-            </ul>
-        </div>
-    </div>
-    
 </div>
+
+<script src="/js/profile.js"></script>

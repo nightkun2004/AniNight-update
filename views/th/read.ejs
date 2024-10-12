@@ -29,6 +29,8 @@
     <meta name="twitter:site" content="ANI-NIGHT.ONLINE">
     <meta name="google-site-verification" content="eyTwMkNmyYZFyV7ag9MuAEh5uOPdc4uZ6ONSM3w5HRI">
 
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <link rel="stylesheet" href="https://cdn.ani-night.online/aninight/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <!-- Google Tag Manager -->
@@ -57,33 +59,92 @@
         .liked {
             color: #f56565;
         }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        section {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     </style>
 </head>
-<body>
+<body class="overflow-hidden">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TD38Z8LH" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <%- include('./Component/Header') %>
-    <%- include('./Component/Sidebar') %>
     
-       <div class="container mx-auto mt-3">
-        <div class="mb-6 mt-4">
-            <% if (typeof error !== 'undefined') { %>
-                <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
-            <% } %>
-        </div>
-       </div>
+
         <% if (post.published) { %>
-        <main class="container mx-auto md:4">
-            <div class="flex flex-col md:flex-row gap-4">
-                <!-- main content -->
-                 <div class="flex-1 bg-white text-black p-4 rounded shadow-md open-windows-read">
+        <main class="bg-white flex flex-row w-full h-screen">
+
+            <%- include('./Component/Sidebar') %>
+
+            <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+                <div class="container mx-auto mt-3">
+                    <div class="mb-6 mt-4">
+                        <% if (typeof error !== 'undefined') { %>
+                            <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+                        <% } %>
+                    </div>
+                   </div>
+
+                   <div class="flex-1 text-black open-windows-read">
                     <div class="skeleton">
                         <div class="title__main flex justify-between items-center">
-                                <h1 class="text-2xl font-bold mb-4">
+                                <h1 class="text-sm md:text-2xl font-bold mb-4">
                                     <a href="/read/<%= post.urlslug %>?lang=en"><%= post.title %></a>
                                 </h1>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-start justify-between space-y-2 md:space-y-0 md:space-x-4 p-4 bg-white shadow-lg rounded-md">
+                            <!-- Left Section: Channel/Author Info -->
+                            <div class="flex items-center space-x-4">
+                                <% if (post.creator.profilePicture && post.creator.profilePicture.startsWith('http')) { %>
+                                    <img src="<%= user.creator.profilePicture %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                                <% } else { %>
+                                    <% if (post.creator.profilePicture) { %>
+                                        <img src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                                    <% } else { %>
+                                        <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                                    <% } %>
+                                <% } %>     
+                                <div>
+                                    <a href="#channel/<%= post.creator.username %>">
+                                        <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.username %></h1>
+                                    </a>
+                                   <p class="text-gray-600"> <%= moment(post.createdAt).locale('th').fromNow() %></p>
+                                </div>
+                            </div>
+                        
+                            <!-- Right Section: Buttons -->
+                            <div class="flex space-x-4 items-center">
+                                <!-- Follow Button -->
+                                <button class="bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-800 transition duration-200">
+                                    ติดตาม
+                                </button>
+                                <!-- Like and Share Buttons -->
+                                <div class="flex space-x-2">
+                                    <% if (userID) {%>
+                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
+                                            onclick="likeArticle('<%= post._id %>')">
+                                            <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                            <span class="pl-2">
+                                                <%= post.likes.length %> ไลค์
+                                            </span>
+                                        </button>
+                                    <% } else {%>
+                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID) ? 'liked' : '' %>"
+                                            onclick="likeArticle('<%= post._id %>')">
+                                            <i class="fa fa-heart <%= post.likes.includes(userID) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                            <span class="pl-2">
+                                                <%= post.likes.length %> ไลค์
+                                            </span>
+                                        </button>
+                                    <% } %>
+                                </div>
                                 <div class="right__title-main flex flex-col items-center">
                                     <div class="relative">
                                         <!-- Share Button -->
@@ -131,180 +192,145 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center" style="border-bottom: 1px solid #eee;">
-                            <div class="mb-4 flex items-center">
-                                <h2 class="text-sm font-semibold bg-gray-100 rounded-full p-1"><i class="fa-solid fa-pen-to-square"></i> เขียนโดย:  <a
-                                        href="/channel/<%= post.creator.username %>" target="_blank">
-                                        <%= post.creator.username %>
-                                    </a>
-                                </h2>
-                                <p class="text-gray-600">
-                                    <%= post.creator.bio %>
+                        
+                        <!-- Article Description Section -->
+                        <div class="mt-4 p-4 bg-gray-100 rounded-md">
+                            <div class="text-gray-700 flex flex-wrap text-sm md:text-base">
+                                <p class="pl-3 text-sm">
+                                    <i class="fa-regular fa-eye"></i> การดู <%= (post.views) %> ครั้ง,
                                 </p>
-                                <div class="pl-3">
-                                    <% if (userID) {%>
-                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
-                                            onclick="likeArticle('<%= post._id %>')">
-                                            <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
-                                            <span class="pl-2">
-                                                <%= post.likes.length %> ไลค์
-                                            </span>
-                                        </button>
-                                    <% } else {%>
-                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID) ? 'liked' : '' %>"
-                                            onclick="likeArticle('<%= post._id %>')">
-                                            <i class="fa fa-heart <%= post.likes.includes(userID) ? 'text-red-500' : 'text-gray-500' %>"></i>
-                                            <span class="pl-2">
-                                                <%= post.likes.length %> ไลค์
-                                            </span>
-                                        </button>
-                                    <% } %>
-                                </div>
-                                
-                                <div class="pl-3">
-                                   <% if (userID) {%>
-                                    <button class="flex items-center <%= isSaved ? 'text-blue-500' : 'text-gray-500' %>">
-                                        <i class="fa-regular fa-bookmark" id="bookmark-<%= post._id %>" onclick="saveArticle('<%= post._id %>')"></i>
-                                        <span class="pl-2">บันทึก</span>
-                                    </button>
-                                <% } else {%>
-                                    <button class="flex items-center">
-                                        <i class="fa-regular fa-bookmark 
-                                            <%= post.savearticles && userID && userID.user && post.savearticles.includes(userID.user._id) ? 'text-blue-500' : 'text-gray-500' %>" 
-                                            id="bookmark-<%= post._id %>" 
-                                            onclick="saveArticle('<%= post._id %>')">
-                                      </i>
-
-                                        <span class="pl-2">บันทึก</span>
-                                    </button>
-                                <% } %>
-                                </div>
-                           
+                                <p class="pl-3 text-sm">
+                                    เผยแพร่เมื่อ: <%= new Date(post.createdAt).toLocaleDateString() %>
+                                </p>
+                                <p class="pl-3 text-sm" id="btn-read-fullscreen">
+                                    <i class="fa-solid fa-expand"></i> อ่านเต็มหน้าจอ
+                                </p>
                             </div>
-                        </div>
-                        <div class="mt-1 max-w-2xl text-sm text-gray-500 flex  items-center ">
-                            <%= moment(post.createdAt).locale('th').fromNow() %>,
-                            <p class="pl-3 text-sm">
-                                <i class="fa-regular fa-eye"></i> <%= (post.views) %> ครั้ง,
-                           </p>
-                           <p class="md:ml-2">เผยแพร่เมื่อ: <%= new Date(post.createdAt).toLocaleDateString() %></p>
-                           <p class="pl-2 cursor-pointer" id="btn-read-fullscreen"><i class="fa-solid fa-expand"></i> อ่านเต็มหน้าจอ</p>
-                       </div>
-
-                         <!-- Advertisement Section -->
-                         <div class="ads-container my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
-                            <div class="text-center mb-4">
-                                <p class="text-sm text-gray-500 " style="user-select: none;">Sponsored</p>
+                            <div class="tages">
+                                <div class="mt-1 flex justify-between">
+                                    <% if (post && post.tags && post.tags.length> 0) { %>
+                                        <h2
+                                            class="inline-block rounded-full border-2 mr-2 bg-white mb-2 border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
+                                            Tags: <% post.tags.forEach((tag, index)=> { %>
+                                                <a class="text-sky-500 txt-sm md:text-base" href="/tag/<%= tag %>">
+                                                    <%= tag %>
+                                                </a>
+                                                <% if (index < post.tags.length - 1) { %>
+                                                    ,
+                                                    <% } %>
+                                                        <% }); %>
+                                        </h2>
+                                        <% } else { %>
+                                            <h2>Tags: ไม่มีแท็ก</h2>
+                                            <% } %>
+                                </div>
                             </div>
-                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                            crossorigin="anonymous"></script>
-                        <ins class="adsbygoogle block mx-auto" style="display:block; text-align:center; width: 50%;"
-                            data-ad-layout="in-article" data-ad-format="video" data-ad-client="ca-pub-6579807593228261"
-                            data-ad-slot="5440757573"></ins>
-                        <script>
-                            (adsbygoogle = window.adsbygoogle || []).push({});
+                            <!-- Advertisement Section -->
+                            <div class="ads-container my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+                                <div class="text-center mb-4">
+                                    <p class="text-sm text-gray-500 " style="user-select: none;">Sponsored</p>
+                                </div>
+                                <script async
+                                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                                    crossorigin="anonymous"></script>
+                                <ins class="adsbygoogle block mx-auto" style="display:block; text-align:center; width: 50%;"
+                                    data-ad-layout="in-article" data-ad-format="video" data-ad-client="ca-pub-6579807593228261"
+                                    data-ad-slot="5440757573"></ins>
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+
+                                    // เพิ่มฟังก์ชันการนับถอยหลัง 15 วินาที
+                                    let countdown = 15;
+                                    const interval = setInterval(() => {
+                                        console.log(`เหลือเวลา: ${countdown} วินาที`);
+                                        countdown--;
+
+                                        if (countdown === 0) {
+                                            clearInterval(interval);
+                                            console.log("โฆษณาสิ้นสุดแล้ว");
+                                        }
+                                    }, 1000); // ทำงานทุก 1 วินาที
+                                </script>
                         
-                            // เพิ่มฟังก์ชันการนับถอยหลัง 15 วินาที
-                            let countdown = 15;
-                            const interval = setInterval(() => {
-                                console.log(`เหลือเวลา: ${countdown} วินาที`);
-                                countdown--;
-                        
-                                if (countdown === 0) {
-                                    clearInterval(interval);
-                                    console.log("โฆษณาสิ้นสุดแล้ว");
-                                }
-                            }, 1000); // ทำงานทุก 1 วินาที
-                        </script>
-                        
+                            </div>
+                            <hr class="mt-4 mb-6">
                         </div>
 
-                        <p><%- post.content %></p>
+                        <article class="bg-white text-black font-light">
+                            <%- post.content %>
+                        </article>
                     
 
-                        <div class="gallery w-full flex justify-center flex-col mt-5 z-0">
-                            <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" class="w-full cursor-pointer h-full object-cover open-fullscreen">
-                             <% if (post.imagesarticle.length > 0) { %>
-                                 <% post.imagesarticle.forEach(function(image) { %>
-                                     <img src="/uploads/articlesImages/<%= image %>" alt="" class="w-full cursor-pointer h-full object-cover open-fullscreen">
-                                 <% }); %>
-                             <% } %>
-                         </div>
-                      
-                        
-                        
-                        <hr class="mb-2 mt-4">
-                     </div>
-                 </div>
-
-                 <!-- Right Content -->
-                  <div class="w-full md:w-1/3 bg-white text-black p-4 rounded shadow-md">
-                    <h2 class="text-lg font-semibold mb-4">คุณอาจชอบรายการเนื้อหาต่อไปนี้</h2>
-                    <div class="tages">
-                        <div class="mt-1 flex justify-between">
-                            <% if (post && post.tags && post.tags.length> 0) { %>
-                                <h2
-                                    class="inline-block rounded-full border-2 mr-2 bg-white mb-2 border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
-                                    Tags: <% post.tags.forEach((tag, index) => { %>
-                                        <a class="text-sky-500" href="/tag/<%= tag %>">
-                                            <%= tag %>
-                                        </a>
-                                        <% if (index < post.tags.length - 1) { %>
-                                            ,
-                                        <% } %>
+                        <div class="gallery w-full mt-5 z-0">
+                            <img src="/uploads/thumbnails/<%= post.thumbnail %>" 
+                                 alt="<%= post.title %>" 
+                                 class="w-full h-[400px] object-cover rounded-lg shadow-md cursor-pointer open-fullscreen hover:opacity-90 transition-opacity duration-200">
+                            
+                            <% if (post.imagesarticle.length > 0) { %>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                                    <% post.imagesarticle.forEach(function(image) { %>
+                                        <img src="/uploads/articlesImages/<%= image %>" 
+                                             alt="<%= post.title %>" 
+                                             class="w-full h-[200px] object-cover rounded-lg shadow-md cursor-pointer open-fullscreen hover:scale-105 transition-transform duration-200">
                                     <% }); %>
-                                </h2>
-                                <% } else { %>
-                                    <h2>Tags: ไม่มีแท็ก</h2>
-                                    <% } %>
+                                </div>
+                            <% } %>
                         </div>
-                        <hr class="mt-4 mb-6">
-                        <h3 class="text-2xl font-medium mb-2">อัพเดตล่าสุด</h3>
+                    
+                        <hr class="mb-2 mt-4">
+
+                        <h3 class="font-normal text-base mb-5 mt-5 md:text-2xl border-blue-300 border-l-2 pl-2">อัพเดตใหม่</h3>
                         <% recentUpdates.forEach(function(update) { %>
                             <% if (update.published) { %>
-                                <div class="skeleton flex flex-col overflow-hidden gap-4 p-4 border border-gray-200 rounded-lg shadow-sm transition-all mb-5 hover:shadow-md">
-                                    <div class="w-full">
+                                <div class="skeleton flex flex-col gap-4 p-4 border border-gray-200 rounded-lg shadow-sm transition-all mb-5 hover:shadow-md md:flex-row md:items-start">
+                                    <!-- Thumbnail Section -->
+                                    <div class="w-full md:w-1/3">
                                         <a href="/read/<%= update.urlslug %>">
                                             <div class="relative">
                                                 <img class="w-full h-auto object-cover rounded-md" src="/uploads/thumbnails/<%= update.thumbnail %>" alt="<%= update.title %>">
-                                                <p class="views" style="position: absolute; top: 0; left: 0;
-                                                background-color: rgba(255, 255, 255, 0.961); color: #000;
-                                                padding: 5px; border-radius: 10px 0;">การดู <%= (update.views) %></p>
+                                                <p class="absolute top-0 left-0 bg-white bg-opacity-90 text-black text-sm px-2 py-1 rounded-br-md">
+                                                    การดู <%= update.views %>
+                                                </p>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="w-3/3">
+                        
+                                    <!-- Article Info Section -->
+                                    <div class="w-full md:w-2/3">
                                         <a href="/read/<%= update.urlslug %>">
-                                            <h3 class="text-lg font-medium text-gray-800 mb-2 hover:text-blue-600 transition-colors">
+                                            <h3 class="text-xl font-semibold text-gray-800 mb-2 hover:text-blue-600 transition-colors">
                                                 <%= update.title %>
                                             </h3>
                                         </a>
-                                        <p class="text-sm text-gray-600 aspect-w-16 aspect-h-9">
-                                            <!-- Add a brief description or excerpt if available -->
+                                        <p class="text-sm text-gray-600 line-clamp-3">
                                             <%- update.excerpt || update.content.substring(0, 100) %>...
                                         </p>
                                     </div>
                                 </div>
                             <% } %>
                         <% }); %>
-                        <hr class="mt-4 mb-6">
-                    </div>
-                  </div>
-            </div>
-            <div class="my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                crossorigin="anonymous"></script>
-           <ins class="adsbygoogle"
-                style="display:block; text-align:center;"
-                data-ad-layout="in-article"
-                data-ad-format="fluid"
-                data-ad-client="ca-pub-6579807593228261"
-                data-ad-slot="2386038227"></ins>
-           <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-           </script>
-            </div>
+                        
+                     </div>
+                 </div>
+
+
+                 <div class="my-8 p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 aspect-w-16 aspect-h-9">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                    crossorigin="anonymous"></script>
+               <ins class="adsbygoogle"
+                    style="display:block; text-align:center;"
+                    data-ad-layout="in-article"
+                    data-ad-format="fluid"
+                    data-ad-client="ca-pub-6579807593228261"
+                    data-ad-slot="2386038227"></ins>
+               <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+               </script>
+                </div>
+            </section>
+
         </main>
         <% } else {%>
             <div class="flex items-center justify-center h-screen">

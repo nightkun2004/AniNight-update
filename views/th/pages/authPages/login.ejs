@@ -1,82 +1,97 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เข้าสู่ระบบ | Login</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        section {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
 </head>
-<body class="bg-blue-50">
-    <%- include('../../Component/Sidebar') %>
-    <%- include('../../Component/Header') %>
-    <div class="flex-1 flex flex-col h-screen justify-center mb-7 mt-7">
 
+<body class="bg-blue-50 overflow-hidden">
 
-         <!-- Registration Form -->
-         <main class="flex-1  flex justify-center items-center w-full">
-            <div class="bg-white relative p-8 rounded-lg shadow-lg w-full max-w-md overflow-hidden">
-                <h2 class="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h2>
-                <form action="/api/v2/auth/login" method="POST" class="z-10">
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-700">อีเมล</label>
-                        <input type="email" id="email" name="email" class="mt-2 p-2 w-full border rounded-md outline-none" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="block text-gray-700">รหัสผ่าน</label>
-                        <input type="password" id="password" name="password" class="mt-2 p-2 w-full border rounded-md outline-none" required>
-                    </div>
-                    <div class="mb-6">
-                        <button type="submit" class="w-full bg-black text-white p-2 rounded-md focus:ring-opacity-50">เข้าสู่ระบบ</button>
-                    </div>
-                </form>
-                <div class="mb-6 mt-4">
-                    <% if (typeof error !== 'undefined') { %>
-                        <div class="mb-4 text-red-500 text-center"><%= error %></div>
-                    <% } %>
+    <main class="bg-white flex flex-row w-full h-screen">
+        <%- include('../../Component/Sidebar') %>
+
+     <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+       <div class="flex justify-center mt-5 mb-6 h-screen items-center">
+        <div class="bg-white relative p-8 rounded-lg shadow-lg w-full max-w-md overflow-hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h2>
+            <form action="/api/v2/auth/login" method="POST" class="z-10">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700">อีเมล</label>
+                    <input type="email" id="email" name="email" class="mt-2 p-2 w-full border rounded-md outline-none" required>
                 </div>
-                <div class="mb-6 mt-4">
-                    <% if (typeof notdata !== 'undefined') { %>
-                        <div class="mb-4 text-orange-400 text-center"><%= notdata %></div>
-                    <% } %>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700">รหัสผ่าน</label>
+                    <input type="password" id="password" name="password" class="mt-2 p-2 w-full border rounded-md outline-none" required>
                 </div>
-                <div class="mb-6 mt-4">
-                    <% if (typeof notsystem !== 'undefined') { %>
-                        <div class="mb-4 text-blue-600 text-center"><%= notsystem %></div>
-                    <% } %>
+                <div class="mb-6">
+                    <button type="submit" class="w-full bg-black text-white p-2 rounded-md focus:ring-opacity-50">เข้าสู่ระบบ</button>
                 </div>
-                <div class="mb-6 mt-4">
-                    <% if (typeof message !== 'undefined') { %>
-                        <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
-                    <% } %>
-                </div>
-                <p class="text-center text-gray-600">ยังไม่มีบัญชี? <a href="/<%= lang %>/auth/register" class="text-blue-500 hover:underline">สมัครสมาชิก</a></p>
-            
-                <hr class="mt-4 mb-6">
-                <div class="google-login mb-4 w-full">
-                    <a href="/auth/google" target="_blank">
-                        <button class="login_button flex items-center border-2 px-4 py-2 rounded-lg w-full">
-                            <img src="/logo/google_icon.png" alt="google icon" class="w-10 h-10">
-                            <div class="login_text pl-5">
-                               เข้าสู่ระบบ / สมัครด้วย Google
-                            </div>
-                        </button>
-                    </a>
-                    <!-- <span class="text-red-500 font-medium text-sm text-center">เนื่องจากการเข้าสู่ระบบ Google ยังอยู่ระหว่างตรวจสอบจาก Google คุณอาจจะได้รับข้อผิดพลาดที่หน้าของ Google</span> -->
-                </div>
-                <!-- Character Image Section -->
-                <div class="absolute top-0 pr-10 select-none" style="right: -60px;">
-                    <img src="/annight/refister.png" alt="ตัวละคร" class="h-40 object-contain pointer-events-none w-auto">
-                </div>
+            </form>
+            <div class="mb-6 mt-4">
+                <% if (typeof error !== 'undefined') { %>
+                    <div class="mb-4 text-red-500 text-center"><%= error %></div>
+                <% } %>
             </div>
-            
-        </main>
-    </div>
+            <div class="mb-6 mt-4">
+                <% if (typeof notdata !== 'undefined') { %>
+                    <div class="mb-4 text-orange-400 text-center"><%= notdata %></div>
+                <% } %>
+            </div>
+            <div class="mb-6 mt-4">
+                <% if (typeof notsystem !== 'undefined') { %>
+                    <div class="mb-4 text-blue-600 text-center"><%= notsystem %></div>
+                <% } %>
+            </div>
+            <div class="mb-6 mt-4">
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
+                <% } %>
+            </div>
+            <p class="text-center text-gray-600">ยังไม่มีบัญชี? <a href="/auth/register" class="text-blue-500 hover:underline">สมัครสมาชิก</a></p>
+        
+            <hr class="mt-4 mb-6">
+            <div class="google-login mb-4 w-full">
+                <a href="/auth/google" target="_blank">
+                    <button class="login_button flex items-center border-2 px-4 py-2 rounded-lg w-full">
+                        <img src="/logo/google_icon.png" alt="google icon" class="w-10 h-10">
+                        <div class="login_text pl-5">
+                           เข้าสู่ระบบ / สมัครด้วย Google
+                        </div>
+                    </button>
+                </a>
+                <!-- <span class="text-red-500 font-medium text-sm text-center">เนื่องจากการเข้าสู่ระบบ Google ยังอยู่ระหว่างตรวจสอบจาก Google คุณอาจจะได้รับข้อผิดพลาดที่หน้าของ Google</span> -->
+            </div>
+            <!-- Character Image Section -->
+            <div class="absolute top-0 pr-10 select-none" style="right: -60px;">
+                <img src="/annight/refister.png" alt="ตัวละคร" class="h-40 object-contain pointer-events-none w-auto">
+            </div>
+        </div>
+       </div>
+     </section>
+
+    </main>
 
 
 
     <script src="/js/script.js  "></script>
 </body>
+
 </html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มีม <%= post.description %> - Meme</title>
+    <meta name="description" content="<%= post.description %>">
+
+
+
+    <% const isVideo=post.memeimageUrl.split('?')[0].endsWith('.mp4'); %>
+        <% if (isVideo) { %>
+            <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+            <meta property="og:locale" content="th_TH">
+            <meta property="og:title" content="<%= post.description %> | ANINIGHT.ONLINE">
+            <meta property="og:type" content="meme">
+            <meta property="og:type" content="video.other">
+            <meta property="og:title" content="<%= post.description %>">
+            <meta property="og:description" content=" <%= post.description %>">
+            <meta property="og:url" content="https://www.ani-night.online/post/<%= post._id %>">
+            <meta property="og:video" content="<%= post.memeimageUrl %>">
+            <meta property="og:video:secure_url" content="<%= post.memeimageUrl %>">
+            <meta property="og:video:type" content="video/mp4">
+            <meta property="og:video:width" content="1280">
+            <meta property="og:video:height" content="720">
+            <meta property="og:site_name" content="ani-night.online">
+            <meta property="og:type" content="website" />
+            <% } else { %>
+                <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+                <meta property="og:locale" content="th_TH">
+                <meta property="og:title" content="<%= post.description %> | ANINIGHT.ONLINE">
+                <meta property="og:type" content="meme">
+                <meta property="og:image" content="<%= post.memeimageUrl %>">
+                <meta property="og:image:alt" content="<%= post.description %>">
+                <meta property="og:image:width" content="1200">
+                <meta property="og:image:height" content="720">
+                <meta property="og:site_name" content="ani-night.online">
+                <meta property="og:type" content="website" />
+                <meta property="og:image:type" content="image/jpg">
+                <% } %>
+
+
+
+
+                    <link rel="stylesheet" href="/css/index.css">
+                    <!-- <link rel="stylesheet" href="/css/player.css"> -->
+                    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+                    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+                    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+                    <script src="/cdn/tailwincss.js"></script>
+                    <script src="/cdn/fontawesome.js" crossorigin="anonymous"></script>
+                    <script async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                        crossorigin="anonymous"></script>
+                    <!-- Google tag (gtag.js) -->
+                    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
+                    <script>
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() { dataLayer.push(arguments); }
+                        gtag('js', new Date());
+
+                        gtag('config', 'G-LTJP520FN4');
+                    </script>
+                    <style>
+                        body::-webkit-scrollbar {
+                            display: none;
+                        }
+
+                        section {
+                            overflow-y: auto;
+                            overflow-x: hidden;
+                        }
+                    </style>
+</head>
+
+<body class="overflow-hidden">
+
+    <main class="bg-white flex flex-row w-full h-screen">
+        <%- include('../Component/Sidebar') %>
+            <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+                <div class="md:bg-white md:rounded-lg grid grid-cols-1 md:grid-cols-2 md:shadow-md md:p-6 mb-8">
+                    <div class="w-full">
+                        <h1 class="text-3xl font-bold mb-2" id="meme-description">
+                            <%= post.description %>
+                        </h1>
+                        <div class="mb-5 mt-3 flex justify-center">
+                            <% if (post.published) {%>
+                                <% const isVideo=post.memeimageUrl.split('?')[0].endsWith('.mp4'); %>
+                                    <% if (isVideo) { %>
+                                        <div class="video_players">
+                                            <video id="video-post" src="<%= post.memeimageUrl %>" controls muted loop
+                                                controlsList="nodownload" oncontextmenu="return false;"
+                                                class="h-64 max-w-full rounded-lg">
+                                            </video>
+                                        </div>
+                                        <% } else { %>
+                                            <img src="<%= post.memeimageUrl %>" alt="<%= post.description %>"
+                                                class="md:h-64 h-52 max-w-full rounded-lg">
+                                            <% } %>
+                                                <% } else {%>
+                                                    <div
+                                                        class="flex items-center justify-center w-full    m-2 h-[400px] bg-black rounded-lg">
+                                                        <div class="text-center">
+                                                            <h1 class="text-6xl font-bold text-blue-500">404</h1>
+                                                            <img src="/annight/error.png" alt=""
+                                                                class="h-60 object-contain w-full pointer-events-none select-none">
+                                                            <p class="text-red-500 mt-2">
+                                                                เนื้อหานี้อาจถูกลบเนื่องจากลิขสิทธิ์</p>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+
+                        </div>
+                        <div class="flex items-center mb-4 ">
+                            <p class="text-gray-700 text-2xl cursor-not-allowed">
+                                <i class='bx bx-like cursor-not-allowed'></i>
+                                (<span id="like-count">0</span>)
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold mb-2">ความคิดเห็น (<%= post.comments.length %>)</h2>
+                        <div id="comments-container"
+                            class="mb-4 max-h-96 overflow-y-auto border border-gray-300 rounded p-2">
+                            <!-- แสดงความคิดเห็น -->
+                            <ul id="commentList" class="space-y-4 mt-4">
+                                <% post.comments.forEach(comment=> { %>
+                                    <li class="flex items-start space-x-3 p-4 border-b border-gray-200">
+                                        <img src="<%= comment.username.id.profilePicture ? comment.username.id.profilePicture : 'https://via.placeholder.com/40' %>"
+                                            alt="Avatar" class="w-10 h-10 rounded-full"> <!-- แสดงภาพโปรไฟล์ -->
+                                        <div class="flex flex-col">
+                                            <span class="font-semibold text-gray-800">
+                                                <%= comment.username.id.username || 'ผู้ใช้ไม่ระบุ' %>
+                                                    <!-- เปลี่ยนเป็น comment.username.name -->
+                                            </span>
+                                            <span class="text-gray-600">
+                                                <%= comment.repliestext %>
+                                            </span>
+                                            <span class="text-sm text-gray-500 mt-1">
+                                                <%= new Date(comment.createdAt).toLocaleString() %>
+                                                    <!-- แสดงวันที่สร้าง -->
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <% }) %>
+                            </ul>
+                        </div>
+                        <% if (userID) { %>
+                            <form id="commentForm" onsubmit="event.preventDefault(); sendComment(this);">
+                                <p data-postid="<%= post._id %>" id="postId"></p>
+                                <p data-userid="<%= userID.user._id %>" id="userId"></p>
+                                <textarea id="commentText" class="w-full border rounded p-2 mb-4"
+                                    placeholder="ใส่ความคิดเห็นของคุณ..." required></textarea>
+                                <button type="submit"
+                                    class="bg-blue-500 px-4 py-2 rounded-lg text-white">ส่งความคิดเห็น</button>
+                                <p class="font-light text-sm text-red-500">หลักจากส่งความคิดเห็น อาจจะยังไม่ขึ้น
+                                    โปรดรอหรือรีโหลดหน้าเว็บ</p>
+                            </form>
+                            <% } else {%>
+                                <a href="/auth/login"
+                                    class="bg-black text-white rounded-lg px-4 py-2 w-full">เข้าสู่ระบบเพื่อแสดงความคิดเห็น</a>
+                                <% } %>
+                    </div>
+                </div>
+
+                <!-- ส่วนแนะนำมีม -->
+                <!-- <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-2">แนะนำมีม</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-gray-200 rounded-lg p-4">
+                        <img src="https://example.com/similar-meme-1.jpg" alt="Similar Meme 1"
+                            class="rounded-lg mb-2 max-w-full">
+                        <p class="font-bold">ชื่อมีม 1</p>
+                    </div>
+                    <div class="bg-gray-200 rounded-lg p-4">
+                        <img src="https://example.com/similar-meme-2.jpg" alt="Similar Meme 2"
+                            class="rounded-lg mb-2 max-w-full">
+                        <p class="font-bold">ชื่อมีม 2</p>
+                    </div>
+                    <div class="bg-gray-200 rounded-lg p-4">
+                        <img src="https://example.com/similar-meme-3.jpg" alt="Similar Meme 3"
+                            class="rounded-lg mb-2 max-w-full">
+                        <p class="font-bold">ชื่อมีม 3</p>
+                    </div>
+                </div>
+            </div> -->
+
+                <footer class="bg-white shadow mt-8">
+                    <div class="container mx-auto px-4 py-4 text-center text-gray-600">
+                        Design By AniNight 2024 &copy; 2024 MemePost - All Rights Reserved.
+                    </div>
+                </footer>
+            </section>
+    </main>
+
+    <script src="/js/player.js"></script>
+    <script>
+        const ws = new WebSocket('ws://localhost:5000/');
+
+        ws.onopen = () => {
+            console.log('Connected to WebSocket');
+        };
+
+        ws.onmessage = (event) => {
+            const response = JSON.parse(event.data);
+            if (response.action === 'newComment') { // ตรวจสอบว่า action เป็น 'newComment'
+                const newComment = response.comment;
+
+                // เพิ่มความคิดเห็นใหม่ลงใน UI
+                const commentList = document.getElementById('commentList');
+                const commentItem = document.createElement('li');
+                commentItem.className = "flex items-start space-x-3 p-4 border-b border-gray-200"; // กำหนดคลาสให้กับรายการ
+                commentItem.innerHTML = `
+            <img src="${newComment.username.id.profilePicture ? newComment.username.id.profilePicture : 'https://via.placeholder.com/40'}" alt="Avatar" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col">
+                <span class="font-semibold text-gray-800">${newComment.username.name || 'ผู้ใช้ไม่ระบุ'}</span>
+                <span class="text-gray-600">${newComment.repliestext}</span>
+                <span class="text-sm text-gray-500 mt-1">${new Date(newComment.createdAt).toLocaleString()}</span>
+            </div>
+        `;
+
+                // เพิ่มความคิดเห็นใหม่ในรายการความคิดเห็น
+                commentList.appendChild(commentItem);
+            }
+        };
+
+
+        function sendComment(form) {
+            const postId = form.querySelector('[data-postid]').getAttribute('data-postid');
+            const userId = form.querySelector('[data-userid]') ? form.querySelector('[data-userid]').getAttribute('data-userid') : null;
+            const commentText = form.querySelector('#commentText').value;
+
+            // ตรวจสอบว่ามีข้อความความคิดเห็น
+            if (!commentText.trim()) {
+                alert("กรุณาใส่ความคิดเห็นของคุณ");
+                return;
+            }
+
+            const data = {
+                postId: postId,
+                userId: userId,
+                commentText: commentText
+            };
+
+            // ส่งความคิดเห็นไปยังเซิร์ฟเวอร์
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/v2/api/comment', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log("ความคิดเห็นถูกส่งแล้ว:", xhr.responseText);
+
+                    const response = JSON.parse(xhr.responseText);
+
+                    ws.send(JSON.stringify({ action: 'addComment', ...data }));
+
+                    document.getElementById('commentText').value = '';
+                } else {
+                    console.error("เกิดข้อผิดพลาดในการส่งความคิดเห็น:", xhr.responseText);
+                }
+            };
+
+            xhr.onerror = () => {
+                console.error("เกิดข้อผิดพลาดในการส่งความคิดเห็น");
+            };
+
+            xhr.send(JSON.stringify(data));
+        }
+    </script>
+</body>
+
+</html>

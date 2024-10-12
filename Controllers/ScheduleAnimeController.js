@@ -13,13 +13,14 @@ const getAnimeInfo = async (req, res) => {
                 userID
             });
         }
-        res.render(`./th/pages/schedulePages/info`, { userID, anime, translations: req.translations, lang });
+        res.render(`./th/pages/schedulePages/info`, { userID, anime, active: "ScheduleAnime", translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/pages/schedulePages/info`, {
             error: errorMessage,
             userID,
-            translations: req.translations, lang
+            translations: req.translations, lang,
+            active: "ScheduleAnime",
         });
     }
 }
@@ -39,12 +40,12 @@ const getAnimeStream = async (req, res) => {
                 translations: req.translations, lang
             });
         }
-        res.render(`./th/pages/schedulePages/streaming/index`, { userID, anime, translations: req.translations, lang });
+        res.render(`./th/pages/schedulePages/streaming/index`, { userID, anime,active: "ScheduleAnime", translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/pages/schedulePages/streaming/index`, {
             error: errorMessage,
-            userID,
+            userID,active: "ScheduleAnime",
             translations: req.translations, lang
         });
     }

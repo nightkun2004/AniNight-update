@@ -1,9 +1,11 @@
-const authorizeRole = (...role) => {
+const authorizeRole = (...roles) => {
     return (req, res, next) => {
-        if (req.session.userlogin && req.session.userlogin.user && role.includes(req.session.userlogin.user.role)) {
+        if (req.session.userlogin && req.session.userlogin.user && roles.includes(req.session.userlogin.user.role)) {
             next();
         } else {
-            res.status(403).render('./errors/role/403', { message: '|| หากคุณต้องการสร้างบทความคุณต้องขอสิทธิ์อนุมัติบัญชีเป็น Content Creator' });
+            res.status(403).render('./errors/role/403', { 
+                message: '|| หากคุณต้องการสร้างบทความคุณต้องขอสิทธิ์อนุมัติบัญชีเป็น Content Creator' 
+            });
         }
     };
 };

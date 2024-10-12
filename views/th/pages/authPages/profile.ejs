@@ -6,6 +6,8 @@
     <title><%= user.username %> | Profile</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -13,155 +15,162 @@
         .bannercss::after {
             content: 'แก้ไขแบนเนอร์';
         }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        section {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     </style>
 </head>
-<body class="bg-blue-50">
-    <%- include('../../Component/Sidebar') %>
-    <div class="flex-1 flex flex-col">
-        <%- include('../../Component/Header') %>
-
-        <main class="flex-1 p-4">
-            <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg">
-                <div class="p-6">
-                    <div class="banner relative w-full h-40 sm:h-64 md:h-80 lg:h-96 xl:h-128">
-                        <% if (user.bannerImagePath) { %>
-                            <img style="user-select: none;" 
-                                 src="/uploads/banners/<%= user.bannerImagePath %>" 
-                                 alt="<%= user.username %>" 
-                                 class="w-full rounded-lg h-full object-cover">
-                        <% } else { %>
-                            <img style="user-select: none;" 
-                                 src="https://ani-night.online/banner/14cd43e9-ba3a-4ed9-af84-d9c6ffe09201.png" 
-                                 alt="<%= user.username %>" 
-                                 class="w-full rounded-lg h-64 object-cover">
-                        <% } %>
-                        <a href="/profile/<%= user.username %>/editbanner/add">
-                            <label for="profile-picture"
-                                   class="absolute top-2 right-2 bg-blue-500 text-white px-4 py-3 rounded-full cursor-pointer bannercss">
-                                <i class="fa-solid fa-pen"></i>
-                            </label>
-                        </a>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 mt-6 md:grid-cols-3 gap-6">
-                        <!-- Profile Info -->
-                        <section class="md:col-span-1 bg-gray-50 p-4 rounded-lg shadow-md">
-                            <div class="flex justify-between">
-                                <div>
-                                    <h3 class="text-xl font-semibold mb-4">ข้อมูลโปรไฟล์ <%= user.username %></h3>
-                                </div>
-                                <div class="relative">
-                                    <button id="menu-button" class="text-black px-4 py-2 rounded-md">
-                                        <i class="fa-solid fa-ellipsis-vertical text-2xl"></i>
-                                    </button>
-                                    <div id="menu-content" class="absolute top right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden hidden">
-                                        <a href="/uploads/create/article" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">เขียนบทความ</a>
-                                        <a href="/dashboard" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">จัดการเนื้อหา</a>
-                                        <a href="/profile/<%= user.username %>/editprofile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">แก้ไขโปรไฟล์</a>
-                                        <form id="logoutForm" action="/api/v2/logout" method="post" class="block cursor-pointer px-4 py-2 text-white bg-red-600 hover:bg-red-800">
-                                            <button type="submit" onclick="logout(event)" >ออกจากระบบ</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <% if (user.profilePicture && user.profilePicture.startsWith('http')) { %>
-                                    <img src="<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+<body class="overflow-hidden">
+   
+        <main class="bg-white flex flex-row w-full h-screen">
+            <%- include('../../Component/Sidebar') %>
+            <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+                <div>
+                    <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg">
+                        <div class="p-6">
+                            <div class="banner relative w-full h-40 sm:h-64 md:h-80 lg:h-96 xl:h-128">
+                                <% if (user.bannerImagePath) { %>
+                                    <img style="user-select: none;" 
+                                         src="/uploads/banners/<%= user.bannerImagePath %>" 
+                                         alt="<%= user.username %>" 
+                                         class="w-full rounded-lg h-full object-cover">
                                 <% } else { %>
-                                    <% if (user.profilePicture) { %>
-                                        <img src="/uploads/profiles/<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                    <img style="user-select: none;" 
+                                         src="https://ani-night.online/banner/14cd43e9-ba3a-4ed9-af84-d9c6ffe09201.png" 
+                                         alt="<%= user.username %>" 
+                                         class="w-full rounded-lg h-64 object-cover">
+                                <% } %>
+                                <a href="/profile/<%= user.username %>/editbanner/add">
+                                    <label for="profile-picture"
+                                           class="absolute top-2 right-2 bg-blue-500 text-white px-4 py-3 rounded-full cursor-pointer bannercss">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </label>
+                                </a>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 mt-6 md:grid-cols-3 gap-6">
+                                <!-- Profile Info -->
+                                <section class="md:col-span-1 bg-gray-50 p-4 rounded-lg shadow-md">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h3 class="text-xl font-semibold mb-4">ข้อมูลโปรไฟล์ <%= user.username %></h3>
+                                        </div>
+                                        <div class="relative">
+                                            <button id="menu-button" class="text-black px-4 py-2 rounded-md">
+                                                <i class="fa-solid fa-ellipsis-vertical text-2xl"></i>
+                                            </button>
+                                            <div id="menu-content" class="absolute top right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden hidden">
+                                                <a href="/uploads/create/article" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">เขียนบทความ</a>
+                                                <a href="/dashboard" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">จัดการเนื้อหา</a>
+                                                <a href="/profile/<%= user.username %>/editprofile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">แก้ไขโปรไฟล์</a>
+                                          
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <% if (user.profilePicture && user.profilePicture.startsWith('http')) { %>
+                                            <img src="<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                        <% } else { %>
+                                            <% if (user.profilePicture) { %>
+                                                <img src="/uploads/profiles/<%= user.profilePicture %>" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                            <% } else { %>
+                                                <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                            <% } %>
+                                        <% } %>                                    
+                                       
+                                        <ul>
+                                            <li><strong>ชื่อผู้ใช้:</strong> <%= user.username %></li>
+                                            <li><strong>อีเมล:</strong> <%= user.email %></li>
+                                            <li><strong>ประวัติ:</strong> <%= user.bio %></li>
+                                            <li><strong>วันที่เข้าร่วม:</strong> <%= new Date(user.createdAt).toLocaleDateString() %></li>
+                                        </ul>
+                                    </div>
+                                   
+                                    <div class="mb-6 mt-4">
+                                        <% if (typeof message !== 'undefined') { %>
+                                            <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
+                                        <% } %>
+                                </section>
+                                <!-- Profile Details -->
+                                <section class="md:col-span-2 bg-gray-50 p-4 rounded-lg shadow-md">
+                                    <h3 class="text-xl font-semibold mb-4">รายละเอียดโปรไฟล์</h3>
+                                    <ul>
+                                        <li><strong>ผู้ติดตาม:</strong> <%= user.followers.length %></li>
+                                        <li><strong>กำลังติดตาม:</strong> <%= user.following.length %></li>
+                                        <li><strong>จำนวนบันทึกบทความ:</strong> <%= user.savearticles.length %></li>
+                                        <li><strong>คะแนน:</strong> <%= user.points %></li>
+                                        <li><strong>สถานะบัญชี:</strong> <%= user.role === "user" ? "ผู้ใช้" : user.role === "content_creator" ? "ครีเอเตอร์" : user.role === "partners" ? "เป็นครีเอเตอร์แบบชำระเงิน" : user.role %></li>
+                                        <li><strong>ได้รับการอนุมัติเป็นครีเอเตอร์:</strong> <%= user.isApproved ? "อนุมัติแล้ว" : "ยังไม่อนุมัติ" %></li>
+                                    </ul>
+                                     
+                                </section>
+                            </div>
+        
+                            <!-- NavBar Profile -->
+                            <div class="header-userarticle mt-4"> 
+                                <nav>
+                                    <ul class="article-user-menus bg-black flex items-center rounded-lg">
+                                        <% if (user.role === 'content_creator') {%>
+                                            <li class="p-3 mr-3 cursor-pointer transform text-white active" onclick="showSection('article-section', this)" id="article-tab">
+                                                <a href="/<%= user.username %>">บทความของคุณ</a>
+                                            </li>
+                                            <% } %>
+                                        <li class="p-3 mr-3 cursor-pointer transform text-white" onclick="showSection('save-section', this)" id="save-tab">
+                                            <a href="/<%= user.username %>/saveanime">รายการอนิเมะที่บันทึก</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+        
+        
+                            <div class="main_section py-8 px-4">
+                                
+                            </div>
+                            
+        
+                            <% if (user.role === 'content_creator') {%>
+                            <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-md">
+                                <!-- Profile Blogs -->
+                                <h3 class="text-xl font-semibold mb-4">บทความของฉัน</h3>
+                                <ul class="space-y-4">
+                                    <% if (user.articles.length > 0) { %>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                                            <% user.articles.forEach(article => { %>
+                                                <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                                    <a href="/read/<%= article.urlslug %>" target="_blank">
+                                                        <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="<%= article.title %>" class="w-full h-60 object-cover md:h-48">
+                                                    </a>
+                                                    <div class="p-6 md:col-span-1">
+                                                        <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                            <a href="/read/<%= article.urlslug %>" target="_blank" class="hover:text-blue-500"><%= article.title %></a>
+                                                        </h1>
+                                                        <% if (article.creator && article.creator.id) { %>
+                                                            <div class="flex items-center space-x-4">
+                                                                <img src="/uploads/profiles/<%= article.creator.profilePicture %>" alt="<%= article.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                                                <p class="text-gray-700"><%= article.creator.username %></p>
+                                                            </div>
+                                                        <% } %>
+                                                    </div>
+                                                </article>
+                                            <% }); %>
+                                        </div>
                                     <% } else { %>
-                                        <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-32 h-32 border-blue-500 border-4 rounded-full mb-4">
+                                        <p>คุณยังไม่ได้เขียนบทความ</p>
                                     <% } %>
-                                <% } %>                                    
-                               
-                                <ul>
-                                    <li><strong>ชื่อผู้ใช้:</strong> <%= user.username %></li>
-                                    <li><strong>อีเมล:</strong> <%= user.email %></li>
-                                    <li><strong>ประวัติ:</strong> <%= user.bio %></li>
-                                    <li><strong>วันที่เข้าร่วม:</strong> <%= new Date(user.createdAt).toLocaleDateString() %></li>
                                 </ul>
                             </div>
-                           
-                            <div class="mb-6 mt-4">
-                                <% if (typeof message !== 'undefined') { %>
-                                    <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
-                                <% } %>
-                        </section>
-                        <!-- Profile Details -->
-                        <section class="md:col-span-2 bg-gray-50 p-4 rounded-lg shadow-md">
-                            <h3 class="text-xl font-semibold mb-4">รายละเอียดโปรไฟล์</h3>
-                            <ul>
-                                <li><strong>ผู้ติดตาม:</strong> <%= user.followers.length %></li>
-                                <li><strong>กำลังติดตาม:</strong> <%= user.following.length %></li>
-                                <li><strong>จำนวนบันทึกบทความ:</strong> <%= user.savearticles.length %></li>
-                                <li><strong>คะแนน:</strong> <%= user.points %></li>
-                                <li><strong>สถานะบัญชี:</strong> <%= user.role === "user" ? "ผู้ใช้" : user.role === "content_creator" ? "ครีเอเตอร์" : user.role === "partners" ? "เป็นครีเอเตอร์แบบชำระเงิน" : user.role %></li>
-                                <li><strong>ได้รับการอนุมัติเป็นครีเอเตอร์:</strong> <%= user.isApproved ? "อนุมัติแล้ว" : "ยังไม่อนุมัติ" %></li>
-                            </ul>
-                             
-                        </section>
-                    </div>
-
-                    <!-- NavBar Profile -->
-                    <div class="header-userarticle mt-4"> 
-                        <nav>
-                            <ul class="article-user-menus bg-black flex items-center rounded-lg">
-                                <% if (user.role === 'content_creator') {%>
-                                    <li class="p-3 mr-3 cursor-pointer transform text-white active" onclick="showSection('article-section', this)" id="article-tab">
-                                        <a href="/<%= user.username %>">บทความของคุณ</a>
-                                    </li>
-                                    <% } %>
-                                <li class="p-3 mr-3 cursor-pointer transform text-white" onclick="showSection('save-section', this)" id="save-tab">
-                                    <a href="/<%= user.username %>/saveanime">รายการอนิเมะที่บันทึก</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-
-
-                    <div class="main_section py-8 px-4">
-                        
-                    </div>
-                    
-
-                    <% if (user.role === 'content_creator') {%>
-                    <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-md">
-                        <!-- Profile Blogs -->
-                        <h3 class="text-xl font-semibold mb-4">บทความของฉัน</h3>
-                        <ul class="space-y-4">
-                            <% if (user.articles.length > 0) { %>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                                    <% user.articles.forEach(article => { %>
-                                        <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
-                                            <a href="/read/<%= article.urlslug %>" target="_blank">
-                                                <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="<%= article.title %>" class="w-full h-60 object-cover md:h-48">
-                                            </a>
-                                            <div class="p-6 md:col-span-1">
-                                                <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                                                    <a href="/read/<%= article.urlslug %>" target="_blank" class="hover:text-blue-500"><%= article.title %></a>
-                                                </h1>
-                                                <% if (article.creator && article.creator.id) { %>
-                                                    <div class="flex items-center space-x-4">
-                                                        <img src="/uploads/profiles/<%= article.creator.profilePicture %>" alt="<%= article.creator.username %>" class="w-12 h-12 rounded-full border border-gray-300">
-                                                        <p class="text-gray-700"><%= article.creator.username %></p>
-                                                    </div>
-                                                <% } %>
-                                            </div>
-                                        </article>
-                                    <% }); %>
-                                </div>
-                            <% } else { %>
-                                <p>คุณยังไม่ได้เขียนบทความ</p>
                             <% } %>
-                        </ul>
+                        </div>
                     </div>
-                    <% } %>
                 </div>
-            </div>
+            </section>
+           
         </main>
-        </div>
-    </div>
 
     
 

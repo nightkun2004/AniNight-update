@@ -6,18 +6,29 @@
     <title>สมัครสมาชิก | Register</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-<body class="bg-blue-50">
-    <%- include('../../Component/Sidebar') %>
-    <%- include('../../Component/Header') %>
-    <div class="flex-1 flex flex-col h-screen justify-center mb-7 mt-7">
-        
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
 
-         <!-- Registration Form -->
-         <main class="flex-1 p-4 flex items-center justify-center relative">
+        section {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+
+<main class="bg-white flex flex-row w-full h-screen">
+    <%- include('../../Component/Sidebar') %>
+
+    <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+        <div class="flex justify-center items-center h-screen mt-8 mb-9">
             <div class="bg-white relative p-8 rounded-lg shadow-lg w-full max-w-md overflow-hidden">
                 <h2 class="text-2xl font-bold mb-6 text-center">สมัครสมาชิก</h2>
                 <form action="/api/v2/auth/register" method="POST">
@@ -63,15 +74,15 @@
                         <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= message %></div>
                     <% } %>
                 </div>
-                <p class="text-center text-gray-600">มีบัญชีอยู่แล้ว? <a href="/<%= lang %>/auth/login" class="text-blue-500 hover:underline">เข้าสู่ระบบ</a></p>
+                <p class="text-center text-gray-600">มีบัญชีอยู่แล้ว? <a href="/auth/login" class="text-blue-500 hover:underline">เข้าสู่ระบบ</a></p>
                  <!-- Character Image Section -->
                  <div class="absolute top-0 pr-10 select-none" style="right: -60px;">
                     <img src="/annight/refister.png" alt="ตัวละคร" class="h-40 object-contain pointer-events-none w-auto">
                 </div>
             </div>
-        </main>
-    </div>
-
-    <script src="/js/script.js  "></script>
+        </div>
+    </section>
+      
+    </main>
 </body>
 </html>
