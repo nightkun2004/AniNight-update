@@ -15,7 +15,7 @@ const getPosts = async (req, res, next) => {
             .populate('creator.id')
             .skip((page - 1) * limit)
             .limit(limit)
-            .sort({ updatedAt: -1 })
+            .sort({ createdAt: -1 })
             .exec();
 
         const totalPosts = await Article.countDocuments(); 
