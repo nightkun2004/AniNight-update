@@ -7,8 +7,8 @@ require("dotenv").config();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const createCheckoutSession = async (req, res) => {
-    const { priceId, email } = req.body; // Extract priceId and email from the request body
-    const paymentId = uuidv4(); // Generate a unique payment ID
+    const { priceId, email, amount, paymentMethod, } = req.body; // Extract priceId and email from the request body
+    const paymentId = uuidv4();
 
     try {
         // Create a new checkout session with Stripe
@@ -24,15 +24,19 @@ const createCheckoutSession = async (req, res) => {
             cancel_url: `${process.env.CLIENT_URL}/top/coin/Cancel`, // Redirect to cancel page
         });
 
-        // Save the payment record to the database
+
         const payment = new Payment({
-            email, // Save user email
-            priceId, // Save the selected price ID
-            sessionId: session.id, // Stripe session ID
-            paymentStatus: "pending", // Set initial status as pending
-            uuid: paymentId, // Store generated UUID for this payment
+            userid: req.user.id,
+            email, // อีเมลของผู้ใช้
+            priceId, // รหัสราคา
+            sessionId: session.id, // รหัส session จาก Stripe
+            paymentStatus: "pending", // สถานะการชำระเงินเริ่มต้นเป็น "pending"
+            uuid: paymentId, // UUID ที่สร้างไว้สำหรับการชำระเงินนี้
+            amount,
+            paymentMethod: "google"
         });
-        await payment.save(); // Save to MongoDB
+        await payment.save();
+        console.log("สร้างการชำระเงิน", payment)
 
         // Send the session URL back to the client
         res.status(200).json({ url: session.url });

@@ -1,9 +1,10 @@
 let selectedPriceId = null;
+let selectedamount = null;
 const profileContent = document.querySelector('.profile-content');
 let userEmail = profileContent ? profileContent.dataset.useremail : null;
 console.log(userEmail)
 
-function selectItem(element, priceId) {
+function selectItem(element, priceId, amount) {
     // ซ่อนข้อความ "กำลังเลือก" จากไอเทมทั้งหมด
     const items = document.querySelectorAll('.item .selection-text');
     items.forEach(item => item.classList.add('hidden'));
@@ -18,7 +19,10 @@ function selectItem(element, priceId) {
     
     // บันทึกราคา ID ที่เลือกไว้
     selectedPriceId = priceId;
+    selectedamount = amount;
 }
+
+console.log(selectItem)
 
 async function checkout() {
     if (!selectedPriceId) {
@@ -29,6 +33,7 @@ async function checkout() {
     try {
         const response = await axios.post('/create-checkout-session', {
             priceId: selectedPriceId,
+            amount: selectedamount,
             email: userEmail
         });
 
