@@ -15,35 +15,33 @@ router.get("/top/coin", checkAuth, (req,res)=>{
     res.render("./th/Topcoin", {userID , active: "topcoin"})
 })
 
-router.get("/top/coin/Successful", async (req,res)=>{
+router.get("/top/coin/Successful", async (req, res) => {
     const userID = req.session.userlogin;
-
     const sessionId = req.query.session_id; 
 
     if (!sessionId) {
-        return res.status(400).send('Session ID is required');
+        return res.status(400).send('ต้องระบุ Session ID');
     }
 
     try {
         // Retrieve the checkout session from Stripe
         const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+        // Check if the session exists and if the payment was successful
         if (!session || session.payment_status !== 'paid') {
-            return res.status(400).send('Payment was not successful');
+            return res.status(400).send('การชำระเงินไม่สำเร็จ');
         }
 
         // Find the payment record based on session ID
         const payment = await Payment.findOne({ sessionId: session.id });
-
         if (!payment) {
-            return res.status(404).send('Payment record not found');
+            return res.status(404).send('ไม่พบบันทึกการชำระเงิน');
         }
 
         // Find the user associated with the payment
         const user = await User.findById(payment.userid);
-
         if (!user) {
-            return res.status(404).send('User not found');
+            return res.status(404).send('ไม่พบผู้ใช้');
         }
 
         // Map price_id to points based on the checkout session
@@ -64,27 +62,44 @@ router.get("/top/coin/Successful", async (req,res)=>{
                     pointsToAdd += 2000; // 100 บาท
                     break;
                 default:
-                    console.log('Unknown price_id');
+                    console.log('price_id ไม่รู้จัก');
             }
         });
 
-        // Add points to user
+        // Update user's points and payment status
         user.points += pointsToAdd;
-        await user.save();
+        payment.paymentStatus = "completed";
 
-        console.log(`Payment successful, added ${pointsToAdd} points to user.`);
-        res.render("./th/pages/playments/Successful", {userID , active: "topcoin"})
+        // Save both the user and payment records in parallel
+        await Promise.all([user.save(), payment.save()]);
+
+        console.log(`การชำระเงินสำเร็จ, เพิ่ม ${pointsToAdd} คะแนนให้ผู้ใช้.`);
+        console.log(payment);
+        
+        // Render the success page
+        res.render("./th/pages/playments/Successful", { userID, active: "topcoin" });
+        
     } catch (error) {
-        console.error('Error processing payment:', error);
-        res.status(500).send('Internal server error');
+        console.error('เกิดข้อผิดพลาดในการประมวลผลการชำระเงิน:', error);
+        res.status(500).send('เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์');
     }
-   
-})
+});
 
-router.get("/top/coin/Cancel", (req,res)=>{
+
+router.get("/top/coin/Cancel", async (req, res) => {
     const userID = req.session.userlogin;
-    res.render("./th/pages/playments/Cancel", {userID, active: "topcoin"})
-})
+    const sessionId = req.query.session_id; // ดึง session_id ถ้ามี
+
+    if (sessionId) {
+        // บันทึกการยกเลิกการชำระเงินในฐานข้อมูล
+        const Payment = require("../models/PaymentModel");
+        await Payment.updateOne({ sessionId: sessionId }, { paymentStatus: 'cancelled' });
+    }
+
+    // Render the cancellation page
+    res.render("./th/pages/playments/Cancel", { userID, active: "topcoin" });
+});
+
 
 
 router.post('/create-checkout-session', authMiddleware, createCheckoutSession);

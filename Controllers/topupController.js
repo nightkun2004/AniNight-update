@@ -13,16 +13,17 @@ const createCheckoutSession = async (req, res) => {
     try {
         // Create a new checkout session with Stripe
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"], // Specify the payment method
+            payment_method_types: ["card", "promptpay"], // ใช้ "wallet" เพื่อรองรับ Google Pay
             line_items: [{
-                price: priceId, // Use the priceId from the frontend
+                price: priceId, // ใช้ priceId จาก frontend
                 quantity: 1,
             }],
             mode: "payment",
-            customer_email: email, // Customer email to associate with the session
-            success_url: `${process.env.CLIENT_URL}/top/coin/Successful?session_id={CHECKOUT_SESSION_ID}`, // Redirect to success page
-            cancel_url: `${process.env.CLIENT_URL}/top/coin/Cancel`, // Redirect to cancel page
+            customer_email: email, // อีเมลของลูกค้าเพื่อเชื่อมโยงกับเซสชัน
+            success_url: `${process.env.CLIENT_URL}/top/coin/Successful?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.CLIENT_URL}/top/coin/Cancel?session_id={CHECKOUT_SESSION_ID}`,
         });
+        
 
 
         const payment = new Payment({
