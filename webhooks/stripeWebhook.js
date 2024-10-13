@@ -49,7 +49,7 @@ exports.handleWebhook = async (req, res) => {
           user.points += pointsToAdd;
           await user.save();
   
-          console.log(`Payment successful, added ${pointsToAdd} points to user.`);
+          console.log(`Webhook Payment successful, added ${pointsToAdd} points to user.`);
         }
       }
     }
