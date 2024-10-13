@@ -88,16 +88,26 @@ router.get("/top/coin/Successful", async (req, res) => {
 
 router.get("/top/coin/Cancel", async (req, res) => {
     const userID = req.session.userlogin;
-    const sessionId = req.query.session_id; // ดึง session_id ถ้ามี
+    const sessionId = req.query.session_id; // Retrieve session_id if available
+    let payment = null; // Initialize payment
 
     if (sessionId) {
-        // บันทึกการยกเลิกการชำระเงินในฐานข้อมูล
-        const Payment = require("../models/PaymentModel");
-        await Payment.updateOne({ sessionId: sessionId }, { paymentStatus: 'cancelled' });
+        try {
+            const session = await stripe.checkout.sessions.retrieve(sessionId);
+            payment = await Payment.findOne({ sessionId: session.id });
+
+            if (payment) {
+                payment.paymentStatus = "cancelled";
+                await payment.save(); // Await the save operation
+            }
+        } catch (error) {
+            console.error("Error processing cancellation:", error);
+            // Optionally, you might want to render an error page or send a response
+        }
     }
 
     // Render the cancellation page
-    res.render("./th/pages/playments/Cancel", { userID, active: "topcoin" });
+    res.render("./th/pages/playments/Cancel", { userID, active: "topcoin", payment });
 });
 
 

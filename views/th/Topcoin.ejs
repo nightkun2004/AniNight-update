@@ -27,7 +27,7 @@
         <%- include('./Component/Sidebar') %>
 
         <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
-            <div class="header__profile z-4 p-5 rounded flex justify-between ">
+            <div class="header__profile z-4 p-5 rounded flex justify-between  mt-10">
                 <!-- Left -->
                 <div class="profile flex items-center">
                     <% if ( userID.user.profilePicture &&  userID.user.profilePicture.startsWith('http')) { %>
@@ -55,7 +55,7 @@
             </div>
 
             <!-- Main Content -->
-             <main class="mx-auto z-3 bg-white rounded-lg">
+             <main class="mx-auto z-3 bg-white rounded-lg mb-10">
                 <div class="rold p-6">
                     <p class="font-semibold">สิทธิ์ของการแลกคะแนน</p>
                     <p><i class="fa-solid fa-shop"></i> คุณสามารถใช้คะแนนซื้อสินค้าของเราได้</p>
