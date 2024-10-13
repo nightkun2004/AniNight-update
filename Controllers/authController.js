@@ -44,7 +44,7 @@ const authLogin = async (req, res, next) => {
         // สร้าง JWT token
         const { _id: id, username, role } = user;
         req.session.userlogin = { user };
-        const token = jwt.sign({ id, username, role }, process.env.JWT_SECRET, { expiresIn: "5d" });
+        const token = jwt.sign({ id, username, role, email }, process.env.JWT_SECRET, { expiresIn: "5d" });
         const tksave = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "5d" });
 
         // ส่ง token ใน HTTP header
