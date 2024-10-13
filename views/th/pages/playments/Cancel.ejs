@@ -3,27 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cancel</title>
+    <title>การชำระเงินถูกยกเลิก | Payment Cancelled</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <div class="flex-1 flex flex-col">
-        <%- include('../../Component/Header') %>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <%- include('../../Component/Header') %>
 
-         <!-- Main Content -->
-         <main class="mx-auto mt-10 p-8 bg-white rounded-lg sm:shadow-lg w-full max-w-lg">
+    <!-- Main Content -->
+    <div class="flex justify-center items-center min-h-screen">
+        <main class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <div class="text-center">
-                <i class="fas fa-times-circle text-red-500 text-6xl"></i>
-                <h1 class="text-2xl font-semibold mt-4 text-gray-800">การชำระเงินถูกยกเลิก</h1>
-                <p class="mt-2 text-gray-600">การชำระเงินของคุณถูกยกเลิกแล้ว หากนี่เป็นข้อผิดพลาด โปรดลองอีกครั้ง</p>
-                <!-- <p>รายละเอียด : <%= payment ? JSON.stringify(payment) : "ไม่มีข้อมูลการชำระเงิน" %></p> -->
-                <strong>สถานะ: <%= payment.paymentStatus %></strong>
-                <strong>จำนวนเงิน: <%= payment.amount %> บาท</strong>
-                <strong>อีเมล: <%= payment.email %> </strong>
-                <a href="/" class="mt-6 inline-block px-6 py-3 bg-blue-500 text-white text-lg font-medium rounded-lg shadow hover:bg-blue-600">กลับหน้าหลัก</a>
+                <!-- Icon for cancellation -->
+                <i class="fas fa-times-circle text-red-500 text-7xl mb-6"></i>
+                
+                <!-- Main heading -->
+                <h1 class="text-3xl font-bold text-gray-900">การชำระเงินถูกยกเลิก</h1>
+                
+                <!-- Description -->
+                <p class="mt-4 text-gray-600">
+                    การชำระเงินของคุณถูกยกเลิกแล้ว หากนี่เป็นข้อผิดพลาด โปรดลองอีกครั้งหรือติดต่อฝ่ายบริการลูกค้า
+                </p>
+
+                <!-- Payment details -->
+                <div class="mt-6 text-left space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <strong class="block text-gray-700">สถานะ: <span class="text-red-600"><%= payment.paymentStatus === 'cancelled' ? 'ยกเลิกแล้ว' : 'สถานะอื่นๆ' %>                    </span></strong>
+                    <strong class="block text-gray-700">จำนวนเงิน: <span class="text-blue-600"><%= payment.amount %> บาท</span></strong>
+                    <strong class="block text-gray-700">อีเมล: <span class="text-blue-600"><%= payment.email %></span></strong>
+                </div>
+
+                <!-- Back to home button -->
+                <a href="/" class="mt-8 inline-block px-6 py-3 bg-blue-500 text-white text-lg font-medium rounded-lg shadow hover:bg-blue-600 transition-colors duration-300">
+                    กลับหน้าหลัก
+                </a>
             </div>
         </main>
     </div>
