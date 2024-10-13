@@ -34,7 +34,6 @@ async function checkout() {
 
         const session = response.data;
 
-        // Redirect to Stripe Checkout
         window.location.href = session.url;
     } catch (error) {
         console.error('Error:', error);

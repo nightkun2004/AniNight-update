@@ -36,7 +36,7 @@ const AnimeRouter = require("./routers/AnimeRouer")
 const channalRouter = require("./routers/ChannelRouter")
 const SurveyRouter = require("./routers/SurveyRouter")
 const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
-const PlaymentRoute = require("./routers/PlaymentRouter")
+const PlaymentRoute = require("./routers/PlaymentRouter") 
 const MemeRouter = require("./routers/MemeRouter")
 
 app.get('/ads.txt', (req, res) => {
