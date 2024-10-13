@@ -1,28 +1,27 @@
 let selectedPriceId = null;
-let selectedamount = null;
-const profileContent = document.querySelector('.profile-content');
+let selectedAmount = null;
+const profileContent = document.getElementById('profile-content'); 
 let userEmail = profileContent ? profileContent.dataset.useremail : null;
-console.log(userEmail)
+console.log(userEmail);
+
 
 function selectItem(element, priceId, amount) {
-    // ซ่อนข้อความ "กำลังเลือก" จากไอเทมทั้งหมด
+    // Hide "กำลังเลือก" text from all items
     const items = document.querySelectorAll('.item .selection-text');
     items.forEach(item => item.classList.add('hidden'));
-    
-    // แสดงข้อความ "กำลังเลือก" สำหรับไอเทมที่ถูกคลิก
+
+    // Show "กำลังเลือก" for the clicked item
     const selectionText = element.querySelector('.selection-text');
     selectionText.classList.remove('hidden');
-    
-    // แสดงปุ่ม "ชำระเงิน"
+
+    // Show "ชำระเงิน" button
     const payButton = document.getElementById('payButton');
     payButton.classList.remove('hidden');
-    
-    // บันทึกราคา ID ที่เลือกไว้
-    selectedPriceId = priceId;
-    selectedamount = amount;
-}
 
-console.log(selectItem)
+    // Store selected price ID and amount
+    selectedPriceId = priceId;
+    selectedAmount = amount; // Make sure amount is a number
+}
 
 async function checkout() {
     if (!selectedPriceId) {
@@ -33,14 +32,14 @@ async function checkout() {
     try {
         const response = await axios.post('/create-checkout-session', {
             priceId: selectedPriceId,
-            amount: selectedamount,
+            amount: Number(selectedAmount), // Ensure amount is a number
             email: userEmail
         });
 
         const session = response.data;
-
-        window.location.href = session.url;
+        window.location.href = session.url; // Redirect to Stripe Checkout
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error during checkout:', error);
+        alert('เกิดข้อผิดพลาดในการชำระเงิน กรุณาลองอีกครั้ง'); // User-friendly error message
     }
 }

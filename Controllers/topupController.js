@@ -19,7 +19,7 @@ const createCheckoutSession = async (req, res) => {
                 quantity: 1,
             }],
             mode: "payment",
-            customer_email: req.user.id, // Customer email to associate with the session
+            customer_email: email, // Customer email to associate with the session
             success_url: `${process.env.CLIENT_URL}/top/coin/Successful?session_id={CHECKOUT_SESSION_ID}`, // Redirect to success page
             cancel_url: `${process.env.CLIENT_URL}/top/coin/Cancel`, // Redirect to cancel page
         });
