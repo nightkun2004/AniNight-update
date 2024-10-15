@@ -4,25 +4,118 @@ const FormData = require('form-data');
 const axios = require('axios');
 const WebSocket = require('ws');
 
-// ฟังก์ชันสำหรับดึงมีม
 const getMeme = async (req, res) => {
     const userID = req.session.userlogin;
     const page = parseInt(req.params.page) || 1; // ค่าเริ่มต้นเป็นหน้า 1
-    const limit = 10; 
+    const limit = 10;
 
     try {
         const totalMemes = await Meme.countDocuments(); // นับจำนวนมีมทั้งหมด
         const memes = await Meme.find({})
             .skip((page - 1) * limit) // ข้ามมีมก่อนหน้านี้
             .limit(limit) // จำกัดจำนวนมีมที่ดึงมา
-            .populate('creator');
+            .populate('creator') // นำข้อมูล creator ของมีมมาแสดง
+            .populate({
+                path: 'comments.username.id', // นำข้อมูล user ของแต่ละคอมเมนต์มาแสดง
+                select: 'name profilePicture' // เลือกเฉพาะชื่อและรูปโปรไฟล์
+            })
+            .populate({
+                path: 'comments.replies.username.id', // นำข้อมูล user ของการตอบกลับคอมเมนต์มาแสดง
+                select: 'name profilePicture' // เลือกเฉพาะชื่อและรูปโปรไฟล์
+            });
 
-        res.render("./th/pages/Meme", { active: "Memes", userID, memes, page, totalPages: Math.ceil(totalMemes / limit) });
+        res.render("./th/pages/Meme", { 
+            active: "Memes", 
+            userID, 
+            memes, 
+            page, 
+            totalPages: Math.ceil(totalMemes / limit) 
+        });
     } catch (error) {
         console.log(error);
         res.json({ msg: "Server Error", error });
     }
+};
+
+
+const likeMeme = async (req, res) => {
+    const MemeId = req.params.id;
+    const userId = req.user.id;
+
+    try {
+        const meme = await Meme.findById(MemeId);
+
+        // ตรวจสอบว่าผู้ใช้กดไลค์ meme นี้หรือยัง
+        if (meme.likes.includes(userId)) {
+            // หากเคยกดแล้ว ให้ลบไลค์ออก
+            meme.likes.pull(userId);
+        } else {
+            // หากยังไม่เคยกด ให้เพิ่มไลค์
+            meme.likes.push(userId);
+        }
+
+        await meme.save();
+        res.json({ success: true, likesCount: meme.likes.length });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error liking meme' });
+    }
 }
+
+
+const addComment = async (req, res) => {
+    const memeId = req.params.id;
+    const { commentText } = req.body;
+
+    try {
+        const meme = await Meme.findById(memeId);
+        const newComment = {
+            username: {
+                id: req.user.id,
+            },
+            commentText
+        };
+
+        meme.comments.push(newComment);
+        await meme.save();
+        console.log("เพิ่มความคิดเห้น", meme)
+        res.json({ success: true, message: 'Comment added successfully', comments: meme.comments });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error adding comment' });
+    }
+};
+
+
+// เพิ่มการตอบกลับ
+const addReply = async (req, res) => {
+    const memeId = req.params.id;
+    const commentId = req.params.commentId;
+    const { replyText } = req.body;
+    const userId = req.user.id;
+
+    try {
+        const meme = await Meme.findById(memeId);
+        const comment = meme.comments.id(commentId);
+
+        if (comment) {
+            const newReply = {
+                username: {
+                    id: req.user.id,
+                    name: req.user.username
+                },
+                replyText
+            };
+
+            comment.replies.push(newReply);
+            await meme.save();
+            console.log("ตอบกลับ", newReply)
+            res.json({ success: true, message: 'Reply added successfully', replies: comment.replies });
+        } else {
+            res.status(404).json({ success: false, message: 'Comment not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error adding reply' });
+    }
+};
 
 // ฟังก์ชันสำหรับการสร้างมีม
 const getCreateMeme = async (req, res) => {
@@ -45,20 +138,57 @@ const getPostMeme = async (req, res) => {
                 path: 'creator',
                 select: '-password' 
             })
-            .populate('comments.username.id', 'username') 
+            .populate({
+                path: 'comments.username.id', // นำข้อมูล user ของแต่ละคอมเมนต์มาแสดง
+                select: 'name profilePicture' // เลือกเฉพาะชื่อและรูปโปรไฟล์
+            })
+            .populate({
+                path: 'comments.replies.username.id', // นำข้อมูล user ของการตอบกลับคอมเมนต์มาแสดง
+                select: 'name profilePicture'
+            })
+            .populate({
+                path: 'comments.replies',
+            })
             .exec();
 
-            post.adsDisplayed = (post.adsDisplayed || 0) + 1;
-            await post.save(); 
+        post.adsDisplayed = (post.adsDisplayed || 0) + 1;
+        await post.save(); 
+
         res.render("./th/pages/post", { 
             userID, 
             active: "Memes",
-            post });
+            post 
+        });
     } catch (error) {
         console.log(error);
         res.json({ msg: "Server Error", error });
     }
 }
+
+const likeMemeComment = async (req, res) => {
+    const userId = req.user.id;
+    const { id, commentId } = req.params;
+
+    try {
+        const post = await Meme.findById(id);
+        const comment = post.comments.id(commentId);
+
+        if (comment.likedBy.includes(userId)) {
+            // ถ้าไลค์อยู่แล้ว ให้ลบออก
+            comment.likedBy.pull(userId);
+        } else {
+            // ถ้ายังไม่ไลค์ ให้เพิ่มเข้าไป
+            comment.likedBy.push(userId);
+        }
+
+        await post.save();
+        res.status(200).json({ message: 'Like status updated', likes: comment.likedBy.length });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+}
+
 
 // ฟังก์ชันสำหรับการสร้างมีม
 const createMeme = async (req, res) => {
@@ -109,7 +239,6 @@ const createMeme = async (req, res) => {
     }
 }
 
-// ฟังก์ชันสำหรับส่งความคิดเห็น
 const postComment = async (req, res,) => {
     const { postId, commentText } = req.body;
     const userID = req.session.userlogin;
@@ -151,55 +280,15 @@ const postComment = async (req, res,) => {
     }
 };
 
-// ฟังก์ชันสำหรับเพิ่มความคิดเห็นใหม่ (ใช้กับ WebSocket)
-const addComment = async (data, ws, wss) => {
-    const { postId, userId, commentText, parentId } = data; // parentId ใช้สำหรับการตอบกลับ
-
-    try {
-        // สร้างความคิดเห็นใหม่ในฐานข้อมูล
-        const comment = {
-            repliestext: commentText,
-            username: {
-                id: userId, // ID ของผู้ใช้ที่ส่งความคิดเห็น
-                name: "Username" // ชื่อผู้ใช้ อาจจะเป็นชื่อจริงหรือชื่อเล่น
-            },
-            createdAt: new Date(),
-            replies: []
-        };
-
-        if (parentId) {
-            // ถ้ามี parentId แสดงว่ากำลังตอบกลับความคิดเห็น
-            const parentComment = await Meme.findOne({ _id: postId, 'comments._id': parentId });
-
-            if (parentComment) {
-                // เพิ่มการตอบกลับในความคิดเห็น
-                await Meme.updateOne(
-                    { _id: postId, 'comments._id': parentId },
-                    { $push: { 'comments.$.replies': comment } } // เพิ่มการตอบกลับ
-                );
-            }
-        } else {
-            // ถ้าไม่มีก็เป็นความคิดเห็นใหม่
-            await Meme.findByIdAndUpdate(postId, { $push: { comments: comment } });
-        }
-
-        // ส่งความคิดเห็นใหม่ไปยังไคลเอนต์ทุกคนที่เชื่อมต่ออยู่ผ่าน WebSocket
-        wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify({ action: 'newComment', comment })); // ส่งความคิดเห็นใหม่
-            }
-        });
-    } catch (error) {
-        console.log(error);
-        ws.send(JSON.stringify({ msg: 'Error adding comment', error }));
-    }
-};
 
 module.exports = {
     getMeme,
+    likeMeme,
     getCreateMeme,
     getPostMeme,
     createMeme,
     postComment,
-    addComment
+    likeMemeComment,
+    addComment,
+    addReply
 };

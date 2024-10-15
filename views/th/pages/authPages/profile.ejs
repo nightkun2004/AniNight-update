@@ -89,6 +89,7 @@
                                             <li><strong>ประวัติ:</strong> <%= user.bio %></li>
                                             <li><strong>วันที่เข้าร่วม:</strong> <%= new Date(user.createdAt).toLocaleDateString() %></li>
                                         </ul>
+                                        <a href="/profile/<%= user.username %>/editprofile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">แก้ไขโปรไฟล์</a>
                                     </div>
                                    
                                     <div class="mb-6 mt-4">
@@ -100,9 +101,9 @@
                                 <section class="md:col-span-2 bg-gray-50 p-4 rounded-lg shadow-md">
                                     <h3 class="text-xl font-semibold mb-4">รายละเอียดโปรไฟล์</h3>
                                     <ul>
-                                        <li><strong>ผู้ติดตาม:</strong> <%= user.followers.length %></li>
-                                        <li><strong>กำลังติดตาม:</strong> <%= user.following.length %></li>
-                                        <li><strong>จำนวนบันทึกบทความ:</strong> <%= user.savearticles.length %></li>
+                                        <li><strong>ผู้ติดตาม:</strong> <%= formatNumber(user.followers.length) %></li>
+                                        <li><strong>กำลังติดตาม:</strong> <%= formatNumber(user.following.length) %></li>
+                                        <li><strong>จำนวนบันทึกบทความ:</strong> <%= formatNumber(user.savearticles.length) %></li>
                                         <li><strong>คะแนน:</strong> <%= user.points %></li>
                                         <li><strong>สถานะบัญชี:</strong> <%= user.role === "user" ? "ผู้ใช้" : user.role === "content_creator" ? "ครีเอเตอร์" : user.role === "partners" ? "เป็นครีเอเตอร์แบบชำระเงิน" : user.role %></li>
                                         <li><strong>ได้รับการอนุมัติเป็นครีเอเตอร์:</strong> <%= user.isApproved ? "อนุมัติแล้ว" : "ยังไม่อนุมัติ" %></li>

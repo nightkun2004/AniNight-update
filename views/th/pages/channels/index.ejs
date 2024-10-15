@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= channel.username %> | Channel</title>
+    <title>
+        <%= channel.username %> | Channel
+    </title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
         crossorigin="anonymous"></script>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTJP520FN4"></script>
     <script>
@@ -23,209 +28,288 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body>
-    <%- include('../../Component/Sidebar') %>
-        <div class="flex-1 flex flex-col"> 
-            <%- include('../../Component/Header') %> 
+<body class="bg-white-color dark:bg-white-color transition-colors duration-300 font-open-sans">
 
-                <!-- Registration Form -->
-                <main class="flex-1 max-w-7xl container mx-auto sm:p-4">
-                    <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6 bg-gradient-to-b from-cyan-400">
-                        <% if (channel.bannerImagePath) {%>
-                            <div class="banner relative w-full h-40 sm:h-64">
-                                <img style="user-select: none;" src="/uploads/banners/<%= channel.bannerImagePath %>" alt="banner" class="w-full rounded-lg h-full object-cover">
-                            </div>
-                        <% } %>
-                       
-                        <div class="flex flex-col p-5 justify-center ">
-                            <div class="flex flex-col items-center">
-                                <img class="h-24 w-24 rounded-full object-cover"
-                                    src="/uploads/profiles/<%= channel.profilePicture %>"
-                                    alt="channel">
-                                <div class="text-center">
-                                    <ul>
-                                        <li class="text-sm md:text-2xl font-bold text-gray-900"> <%= channel.username %></li>
-                                    </ul>
-                                    <h1 data-userid="<%= channel._id %>"></h1>
+    <div class="flex flex-col h-screen overflow-hidden">
+        <%- include('../../Component/Header/Header') %>
+            <!-- Main Layout -->
+            <main class="flex flex-1 overflow-hidden">
+                <%- include('../../Component/Sidebar/Sidebar') %>
+                    <!-- Overlay สำหรับหน้าจอขนาดเล็กเมื่อ Sidebar เปิด -->
+                    <div id="overlay"
+                        class="fixed inset-0 bg-overlay-dark-color opacity-0 pointer-events-none transition-opacity duration-300 md:hidden">
+                    </div>
+
+                    <!-- Content Wrapper -->
+                    <div class="flex-1 overflow-auto p-4 content-layout md:ml-[270px] lg:ml-[250px]">
+                        <section class="container mx-auto px-4 py-8 bg-white rounded-lg shadow">
+                            <% if (channel.bannerImagePath) {%>
+                                <div class="banner relative w-full h-40 sm:h-64">
+                                    <img style="user-select: none;" src="/uploads/banners/<%= channel.bannerImagePath %>" alt="banner" class="w-full rounded-lg h-full object-cover">
+                                </div>
+                            <% } %>
+                            <div class="flex flex-col md:flex-row items-center mt-5">
+                                <img src="/uploads/profiles/<%= channel.profilePicture %>" alt="Profile Picture"
+                                    class="w-32 h-32 rounded-full object-cover">
+                                <div class="md:ml-6 mt-4 md:mt-0 text-center md:text-left">
+                                    <h2 class="text-2xl font-semibold"><%= channel.username %></h2>
+                                    <p class="text-gray-600 mt-2"><%= channel.bio %></p>
                                     <div class="mt-4 flex justify-center sm:justify-start space-x-4">
-                                        <span class="text-sm text-gray-600"><strong> <%= channel.followers.length %></strong> : ผู้ติดตาม</span>
-                                        <span class="text-sm text-gray-600"><strong><%= channel.following.length %></strong> : กำลังติดตาม</span>
+                                        <span class="text-sm text-gray-600"><strong> <%= formatNumber(channel.followers.length) %></strong> : ผู้ติดตาม</span>
+                                        <span class="text-sm text-gray-600"><strong><%= formatNumber(channel.following.length) %></strong> : กำลังติดตาม</span>
                                     </div>
                                     <ul class="items-center">
-                                        <li class="text-sm text-gray-900 p-2 bg-gray-200 rounded-md mt-5 mb-6"><strong class="font-medium">ประวัติ:</strong> <p class="text-sm text-gray-600"> Bio.</p></li>
-                                        <li class="text-sm text-gray-900"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
+                                        <li class="text-sm text-gray-400"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
                                     </ul>
-                                </div>
-                            </div>
-                            
-                            <!-- Right Follow -->
-                            <div class="flex justify-center">
-                                <% if (userID) { %>
-                                    <% if (channel.followers.includes(userID.user._id)) { %>
-                                        <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->
-                                        <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
-                                            onclick="confirmUnfollow('<%= channel._id %>')">
-                                            <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
-                                        </button>
-                                    <% } else { %>
-                                        <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
-                                        <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
-                                                onclick="toggleFollow('<%= channel._id %>')">
-                                            <i class="fa-solid fa-user-plus"></i> ติดตาม
-                                        </button>
-                                    <% } %>
-                                <% } %>
-                            </div>
-
-
-                        </div>
-                        <% if (typeof message !== 'undefined') { %>
-                            <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
-                        <% } %>
-                        
-                        <% if (typeof error !== 'undefined') { %>
-                            <div class="mb-4 text-red-500 text-center"><%= error %></div>
-                        <% } %>
-                    </div>
-
-                    <div class="bg-white mt-5">
-                        <nav>
-                            <ul class="flex items-center">
-                                <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3 active" onclick="showSection('home-section', this)" id="home-tab"> 
-                                    <a href="javascript:void(0)">หน้าหลัก</a>
-                                </li>
-                                <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3 active" onclick="showSection('articles-section', this)" id="articles-tap"> 
-                                    <a href="javascript:void(0)">บทความ</a>
-                                </li>
-                                <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3" onclick="showSection('videos-section', this)" id="videos-tab">
-                                    <a href="javascript:void(0)">วีดีโอ</a>
-                                </li>
-                                <% if (channel && channel.posts) { %> 
-                                <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3" onclick="showSection('posts-section', this)" id="posts-tab">
-                                    <a href="javascript:void(0)">โพสต์</a>
-                                </li>
-                                <% } %>    
-                            </ul>
-                        </nav>
-                    </div>
-
-
-                    <div class="content__section bg-white mb-10">
-                        <section class="home-section" id="home-section">
-                            <h3 class="font-normal text-2xl pl-5 border-b-2 border-blue-500">หน้าหลัก</h3>
-                            <% if (channel.role === 'content_creator') {%>
-                                <div class="mt-6 p-4 rounded-lg shadow-md">
-                                    <ul class="space-y-4">
-                                        <% if (channel.articles.length > 0) { %>
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                                                <% channel.articles.forEach(article => { %>
-                                                    <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
-                                                        <a href="/read/<%= article.urlslug %>" target="_blank">
-                                                            <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="<%= article.title %>" class="w-full h-60 object-cover md:h-48">
-                                                        </a>
-                                                        <div class="p-6 md:col-span-1">
-                                                            <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                                                                <a href="/read/<%= article.urlslug %>" target="_blank" class="hover:text-blue-500"><%= article.title %></a>
-                                                            </h1>
-                                                            <% if (article.creator && channel) { %>
-                                                                <div class="flex items-center space-x-4">
-                                                                    <img src="/uploads/profiles/<%= channel.profilePicture %>" alt="<%= channel.username %>" class="w-12 h-12 rounded-full border border-gray-300">
-                                                                    <p class="text-gray-700"><%= channel.username %></p>
-                                                                </div>
-                                                            <% } %>
-                                                        </div>
-                                                    </article>
-                                                <% }); %>
-                                            </div>
+                                    <div class="mt-4 flex justify-center md:justify-start">
+                                        <% if (userID) { %>
+                                            <% if (channel.followers.includes(userID.user._id)) { %>
+                                                <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->
+                                                <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
+                                                    onclick="confirmUnfollow('<%= channel._id %>')">
+                                                    <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
+                                                </button>
+                                            <% } else { %>
+                                                <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
+                                                <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
+                                                        onclick="toggleFollow('<%= channel._id %>')">
+                                                    <i class="fa-solid fa-user-plus"></i> ติดตาม
+                                                </button>
+                                            <% } %>
                                         <% } else { %>
-                                            <p>คุณยังไม่ได้เขียนบทความ</p>
+                                          <a href="/auth/login" class="bg-pink-600 px-4 py-2 hover:bg-pink-800 rounded-lg text-white">ติดตาม</a>
                                         <% } %>
-                                    </ul>
+                                    </div>
                                 </div>
+                            </div>
+                        </section>
+
+
+                        <section class="container mx-auto px-4 py-8">
+                            <h3 class="text-xl font-semibold mb-6">ผลงานล่าสุด</h3>
+                    
+                            <div class="flex mb-6">
+                                <button class="filter-btn bg-blue-600 text-white px-4 py-2 rounded mr-2" data-filter="all">ทั้งหมด</button>
+                                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded mr-2"
+                                    data-filter="video">วิดีโอ</button>
+                                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded mr-2"
+                                    data-filter="article">บทความ</button>
+                                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded" data-filter="image">รูปภาพ</button>
+                            </div>
+                            <div>
+                                <% if (channel.role === 'content_creator') { %>
+                                  <% if (channel.articles.length > 0) { %>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                      <% channel.articles.forEach(article => { %>
+                                        <div class="content-item bg-white rounded-lg shadow overflow-hidden video">
+                                          <img src="https://via.placeholder.com/400x300" alt="Video Thumbnail" class="w-full h-48 object-cover">
+                                          <div class="p-4">
+                                            <h4 class="font-semibold text-lg"><%= article.title %></h4>
+                                            <p class="text-gray-600 mt-2"><%= article.description %></p>
+                                          </div>
+                                        </div>
+                                      <% }); %>
+                                    </div>
+                                  <% } else { %>
+                                    <p class="text-gray-600">ยังไม่ได้เขียนบทความ</p>
+                                  <% } %>
                                 <% } %>
+                              </div>
+                              
                         </section>
-                        <section class="articles-section" id="articles-section" style="display: none;">
-                            <h3 class="font-normal">บทความ</h3>
-                        </section>
-                        <section class="videos-section" id="videos-section" style="display: none; ">
-                            <h3 class="font-normal">วีดีโอ</h3>
-                        </section>
-                    </div>
+            </main>
+    </div>
 
-                </main>
-        </div>
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ตัวอย่างฟังก์ชันสำหรับการกรองผลงาน
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const contentItems = document.querySelectorAll('.content-item');
 
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
 
-
-        <script src="/js/script.js"></script>
-        <script>
-            function showSection(sectionId, tabElement) {
-               const sections = ['home-section','videos-section', 'articles-section', 'posts-section'];
-               const tabs = ['home-tab','videos-tab', 'articles-tap', 'posts-tab'];
-       
-               sections.forEach((section, index) => {
-                   const sectionElement = document.getElementById(section);
-                   const tabElement = document.getElementById(tabs[index]);
-       
-                   if (section === sectionId) {
-                       sectionElement.style.display = 'block';
-                       tabElement.classList.add('active');
-                   } else {
-                       sectionElement.style.display = 'none';
-                       tabElement.classList.remove('active');
-                   }
-               });
-           }
-       </script>
-        <script>
-            async function toggleFollow(userId) {
-                const followBtn = document.getElementById('follow-btn');
-                const unfollowBtn = document.getElementById('unfollow-btn');
-
-                try {
-                    const response = await fetch(`/api/v2/user/${followBtn.classList.contains('hidden') ? 'unfollow' : 'follow'}/${userId}`, {
-                        method: followBtn.classList.contains('hidden') ? 'DELETE' : 'POST'
+                    // เปลี่ยนสีปุ่มที่ถูกเลือก
+                    filterButtons.forEach(btn => {
+                        if (btn === button) {
+                            btn.classList.remove('bg-gray-200', 'text-gray-700');
+                            btn.classList.add('bg-blue-600', 'text-white');
+                        } else {
+                            btn.classList.remove('bg-blue-600', 'text-white');
+                            btn.classList.add('bg-gray-200', 'text-gray-700');
+                        }
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    followBtn.classList.toggle('hidden');
-                    unfollowBtn.classList.toggle('hidden');
-                    Swal.fire({
-                        title: followBtn.classList.contains('hidden') ? 'ยกเลิกติดตามสำเร็จ!' : 'ติดตามสำเร็จ!',
-                        icon: 'success',
-                        text: response.message,
-                        showConfirmButton: false
+                    contentItems.forEach(item => {
+                        if (filter === 'all' || item.classList.contains(filter)) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
                     });
-                } catch (error) {
-                    console.error('Error:', error);
-                    Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถดำเนินการได้', 'error');
-                }
-            }
-
-
-            async function confirmUnfollow(userId) {
-                const result = await Swal.fire({
-                    title: 'คุณแน่ใจหรือไม่?',
-                    text: 'คุณต้องการยกเลิกการติดตามช่องนี้?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่, ยกเลิกการติดตาม!',
-                    cancelButtonText: 'ยกเลิก'
                 });
+            });
+        });
 
-                if (result.isConfirmed) {
-                    // เรียกใช้งานฟังก์ชัน toggleFollow สำหรับการยกเลิกการติดตาม
-                    await toggleFollow(userId);
+    </script> -->
+    <script>
+        function toggleFollow(channelId) {
+            fetch(`/api/v2/user/follow/${channelId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ติดตามสำเร็จ',
+                        text: data.message,
+                        confirmButtonText: 'ตกลง'
+                    }).then(() => {
+                        location.reload(); // รีเฟรชหน้าเมื่อกดติดตาม
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    
+        function confirmUnfollow(channelId) {
+    Swal.fire({
+        title: 'ยืนยันการยกเลิกติดตาม?',
+        text: "คุณต้องการยกเลิกการติดตามใช่หรือไม่?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยกเลิกติดตาม!',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/v2/user/unfollow/${channelId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // ตรวจสอบสถานะของการตอบกลับ
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ยกเลิกติดตามสำเร็จ',
+                        text: data.message,
+                        confirmButtonText: 'ตกลง'
+                    }).then(() => {
+                        location.reload(); // รีเฟรชหน้าเมื่อยกเลิกติดตาม
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(err => {
+                // แสดงข้อผิดพลาดที่เกิดขึ้น
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาดที่ไม่รู้จัก',
+                    text: err.message // แสดงเฉพาะข้อความของข้อผิดพลาด
+                });
+            });
+        }
+    });
+}
+
+    </script>
+    
+
+    <script>
+        const menuButtons = document.querySelectorAll(".menu-button");
+        const screenOverlay = document.getElementById("overlay");
+        const themeButton = document.getElementById("theme-toggle");
+        const htmlElement = document.documentElement;
+        const sidebar = document.getElementById("sidebar");
+        const closeSidebarButton = document.getElementById("close-sidebar");
+
+        // Toggle sidebar visibility when menu buttons are clicked
+        menuButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                document.body.classList.toggle("sidebar-hidden");
+                sidebar.classList.toggle("translate-x-0");
+                sidebar.classList.toggle("-translate-x-full");
+                screenOverlay.classList.toggle("opacity-0");
+                screenOverlay.classList.toggle("pointer-events-none");
+            });
+        });
+
+        // Toggle sidebar visibility when screen overlay is clicked
+        screenOverlay.addEventListener("click", () => {
+            document.body.classList.toggle("sidebar-hidden");
+            sidebar.classList.toggle("translate-x-0");
+            sidebar.classList.toggle("-translate-x-full");
+            screenOverlay.classList.toggle("opacity-0");
+            screenOverlay.classList.toggle("pointer-events-none");
+        });
+
+        // Initialize dark mode based on localStorage
+        if (localStorage.getItem("darkMode") === "enabled") {
+            htmlElement.classList.add("dark");
+            themeButton.querySelector("i").classList.replace("uil-moon", "uil-sun");
+        } else {
+            themeButton.querySelector("i").classList.replace("uil-sun", "uil-moon");
+        }
+
+        // Toggle dark mode when theme button is clicked
+        themeButton.addEventListener("click", () => {
+            const isDarkMode = htmlElement.classList.toggle("dark");
+            localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+            const icon = themeButton.querySelector("i");
+            if (isDarkMode) {
+                icon.classList.replace("uil-moon", "uil-sun");
+            } else {
+                icon.classList.replace("uil-sun", "uil-moon");
             }
-        </script>
-        
-        <!-- <script src="/js/channel.js"></script> -->
+        });
+
+        // Show sidebar on large screens by default
+        if (window.innerWidth >= 768) {
+            document.body.classList.remove("sidebar-hidden");
+            sidebar.classList.remove("-translate-x-full");
+            sidebar.classList.add("translate-x-0");
+            screenOverlay.classList.add("opacity-0", "pointer-events-none");
+        }
+
+        // ปรับการแสดงผลเมื่อขนาดหน้าจอเปลี่ยน
+        window.addEventListener("resize", () => {
+            if (window.innerWidth >= 768) {
+                document.body.classList.remove("sidebar-hidden");
+                sidebar.classList.remove("-translate-x-full");
+                sidebar.classList.add("translate-x-0");
+                screenOverlay.classList.add("opacity-0", "pointer-events-none");
+            } else {
+                sidebar.classList.add("-translate-x-full");
+                sidebar.classList.remove("translate-x-0");
+            }
+        });
+    </script>
 </body>
 
 </html>

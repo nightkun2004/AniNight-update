@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+const formatNumber = require("./formats/formatNumber")
 
 const { addComment } = require('./Controllers/MemeController')
 const helmet = require("helmet");
@@ -143,7 +144,18 @@ app.use(fileUpload({
   limits: { fileSize: 2 * 1024 * 1024 * 1024 },
 }));
 
+const formatDate = (date) => {
+  return moment(date).fromNow();
+};
+
 app.locals.moment = moment;
+
+
+app.locals.number1 = 100;
+app.locals.number2 = 500;
+app.locals.number3 = 1500;
+app.locals.number4 = 1200000;
+app.locals.formatNumber = formatNumber;
 app.use(bodyParser.json({ limit: '1000mb' }));
 app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(express.json({ limit: '1000mb' }));

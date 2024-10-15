@@ -152,59 +152,59 @@ async function saveArticle(articleId) {
 
 
 // JavaScript ฟังก์ชันสำหรับไลค์บทความ
-async function likeArticle(articleId) {
-    try {
-        const response = await fetch('/api/v2/articles/like', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('tksave')}`
-            },
-            body: JSON.stringify({ articleId })
-        });
+// async function likeArticle(articleId) {
+//     try {
+//         const response = await fetch('/api/v2/articles/like', { 
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${getCookie('tksave')}`
+//             },
+//             body: JSON.stringify({ articleId })
+//         });
 
-        const data = await response.json();
+//         const data = await response.json();
 
-        if (data.success) {
-            const likeButton = document.getElementById(`like-button-${articleId}`);
-            const heartIcon = likeButton.querySelector('i');
-            const likeCount = likeButton.querySelector('span');
+//         if (data.success) {
+//             const likeButton = document.getElementById(`like-button-${articleId}`);
+//             const heartIcon = likeButton.querySelector('i');
+//             const likeCount = likeButton.querySelector('span');
 
-            if (data.message.includes('เพิ่มไลค์')) {
-                heartIcon.classList.add('text-red-500');
-            } else {
-                heartIcon.classList.remove('text-red-500');
-            }
+//             if (data.message.includes('เพิ่มไลค์')) {
+//                 heartIcon.classList.add('text-red-500');
+//             } else {
+//                 heartIcon.classList.remove('text-red-500');
+//             }
 
-            likeCount.textContent = `${data.likes} Likes`;
+//             likeCount.textContent = `${data.likes} Likes`;
 
-            Swal.fire({
-                icon: 'success',
-                title: data.message,
-                didClose: () => {
-                    location.reload();
-                }
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'ข้อผิดพลาด',
-                text: data.message,
-                didClose: () => {
-                    location.reload();
-                }
-            });
-        }
-    } catch (error) {
-        console.error('Error liking article:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'ข้อผิดพลาด',
-            confirmButtonColor: '#333',
-            text: 'เกิดข้อผิดพลาดในการไลค์บทความที่ไม่รู้จัก',
-        });
-    }
-}
+//             Swal.fire({
+//                 icon: 'success',
+//                 title: data.message,
+//                 didClose: () => {
+//                     location.reload();
+//                 }
+//             });
+//         } else {
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'ข้อผิดพลาด',
+//                 text: data.message,
+//                 didClose: () => {
+//                     location.reload();
+//                 }
+//             });
+//         }
+//     } catch (error) {
+//         console.error('Error liking article:', error);
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'ข้อผิดพลาด',
+//             confirmButtonColor: '#333',
+//             text: 'เกิดข้อผิดพลาดในการไลค์บทความที่ไม่รู้จัก',
+//         });
+//     }
+// }
 
 // ads Displayed
 // Function to track ad display

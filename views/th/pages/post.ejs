@@ -22,8 +22,8 @@
             <meta property="og:video" content="<%= post.memeimageUrl %>">
             <meta property="og:video:secure_url" content="<%= post.memeimageUrl %>">
             <meta property="og:video:type" content="video/mp4">
-            <meta property="og:video:width" content="1280">
-            <meta property="og:video:height" content="720">
+            <meta property="og:video:width" content="720">
+            <meta property="og:video:height" content="1280">
             <meta property="og:site_name" content="ani-night.online">
             <meta property="og:type" content="website" />
             <% } else { %>
@@ -33,8 +33,8 @@
                 <meta property="og:type" content="meme">
                 <meta property="og:image" content="<%= post.memeimageUrl %>">
                 <meta property="og:image:alt" content="<%= post.description %>">
-                <meta property="og:image:width" content="1200">
-                <meta property="og:image:height" content="720">
+                <meta property="og:image:width" content="720">
+                <meta property="og:image:height" content="1080">
                 <meta property="og:site_name" content="ani-night.online">
                 <meta property="og:type" content="website" />
                 <meta property="og:image:type" content="image/jpg">
@@ -45,10 +45,13 @@
 
                     <link rel="stylesheet" href="/css/index.css">
                     <!-- <link rel="stylesheet" href="/css/player.css"> -->
+                    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
                     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
                     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
                     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+                    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
                     <script src="/cdn/tailwincss.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                     <script src="/cdn/fontawesome.js" crossorigin="anonymous"></script>
                     <script async
                         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
@@ -79,7 +82,7 @@
     <main class="bg-white flex flex-row w-full h-screen">
         <%- include('../Component/Sidebar') %>
             <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
-                <div class="md:bg-white md:rounded-lg grid grid-cols-1 md:grid-cols-2 md:shadow-md md:p-6 mb-8">
+                <div class="md:bg-white md:rounded-lg grid grid-cols-1 lg:gap-4 lg:grid-cols-2 md:shadow-md md:p-6 mb-8">
                     <div class="w-full">
                         <h1 class="text-3xl font-bold mb-2" id="meme-description">
                             <%= post.description %>
@@ -88,10 +91,13 @@
                             <% if (post.published) {%>
                                 <% const isVideo=post.memeimageUrl.split('?')[0].endsWith('.mp4'); %>
                                     <% if (isVideo) { %>
-                                        <div class="video_players">
-                                            <video id="video-post" src="<%= post.memeimageUrl %>" controls muted loop
-                                                controlsList="nodownload" oncontextmenu="return false;"
-                                                class="h-64 max-w-full rounded-lg">
+                                        <div class="video_players overflow-hidden rounded-lg" id="video_player">
+                                            <video id="player" src="<%= post.memeimageUrl %>" loop controlsList="nodownload"
+                                                oncontextmenu="return false;" class="h-64 max-w-full rounded-lg">
+                                                <track kind="captions" label="ซับไทย" src="/sub/th/เพื่อนกวางของฉัน-ซับไทย-srt.vtt" srclang="th"
+                                                    default />
+                                                <track kind="captions" label="ซับไทย รอง" src="/sub/th/เพื่อนกวางของฉัน-ซับไทย-srt.vtt"
+                                                    srclang="th" />
                                             </video>
                                         </div>
                                         <% } else { %>
@@ -99,8 +105,7 @@
                                                 class="md:h-64 h-52 max-w-full rounded-lg">
                                             <% } %>
                                                 <% } else {%>
-                                                    <div
-                                                        class="flex items-center justify-center w-full    m-2 h-[400px] bg-black rounded-lg">
+                                                    <div class="flex items-center justify-center w-full    m-2 h-[400px] bg-black rounded-lg">
                                                         <div class="text-center">
                                                             <h1 class="text-6xl font-bold text-blue-500">404</h1>
                                                             <img src="/annight/error.png" alt=""
@@ -110,57 +115,151 @@
                                                         </div>
                                                     </div>
                                                     <% } %>
-
+                        
                         </div>
-                        <div class="flex items-center mb-4 ">
-                            <p class="text-gray-700 text-2xl cursor-not-allowed">
-                                <i class='bx bx-like cursor-not-allowed'></i>
-                                (<span id="like-count">0</span>)
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-semibold mb-2">ความคิดเห็น (<%= post.comments.length %>)</h2>
-                        <div id="comments-container"
-                            class="mb-4 max-h-96 overflow-y-auto border border-gray-300 rounded p-2">
-                            <!-- แสดงความคิดเห็น -->
-                            <ul id="commentList" class="space-y-4 mt-4">
-                                <% post.comments.forEach(comment=> { %>
-                                    <li class="flex items-start space-x-3 p-4 border-b border-gray-200">
-                                        <img src="<%= comment.username.id.profilePicture ? comment.username.id.profilePicture : 'https://via.placeholder.com/40' %>"
-                                            alt="Avatar" class="w-10 h-10 rounded-full"> <!-- แสดงภาพโปรไฟล์ -->
-                                        <div class="flex flex-col">
-                                            <span class="font-semibold text-gray-800">
-                                                <%= comment.username.id.username || 'ผู้ใช้ไม่ระบุ' %>
-                                                    <!-- เปลี่ยนเป็น comment.username.name -->
-                                            </span>
-                                            <span class="text-gray-600">
-                                                <%= comment.repliestext %>
-                                            </span>
-                                            <span class="text-sm text-gray-500 mt-1">
-                                                <%= new Date(comment.createdAt).toLocaleString() %>
-                                                    <!-- แสดงวันที่สร้าง -->
-                                            </span>
-                                        </div>
-                                    </li>
-                                    <% }) %>
-                            </ul>
-                        </div>
-                        <% if (userID) { %>
-                            <form id="commentForm" onsubmit="event.preventDefault(); sendComment(this);">
-                                <p data-postid="<%= post._id %>" id="postId"></p>
-                                <p data-userid="<%= userID.user._id %>" id="userId"></p>
-                                <textarea id="commentText" class="w-full border rounded p-2 mb-4"
-                                    placeholder="ใส่ความคิดเห็นของคุณ..." required></textarea>
-                                <button type="submit"
-                                    class="bg-blue-500 px-4 py-2 rounded-lg text-white">ส่งความคิดเห็น</button>
-                                <p class="font-light text-sm text-red-500">หลักจากส่งความคิดเห็น อาจจะยังไม่ขึ้น
-                                    โปรดรอหรือรีโหลดหน้าเว็บ</p>
-                            </form>
-                            <% } else {%>
-                                <a href="/auth/login"
-                                    class="bg-black text-white rounded-lg px-4 py-2 w-full">เข้าสู่ระบบเพื่อแสดงความคิดเห็น</a>
+                       
+                        <div class="flex items-center space-x-4">
+                            <% if (post.creator.profilePicture && post.creator.profilePicture.startsWith('http')) { %>
+                                <img src="<%= user.creator.profilePicture %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                            <% } else { %>
+                                <% if (post.creator.profilePicture) { %>
+                                    <img src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                                <% } else { %>
+                                    <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
                                 <% } %>
+                            <% } %>     
+                            <div>
+                                <a href="/channel/<%= post.creator.username %>">
+                                    <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.username %></h1>
+                                </a>
+                               <p class="text-gray-600"> <%= moment(post.createdAt).locale('th').fromNow() %></p>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="bg-black text-white font-bold py-2 px-4 rounded-full hover:bg-gray-800 transition duration-200">
+                                    <a href="/channel/<%= post.creator.username %>">ติดตาม</a>
+                                </button>
+                            </div>
+                        </div><hr class="mt-5">
+                        <div class="flex items-center mb-4 mt-5 bg-gray-100 rounded-lg px-4 py-2">
+                            <% if (userID) { %>
+                                <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
+                                    onclick="likeMeme('<%= post._id %>')">
+                                    <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                    <span class="pl-2" id="like-count-<%= post._id %>">
+                                        <%= formatNumber(post.likes.length) %> ไลค์
+                                    </span>
+                                </button>
+                                <% } else { %>
+                                    <a href="/auth/login" class="inline-block">
+                                        <button
+                                            class="bg-gray-400 text-white cursor-pointer px-4 py-2 rounded-md hover:bg-gray-500 focus:outline-none">
+                                            <i class="fa fa-heart"></i>
+                                            <%= formatNumber(post.likes.length) %> ไลค์ | เข้าสู่ระบบเพื่อไลค์
+                                        </button>
+                                    </a>
+                                    <% } %>
+                        
+                        </div>
+                        </div>
+                        <div>
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                            crossorigin="anonymous"></script>
+                       <ins class="adsbygoogle"
+                            style="display:block"
+                            data-ad-format="fluid"
+                            data-ad-layout-key="-6t+ed+2i-1n-4w"
+                            data-ad-client="ca-pub-6579807593228261"
+                            data-ad-slot="7311432313"></ins>
+                       <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                       </script>
+                        <h2 class="text-xl font-semibold mb-2">ความคิดเห็น (<%= post.comments.length %>)</h2>
+                        <div class="max-w-xl mx-auto p-4">
+                            <div class="mb-4">
+                              <h2 class="text-xl font-semibold text-gray-800">แสดงความคิดเห็น</h2>
+                            </div>
+                          
+                            <% if (userID) { %>
+                                <!-- Form การแสดงความคิดเห็น -->
+                                <form id="comment-form" class="mb-6" onsubmit="return submitComment(event, '<%= post._id %>')">
+                                    <div class="flex items-start space-x-4">
+                                        <img src="/uploads/profiles/<%= userID.user.profilePicture %>" alt="<%= userID.user.username %>" class="w-10 h-10 rounded-full">
+                                        <div class="flex-1">
+                                            <textarea id="comment-text" placeholder="แสดงความคิดเห็นของคุณที่นี่..." rows="2" class="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-white border border-transparent focus:border-blue-500"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end mt-2">
+                                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">ส่ง</button>
+                                    </div>
+                                </form>
+                                
+                                <% } else {%>
+                                    <a href="/auth/login"
+                                        class="bg-black text-white rounded-lg px-4 py-2 w-full">เข้าสู่ระบบเพื่อแสดงความคิดเห็น</a>
+                               <% } %>
+                            
+                          
+                            <!-- Section สำหรับแสดงความคิดเห็น -->
+                            <div class="space-y-4 mt-10">
+                              <!-- ความคิดเห็น -->
+                              <% post.comments.reverse().forEach(comment => { %>
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <div class="flex items-center space-x-4">
+                                        <!-- แสดงรูปโปรไฟล์ผู้ใช้จาก comment.username.profilePicture -->
+                                        <img src="/uploads/profiles/<%= comment.username.id.profilePicture %>" alt="User Avatar" class="w-8 h-8 rounded-full">
+                                        <div>
+                                            <!-- แสดงชื่อผู้ใช้จาก comment.username.name -->
+                                            <h3 class="text-sm font-semibold text-gray-900"><%= comment.username.id.name %></h3>
+                                            <p class="text-xs text-gray-500"><%= new Date(comment.createdAt).toLocaleString() %></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-2 text-gray-700">
+                                        <%= comment.commentText %> <!-- ข้อความแสดงความคิดเห็น -->
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <button class="text-gray-500 hover:text-red-500 focus:outline-none" onclick="toggleLike('<%= post._id %>', '<%= comment._id %>')">
+                                            <i class="fas fa-heart"></i> <span id="like-count-<%= comment._id %>"><%= formatNumber(comment.likedBy.length) %></span>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-blue-500 focus:outline-none" onclick="toggleReplyInput('<%= comment._id %>')">
+                                            <i class="fas fa-reply"></i> ตอบกลับ
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Reply Section -->
+                                    <div class="ml-10 mt-5">
+                                        <% comment.replies.forEach(reply => { %>
+                                            <div class="flex items-start space-x-4">
+                                                <!-- แสดงรูปโปรไฟล์ของผู้ตอบจาก reply.username.profilePicture -->
+                                                <img src="/uploads/profiles/<%= reply.username.id.profilePicture %>" alt="User Avatar" class="w-6 h-6 rounded-full">
+                                                <div>
+                                                    <!-- แสดงชื่อของผู้ตอบจาก reply.username.name -->
+                                                    <h3 class="text-sm font-semibold text-gray-900"><%= reply.username.id.name %></h3>
+                                                    <p class="text-xs text-gray-500"><%= new Date(reply.createdAt).toLocaleString() %></p>
+                                                    <div class="mt-1 text-gray-700">
+                                                        <%= reply.replyText %> <!-- ข้อความตอบกลับความคิดเห็น -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    
+                                        <!-- ช่องตอบกลับที่จะแสดงเมื่อกดปุ่ม "ตอบกลับ" -->
+                                        <div id="reply-input-container-<%= comment._id %>" class="hidden mt-4">
+                                            <input type="text" placeholder="ตอบกลับ..." class="border border-gray-300 p-2 rounded-lg w-full" id="reply-input-<%= comment._id %>">
+                                            <button class="bg-blue-500 text-white p-2 rounded-lg mt-2" onclick="addReply('<%= post._id %>', '<%= comment._id %>')">ส่ง</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                            
+                            
+                            
+                            
+                            
+                            </div>
+                          </div>
+                          
                     </div>
                 </div>
 
@@ -194,7 +293,181 @@
             </section>
     </main>
 
-    <script src="/js/player.js"></script>
+    <!-- <script src="/js/player.js"></script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = new Plyr('#player');
+        });
+    </script>
+     <script>
+        function likeMeme(MemeId) {
+          fetch(`/api/v2/api/like/meme/${MemeId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              const likeButton = document.getElementById(`like-button-${MemeId}`);
+              const likeCount = document.getElementById(`like-count-${MemeId}`);
+              
+              // อัปเดตจำนวนไลค์
+              likeCount.textContent = `${data.likesCount} ไลค์`;
+      
+              // เปลี่ยนสีไอคอน
+              likeButton.querySelector('i').classList.toggle('text-red-500');
+              likeButton.querySelector('i').classList.toggle('text-gray-500');
+      
+              // ใช้ SweetAlert แจ้งเตือน
+              Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ',
+                text: 'การกดไลค์สำเร็จ!',
+                timer: 1500,
+                showConfirmButton: false
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถกดไลค์ได้'
+              });
+            }
+          })
+          .catch(err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'มีข้อผิดพลาดบางอย่าง'
+            });
+          });
+        }
+      </script>
+     <script>
+        async function submitComment(event, postId) {
+            event.preventDefault(); // หยุดการส่งฟอร์มโดยปกติ
+        
+            const commentText = document.getElementById('comment-text').value; // ดึงข้อความจาก textarea
+            if (!commentText.trim()) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณาใส่ข้อความก่อนส่ง',
+                    text: 'กรุณาใส่ความคิดเห็นของคุณ'
+                });
+                return;
+            }
+        
+            try {
+                const response = await fetch(`/api/v2/meme/${postId}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ commentText })
+                });
+        
+                const data = await response.json();
+                if (data.success) {
+                    // ทำการอัปเดต UI หรือโหลดความคิดเห็นใหม่
+                    console.log(data.comments); // หรือแสดงความคิดเห็นใหม่ในหน้า
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ!',
+                        text: data.message,
+                        showConfirmButton: false,
+                        timer: 1500 // แสดงผล 1.5 วินาที
+                    });
+                    document.getElementById('comment-text').value = ''; // ล้างข้อความ
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด!',
+                        text: data.message
+                    });
+                }
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด!',
+                    text: 'ไม่สามารถเพิ่มความคิดเห็นได้ โปรดลองอีกครั้ง!'
+                });
+            }
+        }
+        </script>
+        
+    <script>
+        function toggleLike(postId, commentId) {
+            fetch(`/api/v2/meme/${postId}/comments/${commentId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // อัปเดตจำนวนไลค์
+                document.getElementById(`like-count-${commentId}`).innerText = data.likes;
+        
+                // แสดง SweetAlert2 ตามสถานะการไลค์
+                const message = data.likes ? 'คุณได้กดไลค์ความคิดเห็นนี้แล้ว!' : 'คุณได้ลบไลค์ความคิดเห็นนี้แล้ว!';
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ!',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 1500 // แสดงผล 1.5 วินาที
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด!',
+                    text: 'ไม่สามารถกดไลค์ความคิดเห็นได้ โปรดลองอีกครั้ง!'
+                });
+            });
+        }
+        </script>
+        
+      <script>
+        function toggleReplyInput(commentId) {
+            // Toggle ช่องตอบกลับให้แสดงหรือซ่อน
+            const replyInputContainer = document.getElementById(`reply-input-container-${commentId}`);
+            if (replyInputContainer.classList.contains('hidden')) {
+                replyInputContainer.classList.remove('hidden');
+            } else {
+                replyInputContainer.classList.add('hidden');
+            }
+        }
+    
+        function addReply(postId, commentId) {
+            const replyInput = document.getElementById(`reply-input-${commentId}`);
+            const replyText = replyInput.value;
+            
+            if (replyText.trim() === '') {
+                alert("กรุณาใส่ข้อความก่อนตอบกลับ");
+                return;
+            }
+    
+            // ทำการส่งข้อมูลไปยัง server เพื่อบันทึกการตอบกลับ
+            fetch(`/api/v2/meme/${postId}/comment/${commentId}/reply`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ replyText })
+            }).then(response => {
+                if (response.ok) {
+                    // เมื่อบันทึกสำเร็จ อาจจะทำการโหลดหน้าหรืออัพเดตคอมเมนต์
+                    location.reload(); 
+                } else {
+                    alert("เกิดข้อผิดพลาดในการส่งตอบกลับ");
+                }
+            });
+        }
+    </script>
+    
     <script>
         const ws = new WebSocket('ws://localhost:5000/');
 

@@ -112,7 +112,7 @@
                                     <% } %>
                                 <% } %>     
                                 <div>
-                                    <a href="#channel/<%= post.creator.username %>">
+                                    <a href="/channel/<%= post.creator.username %>">
                                         <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.username %></h1>
                                     </a>
                                    <p class="text-gray-600"> <%= moment(post.createdAt).locale('th').fromNow() %></p>
@@ -123,27 +123,23 @@
                             <div class="flex space-x-4 items-center">
                                 <!-- Follow Button -->
                                 <button class="bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-800 transition duration-200">
-                                    ติดตาม
+                                    <a href="/channel/<%= post.creator.username %>">ติดตาม</a>
                                 </button>
                                 <!-- Like and Share Buttons -->
                                 <div class="flex space-x-2">
-                                    <% if (userID) {%>
-                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
-                                            onclick="likeArticle('<%= post._id %>')">
-                                            <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
-                                            <span class="pl-2">
-                                                <%= post.likes.length %> ไลค์
-                                            </span>
+                                    <% if (userID) { %>
+                                        <button id="like-button-<%= post._id %>" 
+                                                class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
+                                                onclick="likeArticle('<%= post._id %>')">
+                                                
+                                          <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                          <span class="pl-2" id="like-count-<%= post._id %>"><%= formatNumber(post.likes.length) %> ไลค์</span>
                                         </button>
-                                    <% } else {%>
-                                        <button id="like-button-<%= post._id %>" class="<%= post.likes.includes(userID) ? 'liked' : '' %>"
-                                            onclick="likeArticle('<%= post._id %>')">
-                                            <i class="fa fa-heart <%= post.likes.includes(userID) ? 'text-red-500' : 'text-gray-500' %>"></i>
-                                            <span class="pl-2">
-                                                <%= post.likes.length %> ไลค์
-                                            </span>
+                                      <% } else { %>
+                                        <button disabled>
+                                            <a href="/auth/login">เข้าสู่เพื่อไลค์</a>
                                         </button>
-                                    <% } %>
+                                      <% } %>
                                 </div>
                                 <div class="right__title-main flex flex-col items-center">
                                     <div class="relative">
@@ -153,9 +149,10 @@
                                         </button>
 
                                     <!-- Popup Alert -->
-                                    <div class="popupalert hidden" id="popupalert">
-                                        <p>แชร์ลิ้งแล้ว</p>
-                                    </div>
+<div id="popupalert" class="hidden fixed top-6 left-0 right-0 mx-auto flex justify-center ml-10 mr-10">
+    <p class="bg-gray-500 text-center px-4 py-2 text-white rounded-md">แชร์ลิ้งแล้ว</p>
+  </div>
+  
 
                                     <div class="data__box-share hidden">
                                         <form>
@@ -199,7 +196,7 @@
                         <div class="mt-4 p-4 bg-gray-100 rounded-md">
                             <div class="text-gray-700 flex flex-wrap text-sm md:text-base">
                                 <p class="pl-3 text-sm">
-                                    <i class="fa-regular fa-eye"></i> การดู <%= (post.views) %> ครั้ง,
+                                    <i class="fa-regular fa-eye"></i> การดู <%= formatNumber(post.views) %> ครั้ง,
                                 </p>
                                 <p class="pl-3 text-sm">
                                     เผยแพร่เมื่อ: <%= new Date(post.createdAt).toLocaleDateString() %>
@@ -380,5 +377,49 @@
 
     <script src="/js/script.js"></script>
     <script src="/js/read.js"></script> 
+    <script>
+        function likeArticle(articleId) {
+          fetch(`/api/v2/like/articles/${articleId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              const likeButton = document.getElementById(`like-button-${articleId}`);
+              const likeCount = document.getElementById(`like-count-${articleId}`);
+      
+              // อัปเดตจำนวนไลค์
+              likeCount.textContent = `${data.likesCount} ไลค์`;
+      
+              // เปลี่ยนสีไอคอน
+              likeButton.querySelector('i').classList.toggle('text-red-500');
+              likeButton.querySelector('i').classList.toggle('text-gray-500');
+      
+              // ใช้ SweetAlert แจ้งเตือน
+              Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ',
+                text: 'การกดไลค์สำเร็จ!',
+                timer: 1500,
+                showConfirmButton: false
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถกดไลค์ได้'
+              });
+            }
+          })
+          .catch(err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'มีข้อผิดพลาดบางอย่าง'
+            });
+          });
+        }
+      </script>
 </body>
 </html>

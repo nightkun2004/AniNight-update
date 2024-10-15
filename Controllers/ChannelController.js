@@ -18,6 +18,7 @@ const getChannel = async (req, res) => {
         const channelUser = await User.findOne({username: username}).populate('articles').exec()
         res.render("./th/pages/channels/index", {
             userID,
+            active: "channel",
             channel: channelUser,
             translations: req.translations,lang  
         });
@@ -30,55 +31,66 @@ const getChannel = async (req, res) => {
             translations: req.translations,lang  
         });
     }
-};
+}; 
 
 const getFollow = async (req, res) => {
     const { userId } = req.params;
-    const currentUserId = req.user.id; // สมมุติว่าคุณมีการตรวจสอบสิทธิ์ผู้ใช้
-
     try {
-        const userToFollow = await User.findById(userId);
-        const currentUser = await User.findById(currentUserId);
+        const channelId = req.params.channelId; // ดึง channelId ของครีเอเตอร์
+        const userId = req.user.id; // ดึง userId ของผู้ติดตาม
 
-        if (!userToFollow || !currentUser) {
-            return res.status(404).json({ message: 'User not found' });
+        // หา channel ที่ต้องการติดตาม
+        const channel = await User.findById(channelId);
+        // หา user ผู้ติดตาม
+        const user = await User.findById(userId);
+
+        // ตรวจสอบว่า user นี้ยังไม่ได้ติดตาม channel นี้
+        if (!channel.followers.includes(userId)) {
+            // เพิ่ม userId ของผู้ติดตามใน followers ของ channel
+            channel.followers.push(userId);
+            await channel.save();
+
+            // เพิ่ม channelId ใน following ของ user ผู้ติดตาม
+            user.following.push(channelId);
+            await user.save();
+
+            return res.json({ success: true, message: 'ติดตามแล้ว' });
         }
 
-        if (currentUser.following.includes(userId)) {
-            return res.status(400).json({ message: 'Already following this user' });
-        }
-
-        currentUser.following.push(userId);
-        await currentUser.save();
-
-        res.status(200).json({ message: 'Followed successfully' });
+        res.json({ success: false, message: 'คุณได้ติดตามแล้ว' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาด' });
     }
 };
 
 const getUnfollow = async (req, res) => {
-    const { userId } = req.params;
-    const currentUserId = req.user.id; // สมมุติว่าคุณมีการตรวจสอบสิทธิ์ผู้ใช้
-
     try {
-        const userToUnfollow = await User.findById(userId);
-        const currentUser = await User.findById(currentUserId);
+        const channelId = req.params.channelId; // ดึง channelId ของครีเอเตอร์
+        const userId = req.user.id; // ดึง userId ของผู้ติดตาม
 
-        if (!userToUnfollow || !currentUser) {
-            return res.status(404).json({ message: 'User not found' });
+        // หา channel ที่ต้องการยกเลิกติดตาม
+        const channel = await User.findById(channelId);
+        // หา user ผู้ติดตาม
+        const user = await User.findById(userId);
+
+        const followerIndex = channel.followers.indexOf(userId);
+        const followingIndex = user.following.indexOf(channelId);
+
+        if (followerIndex > -1) {
+            // ลบ userId ของผู้ติดตามออกจาก followers ของ channel
+            channel.followers.splice(followerIndex, 1);
+            await channel.save();
         }
 
-        if (!currentUser.following.includes(userId)) {
-            return res.status(400).json({ message: 'Not following this user' });
+        if (followingIndex > -1) {
+            // ลบ channelId ออกจาก following ของ user ผู้ติดตาม
+            user.following.splice(followingIndex, 1);
+            await user.save();
         }
 
-        currentUser.following = currentUser.following.filter(id => id.toString() !== userId);
-        await currentUser.save();
-
-        res.status(200).json({ message: 'Unfollowed successfully' });
+        return res.json({ success: true, message: 'ยกเลิกติดตามแล้ว' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาด' });
     }
 };
 

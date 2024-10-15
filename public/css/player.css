@@ -64,15 +64,22 @@ body {
     display: none;
   }
 
+  .video_player {
+    width: 800px; /* กำหนดขนาดความกว้างคงที่ */
+    height: 500px; /* กำหนดขนาดความสูงคงที่ */
+    position: relative;
+    background-color: black;
+}
+
 .video_player video {
-    width: 100%;
+    width: 100%; /* ทำให้วิดีโอเต็มขนาดของ container */
+    height: 100%; /* ทำให้วิดีโอเต็มขนาดของ container */
     pointer-events: none;
-    display: block;
 }
 
 .video_player.openFullScreen {
-    width: 100vw;
-    height: 100%;
+    width: 800px; /* ยังคงขนาดเมื่อเข้าโหมด fullscreen */
+    height: 500px;
 }
 
 .backwart-popup,
@@ -163,6 +170,7 @@ body {
     z-index: 20;
     opacity: 1;
     transition: opacity 0.5s, height 0.5s;
+    overflow: hidden;
 }
 
 .controls.hidden {

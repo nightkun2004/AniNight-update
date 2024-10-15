@@ -34,12 +34,7 @@ video_players.forEach(video_player => {
                             <p id="total-time">00:00</p>
                         </div>
                     </div>
-                    <div class="center-controls">
-                        <div class="container-comment">
-                            <input type="text" name="sendComment" id="sendComment" placeholder="แสดงความคิดเห็นลอย">
-                            <button type="submit">ส่ง </button>
-                        </div>
-                    </div>
+                   
                     <div class="right-controls">
                         <p class="Subtitles" id="sub_btn">
                             <i class="fas fa-closed-captioning"></i>
@@ -61,7 +56,6 @@ video_players.forEach(video_player => {
                         <ul id="subtitleList">
                             <li class="activesub">ปิด</li>
                              <li data-subtitle="/sub/th/sub.srt" >ซับไทย</li>
-                             <li data-subtitle="/sub/en/sub.srt">ซับอังกฤษ</li>
                         </ul>
                     </div>
                     <div class="header-quality">
@@ -87,7 +81,7 @@ video_players.forEach(video_player => {
                 </div>
                 `;
       video_player.innerHTML = video_player_html;
-});
+}); 
 
 
 document.addEventListener("DOMContentLoaded", () => {

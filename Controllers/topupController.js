@@ -7,15 +7,14 @@ require("dotenv").config();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const createCheckoutSession = async (req, res) => {
-    const { priceId, email, amount, paymentMethod, } = req.body; // Extract priceId and email from the request body
+    const { priceId, email, amount, paymentMethod, } = req.body; 
     const paymentId = uuidv4();
 
     try {
-        // Create a new checkout session with Stripe
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card", "promptpay"], // ใช้ "wallet" เพื่อรองรับ Google Pay
+            payment_method_types: ["card", "promptpay"],
             line_items: [{
-                price: priceId, // ใช้ priceId จาก frontend
+                price: priceId, 
                 quantity: 1,
             }],
             mode: "payment",

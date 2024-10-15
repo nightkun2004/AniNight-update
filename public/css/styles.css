@@ -1,0 +1,15 @@
+.layout-app {
+    background-color: #fafafa;
+    min-height: 100vh;
+  }
+  
+  .layout-body {
+    margin: 0 auto;
+    display: flex;
+  }
+  .layout_content {
+    width: 100%;
+    overflow: hidden;
+    /* height: 100vh; */
+    transition: margin-left 0.3s ease-in-out;
+  }

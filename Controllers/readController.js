@@ -9,19 +9,19 @@ const getRead = async (req, res, next) => {
     const userID = req.session.userlogin;
     try {
         // Fetch all posts and populate the 'creator.id' field
-        const post = await Article.findOne({ urlslug: urlslug}).populate('creator.id').exec();
+        const post = await Article.findOne({ urlslug: urlslug }).populate('creator.id').exec();
         const recentUpdates = await Article.find().sort({ createdAt: -1 }).limit(4).populate('creator.id').exec();
         if (!post) {
             return res.status(404).render(`${lang}/read`, {
-                post: { title: "ไม่พบข้อมูล"},
+                post: { title: "ไม่พบข้อมูล" },
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
                 userID,
-                translations: req.translations,lang  
+                translations: req.translations, lang
             });
         }
 
         post.views = (post.views || 0) + 1;
-        await post.save(); 
+        await post.save();
 
         let isSaved = false;
         if (userID && userID.user._id && post.savearticles) {
@@ -29,13 +29,13 @@ const getRead = async (req, res, next) => {
         }
         // console.log(post)
         // Pass 'posts' to the template
-        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved , translations: req.translations,lang  });
+        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/read`, {
             error: errorMessage,
-            userID, 
-            translations: req.translations,lang  
+            userID,
+            translations: req.translations, lang
         });
     }
 };
@@ -72,7 +72,7 @@ const getReadAPI = async (req, res, next) => {
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
                 userID,
                 translations: req.translations || {},
-                lang  
+                lang
             });
         }
 
@@ -89,19 +89,19 @@ const getReadAPI = async (req, res, next) => {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
             error: errorMessage,
-            userID, 
+            userID,
             translations: req.translations || {},
-            lang  
+            lang
         });
     }
 };
 
 
-const saveArticle = async (req,res) => {
+const saveArticle = async (req, res) => {
     const userID = req.session.userlogin;
     try {
         const user = await User.findById(req.user.id);
-          
+
         if (!user) {
             return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
         }
@@ -143,44 +143,63 @@ const saveArticle = async (req,res) => {
 }
 
 
-const likeArticle = async (req, res) => {
+// const likeArticle = async (req, res) => {
+//     try {
+//         const userId = req.user.id;
+//         const { articleId } = req.body;
+
+//         if (!userId) {
+//             return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
+//         }
+
+//         if (!articleId) {
+//             return res.status(400).json({ success: false, message: 'ไม่พบ ID ของบทความ' });
+//         }
+
+//         const article = await Article.findById(articleId);
+
+//         if (!article) {
+//             return res.status(404).json({ success: false, message: 'ไม่พบบทความ' });
+//         }
+
+//         const hasLiked = article.likes.includes(userId);
+
+//         if (hasLiked) {
+//             article.likes = article.likes.filter(like => !like.equals(userId));
+//             await article.save(); 
+//             return res.status(200).json({ success: true, message: 'ลบไลค์บทความแล้ว' });
+//         } else {
+//             article.likes.push(userId);
+//             await article.save();
+//             return res.status(200).json({ success: true, message: 'เพิ่มไลค์บทความแล้ว' });
+//         }
+
+//     } catch (error) {
+//         const errorMessage = error.message || 'Internal Server Error';
+//         return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์', error: errorMessage });
+//     }
+// }
+
+const LikeArticle = async (req, res) => {
+    const articleId = req.params.id;
+    const userId = req.user.id;
+
     try {
-        const userId = req.user.id;
-        const { articleId } = req.body;
-
-        if (!userId) {
-            return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
-        }
-
-        if (!articleId) {
-            return res.status(400).json({ success: false, message: 'ไม่พบ ID ของบทความ' });
-        }
-
-        // ค้นหาบทความที่ต้องการ
         const article = await Article.findById(articleId);
 
-        if (!article) {
-            return res.status(404).json({ success: false, message: 'ไม่พบบทความ' });
-        }
-
-        // ตรวจสอบว่าผู้ใช้เคยไลค์บทความนี้หรือยัง
-        const hasLiked = article.likes.includes(userId);
-
-        if (hasLiked) {
-            // ถ้าผู้ใช้เคยไลค์แล้ว ให้ลบไลค์
-            article.likes = article.likes.filter(like => !like.equals(userId));
-            await article.save();
-            return res.status(200).json({ success: true, message: 'ลบไลค์บทความแล้ว' });
+        // ตรวจสอบว่าผู้ใช้กดไลค์บทความนี้หรือยัง
+        if (article.likes.includes(userId)) {
+            // หากเคยกดแล้ว ให้ลบไลค์ออก
+            article.likes.pull(userId);
         } else {
-            // ถ้าผู้ใช้ยังไม่ไลค์ ให้เพิ่มไลค์
+            // หากยังไม่เคยกด ให้เพิ่มไลค์
             article.likes.push(userId);
-            await article.save();
-            return res.status(200).json({ success: true, message: 'เพิ่มไลค์บทความแล้ว' });
         }
 
+        await article.save();
+        res.json({ success: true, likesCount: article.likes.length });
     } catch (error) {
-        const errorMessage = error.message || 'Internal Server Error';
-        return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์', error: errorMessage });
+        res.status(500).json({ success: false, message: 'Error liking article' });
     }
 }
 
@@ -196,7 +215,7 @@ const updateAdsDisplayed = async (articleId) => {
 module.exports = {
     getRead,
     saveArticle,
-    likeArticle,
+    LikeArticle,
     updateAdsDisplayed,
     getReadAPI
 }

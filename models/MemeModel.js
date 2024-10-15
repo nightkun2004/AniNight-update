@@ -28,9 +28,8 @@ const commentSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
-        profilePicture: String
     },
-    repliestext: String,
+    commentText: String, // ข้อความความคิดเห็น
     likedBy: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

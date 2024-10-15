@@ -1,0 +1,46 @@
+<header class="sticky top-0 z-20 bg-white dark:bg-white-color shadow-md">
+    <nav class="flex justify-between items-center px-4 py-2">
+      <!-- Left Section -->
+      <div class="flex items-center gap-2">
+        <button id="menu-button" class="p-2 rounded-full hover:bg-light-gray-color focus:outline-none">
+          <i class="uil uil-bars text-black-color dark:text-black-color text-xl"></i>
+        </button>
+        <a href="/" class="flex items-center gap-2">
+          <img src="/annight/logo_mini.png" alt="Logo" class="w-12 h-12">
+          <h2 class="text-lg font-semibold text-black-color dark:text-black-color">AniNight</h2>
+        </a>
+      </div>
+      
+      <!-- Center Section -->
+      <div class="flex-2 mx-4 hidden md:flex items-center gap-2">
+        <form action="#" class="flex-1 flex">
+          <input type="search" placeholder="ค้นหา..." required class="w-[400px] px-4 py-2 border border-border-color rounded-l-lg focus:border-primary-color focus:outline-none text-black-color dark:text-black-color bg-white-color dark:bg-white-color">
+          <button type="submit" class="px-4 py-2 bg-gray-500 text-white rounded-r-full hover:bg-gray-700 focus:outline-none">
+            <i class="uil uil-search"></i>
+          </button>
+        </form>
+        <button class="p-2 rounded-r-lg hover:bg-light-gray-color focus:outline-none bg-overlay-dark-color dark:bg-light-white-color">
+          <i class="uil uil-microphone text-black-color dark:text-black-color text-xl"></i>
+        </button>
+      </div>
+      
+      <!-- Right Section -->
+      <div class="flex items-center gap-2">
+        <button class="p-2 rounded-full hover:bg-light-gray-color focus:outline-none md:hidden">
+          <i class="uil uil-search text-black-color dark:text-black-color text-xl"></i>
+        </button>
+      <% if (userID) {%>
+        <% if (userID.user.profilePicture && userID.user.profilePicture.startsWith('http')) { %>
+          <img src="<%= userID.user.profilePicture %>" alt="Profile Picture" class="w-8 h-8 rounded-full cursor-pointer">
+      <% } else { %>
+          <% if (userID.user.profilePicture) { %>
+            <img src="/uploads/profiles/<%= userID.user.profilePicture %>" alt="User Image" class="w-8 h-8 rounded-full cursor-pointer">
+          <% } else { %>
+              <img src="/uploads/profiles/default.png" alt="Profile Picture" class="w-8 h-8 border-blue-500 border-4 rounded-full mb-4">
+          <% } %>
+      <% } %>     
+      <% } %>
+       
+      </div>
+    </nav>
+  </header>

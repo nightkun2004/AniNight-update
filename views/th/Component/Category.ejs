@@ -1,0 +1,8 @@
+<button class="px-4 py-2 bg-black-color text-white-color rounded-full font-medium disabled:bg-black-color" disabled>ทางลัด</button>
+<button class="px-4 py-2 bg-gray-200 text-black-color rounded-lg font-medium hover:bg-border-color"><a href="/memes">มีม</a></button>
+<button class="px-4 py-2 bg-gray-200 text-black-color rounded-lg font-medium hover:bg-border-color"><a href="/create/meme/new">โพสต์มีม</a></button>
+<% if (userID) {%>
+    <button class="px-4 py-2 bg-gray-200 text-black-color rounded-lg font-medium hover:bg-border-color"><a href="/<%= userID.user.username %>">โปรไฟล์</a></button>
+<% } else {%>
+    <button class="px-4 py-2 bg-gray-200 text-black-color rounded-lg font-medium hover:bg-border-color"><a href="/auth/login">เข้าสู่ระบบ</a></button>
+<% } %>

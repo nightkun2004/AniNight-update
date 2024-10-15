@@ -1,0 +1,264 @@
+<div class="flex-1 flex flex-col"> 
+    <%- include('../../Component/Header') %> 
+
+        <!-- Registration Form -->
+        <main class="flex-1 max-w-7xl container mx-auto sm:p-4">
+            <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6 bg-gradient-to-b from-cyan-400">
+                <% if (channel.bannerImagePath) {%>
+                    <div class="banner relative w-full h-40 sm:h-64">
+                        <img style="user-select: none;" src="/uploads/banners/<%= channel.bannerImagePath %>" alt="banner" class="w-full rounded-lg h-full object-cover">
+                    </div>
+                <% } %>
+               
+                <div class="flex flex-col p-5 justify-center ">
+                    <div class="flex flex-col items-center">
+                        <img class="h-24 w-24 rounded-full object-cover"
+                            src="/uploads/profiles/<%= channel.profilePicture %>"
+                            alt="channel">
+                        <div class="text-center"> 
+                            <ul>
+                                <li class="text-sm md:text-2xl font-bold text-gray-900"> <%= channel.username %></li>
+                            </ul>
+                            <h1 data-userid="<%= channel._id %>"></h1>
+                            <div class="mt-4 flex justify-center sm:justify-start space-x-4">
+                                <span class="text-sm text-gray-600"><strong> <%= channel.followers.length %></strong> : ผู้ติดตาม</span>
+                                <span class="text-sm text-gray-600"><strong><%= channel.following.length %></strong> : กำลังติดตาม</span>
+                            </div>
+                            <ul class="items-center">
+                                <li class="text-sm text-gray-900 p-2 bg-gray-200 rounded-md mt-5 mb-6"><strong class="font-medium">ประวัติ:</strong> <p class="text-sm text-gray-600"> Bio.</p></li>
+                                <li class="text-sm text-gray-900"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Follow -->
+                    <div class="flex justify-center">
+                        <% if (userID) { %>
+                            <% if (channel.followers.includes(userID.user._id)) { %>
+                                <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->
+                                <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
+                                    onclick="confirmUnfollow('<%= channel._id %>')">
+                                    <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
+                                </button>
+                            <% } else { %>
+                                <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
+                                <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
+                                        onclick="toggleFollow('<%= channel._id %>')">
+                                    <i class="fa-solid fa-user-plus"></i> ติดตาม
+                                </button>
+                            <% } %>
+                        <% } %>
+                    </div>
+
+
+                </div>
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
+                <% } %>
+                
+                <% if (typeof error !== 'undefined') { %>
+                    <div class="mb-4 text-red-500 text-center"><%= error %></div>
+                <% } %>
+            </div>
+
+            <div class="bg-white mt-5">
+                <nav>
+                    <ul class="flex items-center">
+                        <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3 active" onclick="showSection('home-section', this)" id="home-tab"> 
+                            <a href="javascript:void(0)">หน้าหลัก</a>
+                        </li>
+                        <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3 active" onclick="showSection('articles-section', this)" id="articles-tap"> 
+                            <a href="javascript:void(0)">บทความ</a>
+                        </li>
+                        <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3" onclick="showSection('videos-section', this)" id="videos-tab">
+                            <a href="javascript:void(0)">วีดีโอ</a>
+                        </li>
+                        <% if (channel && channel.posts) { %> 
+                        <li class="hover:bg-gray-100 text-black rounded-lg m-5 px-5 py-3" onclick="showSection('posts-section', this)" id="posts-tab">
+                            <a href="javascript:void(0)">โพสต์</a>
+                        </li>
+                        <% } %>    
+                    </ul>
+                </nav>
+            </div>
+
+
+            <div class="content__section bg-white mb-10">
+                <section class="home-section" id="home-section">
+                    <h3 class="font-normal text-2xl pl-5 border-b-2 border-blue-500">หน้าหลัก</h3>
+                    <% if (channel.role === 'content_creator') {%>
+                        <div class="mt-6 p-4 rounded-lg shadow-md">
+                            <ul class="space-y-4">
+                                <% if (channel.articles.length > 0) { %>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                                        <% channel.articles.forEach(article => { %>
+                                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                                <a href="/read/<%= article.urlslug %>" target="_blank">
+                                                    <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="<%= article.title %>" class="w-full h-60 object-cover md:h-48">
+                                                </a>
+                                                <div class="p-6 md:col-span-1">
+                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                        <a href="/read/<%= article.urlslug %>" target="_blank" class="hover:text-blue-500"><%= article.title %></a>
+                                                    </h1>
+                                                    <% if (article.creator && channel) { %>
+                                                        <div class="flex items-center space-x-4">
+                                                            <img src="/uploads/profiles/<%= channel.profilePicture %>" alt="<%= channel.username %>" class="w-12 h-12 rounded-full border border-gray-300">
+                                                            <p class="text-gray-700"><%= channel.username %></p>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                            </article>
+                                        <% }); %>
+                                    </div>
+                                <% } else { %>
+                                    <p>คุณยังไม่ได้เขียนบทความ</p>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <% } %>
+                </section>
+                <section class="articles-section" id="articles-section" style="display: none;">
+                    <h3 class="font-normal">บทความ</h3>
+                </section>
+                <section class="videos-section" id="videos-section" style="display: none; ">
+                    <h3 class="font-normal">วีดีโอ</h3>
+                </section>
+            </div>
+
+        </main>
+</div>
+
+<script>
+    function showSection(sectionId, tabElement) {
+       const sections = ['home-section','videos-section', 'articles-section', 'posts-section'];
+       const tabs = ['home-tab','videos-tab', 'articles-tap', 'posts-tab'];
+
+       sections.forEach((section, index) => {
+           const sectionElement = document.getElementById(section);
+           const tabElement = document.getElementById(tabs[index]);
+
+           if (section === sectionId) {
+               sectionElement.style.display = 'block';
+               tabElement.classList.add('active');
+           } else {
+               sectionElement.style.display = 'none';
+               tabElement.classList.remove('active');
+           }
+       });
+   }
+</script>
+
+
+<!-- <script src="/js/channel.js"></script> -->
+
+<main class="bg-white flex flex-row w-full h-screen">
+    <%- include('./Component/Sidebar') %>
+        <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+            <h2 class="font-normal text-base mb-5 mt-5 md:text-2xl border-blue-300 border-l-2 pl-2">
+                พบกับเว็บที่คุณสร้างสรรค์ผมงานข่าวอนิเมะ</h2>
+
+            <% if (Posts.length> 0) { %>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <% Posts.slice(0, 10).forEach((post, index)=> { %>
+                        <% if (post.published) { %>
+                            <article class="bg-white shadow-md rounded-lg">
+                                <a href="/read/<%= post.urlslug %>" class="block relative mb-5">
+                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>"
+                                        class="span-thumbnail w-full h-[100px] md:h-[200px] rounded object-cover"
+                                        alt="<%= post.title %>">
+                                </a>
+
+                                <div class="p-6">
+                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                        <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500">
+                                            <%= post.title.length> 60 ? post.title.substring(0, 60) + "..." :
+                                                post.title %>
+                                        </a>
+                                    </h1>
+                                    <% if (post.creator && post.creator.id) { %>
+                                        <div class="flex items-center space-x-4">
+                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>"
+                                                alt="<%= post.creator.username %>"
+                                                class="w-12 h-12 rounded-full border border-gray-300">
+                                            <p class="text-gray-700">
+                                                <a class="hover:text-blue-400"
+                                                    href="/<%= lang %>/editor/<%= post.creator.username %>">
+                                                    <%= post.creator.username %>
+                                                </a>
+                                            </p>
+                                        </div>
+                                        <% } %>
+                                </div>
+                            </article>
+
+                            <% } %>
+                                <% }) %>
+                </div>
+                <% } else { %>
+                    <p>ยังไม่ได้เขียนบทความ</p>
+                    <% } %>
+
+
+
+
+                        <div class="bg-white rounded-lg p-5 shadow-lg mt-4 mb-6">
+                            <h2 class="font-semibold text-lg mb-5 mt-4 text-black">Tags ที่คุณอาจจะสนใจ</h2>
+                            <div class="flex flex-wrap bg-white overflow-hidden  rounded-lg p-4">
+                                <% if (Posts.length> 0) { %>
+                                    <% Posts.forEach(post=> { %>
+                                        <% post.tags.forEach(tag=> { %> <!-- Iterate over tags for each post -->
+                                            <a href="/tag/<%= tag %>" target="_blank"
+                                                class="inline-block rounded-full border-2 mr-2 mb-2 bg-white border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
+                                                <%= tag %>
+                                            </a>
+                                            <% }) %>
+                                                <% }) %>
+                                                    <% } else { %>
+                                                        <p>No tags available</p>
+                                                        <% } %>
+                            </div>
+                        </div>
+
+
+                        <div class="bg-white rounded-lg p-5 shadow-md mt-4 mb-6">
+                            <h3 class="border-l-4 border-red-600 p-2 text-2xl font-medium text-black mb-5 mt-6">
+                                บทความมาแรงจาก 10
+                                รายการ</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <% if (TopViews.length> 0) { %>
+                                    <% TopViews.forEach(post=> { %>
+                                        <% if (post.published) { %>
+                                            <article class="bg-white shadow-lg md:rounded-lg overflow-hidden">
+                                                <a href="/read/<%= post.urlslug %>">
+                                                    <img src="/uploads/thumbnails/<%= post.thumbnail %>"
+                                                        alt="<%= post.title %>"
+                                                        class="w-full h-60 object-cover md:h-48">
+                                                </a>
+                                                <div class="p-6 md:col-span-1">
+                                                    <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                                                        <a href="/read/<%= post.urlslug %>"
+                                                            class="hover:text-blue-500">
+                                                            <%= post.title %>
+                                                        </a>
+                                                    </h1>
+                                                    <% if (post.creator && post.creator.id) { %>
+                                                        <div class="flex items-center space-x-4">
+                                                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>"
+                                                                alt="<%= post.creator.username %>"
+                                                                class="w-12 h-12 rounded-full border border-gray-300">
+                                                            <p class="text-gray-700">
+                                                                <%= post.creator.username %>
+                                                            </p>
+                                                        </div>
+                                                        <% } %>
+                                                </div>
+                                            </article>
+                                            <% } %>
+                                                <% }) %>
+                                                    <% } else { %>
+                                                        <p>ยังไม่ได้เขียนบทความ</p>
+                                                        <% } %>
+                            </div>
+                        </div>
+        </section>
+</main>
