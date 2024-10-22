@@ -1,273 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตารางฉายอนิเมะ 2024 -2025 และช่องทางการฉายออนไลน์ แบบถูกลิขสิทธิ์ | AniNight</title>
-    <link rel="stylesheet" href="https://cdn.ani-night.online/aninight/css/index.css">
-    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
-    <!-- <link rel="canonical" href="https://www.ani-night.online/th/schedule/anime"> -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-    <meta property="og:image" content="https://m1r.ai/ycqx2.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="ani-night.online">
-   
-    
+    <title>อตารางอนิเมะสำหรับซีซัน Fall 2024</title>
+    <meta name="description" content="ที่นำเสนอข่าวสาร, รีวิว, ตารางออกอากาศ, และบทความที่เกี่ยวกับอนิเมะ">
+    <meta name="keywords" content="อนิเมะ, ดันดาดัน, อนิเมะ, ข่าวอนิเมะ, รีวิวอนิเมะ, ตารางอนิเมะ, อนิเมะใหม่, อนิเมะยอดนิยม, นายโดดเดี่ยวพิชิตต่างโลก, รักรักรักรักรักเธอหมดหัวใจจากแฟนสาว 100 คน, [2024], [Fall]">
+    <meta name="author" content="Night">
+
+    <meta property="og:title" content="เว็บไซต์อนิเมะ | ข่าวสารและข้อมูลเกี่ยวกับอนิเมะ">
+    <meta property="og:description" content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ, รีวิวอนิเมะ, และตารางออกอากาศได้ที่นี่!">
+    <meta property="og:image" content="https://s3.ap-southeast-1.amazonaws.com/sv-poster.ani-night.online/posters/1c3445f9-27ad-46b3-9e2d-f8db09deea8b.jpg">
+    <meta property="og:url" content="https://ani-night.online/schedule/anime">
+    <meta property="og:type" content="ani-night.online">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <style>
-        body::-webkit-scrollbar {
-           display: none;
-       }
+        .scroll_custom::-webkit-scrollbar {
+            display: none;
+            width: 10px;
+            height: 12px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+        }
 
-       section {
-           overflow-y: auto;
-           overflow-x: hidden;
-       }
-   </style>
+        /* Scrollbar Thumb (ส่วนที่ใช้เลื่อน) */
+        .scroll_custom::-webkit-scrollbar-thumb {
+            background-color: #c0c0c0;
+            border-radius: 12px;
+            border: 2px solid #fafafa;
+            /* ขอบรอบๆ */
+        }
+
+        .card_year,
+        .card_format {
+            position: relative;
+            /* ทำให้ลูกศรและเมนูถูกกำหนดตำแหน่งได้ */
+        }
+
+        .pseudo::before {
+            content: "";
+            position: absolute;
+            top: -17px;
+            /* ระบุตำแหน่งลูกศร */
+            left: 19%;
+            /* กำหนดตำแหน่งตรงกลางของกล่อง */
+            transform: translateX(-50%);
+            border-width: 10px;
+            /* ขนาดลูกศร */
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+            /* สีของลูกศร */
+        }
+
+        @media (max-width: 1040px) {
+            .cover:before {
+                content: "";
+                display: block;
+                height: 0;
+                width: 0;
+            }
+        }
+
+        /* Scrollbar Hover Effect (เอฟเฟกต์เมื่อ hover) */
+        .scroll_custom::-webkit-scrollbar-thumb:hover {
+            background-color: #a0a0a0;
+            /* เปลี่ยนสีเมื่อ hover */
+        }
+    </style>
 </head>
-<body class="overflow-hidden">
 
+<body class="bg-gray-100">
 
-        <main class="bg-white flex flex-row w-full h-screen">
-            <%- include('../../Component/Sidebar') %>
+    <%- include('../../Component/Header') %>
 
-            <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
-                <div class="container mx-auto p-4">
-                    <div class="mb-4 flex gap-4 items-center">
-                        <h1 class="text-xl font-bold border-black border-b-2">ตารางฉายอนิเมะและช่องทางการฉายออนไลน์</h1>
-                    </div>
-                    <div class="bg-white shadow rounded p-4">
-                        <!-- ประเภทอนิเมะ -->
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">ประเภทอนิเมะ</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-animetype="all">ทั้งหมด</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-animetype="japan">ญี่ปุ่น</button>
-                            </div>
-                        </div>
-            
-                        <!-- categories -->
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">เลือกหมวดหมู่</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-style="ทั้งหมด">ทั้งหมด</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="อนิเมะ">อนิเมะ</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="มังงะ">มังงะ</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ชีวิตประจำวัน">ชีวิตประจำวัน</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="sci-fi">sci-fi</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="นิยาย">นิยาย></button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="ผจญภัย">ผจญภัย></button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-style="โมเอะ">โมเอะ</button>
-                            </div>
-                        </div>
-            
-                       <!-- Voice Actors -->
-            <div class="mb-4">
-                <h3 class="font-semibold mb-2">เสียงพากย์</h3>
-                <div class="flex flex-wrap gap-2">
-                    <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-voice="all">ทั้งหมด</button>
-                    <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ไทย">พากย์ไทย</button>
-                    <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-voice="พากย์ญี่ปุ่น">พากย์ญี่ปุ่น</button>
-                </div>
-            </div>
-    
-            <!-- Price -->
-            <div class="mb-4">
-                <h3 class="font-semibold mb-2">รูปแบบริการ</h3>
-                <div class="flex flex-wrap gap-2">
-                    <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-price="all">ทั้งหมด</button>
-                    <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="free">free</button>
-                    <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-price="premium">premium</button>
-                </div>
-            </div>
-            
-                       <!-- season -->
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">season</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-season="all">ทั้งหมด</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Spring">Spring</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Summer">Summer</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Fall">Fall</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-season="Winter">Winter</button>
-                            </div>
-                        </div>
-    
-                        
-                    <!-- Year -->
-                    <div class="mb-4">
-                        <h3 class="font-semibold mb-2">ปี</h3>
-                        <div class="flex flex-wrap gap-2 year">
-                            <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-year="all">ทั้งหมด</button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2025">2025</button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2024">2024</button>
-                            <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-year="2023">2023</button>
-                        </div>
-                    </div>
-            
-                          <!-- เดือน -->
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">เดือน</h3>
-                            <div class="flex flex-wrap gap-2 year">
-                                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-month="all">ทั้งหมด</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มกราคม">มกราคม</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กุมภาพันธ์">กุมภาพันธ์</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มีนาคม">มีนาคม</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="เมษายน">เมษายน</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤษภาคม">พฤษภาคม</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="มิถุนายน">มิถุนายน</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กรกฎาคม">กรกฎาคม</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="สิงหาคม">สิงหาคม</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="กันยายน">กันยายน</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ตุลาคม">ตุลาคม</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="พฤศจิกายน">พฤศจิกายน</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-month="ธันวาคม">ธันวาคม</button>
-                            </div>
-                        </div>
-            
-                        <!-- Status --> 
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">การฉาย</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-status="all">ทั้งหมด</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="completed">ฉายแล้ว</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn" data-status="incomplete">ยังไม่ฉาย</button>
-                            </div>
-                        </div>
-                        <!-- แพลตฟอร์ม -->
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">แพลตฟอร์มสตืม</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button class="bg-blue-200 text-blue-600 rounded px-3 py-1 filter-btn" data-platform="all">ทั้งหมด</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
-                                    data-platform="bilibili">BILIBILI</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
-                                    data-platform="crunchyroll">Crunchyroll</button>
-                                <button class="bg-gray-200 text-gray-600 rounded px-3 py-1 filter-btn"
-                                    data-platform="iqiyi">iqiyi</button>
-                            </div>
-                        </div>
-    
-                        <div class="mb-4">
-                            <h3 class="font-semibold mb-2">ค้นหาอนิเมะ</h3>
-                            <input type="text" id="search-input" class="p-2 border rounded outline-none" placeholder="ค้นหาอนิเมะ">
-                        </div>
-    
-    
-                    </div>
-                    
-                    <!-- Language Selector -->
-                    <div class="mt-4">
-                        <button class="px-4 py-2 text-gray-500">เลือก: <span id="selected-filters" class="text-black">ทั้งหมด</span></button>
-                    </div>
-    
-                    <div id="loading-content" class="loading-content flex justify-center" style="display: none;">
-                        <div class="flex gap-2 items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="50" height="50" style="shape-rendering: auto; display: block; background: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <g>
-                                    <circle stroke-dasharray="169.64600329384882 58.548667764616276" r="36" stroke-width="3" stroke="#5bbfe1" fill="none" cy="50" cx="50">
-                                        <animateTransform keyTimes="0;1" values="0 50 50;360 50 50" dur="0.6211180124223602s" repeatCount="indefinite" type="rotate" attributeName="transform"></animateTransform>
-                                    </circle>
-                                </g>
+    <div class="mx-auto max-w-6xl p-5">
+        <!-- For larger screens -->
+        <div class="md:block z-10 bg-white p-5 rounded-lg">
+            <!-- Search Filter -->
+            <div class="custom-scroll-container">
+                <div class="flex justify-evenly lg:justify-around items-center gap-5 flex-wrap">
+                    <!-- Search -->
+                    <div>
+                        <label class="block text-gray-500 font-semibold">ค้นหา</label>
+                        <div class="relative mt-1 flex items-center">
+                            <svg class="absolute left-3 w-4 h-4 text-gray-200" xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor" viewBox="0 0 512 512">
+                                <path
+                                    d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z">
+                                </path>
                             </svg>
-                            <span>กำลังโหลดเนื้อหา.....</span>
+                            <input type="text" placeholder="พิมพ์เพื่อค้นหา..."
+                                class="w-full px-9 py-2 outline-none bg-none rounded-lg border-2">
                         </div>
                     </div>
-                    
-                    
-                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4" id="anime-container">
-                        
-                        <% if (Animelists && Animelists.length > 0) {%>
-                        <% Animelists.forEach(anime => { %>
-                         <% if (anime.published) {%>
-                        <div class="anime-card bg-white shadow rounded overflow-hidden" id="main-content" style="display: none;"
-                            data-animetype="<%= anime.animetype %>" data-categories="<%= anime.categories %>" data-voice="<%= anime.voice %>"
-                            data-price="<%= anime.price %>" data-year="<%= anime.year %>"
-                            data-status="<%= anime.status ? 'completed' : 'incomplete' %>" data-season="<%= anime.season %>"
-                            data-month="<%= anime.month %>" 
-                            <% if(anime.platforms && anime.platforms.length > 0) { %>
-                                data-platforms="<%= JSON.stringify(anime.platforms) %>"
-                            <% } %>>
-                        
-                            <picture class="relative">
-                                <a href="/anime/<%= anime.urlslug %>">
-                                    <% if (anime.poster.startsWith('http')) { %>
-                                        <!-- External image URL -->
-                                        <img width="400px" height="600px"
-                                            src="<%= anime.poster %>"
-                                            alt="<%= anime.title %>">
-                                    <% } else { %>
-                                        <!-- Local server image path -->
-                                        <img width="400px" height="600px"
-                                            src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
-                                            alt="<%= anime.title %>">
-                                    <% } %>
-                                </a>
-                                
-                                <span class="absolute top-0 left-0 bg-sky-400 rounded text-white px-3"><%= anime.year %></span>
-                                <streeming class="absolute bottom-1 left-1 flex gap-2 select-none pointer-events-none items-center">
-                                    <% if (anime.platforms.includes('crunchyroll')) { %>
-                                        <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" class="w-7 h-7 pointer-events-none rounded-full">
-                                    <% } %>
-                                    <% if (anime.platforms.includes('bilibili')) { %>
-                                        <img src="/logo/bilibili_icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
-                                    <% } %>
-                                    <% if (anime.platforms.includes('iqiyi')) { %>
-                                        <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
-                                    <% } %>
-                                    
-                                </streeming>
-                            </picture>
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold">
-                                    <a href="/anime/<%= anime.urlslug %>">
-                                        <%= anime.title %>
-                                    </a>
-                                </h3>
-                                <p class="text-gray-600 text-sm">
-                                    <%= anime.voice %> • <%= anime.categories %>
-                                </p>
-                               
-                            </div>
-    
-                        </div>
-                         <% } %>
-                        <% }) %>
-                        <% } else { %>
-                            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md max-w-md mx-auto">
-                                <div class="flex">
-                                    <div class="ml-3">
-                                        <div class="flex-shrink-0 mb-6">
-                                            <i class="fa-solid fa-database text-4xl"></i>
-                                        </div>
-                                        <h3 class="text-lg font-semibold">การย้ายข้อมูลกำลังดำเนินการอยู่</h3>
-                                        <div class="mt-2 text-sm">
-                                            <p>ขณะนี้เรากำลังย้ายข้อมูล กรุณารอสักครู่ ระบบจะพร้อมใช้งานในเร็ว ๆ นี้ ขออภัยในความไม่สะดวก</p>
-                                        </div>
-                                    </div>
+
+                    <!-- Year Filter -->
+                    <div class="w-56">
+                        <div class="relative">
+                            <label class="block text-gray-500 font-semibold">ปี</label>
+                            <div class="select_year-btn cursor-pointer relative inline-block w-full border-2 rounded-lg"
+                                onclick="toggleMenu('.card_year')">
+                                <div
+                                    class="block appearance-none w-full bg-white outline-none border-none py-2 px-4 pr-8 rounded-lg shadow-sm">
+                                    <div class="option text-gray-400" selected disabled>เลือกปี</div>
+                                </div>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                        </path>
+                                    </svg>
                                 </div>
                             </div>
-                        <% } %>
-                        <!-- Add more anime cards as needed -->
+                            <div class="bg-white card_year px-4 absolute top-20 rounded-lg shadow-lg hidden">
+                                <div class="overflow-y-auto h-52 scroll_custom">
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2025</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2024</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2023</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2022</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2021</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2020</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2019</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2018</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2017</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                   
-                </div>
-            </section>
-           
-        </main>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-    crossorigin="anonymous"></script>
-<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-6579807593228261"
-    data-ad-slot="3649329378"></ins>
-<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-<script src="/js/script.js"></script>
-<script src="/js/stanime.js"></script>
+                    <!-- Season Filter -->
+                    <div>
+                        <label class="block text-gray-500 font-semibold">Season</label>
+                        <div class="relative mt-1">
+                            <div class="relative cursor-pointer inline-block w-full select_Season border-2 rounded-lg"
+                                onclick="toggleMenu('.card_Season')">
+                                <div
+                                    class="block appearance-none w-full bg-white outline-none border-none py-2 px-4 pr-8 rounded-lg shadow-sm">
+                                    <div class="option text-gray-400" selected disabled>เลือก Season</div>
+                                </div>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white card_Season px-4 absolute top-14 h-52 overflow-y-auto rounded-lg shadow-lg scroll_custom hidden">
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Spring</div>
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Summer</div>
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Fall</div>
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Winter</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Format Filter -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold">รูปแบบ</label>
+                        <div class="relative mt-1">
+                            <div class="relative cursor-pointer inline-block w-full select_Format border-2 rounded-xl"
+                                onclick="toggleMenu('.card_format')">
+                                <div
+                                    class="block appearance-none w-full bg-white outline-none border-none py-2 px-4 pr-8 rounded-lg shadow-sm">
+                                    <div class="option text-gray-400" selected disabled>รูปแบบ</div>
+                                </div>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white card_format px-4 absolute top-14 h-52 overflow-y-auto rounded-lg shadow-lg scroll_custom hidden">
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">TV Anime</div>
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Movie</div>
+                                <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">OVA</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="text-red-500 font-light">เนื่องระบบกรองเนื้อหายังใช้ไม่ได้อยู่ระหว่างปรับปรุ่ง</p>
+        <hr class="mt-5 ">
+
+        <!-- result Filter -->
+        <div class="text-gray-400 mt-5 flex items-center gap-3">
+            <svg class="w-5 h-5" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="tags" role="img"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+                class="tags-icon svg-inline--fa fa-tags fa-w-20">
+                <path data-v-cd1dc2b6="" fill="currentColor"
+                    d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"
+                    class=""></path>
+            </svg> กำลังเลือก. <span class="result">2024, Fall, TV</span>
+        </div>
+
+
+        <div class="mx-auto max-w-5xl px-4 py-8">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-10">
+                <% if (Animelists && Animelists.length > 0) { %>
+                    <% Animelists.forEach(anime => { %>
+                        <% if (anime.published) { %>
+                            <div class="overflow-hidden">
+                                <a href="/anime/<%= anime.urlslug %>"  data-popover-target="popover-<%= anime._id %>" class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                                    <% if (anime.poster.startsWith('http')) { %>
+                                        <!-- External image URL -->
+                                        <img src="<%= anime.poster %>"
+                                        alt="<%= anime.title %>" class="w-full rounded-lg">
+                                    <% } else { %>
+                                        <!-- Local server image path -->
+                                        <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                                        alt="<%= anime.title %>" class="w-full rounded-lg">
+                                    <% } %>
+                                </a>
+                                <div data-popover id="popover-<%= anime._id %>" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                    <div class="px-3 py-2 bg-blue-400 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white"><%= anime.title %></h3>
+                                    </div>
+                                    <div class="px-3 py-2">
+                                        <p><%= anime.synopsis %></p>
+                                        <div class="mt-5 mb-6">
+                                            <div>
+                                                <h2 class="font-semibold">studio</h2>
+                                                <p>
+                                                    <%= anime.studio || "ไม่พบข้อมูล" %>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">Licensors</h2>
+                                                <p>
+                                                    <%= anime.Licensors || "ไม่พบข้อมูล" %>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">Season</h2>
+                                                <p>
+                                                    <%= anime.season %>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">Episodes</h2>
+                                                <p>
+                                                    <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">Duration</h2>
+                                                <p>
+                                                    <%= anime.Duration || "ไม่พบข้อมูล" %> <strong>นาที</strong>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">Status</h2>
+                                                <p>
+                                                    <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">เริ่มฉาย</h2>
+                                                <p>
+                                                    <%= anime.month %>
+                                                        <%= anime.year %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <streeming class="mt-5 flex gap-2 select-none pointer-events-none items-center">
+                                            <% if (anime.platforms.includes('crunchyroll')) { %>
+                                                <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <% } %>
+                                            <% if (anime.platforms.includes('bilibili')) { %>
+                                                <img src="/logo/bilibili_icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <% } %>
+                                            <% if (anime.platforms.includes('iqiyi')) { %>
+                                                <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <% } %>
+                                            
+                                        </streeming>
+                                    </div>
+                                    <div data-popper-arrow></div>
+                                </div>
+                                <a href="/anime/<%= anime.urlslug %>" class="title">
+                                    <h2 class="text-sm font-bold"><%= anime.title %></h2>
+                                </a>
+                            </div>
+                        <% } %>
+                    <% }) %>
+                <% } else { %>
+                    <p>ยังไม่มีอนิเมะ</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+        // Toggle menu function for Year, Season, Format
+        function toggleMenu(menuClass) {
+            document.querySelector(menuClass).classList.toggle("hidden");
+        }
+
+        // Function to update the selected filter result
+        function updateResult() {
+            const year = document.querySelector(".select_year-btn .option").textContent.trim();
+            const season = document.querySelector(".select_Season .option").textContent.trim();
+            const format = document.querySelector(".select_Format .option").textContent.trim();
+            document.querySelector(".result").textContent = `${year}, ${season}, ${format}`;
+
+            const url = `/filter/anime?year=${year}&season=${season}&format=${format}`;
+            console.log(url)
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // นำข้อมูลที่ได้มาแสดงในหน้าจอ
+                    // document.querySelector(".results-container").innerHTML = data;
+                    console.log(data)
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Event listeners for Year, Season, and Format selection
+        document.querySelectorAll(".card_year .option").forEach((option) => {
+            option.addEventListener("click", (e) => {
+                document.querySelector(".select_year-btn .option").textContent = e.target.textContent;
+                updateResult();
+                toggleMenu('.card_year');
+            });
+        });
+
+        document.querySelectorAll(".card_Season .option").forEach((option) => {
+            option.addEventListener("click", (e) => {
+                document.querySelector(".select_Season .option").textContent = e.target.textContent;
+                updateResult();
+                toggleMenu('.card_Season');
+            });
+        });
+
+        document.querySelectorAll(".card_format .option").forEach((option) => {
+            option.addEventListener("click", (e) => {
+                document.querySelector(".select_Format .option").textContent = e.target.textContent;
+                updateResult();
+                toggleMenu('.card_format');
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>

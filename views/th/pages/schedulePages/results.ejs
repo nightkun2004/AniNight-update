@@ -1,0 +1,88 @@
+<% if (results.length > 0) { %>
+    <% results.forEach(anime => { %>
+        <div class="overflow-hidden">
+            <a href="/anime/<%= anime.urlslug %>"  data-popover-target="popover-<%= anime._id %>" class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                <% if (anime.poster.startsWith('http')) { %>
+                    <!-- External image URL -->
+                    <img src="<%= anime.poster %>"
+                    alt="<%= anime.title %>" class="w-full rounded-lg">
+                <% } else { %>
+                    <!-- Local server image path -->
+                    <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                    alt="<%= anime.title %>" class="w-full rounded-lg">
+                <% } %>
+            </a>
+            <div data-popover id="popover-<%= anime._id %>" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                <div class="px-3 py-2 bg-blue-400 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white"><%= anime.title %></h3>
+                </div>
+                <div class="px-3 py-2">
+                    <p><%= anime.synopsis %></p>
+                    <div class="mt-5 mb-6">
+                        <div>
+                            <h2 class="font-semibold">studio</h2>
+                            <p>
+                                <%= anime.studio || "ไม่พบข้อมูล" %>
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold">Licensors</h2>
+                            <p>
+                                <%= anime.Licensors || "ไม่พบข้อมูล" %>
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold">Season</h2>
+                            <p>
+                                <%= anime.season %>
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold">Episodes</h2>
+                            <p>
+                                <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong>
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold">Duration</h2>
+                            <p>
+                                <%= anime.Duration || "ไม่พบข้อมูล" %> <strong>นาที</strong>
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold">Status</h2>
+                            <p>
+                                <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %>
+                            </p>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold">เริ่มฉาย</h2>
+                            <p>
+                                <%= anime.month %>
+                                    <%= anime.year %>
+                            </p>
+                        </div>
+                    </div>
+                    <streeming class="mt-5 flex gap-2 select-none pointer-events-none items-center">
+                        <% if (anime.platforms.includes('crunchyroll')) { %>
+                            <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" class="w-7 h-7 pointer-events-none rounded-full">
+                        <% } %>
+                        <% if (anime.platforms.includes('bilibili')) { %>
+                            <img src="/logo/bilibili_icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                        <% } %>
+                        <% if (anime.platforms.includes('iqiyi')) { %>
+                            <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                        <% } %>
+                        
+                    </streeming>
+                </div>
+                <div data-popper-arrow></div>
+            </div>
+            <a href="/anime/<%= anime.urlslug %>" class="title">
+                <h2 class="text-sm font-bold"><%= anime.title %></h2>
+            </a>
+        </div>
+    <% }) %>
+<% } else { %>
+    <p>No results found for the selected filters.</p>
+<% } %>

@@ -6,7 +6,7 @@ const getAnimeInfo = async (req, res) => {
     const userID = req.session.userlogin;
     const { urlslug } = req.params;
     try {
-        const anime = await Anime.findOne({ urlslug }).exec();
+        const anime = await Anime.findOne({ urlslug }).exec(); 
         if (!anime) {
             return res.status(404).render(`/th/pages/schedulePages/info`, {
                 error: 'Anime not found',
@@ -91,6 +91,25 @@ const getSchedule = async (req, res) => {
 }
 
 
+const getFilterAnime = async (req , res) => {
+    const { year, season, format } = req.query;
+
+    try {
+        // ค้นหาข้อมูลจาก MongoDB ตามค่าที่ส่งมา
+        const results = await Anime.find({
+            year: parseInt(year),
+            season: season,
+            type: format
+        });
+
+        // ส่งข้อมูลไปยังหน้า EJS เพื่อนำไปแสดงผล
+        res.json({ results });
+    } catch (err) {
+        res.status(500).send("Error retrieving data");
+    }
+}
+
+
 //  ============================================= GET Anime info =========================================
 const getScheduleInfo = async (req, res) => {
     const userID = req.session.userlogin;
@@ -168,4 +187,4 @@ const getAnimeWinterAPI = async (req, res) => {
     }
 }
 
-module.exports = { getAnimeInfo, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }
+module.exports = { getAnimeInfo, getFilterAnime, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }

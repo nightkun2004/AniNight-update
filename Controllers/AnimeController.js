@@ -105,38 +105,38 @@ const getAnimeStreemYoutube = async (req, res) => {
 const updateAnimeYoutubeLinks = async (req, res) => {
     const { muse, anione, pops } = req.body;
     const { id } = req.params || req.query;
-  
+
     try {
-      // ตรวจสอบว่ามีข้อมูล YouTube อยู่ในฐานข้อมูลแล้วหรือไม่
-      const anime = await Anime.findById(id).exec();
-  
-      if (anime) {
-        // ตรวจสอบว่ามีข้อมูล streaming หรือยัง ถ้าไม่มี ให้สร้างเป็น array ว่าง
-        if (!anime.streaming || anime.streaming.length === 0) {
-          anime.streaming = [{ youtubes: [{ muse, anione, pops }] }];
+        // ตรวจสอบว่ามีข้อมูล YouTube อยู่ในฐานข้อมูลแล้วหรือไม่
+        const anime = await Anime.findById(id).exec();
+
+        if (anime) {
+            // ตรวจสอบว่ามีข้อมูล streaming หรือยัง ถ้าไม่มี ให้สร้างเป็น array ว่าง
+            if (!anime.streaming || anime.streaming.length === 0) {
+                anime.streaming = [{ youtubes: [{ muse, anione, pops }] }];
+            } else {
+                // ตรวจสอบว่า streaming[0] มี youtubes หรือยัง ถ้าไม่มีให้สร้างใหม่
+                if (!anime.streaming[0].youtubes || anime.streaming[0].youtubes.length === 0) {
+                    anime.streaming[0].youtubes = [{ muse, anione, pops }];
+                } else {
+                    // อัปเดตข้อมูลที่มีอยู่แล้วใน youtubes
+                    anime.streaming[0].youtubes[0].muse = muse;
+                    anime.streaming[0].youtubes[0].anione = anione;
+                    anime.streaming[0].youtubes[0].pops = pops;
+                }
+            }
+
+            await anime.save();
+            // console.log("anime yt", anime);
+            res.redirect(`/admin/add/anime/streem/youtube/?id=${id}`);
         } else {
-          // ตรวจสอบว่า streaming[0] มี youtubes หรือยัง ถ้าไม่มีให้สร้างใหม่
-          if (!anime.streaming[0].youtubes || anime.streaming[0].youtubes.length === 0) {
-            anime.streaming[0].youtubes = [{ muse, anione, pops }];
-          } else {
-            // อัปเดตข้อมูลที่มีอยู่แล้วใน youtubes
-            anime.streaming[0].youtubes[0].muse = muse;
-            anime.streaming[0].youtubes[0].anione = anione;
-            anime.streaming[0].youtubes[0].pops = pops;
-          }
+            res.status(404).send("ไม่พบอนิเมะที่ต้องการอัพเดต");
         }
-  
-        await anime.save();
-        // console.log("anime yt", anime);
-        res.redirect(`/admin/add/anime/streem/youtube/?id=${id}`);
-      } else {
-        res.status(404).send("ไม่พบอนิเมะที่ต้องการอัพเดต");
-      }
     } catch (error) {
-      res.status(500).send(`เกิดข้อผิดพลาด: ${error.message}`);
+        res.status(500).send(`เกิดข้อผิดพลาด: ${error.message}`);
     }
-  };
-  
+};
+
 // ================================================================ update stream ========================================
 // =======================================================================================================================
 const updateAnimeStream = async (req, res) => {
@@ -220,7 +220,7 @@ const CreateanimeItem = async (req, res) => {
     const lang = res.locals.lang;
     const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories } = req.body;
     const poster = req.files.poster;
-    
+
     try {
         if (!title || !animetype || !year || !month || !status || !urlslug) {
             return res.status(404).render(`${lang}/pages/admin/add/anime`, { message: "โปรดกรองข้อมูลให้ครบทุกช่องที่จำเป็น", userID, translations: req.translations, lang });
@@ -242,7 +242,7 @@ const CreateanimeItem = async (req, res) => {
         };
 
         let posterFilename = generateFilename(poster);
-        let posterUploadPath = path.join(__dirname, '..', 'public/uploads/posters', posterFilename);
+        let posterUploadPath = path.join(__dirname, '..', 'public/uploads/posters/no', posterFilename);
 
         try {
             // อัปโหลดไปยัง local server
@@ -251,13 +251,13 @@ const CreateanimeItem = async (req, res) => {
         } catch (error) {
             console.log('Local upload failed, attempting S3 upload or external server upload:', error.message);
 
-            const params = {
-                Bucket: process.env.AWS_S3_BUCKET_NAME, // แก้ไขการสะกด
-                Key: `posters/${posterFilename}`,
-                Body: poster.data, // แก้ไขการสะกด
-                ContentType: poster.mimetype,
-                ACL: 'public-read'
-            };
+            // const params = {
+            //     Bucket: process.env.AWS_S3_BUCKET_NAME, // แก้ไขการสะกด
+            //     Key: `posters/${posterFilename}`,
+            //     Body: poster.data, // แก้ไขการสะกด
+            //     ContentType: poster.mimetype,
+            //     ACL: 'public-read'
+            // };
 
             try {
                 // ลองอัปโหลดไปยัง S3
@@ -269,9 +269,13 @@ const CreateanimeItem = async (req, res) => {
 
                 // ลองยิงภาพไปเก็บที่ server สำรอง
                 try {
-                    const uploadResponse = await axios.post('https://sv2-pic.ani-night.online/api/v2/upload/file/to/server', poster.data, {
+                    const formData = new FormData();
+                    formData.append('poster', poster.data, poster.name);
+
+                    // ส่ง formData แทนที่จะส่ง poster.data
+                    const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/posters/sv7', formData, {
                         headers: {
-                            'Content-Type': poster.mimetype
+                            ...formData.getHeaders()
                         }
                     });
                     posterFilename = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
@@ -347,7 +351,7 @@ const CreateanimeItem = async (req, res) => {
 const Createcharacters = async (req, res) => {
     const userID = req.session.userlogin;
     const lang = res.locals.lang;
-    const animeId = req.body.animeId; 
+    const animeId = req.body.animeId;
     const { name, role } = req.body;
     const imagecharacters = req.files.image;
 
@@ -357,13 +361,13 @@ const Createcharacters = async (req, res) => {
             throw new Error('กรุณาเลือกรูปภาพสำหรับตัวละคร');
         }
 
-        // สร้าง formData สำหรับการอัปโหลดรูปภาพ
+        // สร้าง formData สำหรับการอัปโหลดรูปภาพ /api/v2/upload/characters actors
         const formData = new FormData();
-        formData.append('image', imagecharacters.data, imagecharacters.name);
+        formData.append('file', imagecharacters.data, imagecharacters.name);
 
-        const uploadResponse = await axios.post('https://sv5.ani-night.online/api/upload/characters', formData, {
+        const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/characters/sv7', formData, {
             headers: {
-                ...formData.getHeaders() 
+                ...formData.getHeaders()
             }
         });
 
@@ -391,12 +395,12 @@ const Createcharacters = async (req, res) => {
         await User.findByIdAndUpdate(req.user.id, { $push: { animelists: anime._id } }, { new: true });
 
         // ตอบกลับสำเร็จ
-        res.status(200).render(`./th/pages/admin/add/characters`, { 
-            message: "สร้างสำเร็จ", 
+        res.status(200).render(`./th/pages/admin/add/characters`, {
+            message: "สร้างสำเร็จ",
             anime,
-            userID, 
-            translations: req.translations, 
-            lang 
+            userID,
+            translations: req.translations,
+            lang
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
@@ -415,13 +419,13 @@ const getAddActorToCharacter = async (req, res) => {
     const lang = res.locals.lang;
     const { animeId, characterId } = req.query;
     try {
-        
+
         const anime = await Anime.findById(animeId).exec();
         if (!anime) {
             throw new Error('ไม่พบอนิเมะที่ระบุ');
         }
 
-        console.log("anime", anime)
+        // console.log("anime", anime)
 
         res.status(200).render(`./th/pages/admin/add/actor`, {
             userID,
@@ -441,6 +445,62 @@ const getAddActorToCharacter = async (req, res) => {
         });
     }
 }
+
+const getEditActorToCharacter = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const { animeId, characterId, actorId } = req.query; // รับค่า animeId, characterId และ actorId จาก query string
+
+    try {
+        // ดึงข้อมูลอนิเมะ พร้อมกับตัวละครและนักพากย์
+        const anime = await Anime.findById(animeId).exec();
+        if (!anime) {
+            throw new Error('ไม่พบอนิเมะที่ระบุ');
+        }
+
+        // ดึงข้อมูลตัวละครตาม characterId
+        const character = anime.characters.id(characterId);
+        if (!character) {
+            throw new Error('ไม่พบตัวละครที่ระบุ');
+        }
+
+        // ดึงข้อมูลนักพากย์ตาม actorId
+        const actor = character.actor.id(actorId);
+        if (!actor) {
+            throw new Error('ไม่พบนักพากย์ที่ระบุ');
+        }
+
+        // console.log("anime", anime);
+        // console.log("character", character);
+        // console.log("actor", actor);
+
+        // ส่งข้อมูลไปยังหน้าแก้ไข
+        res.status(200).render(`./th/pages/admin/edit/actor`, {
+            userID,
+            anime,
+            character, // ส่งข้อมูลตัวละครไปด้วย
+            actor, // ส่งข้อมูลนักพากย์ไปยังหน้าแก้ไข
+            translations: req.translations,
+            lang
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        console.log(errorMessage);
+
+        // ส่งข้อมูล error ไปยังหน้าแก้ไข (หากเกิดข้อผิดพลาด)
+        res.status(500).render(`./th/pages/admin/edit/actor`, {
+            error: errorMessage,
+            userID,
+            anime: animeId, // ส่งค่า animeId กลับไปเพื่อแสดงบนหน้า
+            character: characterId, // ส่งค่า characterId กลับไปเพื่อแสดงบนหน้า
+            actor: actorId,  // ส่งค่า actorId กลับไปเพื่อแสดงบนหน้า
+            translations: req.translations,
+            lang
+        });
+    }
+};
+
+
 
 
 const AddActorToCharacter = async (req, res) => {
@@ -477,9 +537,9 @@ const AddActorToCharacter = async (req, res) => {
 
         // สร้าง formData สำหรับการอัปโหลดรูปภาพ
         const formData = new FormData();
-        formData.append('image', imagecharacters.data, imagecharacters.name);
+        formData.append('file', imagecharacters.data, imagecharacters.name);
 
-        const uploadResponse = await axios.post('https://sv5.ani-night.online/api/upload/actor', formData, {
+        const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/actors/sv7', formData, {
             headers: {
                 ...formData.getHeaders()
             }
@@ -500,7 +560,7 @@ const AddActorToCharacter = async (req, res) => {
         await anime.save();
 
         res.status(200).render(`./th/pages/admin/add/actor`, {
-            message: "เพิ่มนักพากย์สำเร็จ", 
+            message: "เพิ่มนักพากย์สำเร็จ",
             anime,
             userID,
             translations: req.translations,
@@ -518,6 +578,89 @@ const AddActorToCharacter = async (req, res) => {
         });
     }
 }
+
+
+const EditActorInCharacter = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const { animeId, characterId, actorId } = req.body; // ใช้ req.body เพื่อรับข้อมูล
+    const { actorName, actorRole } = req.body;
+    const imagecharacters = req.files?.image;
+
+    try {
+        if (!animeId || animeId.trim() === '') {
+            return res.status(400).send('animeId ไม่ถูกต้อง');
+        }
+
+        if (!characterId || characterId.trim() === '') {
+            return res.status(400).send('characterId ไม่ถูกต้อง');
+        }
+
+        if (!actorId || actorId.trim() === '') {
+            return res.status(400).send('actorId ไม่ถูกต้อง');
+        }
+
+        const anime = await Anime.findById(animeId).exec();
+        if (!anime) {
+            throw new Error('ไม่พบอนิเมะที่ระบุ');
+        }
+
+        // ค้นหาตัวละครที่ต้องการแก้ไขนักพากย์ โดยใช้ characterId
+        const character = anime.characters.id(characterId);
+        if (!character) {
+            throw new Error('ไม่พบตัวละครที่ระบุ');
+        }
+
+        // ค้นหานักพากย์ที่ต้องการแก้ไข โดยใช้ actorId
+        const actor = character.actor.id(actorId);
+        if (!actor) {
+            throw new Error('ไม่พบนักพากย์ที่ระบุ');
+        }
+
+        // อัปเดตข้อมูลนักพากย์
+        actor.name = actorName || actor.name;
+        actor.role = actorRole || actor.role;
+
+        // หากมีการอัปโหลดรูปภาพใหม่
+        if (imagecharacters) {
+            const formData = new FormData();
+            formData.append('file', imagecharacters.data, imagecharacters.name);
+
+            const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/actors/sv7', formData, {
+                headers: {
+                    ...formData.getHeaders()
+                }
+            });
+
+            // รับ URL ของรูปภาพที่อัปโหลดสำเร็จและอัปเดต
+            actor.imageUrl = uploadResponse.data.url;
+        }
+
+        // บันทึกการเปลี่ยนแปลง
+        await anime.save();
+
+        res.status(200).redirect(`/admin/edit/anime/voice/actor/edit/new?animeId=${animeId}&characterId=${characterId}&actorId=${actorId}`)
+        // res.status(200).render(`./th/pages/admin/edit/actor`, {
+        //     message: "แก้ไขนักพากย์สำเร็จ", 
+        //     anime,
+        //     actor: actorId,
+        //     userID,
+        //     translations: req.translations,
+        //     lang
+        // });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        console.log(errorMessage);
+        res.status(500).render(`./th/pages/admin/edit/actor`, {
+            error: errorMessage,
+            userID,
+            anime: animeId,
+            translations: req.translations,
+            lang
+        });
+    }
+}
+
 
 
 // ============================================================ Edit Anime Post INFO ==============================
@@ -650,11 +793,12 @@ const getSchedule = async (req, res) => {
     try {
         const Animelists = await Anime.find().sort({ createdAt: -1 }).exec();
 
-        res.render(`./th/pages/schedulePages/index`, { 
-            userID, 
-            Animelists, 
+        res.render(`./th/pages/schedulePages/index`, {
+            userID,
+            Animelists,
             active: "ScheduleAnime",
-            lang })
+            lang
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/pages/schedulePages/index`, {
@@ -826,7 +970,9 @@ module.exports = {
     CreateanimeItem,
     Createcharacters,
     getAddActorToCharacter,
+    getEditActorToCharacter,
     AddActorToCharacter,
+    EditActorInCharacter,
     getSchedule,
     getScheduleAPI,
     getInfiniteScroll,

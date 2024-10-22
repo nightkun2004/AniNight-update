@@ -53,7 +53,7 @@ const authLogin = async (req, res, next) => {
 
         // เก็บ token ใน Session Storage 
 
-        const returnTo = req.session.returnTo || `/${username}`;
+        const returnTo = req.session.returnTo || `/@${username}`;
         delete req.session.returnTo;
         res.redirect(303, returnTo);
     } catch (error) {

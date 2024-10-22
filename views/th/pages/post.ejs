@@ -206,16 +206,16 @@
                                 <div class="bg-white p-4 rounded-lg shadow">
                                     <div class="flex items-center space-x-4">
                                         <!-- แสดงรูปโปรไฟล์ผู้ใช้จาก comment.username.profilePicture -->
-                                        <img src="/uploads/profiles/<%= comment.username.id.profilePicture %>" alt="User Avatar" class="w-8 h-8 rounded-full">
+                                        <img src="/uploads/profiles/<%= comment.username.id.profilePicture %>" alt="<%= comment.username.id.username %>" class="w-8 h-8 rounded-full">
                                         <div>
                                             <!-- แสดงชื่อผู้ใช้จาก comment.username.name -->
-                                            <h3 class="text-sm font-semibold text-gray-900"><%= comment.username.id.name %></h3>
+                                            <h3 class="text-sm font-semibold text-gray-900"><%= comment.username.id.username %></h3>
                                             <p class="text-xs text-gray-500"><%= new Date(comment.createdAt).toLocaleString() %></p>
                                         </div>
                                     </div>
                                     
                                     <div class="mt-2 text-gray-700">
-                                        <%= comment.commentText %> <!-- ข้อความแสดงความคิดเห็น -->
+                                        <%= comment.commentText %>
                                     </div>
                                     
                                     <div class="flex items-center space-x-2 mt-2">

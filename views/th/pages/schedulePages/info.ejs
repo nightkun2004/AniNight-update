@@ -15,8 +15,8 @@
     <% } else { %>
         <meta property="og:image" content="https://www.ani-night.online/uploads/posters/<%= anime.poster  %>" />
     <% } %>
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="720">
+    <meta property="og:image:height" content="1280">
      <meta name="description"
          content="<%= anime.synopsis %>" /> 
      <meta property="og:type" content="website" />
@@ -267,25 +267,51 @@
             </div>
 
             <!-- Characters Section -->
-            <div class="mb-6 mt-6">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-4">ตัวละคร | Characters</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="mb-6 mt-6 bg-gray-50 p-4 rounded-lg">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">ตัวละคร / Characters | นักพากย์ / Actor</h2>
+                <div class="space-y-4">
                     <% if (anime.characters.length > 0) { %>
                         <% anime.characters.forEach(character => { %>
-                            <div class="text-center">
-                                <img src="<%- character.imageUrl %>" alt="<%- character.name %>" class="w-32 h-32 object-cover rounded-full mx-auto mb-2">
-                                <p class="text-gray-700"><%- character.name %></p>
-                                <strong><%- character.role %></strong>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-white shadow rounded-lg p-4">
+                                <!-- Left: Character -->
+                                <div class="flex items-center">
+                                    <img src="<%- character.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
+                                         alt="<%- character.name %>" 
+                                         class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
+                                    <div>
+                                        <p class="text-gray-700 text-lg font-semibold"><%- character.name %></p>
+                                        <p class="text-gray-500"><%- character.role %></p>
+                                    </div>
+                                </div>
+            
+                                <!-- Right: Voice Actor -->
+                                <div class="flex items-center justify-end">
+                                    <% if (character.actor && character.actor.length > 0) { %>
+                                        <% character.actor.forEach(actor => { %>
+                                            <div class="flex items-center">
+                                                <img src="<%- actor.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
+                                                     alt="<%- actor.name %>" 
+                                                     class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
+                                                <div>
+                                                    <p class="text-gray-700 text-lg font-semibold"><%- actor.name %></p>
+                                                    <p class="text-gray-500"><%- actor.role %></p>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <p class="text-gray-500">No voice actor available</p>
+                                    <% } %>
+                                </div>
                             </div>
                         <% }); %>
                     <% } else { %>
                         <div class="text-center">
-                            <img src="https://via.placeholder.com/150" alt="Character Image" class="w-32 h-auto rounded-full mx-auto mb-2">
-                            <p class="text-gray-700">Character Name</p>
+                            <p class="text-gray-700">No characters available</p>
                         </div>
-                    <% } %>                        
+                    <% } %>
                 </div>
             </div>
+
 
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
      crossorigin="anonymous"></script>
