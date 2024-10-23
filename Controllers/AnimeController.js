@@ -669,7 +669,7 @@ const EditAnimeinfo = async (req, res) => {
     const userID = req.session.userlogin;
     const id = req.body.update_id;
     const lang = res.locals.lang;
-    const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, published, studio, Source, Licensors, website, Episodes, Duration, type } = req.body;
+    const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, genres, published, studio, Source, Licensors, website, Episodes, Duration, type } = req.body;
 
     try {
         const searchanime = await Anime.findById(id).exec();
@@ -687,8 +687,14 @@ const EditAnimeinfo = async (req, res) => {
             })
         }
 
-        let updateData = { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, published: isPublished, studio, Source, Licensors, website, Episodes, Duration, type };
+        let updateData = { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, genres, published: isPublished, studio, Source, Licensors, website, Episodes, Duration, type };
 
+        const generateFilename = (file) => {
+            let splittedFilename = file.name.split('.');
+            return crypto.randomUUID() + '.' + splittedFilename[splittedFilename.length - 1];
+        };
+
+        // cก้ไข poster
         if (req.files && req.files.poster) {
             const poster = req.files.poster;
             if (poster.size > 5000000) {
@@ -696,27 +702,80 @@ const EditAnimeinfo = async (req, res) => {
             }
 
             const fileName = poster.name;
-            const splittedFilename = fileName.split('.');
-            const newFilename = crypto.randomUUID() + "." + splittedFilename[splittedFilename.length - 1];
-            const newThumbnailPath = path.join(__dirname, '..', 'public/uploads/posters', newFilename);
+            let posterFilename = generateFilename(poster);
 
             try {
-                await poster.mv(newThumbnailPath);
-                updateData.poster = newFilename;
+                await poster.mv(posterFilename);
 
-                // Delete old poster if exists
-                if (searchanime.poster) {
-                    const oldThumbnailPath = path.join(__dirname, '..', 'public/uploads/posters', searchanime.poster);
-                    fs.unlink(oldThumbnailPath, (err) => {
-                        if (err) console.error("Error deleting old poster:", err);
-                    });
-                }
+                const formData = new FormData();
+                formData.append('poster', poster.data, poster.name);
+
+                // ส่ง formData แทนที่จะส่ง poster.data
+                const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/posters/sv7', formData, {
+                    headers: {
+                        ...formData.getHeaders()
+                    }
+                });
+
+                 // ตรวจสอบว่ามี URL กลับมาหรือไม่
+                 const bannerUrl = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
+                 if (!bannerUrl) {
+                     throw new Error('Failed to get banner URL from external server');
+                 }
+
+                updateData.poster = bannerUrl;
+                console.log('Uploaded to external server:', posterFilename);
+
             } catch (err) {
                 return res.status(500).render(`${lang}/pages/admin/edit/anime`, { error: `Error uploading new poster: ${err}`, userID, edit, translations: req.translations, lang });
             }
         }
 
+        // แก้ไขหรือเพิ่ม banner
+        if (req.files && req.files.banner) {
+            const banner = req.files.banner;
+            if (banner.size > 5000000) {
+                return res.status(400).render(`${lang}/pages/admin/edit/anime`, {
+                    error: `Image size exceeds 5MB limit`, userID, edit, translations: req.translations, lang
+                });
+            }
+        
+            let bannerFilename = generateFilename(banner);
+        
+            try {
+                await banner.mv(bannerFilename); // อัปโหลดไฟล์ไปยังเซิร์ฟเวอร์ภายในก่อน (หากจำเป็น)
+                
+                // ส่งไฟล์ไปยังเซิร์ฟเวอร์ภายนอก
+                const formData = new FormData();
+                formData.append('file', banner.data, banner.name);
+        
+                const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/banners/sv7', formData, {
+                    headers: {
+                        ...formData.getHeaders()
+                    }
+                });
+        
+                // ตรวจสอบว่ามี URL กลับมาหรือไม่
+                const bannerUrl = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
+                if (!bannerUrl) {
+                    throw new Error('Failed to get banner URL from external server');
+                }
+        
+                // อัปเดต updateData ด้วย URL ของไฟล์ที่อัปโหลด
+                updateData.banner = bannerUrl;
+                console.log('Uploaded to external server:', updateData.banner);
+        
+            } catch (err) {
+                return res.status(500).render(`${lang}/pages/admin/edit/anime`, {
+                    error: `Error uploading new banner: ${err}`, userID, edit, translations: req.translations, lang
+                });
+            }
+        }
+        
+
+
         const updatedPost = await Anime.findByIdAndUpdate(id, updateData, { new: true });
+        console.log("แก้ไขแล้วว",updatedPost)
 
         if (!updatedPost) {
             return res.status(400).render(`${lang}/pages/admin/edit/anime`, { error: "Couldn't update post.", userID, edit, translations: req.translations, lang });

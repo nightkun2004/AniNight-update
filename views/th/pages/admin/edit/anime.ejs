@@ -254,16 +254,19 @@
                     <div class="mb-5">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
                         <div class="flex items-center mb-4">
-                            <input id="status_completed" type="radio" name="status" value="true"  <% if (edit.status === 'true') { %> checked <% } %> 
+                            <input id="status_completed" type="radio" name="status" value="true" 
+                                   <% if (edit.status === true) { %> checked <% } %> 
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
-                            <label for="status_completed" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">จบแล้ว</label>
+                            <label for="status_completed" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ฉายแล้ว</label>
                         </div>
                         <div class="flex items-center">
-                            <input id="status_ongoing" type="radio" name="status" value="false" <% if (edit.status === 'false') { %> checked <% } %> 
+                            <input id="status_ongoing" type="radio" name="status" value="false" 
+                                   <% if (edit.status === false) { %> checked <% } %> 
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
-                            <label for="status_ongoing" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ยังไม่จบ</label>
+                            <label for="status_ongoing" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ยังไม่ฉาย</label>
                         </div>
                     </div>
+                    
                     
                     
                     <!-- URL Slug -->
@@ -331,40 +334,105 @@
                         <div class="flex flex-wrap gap-2 mt-2">
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="อนิเมะ" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('อนิเมะ')) { %> checked <% } %> > 
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">อนิเมะ</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-gray-300 <% if (edit.categories.includes('อนิเมะ')) { %> bg-blue-500 text-white <% } %>">อนิเมะ</span>
                             </label>
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="มังงะ" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('มังงะ')) { %> checked <% } %>>
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">มังงะ</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500 <% if (edit.categories.includes('มังงะ')) { %> bg-blue-500 text-white  <% } %>">มังงะ</span>
                             </label>
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="ชีวิตประจำวัน" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('ชีวิตประจำวัน')) { %> checked <% } %>>
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">ชีวิตประจำวัน</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500 <% if (edit.categories.includes('ชีวิตประจำวัน')) { %> bg-blue-500 text-white <% } %>">ชีวิตประจำวัน</span>
                             </label>
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="sci-fi" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('sci-fi')) { %> checked <% } %>>
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">sci-fi</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500  <% if (edit.categories.includes('sci-fi')) { %> bg-blue-500 text-white <% } %>">sci-fi</span>
                             </label>
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="นิยาย" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('นิยาย')) { %> checked <% } %>>
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">นิยาย</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500 <% if (edit.categories.includes('นิยาย')) { %> bg-blue-500 text-white <% } %>">นิยาย</span>
                             </label>
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="ผจญภัย" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('ผจญภัย')) { %> checked <% } %>>
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">ผจญภัย</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500  <% if (edit.categories.includes('ผจญภัย')) { %> bg-blue-500 text-white <% } %>">ผจญภัย</span>
                             </label>
                             <label class="category-label">
                                 <input type="checkbox" name="categories" value="โมเอะ" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('โมเอะ')) { %> checked <% } %>>
-                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer dark:border-gray-600 dark:text-gray-300">โมเอะ</span>
+                                <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500  <% if (edit.categories.includes('โมเอะ')) { %> bg-blue-500 text-white  <% } %>">โมเอะ</span>
                             </label>
                         </div>
                     </div>
+
+
+<!-- Genres -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-white">รูปแบบ</label>
+                        <div class="flex flex-wrap gap-6 space-x-1 mt-2">
+                            <!-- อนิเมะ -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Anime" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Anime')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-gray-300 <% if (edit.genres.includes('Anime')) { %> bg-sky-500 text-white <% } %>">อนิเมะ</span>
+                            </label>
+                            <!-- แอ็คชั่น -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Action" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Action')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Action')) { %> bg-sky-500 text-white <% } %>">แอ็คชั่น</span>
+                            </label>
+                            <!-- คอมเมดี้ -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Comedy" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Comedy')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Comedy')) { %> bg-sky-500 text-white <% } %>">คอมเมดี้</span>
+                            </label>
+                            <!-- ดราม่า -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Drama" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Drama')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Drama')) { %> bg-sky-500 text-white <% } %>">ดราม่า</span>
+                            </label>
+                            <!-- โรแมนซ์ -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Romance" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Romance')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Romance')) { %> bg-sky-500 text-white <% } %>">โรแมนซ์</span>
+                            </label>
+                            <!-- ไซไฟ -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Sci-Fi" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Sci-Fi')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Sci-Fi')) { %> bg-sky-500 text-white <% } %>">ไซไฟ</span>
+                            </label>
+                            <!-- ผจญภัย -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Adventure" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Adventure')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Adventure')) { %> bg-sky-500 text-white <% } %>">ผจญภัย</span>
+                            </label>
+                            <!-- สยองขวัญ -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Horror" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Horror')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Horror')) { %> bg-sky-500 text-white <% } %>">สยองขวัญ</span>
+                            </label>
+                            <!-- แฟนตาซี -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Fantasy" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Fantasy')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Fantasy')) { %> bg-sky-500 text-white <% } %>">แฟนตาซี</span>
+                            </label>
+                            <!-- ดนตรี -->
+                            <label class="category-label">
+                                <input type="checkbox" name="genres" value="Music" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Music')) { %> checked <% } %> >
+                                <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Music')) { %> bg-sky-500 text-white <% } %>">ดนตรี</span>
+                            </label>
+                        </div>
+                    </div>
+                    
 
                 
                     <!-- โปรเตอร์หรือ KV Anime -->
                     <div class="mb-5">
                         <label for="poster" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกโปรเตอร์หรือ KV Anime</label>
                         <input id="poster" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400 dark:border-gray-600 dark:placeholder-blue-400" type="file" name="poster" accept="image/*"  onchange="previewImage(this, 'preview', 'cover-text')">
+                    </div>
+
+                    <!-- โปรเตอร์หรือ KV Anime -->
+                    <div class="mb-5">
+                        <label for="banner" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่ม banner Anime</label>
+                        <input id="banner" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400 dark:border-gray-600 dark:placeholder-blue-400" type="file" name="banner" accept="image/*"  onchange="previewImage(this, 'preview', 'banner-text')">
                     </div>
                 
                     <!-- เผยแพร่บทความ -->

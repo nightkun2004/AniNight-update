@@ -76,7 +76,7 @@ const ManageAnimes = async (req, res) => {
     const lang = req.params.lang || 'th';
     const userID = req.session.userlogin;
     try {
-        const animelists = await Anime.find().exec();
+        const animelists = await Anime.find().sort({ createdAt: -1 }).exec();
         // console.log(animelists)
         res.render("./th/pages/admin/manage/manage_anime", { userID, animelists, translations: req.translations, lang })
     } catch (error) {

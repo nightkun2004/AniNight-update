@@ -42,6 +42,7 @@ const AnimeSchema = new mongoose.Schema({
         enum: ["Spring", "Summer", "Fall", "Winter"]
     },
     poster: String,
+    banner: String,
     studio: String,
     Source: String,
     Licensors: String,
@@ -51,6 +52,11 @@ const AnimeSchema = new mongoose.Schema({
     categories: [{
         type: String,
         enum: ["อนิเมะ", "มังงะ", "ชีวิตประจำวัน", "sci-fi", "นิยาย", "ผจญภัย", "โมเอะ"]
+    }],
+    genres: [{
+        type: String,
+        enum: ['Anime', 'Action', 'Comedy', 'Drama', 'Romance', 'Sci-Fi', 'Adventure', 'Horror', 'Fantasy', 'Music'],
+        required: true
     }],
     voice: {
         type: String,
@@ -64,10 +70,6 @@ const AnimeSchema = new mongoose.Schema({
         type: String,
         enum: ["bilibili", "iqiyi", "crunchyroll"]
     }],
-    year: {
-        type: Number,
-        enum: [2025, 2024, 2023]
-    },
     month: {
         type: String,
         enum: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
