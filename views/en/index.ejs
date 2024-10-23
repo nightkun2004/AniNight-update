@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniNight</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="title" content="Ani-Schedule - Latest Anime Broadcast Schedules">
+    <meta name="description" content="Stay updated with the latest anime broadcast schedules. Track upcoming anime episodes and never miss a broadcast.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ani-night.online">
+    <meta property="og:title" content="Ani-Schedule - Latest Anime Broadcast Schedules">
+    <meta property="og:description" content="Stay updated with the latest anime broadcast schedules. Track upcoming anime episodes and never miss a broadcast.">
+    <meta property="og:image" content="https://www.ani-night.online/images/og-image.jpg">
+
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.ani-night.online">
+    <meta property="twitter:title" content="Ani-Schedule - Latest Anime Broadcast Schedules">
+    <meta property="twitter:description" content="Stay updated with the latest anime broadcast schedules. Track upcoming anime episodes and never miss a broadcast.">
+    <meta property="twitter:image" content="https://www.ani-night.online/images/twitter-image.jpg">
+
+    <meta name="keywords" content="anime, broadcast schedules, anime episodes, latest anime, anime news, anime airing times">
+    <meta name="author" content="Night">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#1F2937"> <!-- สีที่ใช้ในเบราว์เซอร์บนมือถือ -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+         html {
+            scroll-behavior: smooth;
+        }
+        .scroll_custom::-webkit-scrollbar {
+            display: none;
+            width: 10px;
+            height: 12px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+        }
+
+        /* Scrollbar Thumb (ส่วนที่ใช้เลื่อน) */
+        .scroll_custom::-webkit-scrollbar-thumb {
+            background-color: #c0c0c0;
+            border-radius: 12px;
+            border: 2px solid #fafafa;
+            /* ขอบรอบๆ */
+        }
+
+        .card_year,
+        .card_format {
+            position: relative;
+            /* ทำให้ลูกศรและเมนูถูกกำหนดตำแหน่งได้ */
+        }
+
+        .pseudo::before {
+            content: "";
+            position: absolute;
+            top: -17px;
+            /* ระบุตำแหน่งลูกศร */
+            left: 19%;
+            /* กำหนดตำแหน่งตรงกลางของกล่อง */
+            transform: translateX(-50%);
+            border-width: 10px;
+            /* ขนาดลูกศร */
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+            /* สีของลูกศร */
+        }
+
+        @media (max-width: 1040px) {
+            .cover:before {
+                content: "";
+                display: block;
+                height: 0;
+                width: 0;
+            }
+        }
+
+        /* Scrollbar Hover Effect (เอฟเฟกต์เมื่อ hover) */
+        .scroll_custom::-webkit-scrollbar-thumb:hover {
+            background-color: #a0a0a0;
+            /* เปลี่ยนสีเมื่อ hover */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <%- include('./Component/HEader') %>
+
+
+        <!-- Main Section -->
+        <main class="bg-gray-900 h-full text-white py-16 px-5">
+            <div class="container mx-auto text-center">
+                <h1 class="text-4xl font-bold">Stay Updated with the Latest Anime Broadcast Schedules</h1>
+                <p class="mt-4 text-lg">Track upcoming anime episodes and never miss a broadcast!</p>
+    
+                <!-- Feature Cards Section -->
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="p-6 bg-gray-800 rounded-lg">
+                        <img src="https://img.icons8.com/color/48/000000/calendar.png" alt="Latest Schedule" class="mx-auto mb-4">
+                        <h2 class="text-xl font-bold">Check the Latest Schedule</h2>
+                        <p class="mt-2">Get real-time updates on the airing times of your favorite anime shows.</p>
+                    </div>
+                    <!-- <div class="p-6 bg-gray-800 rounded-lg">
+                        <img src="https://img.icons8.com/color/48/000000/notification.png" alt="Stay Notified" class="mx-auto mb-4">
+                        <h2 class="text-xl font-bold">Stay Notified</h2>
+                        <p class="mt-2">Set notifications to receive alerts when a new episode is about to air.</p>
+                    </div> -->
+                    <div class="p-6 bg-gray-800 rounded-lg">
+                        <img src="https://img.icons8.com/color/48/000000/news.png" alt="Anime News" class="mx-auto mb-4">
+                        <h2 class="text-xl font-bold">Latest Anime News</h2>
+                        <p class="mt-2">Follow the latest updates, announcements, and special events in the anime world.</p>
+                    </div>
+                    <div class="p-6 bg-gray-800 rounded-lg">
+                        <img src="https://img.icons8.com/color/48/000000/tv.png" alt="Watch Anywhere" class="mx-auto mb-4">
+                        <h2 class="text-xl font-bold">Watch Anywhere</h2>
+                        <p class="mt-2">Easily access broadcast schedules from any device, anytime.</p>
+                    </div>
+                </div>
+    
+                <!-- Join Now Button -->
+                <div class="mt-12">
+                    <a href="#join" class="bg-blue-500 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-600">Join Now</a>
+                </div>
+            </div>
+        </main>
+
+
+        <section class="mx-auto max-w-6xl p-5" id="join">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+            crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-format="fluid"
+            data-ad-layout-key="-fb+5w+4e-db+86"
+            data-ad-client="ca-pub-6579807593228261"
+            data-ad-slot="2392656865"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+            <div class="md:block z-10 bg-white p-5 rounded-lg">
+                <!-- Search Filter -->
+                <div class="custom-scroll-container">
+                    <div class="flex justify-evenly lg:justify-around items-center gap-5 flex-wrap">
+                        <!-- Search -->
+                        <div>
+                            <label class="block text-gray-500 font-semibold">Search</label>
+                            <div class="relative mt-1 flex items-center">
+                                <svg class="absolute left-3 w-4 h-4 text-gray-200" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 512 512">
+                                    <path
+                                        d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z">
+                                    </path>
+                                </svg>
+                                <input type="search" placeholder="Type to search..."
+                                    class="w-full px-9 py-2 outline-none bg-none rounded-lg border-2">
+                            </div>
+                        </div>
+    
+                        <!-- Year Filter -->
+                        <div class="w-56">
+                            <div class="relative">
+                                <label class="block text-gray-500 font-semibold">choose Year</label>
+                                <div class="select_year-btn cursor-pointer relative inline-block w-full border-2 rounded-lg"
+                                    onclick="toggleMenu('.card_year')">
+                                    <div
+                                        class="block appearance-none w-full bg-white outline-none border-none py-2 px-4 pr-8 rounded-lg shadow-sm">
+                                        <div class="option text-gray-400" selected disabled>choose Year</div>
+                                    </div>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="bg-white card_year px-4 absolute top-20 z-50 rounded-lg shadow-lg hidden">
+                                    <div class="overflow-y-auto h-52 scroll_custom">
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2025</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2024</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2023</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2022</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2021</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2020</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2019</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2018</div>
+                                        <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">2017</div>
+                                    </div>
+                                </div>
+    
+                                <p class="absolute top-1 left-5 text-red-500 text-sm">*necessary</p>
+                            </div>
+                        </div>
+    
+                        <!-- Season Filter -->
+                        <div>
+                            <label class="block text-gray-500 font-semibold">choose Season</label>
+                            <div class="relative mt-1">
+                                <div class="relative cursor-pointer inline-block w-full select_Season border-2 rounded-lg"
+                                    onclick="toggleMenu('.card_Season')">
+                                    <div
+                                        class="block appearance-none w-full bg-white outline-none border-none py-2 px-4 pr-8 rounded-lg shadow-sm">
+                                        <div class="option text-gray-400" selected disabled>choose Season</div>
+                                    </div>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-white card_Season px-4 absolute top-14 h-52 overflow-y-auto z-50 rounded-lg shadow-lg scroll_custom hidden">
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Spring</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Summer</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Fall</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Winter</div>
+                                </div>
+                                <p class="absolute top-0 right-5 text-red-500 text-sm">*necessary</p>
+                            </div>
+                        </div>
+    
+                        <!-- Format Filter -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold">Gender</label>
+                            <div class="relative mt-1">
+                                <div class="relative cursor-pointer inline-block w-full select_Format border-2 rounded-xl"
+                                    onclick="toggleMenu('.card_format')">
+                                    <div
+                                        class="block appearance-none w-full bg-white outline-none border-none py-2 px-4 pr-8 rounded-lg shadow-sm">
+                                        <div class="option text-gray-400" selected disabled>Gender</div>
+                                    </div>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-white card_format px-4 absolute top-14 h-52 overflow-y-auto rounded-lg z-50 shadow-lg scroll_custom hidden">
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">TV Anime</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">Movie</div>
+                                    <div class="option px-2 py-3 hover:text-blue-400 cursor-pointer">OVA</div>
+                                </div>
+                                <p class="absolute top-1 left-5 text-red-500 text-sm">*necessary</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <p class="text-red-500 font-light">เนื่องระบบกรองเนื้อหายังใช้ไม่ได้อยู่ระหว่างปรับปรุ่ง</p> -->
+            <hr class="mt-5 ">
+
+        <!-- result Filter -->
+        <div class="text-gray-400 mt-5 flex items-center gap-3">
+            <svg class="w-5 h-5" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="tags" role="img"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+                class="tags-icon svg-inline--fa fa-tags fa-w-20">
+                <path data-v-cd1dc2b6="" fill="currentColor"
+                    d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"
+                    class=""></path>
+            </svg><span class="result">2024, Fall, TV</span>
+        </div>
+
+        <div class="mx-auto max-w-5xl px-4 py-8">
+            <div class="result-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-10">
+                <% if (Animelists && Animelists.length > 0) { %>
+                    <% Animelists.forEach(anime => { %>
+                        <% if (anime.published) { %>
+                            <div class="anime-card overflow-hidden"  data-popover-target="popover-<%= anime._id %>">
+                                <a href="/anime/<%= anime.urlslug %>"  class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                                    <% if (anime.poster.startsWith('http')) { %>
+                                        <!-- External image URL -->
+                                        <img src="<%= anime.poster %>"
+                                        alt="<%= anime.title %>" class="w-full rounded-lg">
+                                    <% } else { %>
+                                        <!-- Local server image path -->
+                                        <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                                        alt="<%= anime.title %>" class="w-full rounded-lg">
+                                    <% } %>
+                                </a>
+                                <div data-popover id="popover-<%= anime._id %>" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                    <div class="px-3 py-2 bg-blue-400 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                                        <h3 class="font-semibold text-white dark:text-white"><%= anime.title %></h3>
+                                    </div>
+                                    <div class="px-3 py-2">
+                                        <div class="mb-6">
+                                            <div>
+                                                <h2 class="font-semibold">Season</h2>
+                                                <p>
+                                                    <%= anime.season %>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">Episodes</h2>
+                                                <p>
+                                                    <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold">เริ่มฉาย</h2>
+                                                <p>
+                                                    <%= anime.month %>
+                                                        <%= anime.year %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <streeming class="mt-5 flex gap-2 select-none pointer-events-none items-center">
+                                            <% if (anime.platforms.includes('crunchyroll')) { %>
+                                                <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <% } %>
+                                            <% if (anime.platforms.includes('bilibili')) { %>
+                                                <img src="/logo/bilibili_icon.png" alt="bilibili" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <% } %>
+                                            <% if (anime.platforms.includes('iqiyi')) { %>
+                                                <img src="/logo/iqiyi_icon.png" alt="iqiyi" class="w-7 h-7 pointer-events-none rounded-full">
+                                            <% } %>
+                                            
+                                        </streeming>
+                                    </div>
+                                    <div data-popper-arrow></div>
+                                </div>
+                                <a class="anime-info title" href="/anime/<%= anime.urlslug %>">
+                                    <h2 class="text-sm font-bold"><%= anime.title %></h2>
+                                </a>
+                            </div>
+                        <% } %>
+                    <% }) %>
+                <% } else { %>
+                    <p>ยังไม่มีอนิเมะ</p>
+                <% } %>
+            </div>
+        </div>
+        </section>
+
+
+
+
+
+        <script>
+            // Toggle menu function for Year, Season, Format
+            function toggleMenu(menuClass) {
+                document.querySelector(menuClass).classList.toggle("hidden");
+            }
+    
+            const searchInput = document.querySelector('input[type="search"]');
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
+                    // เรียกใช้งานฟังก์ชันกรองที่นี่
+                    updateResults(query);  // ตัวอย่างฟังก์ชันในการกรอง
+                });
+    
+                function updateResults(query) {
+                // ทำการกรองหรือเรียก API ที่นี่
+                console.log(`Searching for: ${query}`);
+            }
+    
+            // Function to update the selected filter result
+            function updateResult(query) {
+                const year = document.querySelector(".select_year-btn .option").textContent.trim();
+                const season = document.querySelector(".select_Season .option").textContent.trim();
+                const format = document.querySelector(".select_Format .option").textContent.trim();
+                document.querySelector(".result").textContent = `Filter results: ${year}, ${season}, ${format}`;
+    
+                const url = `/filter/anime?year=${year}&season=${season}&format=${format}`;
+                console.log(url);
+    
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+    
+                        const resultContainer = document.querySelector('.result-content');
+                        resultContainer.innerHTML = '';
+    
+                        if (data.results.length > 0) {
+                            // ใช้ data.results เพื่อเข้าถึงอนิเมะ
+                            data.results.forEach(anime => {  // แก้ไขจาก data เป็น data.results
+                                const animeItem = document.createElement('div');
+                                animeItem.classList.add('anime-card', 'overflow-hidden');
+                                animeItem.innerHTML = `
+                                <a href="/anime/${anime.urlslug}" data-popover-target="popover-${anime._id}" class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                                    <img src="${anime.poster.startsWith('http') ? anime.poster : '/uploads/posters/' + anime.poster}" alt="${anime.title}" class="w-full rounded-lg">
+                                </a>
+                                <div data-popover id="popover-${anime._id}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                    <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">Popover title</h3>
+                                    </div>
+                                    <div class="px-3 py-2">
+                                        <p>And here's some amazing content. It's very engaging. Right?</p>
+                                    </div>
+                                    <div data-popper-arrow></div>
+                                </div>
+                                <div class="anime-info">
+                                    <h2 class="text-sm font-bold">${anime.title}</h2>
+                                </div>
+                            `;
+                                resultContainer.appendChild(animeItem);
+                            });
+                        } else {
+                            resultContainer.innerHTML = '<p class="text-center">No anime matching filters found.</p>';
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+    
+            // Event listeners for Year, Season, and Format selection
+            document.querySelectorAll(".card_year .option").forEach((option) => {
+                option.addEventListener("click", (e) => {
+                    document.querySelector(".select_year-btn .option").textContent = e.target.textContent;
+                    updateResult();
+                    toggleMenu('.card_year');
+                });
+            });
+    
+            document.querySelectorAll(".card_Season .option").forEach((option) => {
+                option.addEventListener("click", (e) => {
+                    document.querySelector(".select_Season .option").textContent = e.target.textContent;
+                    updateResult();
+                    toggleMenu('.card_Season');
+                });
+            });
+    
+            document.querySelectorAll(".card_format .option").forEach((option) => {
+                option.addEventListener("click", (e) => {
+                    document.querySelector(".select_Format .option").textContent = e.target.textContent;
+                    updateResult();
+                    toggleMenu('.card_format');
+                });
+            });
+        </script>
+</body>
+
+</html>

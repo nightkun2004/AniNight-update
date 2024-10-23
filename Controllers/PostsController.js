@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
+const Anime = require("../models/AnimeModel")
 const { getRecommendations } = require("../lib/generateRecommen")
 
 // ============================= get SINGLE POST
@@ -8,7 +9,7 @@ const getPosts = async (req, res, next) => {
     const userID = req.session.userlogin;
     const lang = res.locals.lang;
     const page = parseInt(req.params.page) || 1;
-    const limit = 10;
+    const limit = 15;
     try {
         // Fetch all posts and populate the 'creator.id' field
         const Posts = await Article.find()
@@ -21,10 +22,14 @@ const getPosts = async (req, res, next) => {
         const totalPosts = await Article.countDocuments(); 
 
         const TopViews = await Article.find().populate('creator.id').sort({ views: -1 }).limit(10);
+        const Animelists = await Anime.find().sort({ createdAt: -1 }).exec();
 
-        res.render(`./th/index`, { 
+        const template = req.language === 'th_TH' ? './th/index' : './en/index';
+
+        res.render(template, { 
             active: "Home", 
             Posts, 
+            Animelists,
             userID, 
             TopViews, 
             page, 

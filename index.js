@@ -40,6 +40,8 @@ const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
 const PlaymentRoute = require("./routers/PlaymentRouter") 
 const MemeRouter = require("./routers/MemeRouter")
 
+const setLanguage = require("./lib/language")
+
 app.get('/ads.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/ads.txt'));
 });
@@ -150,12 +152,12 @@ const formatDate = (date) => {
 
 app.locals.moment = moment;
 
-
 app.locals.number1 = 100;
 app.locals.number2 = 500;
 app.locals.number3 = 1500;
 app.locals.number4 = 1200000;
 app.locals.formatNumber = formatNumber;
+app.use(setLanguage);
 app.use(bodyParser.json({ limit: '1000mb' }));
 app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(express.json({ limit: '1000mb' }));
