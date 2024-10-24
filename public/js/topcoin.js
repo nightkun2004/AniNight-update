@@ -32,12 +32,12 @@ async function checkout() {
     try {
         const response = await axios.post('/create-checkout-session', {
             priceId: selectedPriceId,
-            amount: Number(selectedAmount), // Ensure amount is a number
+            amount: Number(selectedAmount), 
             email: userEmail
         });
 
         const session = response.data;
-        window.location.href = session.url; // Redirect to Stripe Checkout
+        window.open(session.url, '_blank');
     } catch (error) {
         console.error('Error during checkout:', error);
         alert('เกิดข้อผิดพลาดในการชำระเงิน กรุณาลองอีกครั้ง'); // User-friendly error message
