@@ -9,7 +9,7 @@ router.get("/api/v2/anime/pv", getPV)
 
 const { checkAuth } = require("../lib/auth")
 const { authMiddleware } = require("../Middlewares/authMiddleware")
-
+ 
 router.get("/upload/pv/anime", checkAuth, authMiddleware,  getUploadPv)
 router.get("/add/episodes/anime/:playid", checkAuth, authMiddleware,  getepisodes)
 router.get("/admin/edit/video/anime/:videoid", checkAuth, authMiddleware,  getEditPv)

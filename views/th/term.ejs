@@ -17,7 +17,7 @@
         <!-- Terms of Service -->
         <div class="bg-white rounded p-4 mb-5">
             <h3 class="text-2xl font-medium">เงื่อนไขการใช้และบริการ (Terms of Service)</h3>
-            <p>อัพเดตเมื่อ (27/08/2024)</p>
+            <p>อัพเดตเมื่อ (24/10/2024)</p>
             <hr class="mb-4">
             <div class="m-5">
                 <h4 class="font-normal text-lg">เกี่ยวกับเรา</h4>
@@ -154,7 +154,246 @@
             </div>
          </section>
 
+         <section class="mb-6 mt-5 bg-white p-6 shadow-lg rounded-lg">
+            <h2 class="text-2xl font-bold mb-4 text-gray-700">เงื่อนไขการใช้ API</h2>
+            <p class="text-gray-600">
+                บริการ API ของเรามีการจัดเตรียมข้อมูลเกี่ยวกับอนิเมะและบทความต่างๆ ซึ่งสามารถนำไปใช้ในการพัฒนาบริการในเชิงพาณิชย์ เช่น แอปพลิเคชันหรือเว็บไซต์ที่มีเนื้อหาเกี่ยวข้องกับอนิเมะหรือข่าวสารต่างๆ โดยมีเงื่อนไขการใช้งานดังนี้:
+            </p>
+            <ul class="list-disc pl-5 mt-4 text-gray-600">
+                <li><strong>การใช้งานเชิงพาณิชย์:</strong> เราไม่อนุญาติให้ใช้ในเชิงพาณิชย์เฉพาะในส่วนข้อมูลอนิเมะ เนื่องจากลิขสิทธิ์</li>
+                <li><strong>การร้องขอข้อมูล:</strong> จำกัดการใช้งาน API ต่อจำนวนคำขอในแต่ละวัน ( 5 Tokens  ต่อ 1 คำขอ ) หากต้องการใช้งานเพิ่มเติม กรุณาติดต่อเพื่อขอเพิ่มขีดจำกัด</li>
+                <li><strong>ข้อมูลผู้ใช้ที่จำเป็น:</strong> ในการเข้าถึงข้อมูลบทความหรืออนิเมะ ต้องมีข้อมูลผู้ใช้ที่ประกอบด้วยอีเมลหรือชื่อผู้ใช้ เพื่อให้สามารถระบุการเข้าถึงข้อมูลได้อย่างถูกต้อง</li>
+                <li><strong>นโยบายความเป็นส่วนตัว:</strong> ข้อมูลของผู้ใช้ที่ใช้ในการเข้าถึง API จะถูกเก็บรักษาอย่างปลอดภัยและไม่ถูกนำไปใช้ในทางที่ผิด</li>
+                <li><strong>ข้อกำหนดเพิ่มเติม:</strong> การใช้ API ต้องปฏิบัติตามนโยบายความเป็นส่วนตัวและข้อตกลงในการให้บริการของเรา</li>
+            </ul>
+
+            <hr class="my-8">
+            </section>
+
         
+        <main class="container mx-auto my-10" id="api">
+            <h1 class="text-3xl font-bold mt-10 mb-5">สอนใช้ API</h1>
+            <section class="bg-white p-6 shadow-lg rounded-lg">
+                <h2 class="text-2xl font-bold text-orange-500 mb-4">API Key คืออะไร?</h2>
+                <p class="mb-4">
+                    รหัส API คือรหัสประจำตัวเฉพาะที่ช่วยให้คุณเข้าถึงบริการ API ของเราได้ โดยรหัสนี้ทำหน้าที่เป็นมาตรการรักษาความปลอดภัยเพื่อให้แน่ใจว่าผู้ใช้ที่ได้รับอนุญาตเท่านั้นจึงจะใช้ API ได้
+                </p>
+
+                <h2 class="text-2xl font-bold text-orange-500 mb-4">ขอ API Key ได้จากที่ไหน ?</h2>
+                <p class="mb-4">
+                    คุณสามารถขอ API Key ผ่าน ช่องทางติดต่อต่างๆของเรา หรือ <a href="https://web.facebook.com/AniNightOffice.net" class="bg-gray-100 px-4 rounded-lg" target="_blank"> Facebook</a>
+                </p>
+
+
+                <h3 class="text-xl font-bold text-orange-500 mb-4">วิธีใช้คีย์ API ของคุณ</h3>
+                <p class="mb-4">
+                    หากต้องการส่งคำขอไปยัง API ของเรา โปรดใส่รหัส API ของคุณในส่วนหัวคำขอภายใต้ <code  class="bg-gray-100 rounded-lg px-2">x-api-key</code>.
+                </p>
+        
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">ตัวอย่างการส่งคำขอ (GET)</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+                        <code>
+        GET /api/some-endpoint HTTP/1.1
+        Host: api.yourwebsite.com
+        x-api-key: YOUR_API_KEY
+                        </code>
+                    </pre>
+        
+        
+                <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-2">ตัวอย่างการใช้ใน JavaScript (Fetch)</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+                        <code>
+        fetch('https://api.ani-night.online/api/<--- บริการที่ต้องการเข้าถึง API  ของเรา --->', {
+            method: 'GET',
+            headers: {
+                'x-api-key': 'YOUR_API_KEY'
+            }
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+                        </code>
+                    </pre>
+
+                    <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-2">ตัวอย่างการใช้ใน axios บน Nodejs (JavaScript)</h3>
+                    <p class="mb-4">
+                        ในการใช้คีย์ API กับ Axios ใน Node.js ให้รวมคีย์ API ไว้ในส่วนหัวคำขอโดยใช้ <code class="bg-gray-100 px-4 rounded-lg">x-api-key</code>.
+                    </p>
+        
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">ขั้นตอนที่ 1: ติดตั้ง Axios</h3>
+                    <pre class="bg-gray-100 px-4 rounded-lg text-sm overflow-x-auto">
+                        <code>
+        npm install axios   </code>
+                    </pre>
+
+
+                    <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-2">ขั้นตอนที่ 2: ตัวอย่างคำขอโดยใช้ Axios</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+                    <code>
+    const axios = require('axios');
+
+    // API Key ของคุณ
+    const apiKey = 'YOUR_API_KEY';
+
+    // Make a GET request to the API
+    axios.get('https://api.yourwebsite.com/api/<--- บริการที่ต้องการเข้าถึง API  ของเรา --->', {
+        headers: {
+            'x-api-key': apiKey
+        }
+    })
+    .then(response => {
+        console.log(response.data); // ข้อมูลที่สำหรับส่งออกผ่าน console
+    })
+    .catch(error => {
+        console.error('Error:', error); // เมื่อมีข้อผิดพลาดจะแสดงผ่าน console
+    });
+                    </code>
+                </pre>
+
+                <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-2">ขั้นตอนที่ 3: ตัวอย่างการร้องขอโดยใช้ POST</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+                    <code>
+    const axios = require('axios');
+
+    // Your API Key
+    const apiKey = 'YOUR_API_KEY';
+
+    // Data to be sent in the POST request
+    const postData = {
+        name: 'example',
+        value: 123
+    };
+
+    // Make a POST request to the API
+    axios.post('https://api.yourwebsite.com/api/some-endpoint', postData, {
+        headers: {
+            'x-api-key': apiKey,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log(response.data); // Handle the response data
+    })
+    .catch(error => {
+        console.error('Error:', error); // Handle any errors
+    });
+                    </code>
+                </pre>
+        
+            </section>
+
+
+            <section class="mb-6 mt-5 bg-white p-6 shadow-lg rounded-lg">
+                <section>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">ขั้นตอนที่ 1: ขอรับ API Key</h2>
+                    <!-- <span class="text-orange-500">support@ani-night.com</span> -->
+                    <p class="text-gray-600">เพื่อใช้งาน API ของเรา คุณต้องทำการติดต่อผู้พัฒนาเพื่อขอรับ API Key โดยส่งอีเมลมาที่: <span class="text-orange-500">nightnattkun@gmail.com</span></p>
+                    <p class="text-gray-600">ตัวอย่าง API Key: <span class="font-mono text-orange-500">12345-abcde-67890</span></p>
+                </section>
+                <hr class="my-8">
+
+                <h2 class="text-2xl font-bold mb-4 mt-10 text-gray-700">ขั้นตอนที่ 2: การใช้งาน API Key ในแอปพลิเคชันของคุณ</h2>
+                <p class="text-gray-600">คุณสามารถส่งคำขอ API โดยเพิ่ม API Key ลงในส่วน headers ของคำขอ HTTP นี่คือตัวอย่างการใช้ <span class="font-bold">Axios</span> ใน Node.js:</p>
+
+                <div class="bg-gray-100 p-4 rounded-lg my-4">
+                    <pre class="text-sm text-gray-700">
+    const axios = require('axios');
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('https://api.example.com/data', {
+                headers: {
+                    'x-api-key': '12345-abcde-67890' // แทนที่ด้วย API Key ของคุณ
+                }
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    fetchData();
+                    </pre>
+                </div>
+
+                <p class="text-gray-600">อย่าลืมแทนที่ <span class="font-mono text-orange-500">'12345-abcde-67890'</span> ด้วย API Key จริงของคุณ</p>
+
+                <!-- Step 3: Authorization with JWT -->
+                <h2 class="text-2xl font-bold mt-10 mb-4 text-gray-700">ขั้นตอนที่ 3: การใช้งาน Authorization ด้วย JWT</h2>
+                <p class="text-gray-600">สำหรับการเข้าถึงเส้นทางที่ป้องกันไว้ คุณต้องส่ง JWT token ในส่วน Authorization header ดังนี้:</p>
+    
+                <div class="bg-gray-100 p-4 rounded-lg my-4">
+                    <pre class="text-sm text-gray-700">
+    const axios = require('axios');
+    
+    const fetchProtectedData = async () => {
+        const token = 'your-jwt-token'; // แทนที่ด้วย JWT Token ของคุณ
+    
+        try {
+            const response = await axios.get('https://api.example.com/protected-data', {
+                headers: {
+                    'Authorization': \`Bearer \${token}\`
+                }
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+    fetchProtectedData();
+                    </pre>
+                </div>
+    
+                <p class="text-gray-600">อย่าลืมแทนที่ <span class="font-mono text-orange-500">'your-jwt-token'</span> ด้วย JWT Token จริงของคุณ</p>
+
+                <section class="mt-5">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">คำถามที่พบบ่อย (FAQ)</h2>
+                    <ul class="list-disc pl-5 text-gray-600">
+                        <li><span class="font-bold">ฉันจะรับ API Key ได้ที่ไหน?</span> คุณสามารถรับได้จากแดชบอร์ดหลังจากลงทะเบียน หรือขอกลับแพลตฟอร์มช่องทางต่างๆ กับเรา</li>
+                        <li><span class="font-bold">ฉันจะรีเฟรช API Key ได้อย่างไร?</span> คุณสามารถแจ้งกับนักพัฒนาได้โดยตตรง หาก API KEY ของคุณถูกเปิดเผย</li>
+                        <li><span class="font-bold">ทำไมฉันถึงได้รับข้อผิดพลาด 403?</span> ตรวจสอบให้แน่ใจว่าคุณใช้ API Key ที่ถูกต้องและ token ไม่หมดอายุ</li>
+                    </ul>
+                </section>
+            </section>
+
+        
+        y-8">
+            </section>
+
+            <section class="bg-white p-6 shadow-lg rounded-lg mt-10">
+                <h2 class="text-2xl font-bold text-orange-500 mb-4">Error Responses</h2>
+                <p class="mb-4">หากคำขอของคุณขาดรหัส API หรือรหัส API ไม่ถูกต้อง คุณจะได้รับการตอบกลับข้อผิดพลาดอย่างใดอย่างหนึ่งต่อไปนี้:</p>
+        
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">403 Forbidden - Missing API Key</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+                        <code>
+        HTTP/1.1 403 Forbidden
+        Content-Type: text/html
+        
+        <h1>403 Forbidden</h1>
+        <p>Message: API key missing</p>
+        <p>Time: CURRENT_TIME</p>
+        <hr>
+        <p>URL: REQUEST_URL</p>
+                        </code>
+                    </pre>
+        
+                <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-2">403 Forbidden - Invalid API Key</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
+                        <code>
+        HTTP/1.1 403 Forbidden
+        Content-Type: text/html
+        
+        <h1>403 Forbidden</h1>
+        <p>Message: Invalid API key</p>
+        <p>Time: CURRENT_TIME</p>
+        <hr>
+        <p>URL: REQUEST_URL</p>
+                        </code>
+                    </pre>
+            </section>
+        </main>
     </main>
 
     <script src="/js/script.js"></script>

@@ -30,7 +30,7 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-black text-white font-sans">
 
   <!-- Header -->
  <%- include('./Component/Header') %>
@@ -39,7 +39,17 @@
     <div class="flex flex-wrap">
       <!-- Left Side (Anime Thumbnails) -->
       <section class="w-full lg:w-3/4">
-        <h2 class="text-xl font-semibold mb-4">อัพเดตใหม่</h2>
+
+        <section class="relative bg-cover bg-center py-5 mb-5 rounded-lg" style="background-image: url('/annight/halloween-anime-girl.jpg');">
+          <div class="absolute inset-0 bg-black opacity-60 rounded-lg"></div>
+          <div class="relative flex flex-col justify-center items-center h-full">
+              <h2 class="md:text-5xl font-extrabold mb-4 text-orange-500">ขอต้อนรับสู่ฮาโลวีน!</h2>
+              <p class="md:text-2xl mb-6">เช็คอนิเมะเดือนตุลาคม ในช่วงฮาโลวีนเลยย  !!.</p>
+              <a href="/schedule/anime" class="px-6 py-3 bg-orange-600 text-white rounded-lg shadow-lg hover:bg-orange-500">ไปเลยย!</a>
+          </div>
+      </section>
+
+        <h2 class="text-xl font-semibold mb-4">อัพเดตใหม่ 🎃</h2>
         <% if (Posts.length> 0 && typeof error === 'undefined') { %>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <!-- Example Anime Card -->
@@ -101,7 +111,7 @@
         
         <!-- Ads Section -->
         <div class="bg-white p-4 rounded-lg shadow-md">
-          <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
+          <h3 class="text-lg text-black font-semibold mb-3">โฆษณา</h3>
           <div class="w-full h-40 bg-gray-300 flex items-center justify-center">
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
             crossorigin="anonymous"></script>
@@ -120,12 +130,25 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white mt-12 py-4 shadow-inner">
-    <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
-      &copy; 2024 Ani-Night. All rights reserved.
-    </div>
-  </footer>
+
+  <!-- Footer Section -->
+<footer class="bg-black py-12">
+  <div class="container mx-auto text-center">
+      <div class="mb-6">
+          <h2 class="text-3xl font-extrabold text-orange-500">Happy Halloween!</h2>
+          <p class="text-gray-400">Get ready for a spooky and fun-filled celebration!</p>
+      </div>
+      <!-- <ul class="flex justify-center space-x-6 mb-6 text-gray-400">
+          <li><a href="#" class="hover:text-orange-300">Home</a></li>
+          <li><a href="#" class="hover:text-orange-300">About Us</a></li>
+          <li><a href="#" class="hover:text-orange-300">Events</a></li>
+          <li><a href="#" class="hover:text-orange-300">Contact</a></li>
+      </ul> -->
+      <p class="text-gray-500 text-sm">&copy; 2024 Ani-Night. All rights reserved.</p>
+      <p class="text-gray-500 text-sm">Made with 🎃 and 👻 by Nightkun</p>
+  </div>
+</footer>
+
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
 const Anime = require("../models/AnimeModel")
+const Play = require("../models/PlayModel")
 const { getRecommendations } = require("../lib/generateRecommen")
 
 // ============================= get SINGLE POST

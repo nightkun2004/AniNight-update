@@ -52,6 +52,8 @@ const authLogin = async (req, res, next) => {
         res.cookie('tksave', tksave, { httpOnly: false, secure: false });
 
         // เก็บ token ใน Session Storage 
+        console.log("session daras", req.session.userlogin)
+        console.log("token", token)
 
         const returnTo = req.session.returnTo || `/@${username}`;
         delete req.session.returnTo;

@@ -4,12 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= anime.title %> | AniNight</title>
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
-    <link rel="canonical" href="https://www.ani-night.online/anime/<%= anime.urlslug %>">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <title><%= anime.title %></title>
     <% if (anime.poster.startsWith('http')) { %>
         <meta property="og:image" content="<%= anime.poster %>" />
     <% } else { %>
@@ -21,9 +16,15 @@
          content="<%= anime.synopsis %>" /> 
      <meta property="og:type" content="website" />
      <meta property="og:url" content="https://ani-night.online" />
-     <meta property="og:title" content="<%= anime.title %>" />
+     <meta property="og:title" content="<%= anime.title %> | AniNight" />
      <meta property="og:description"
          content="<%= anime.synopsis %>" />
+
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="canonical" href="https://www.ani-night.online/anime/<%= anime.urlslug %>">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
@@ -35,7 +36,7 @@
 
     <section class="mx-auto max-w-6xl md:p-5">
         <!-- Anime Info Section -->
-        <div class="bg-white md:rounded-lg md:shadow-md p-6">
+        <div class="bg-white md:rounded-lg md:shadow-md p-6 bg-bottom bg-no-repeat bg-cover" style="background-image: url('/annight/Halloween_anime (1).svg');">
             <!-- Anime Banner Section -->
             <div class="mb-6 relative">
                 <img title="<%- anime.synopsis %>" src="<%= anime.banner ? anime.banner : 'https://via.placeholder.com/1200x400' %>" alt="Anime Banner"
@@ -46,7 +47,7 @@
             </div> 
             <h1 class="text-3xl font-bold text-gray-800 mb-4"><%- anime.title %></h1>
         
-            <div class="flex flex-col md:flex-row mb-6">
+            <div class="flex flex-col md:flex-row mb-6" >
                 <div class="overflow-hidden">
                     <% if (anime.poster.startsWith('http')) { %>
                         <img title="<%- anime.title %>" src="<%= anime.poster %>" alt=" <%= anime.title %>"
@@ -80,7 +81,7 @@
                                 </article>
         
                                 <!-- Details (Genres, Episodes, Status, etc.) -->
-                                <div class="grid grid-cols-2 gap-4 text-gray-700">
+                                <div class="grid grid-cols-2 gap-4 text-white">
                                     <div>
                                         <h2 class="font-semibold">Format</h2>
                                         <p>
@@ -99,9 +100,15 @@
                                             <%= anime.Licensors || "ไม่พบข้อมูล" %>
                                         </p>
                                     </div>
-                                    <div>
-                                        <h2 class="font-semibold">รูปแบบ</h2>
-                                        <p>  <%= anime.genres || "ไม่พบข้อมูล" %></p>
+                                    <div class="flex flex-wrap">
+                                        <h2 class="font-semibold">รูปแบบ : </h2>
+                                        <% if (anime.genres && anime.genres.length > 0) { %>
+                                            <% anime.genres.forEach(function(genre) { %>
+                                               <br> <p><%= genre %></p> ,
+                                            <% }) %>
+                                        <% } else { %>
+                                            <p>ไม่พบข้อมูล</p>
+                                        <% } %>
                                     </div>
                                     <div>
                                         <h2 class="font-semibold">Season</h2>
@@ -117,7 +124,9 @@
                                     </div>
                                     <div>
                                         <h2 class="font-semibold">Duration</h2>
-                                        <p>
+                                        <p class="text-white t" style="
+                                        color: orange;
+                                        text-shadow: 2px 4px 6px black;">
                                             <%= anime.Duration || "ไม่พบข้อมูล" %> <strong>นาที</strong>
                                         </p>
                                     </div>
@@ -127,7 +136,7 @@
                                             <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %>
                                         </p>
                                     </div>
-                                    <div>
+                                    <div class="text-white">
                                         <h2 class="font-semibold">เริ่มฉาย</h2>
                                         <p>
                                             <%= anime.month %>
@@ -140,18 +149,54 @@
             </div>
         </div>
 
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-        crossorigin="anonymous"></script>
-   <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-format="fluid"
-        data-ad-layout-key="-e5+6n-34-bt+x0"
-        data-ad-client="ca-pub-6579807593228261"
-        data-ad-slot="1942933440"></ins>
-   <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-   </script>
+<div class="mx-auto p-4 flex flex-col lg:flex-row gap-4">
+    <aside class="hidden lg:block lg:w-1/4 bg-white shadow-lg p-4 rounded-lg">
+        <h2 class="text-xl font-bold mb-4 text-orange-500">ข้อมูลอนิเมะ</h2>
+      
+        <!-- ข้อมูลอนิเมะ -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-700">ชื่อเรื่อง: <%= anime.title %></h3>
+            <p class="text-gray-600">หมวดหมู่: <%= anime.categories %></p>
+            <p class="text-gray-600">จำนวนตอน: <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong></p>
+            <p class="text-gray-600">สถานะ:  <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></p>
+        </div>
+    
+        <!-- เรทคะแนน -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-700">เรทคะแนน</h3>
+            <div class="flex items-center mb-2">
+                <span class="text-yellow-400 text-2xl">⭐</span>
+                <span class="ml-2 text-gray-800 font-bold text-xl">9.2/10</span>
+            </div>
+            <p class="text-gray-600">จากผู้โหวต: 1,200,000 คน</p>
+        </div>
+    
+        <!-- แนวอนิเมะ -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-700">แนวอนิเมะ</h3>
+            <ul class="list-disc pl-5 text-gray-600">
+                <% if (anime.genres && anime.genres.length > 0) { %>
+                    <% anime.genres.forEach(function(genre) { %>
+                        <li><%= genre %></li>
+                    <% }) %>
+                <% } else { %>
+                    <li>ไม่พบข้อมูล</li>
+                <% } %>
+            </ul>            
+        </div>
+    
+        <!-- วันที่ฉาย -->
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-700">วันที่ฉาย:</h3>
+            <p class="text-gray-600">เริ่มฉาย: <%= anime.month %> <%= anime.year %></p>
+            <p class="text-gray-600">จบฉาย: no date</p>
+        </div>
+    
+    </aside>
+    
 
+     <!-- Main Content (Right) -->
+     <main class="w-full lg:w-3/4 bg-white shadow-lg p-6 rounded-lg">
          <!-- สำหรับแสดงช่องทางการฉาย -->
          <div class="mb-6 bg-white md:rounded-lg p-5 mt-5">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">ช่องทางการฉาย</h2>
@@ -309,7 +354,21 @@
                 <% } %>
             </div>
         </div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+   <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="-e5+6n-34-bt+x0"
+        data-ad-client="ca-pub-6579807593228261"
+        data-ad-slot="1942933440"></ins>
+   <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+    </main>
+</div>
 
+       
 
         <div class="mx-auto max-w-6xl">
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"

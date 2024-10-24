@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th_TH">
 <head>
-    <title><%= post.title %> | ANINIGHT.ONLINE</title>
+    <title><%= post.title %> | ANINIGHT</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="อัตเดตข่าวสารด้านอนิเมะที่คุณชอบ พร้อมเนื้อหาที่มีประโยนช์แ่คุณ!!">
@@ -70,19 +70,17 @@
         }
     </style>
 </head>
-<body class="overflow-hidden">
+<body class="bg-gray-100">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TD38Z8LH" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     
+        <%- include('./Component/Header') %>
 
         <% if (post.published) { %>
-        <main class="bg-white flex flex-row w-full h-screen">
 
-            <%- include('./Component/Sidebar') %>
-
-            <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
+            <section class="mx-auto max-w-6xl p-2 md:p-5 bg-white">
                 <div class="container mx-auto mt-3">
                     <div class="mb-6 mt-4">
                         <% if (typeof error !== 'undefined') { %>
@@ -115,16 +113,31 @@
                                     <a href="/channel/<%= post.creator.username %>">
                                         <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.username %></h1>
                                     </a>
-                                   <p class="text-gray-600"> <%= moment(post.createdAt).locale('th').fromNow() %></p>
+                                   <p class="text-gray-600">ผู้ติดตาม <%= formatNumber(post.creator.id.followers.length) %> คน</p>
                                 </div>
                             </div>
                         
                             <!-- Right Section: Buttons -->
                             <div class="flex space-x-4 items-center">
                                 <!-- Follow Button -->
-                                <button class="bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-800 transition duration-200">
+                                <!-- <button class="bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-800 transition duration-200">
                                     <a href="/channel/<%= post.creator.username %>">ติดตาม</a>
-                                </button>
+                                </button> -->
+                                <% if (userID) { %>
+                                    <% if (post.creator.id.followers.includes(userID.user._id)) { %>
+                                        <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->  
+                                        <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
+                                            onclick="confirmUnfollow('<%= post.creator.id._id %>')">
+                                            <i class="fa-solid fa-user-minus"></i> ติดตามแล้ว
+                                        </button>
+                                    <% } else { %>
+                                        <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
+                                        <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
+                                                onclick="toggleFollow('<%= post.creator.id._id %>')">
+                                            <i class="fa-solid fa-user-plus"></i> ติดตาม
+                                        </button>
+                                    <% } %>
+                                <% } %>
                                 <!-- Like and Share Buttons -->
                                 <div class="flex space-x-2">
                                     <% if (userID) { %>
@@ -197,6 +210,9 @@
                             <div class="text-gray-700 flex flex-wrap text-sm md:text-base">
                                 <p class="pl-3 text-sm">
                                     <i class="fa-regular fa-eye"></i> การดู <%= formatNumber(post.views) %> ครั้ง,
+                                </p>
+                                <p class="pl-3 text-sm">
+                                    <%= moment(post.createdAt).locale('th').fromNow() %>
                                 </p>
                                 <p class="pl-3 text-sm">
                                     เผยแพร่เมื่อ: <%= new Date(post.createdAt).toLocaleDateString() %>
@@ -328,7 +344,6 @@
                 </div>
             </section>
 
-        </main>
         <% } else {%>
             <div class="flex items-center justify-center h-screen">
                 <div class="text-center">
@@ -377,6 +392,92 @@
 
     <script src="/js/script.js"></script>
     <script src="/js/read.js"></script> 
+    <script>
+        function toggleFollow(channelId) {
+            fetch(`/api/v2/user/follow/${channelId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ติดตามสำเร็จ',
+                        text: data.message,
+                        confirmButtonText: 'ตกลง'
+                    }).then(() => {
+                        location.reload(); // รีเฟรชหน้าเมื่อกดติดตาม
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    
+        function confirmUnfollow(channelId) {
+    Swal.fire({
+        title: 'ยืนยันการยกเลิกติดตาม?',
+        text: "คุณต้องการยกเลิกการติดตามใช่หรือไม่?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยกเลิกติดตาม!',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/v2/user/unfollow/${channelId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // ตรวจสอบสถานะของการตอบกลับ
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ยกเลิกติดตามสำเร็จ',
+                        text: data.message,
+                        confirmButtonText: 'ตกลง'
+                    }).then(() => {
+                        location.reload(); // รีเฟรชหน้าเมื่อยกเลิกติดตาม
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(err => {
+                // แสดงข้อผิดพลาดที่เกิดขึ้น
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาดที่ไม่รู้จัก',
+                    text: err.message // แสดงเฉพาะข้อความของข้อผิดพลาด
+                });
+            });
+        }
+    });
+}
+
+    </script>
     <script>
         function likeArticle(articleId) {
           fetch(`/api/v2/like/articles/${articleId}`, {

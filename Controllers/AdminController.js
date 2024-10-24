@@ -106,6 +106,22 @@ const ManageActor = async (req, res) => {
     }
 }
 
+const ManageActPIKey = async (req, res) => {
+    const lang = req.params.lang || 'th';
+    const userID = req.session.userlogin;
+    try {
+        const ApiKeylists = await ApiKey.find().exec();
+        // console.log(animelists)
+        res.render("./th/pages/admin/manage/manage_aptkey", { userID, ApiKeylists, translations: req.translations, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/admin/manage/manage_aptkey', {
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang
+        });
+    }
+}
 
 const ManageVideos = async (req, res) => {
     const lang = req.params.lang || 'th';
@@ -179,6 +195,7 @@ module.exports = {
     generateAPIKEY,
     ManageAnimes,
     ManageActor,
+    ManageActPIKey,
     ManageVideos,
     updateUserRole,
     filterUsers
