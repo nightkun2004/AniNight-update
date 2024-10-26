@@ -35,8 +35,8 @@
     <%- include('../../Component/Header') %>
 
     <section class="mx-auto max-w-6xl md:p-5">
-        <!-- Anime Info Section -->
-        <div class="bg-white md:rounded-lg md:shadow-md p-6 bg-bottom bg-no-repeat bg-cover" style="background-image: url('/annight/Halloween_anime (1).svg');">
+        <!-- Anime Info Section  -->
+        <div class="container-info-header bg-white md:rounded-lg md:shadow-md p-6 ">
             <!-- Anime Banner Section -->
             <div class="mb-6 relative">
                 <img title="<%- anime.synopsis %>" src="<%= anime.banner ? anime.banner : 'https://via.placeholder.com/1200x400' %>" alt="Anime Banner"
@@ -50,12 +50,12 @@
             <div class="flex flex-col md:flex-row mb-6" >
                 <div class="overflow-hidden">
                     <% if (anime.poster.startsWith('http')) { %>
-                        <img title="<%- anime.title %>" src="<%= anime.poster %>" alt=" <%= anime.title %>"
+                        <img id="image-bg" title="<%- anime.title %>" src="<%= anime.poster %>" alt="<%= anime.title %>"
+                            class="w-64 h-auto rounded-lg shadow-md mb-4 md:mb-0" crossorigin="anonymous">
+                    <% } else { %>
+                        <img id="image-bg" title="<%- anime.title %>" src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title %>"
                             class="w-64 h-auto rounded-lg shadow-md mb-4 md:mb-0">
-                        <% } else { %>
-                            <img title="<%- anime.title %>" src="/uploads/posters/<%= anime.poster %>" alt=" <%= anime.title %>"
-                                class="w-64 h-auto rounded-lg shadow-md mb-4 md:mb-0">
-                            <% } %>
+                    <% } %>
                 </div>
                 <!-- <img src="https://via.placeholder.com/300x450" alt="Anime Cover" > -->
                 <div class="md:ml-6 flex-1">
@@ -76,12 +76,12 @@
                             </div>
                             <% } %>
                                 <!-- Description -->
-                                <article class="text-gray-600 mb-5">
+                                <article class=" mb-5">
                                     <%- anime.synopsis %>
                                 </article>
         
                                 <!-- Details (Genres, Episodes, Status, etc.) -->
-                                <div class="grid grid-cols-2 gap-4 text-white">
+                                <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <h2 class="font-semibold">Format</h2>
                                         <p>
@@ -196,7 +196,8 @@
     
 
      <!-- Main Content (Right) -->
-     <main class="w-full lg:w-3/4 bg-white shadow-lg p-6 rounded-lg">
+     <main class="w-full lg:w-3/4 bg-white shadow-lg p-6 rounded-lg bg-bottom bg-no-repeat bg-cover"
+     style="background-image: url('/annight/Halloween_anime (1).svg');">
          <!-- สำหรับแสดงช่องทางการฉาย -->
          <div class="mb-6 bg-white md:rounded-lg p-5 mt-5">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">ช่องทางการฉาย</h2>
@@ -388,7 +389,8 @@
 
     <%- include('../../Component/Footer') %>
 
-    <script src="/js/script.js"></script>
+    <!-- <script src="/js/script.js"></script> -->
+    <script src="/js/pages/genColorbg.js" ></script>
     <script src="/js/pages/Animeinfo.js"></script>
 </body>
 
