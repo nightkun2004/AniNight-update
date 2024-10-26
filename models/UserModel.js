@@ -69,6 +69,14 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Article'
     }],
+    interactions: [
+        {
+            contentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },
+            viewedAt: Date,
+            liked: Boolean,
+            watchedDuration: Number, // กำหนดระยะเวลาที่รับชม (สำหรับเนื้อหาวิดีโอ)
+        }
+    ],
     Mememes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Meme'

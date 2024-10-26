@@ -3,16 +3,18 @@ const Article = require("../models/ArticleModel")
 const Anime = require("../models/AnimeModel")
 const Play = require("../models/PlayModel")
 const { getRecommendations } = require("../lib/generateRecommen")
+const { getRecommendedContent } = require("../Controllers/RecommenController")
 
 // ============================= get SINGLE POST
 // HOME PAGE MAIN
 const getPosts = async (req, res, next) => {
-    const userID = req.session.userlogin;
-    const lang = res.locals.lang;
-    const page = parseInt(req.params.page) || 1;
-    const limit = 15;
+    const userID = req.session.userlogin; 
+    const usertoken = userID?.user?._id; 
+    const lang = res.locals.lang; 
+    const page = parseInt(req.params.page) || 1; // กำหนดตัวแปร page
+    const limit = 15; 
+
     try {
-        // Fetch all posts and populate the 'creator.id' field
         const Posts = await Article.find()
             .populate('creator.id')
             .skip((page - 1) * limit)
@@ -20,30 +22,46 @@ const getPosts = async (req, res, next) => {
             .sort({ createdAt: -1 })
             .exec();
 
-        const totalPosts = await Article.countDocuments(); 
+        const totalPosts = await Article.countDocuments();
+        const TopViews = await Article.find()
+            .populate('creator.id')
+            .sort({ views: -1 })
+            .limit(10)
+            .exec();
 
-        const TopViews = await Article.find().populate('creator.id').sort({ views: -1 }).limit(10);
-        const Animelists = await Anime.find().sort({ createdAt: -1 }).exec();
+        const Animelists = await Anime.find()
+            .sort({ createdAt: -1 })
+            .exec();
 
-        const template = req.language === 'th_TH' ? './th/index' : './en/index';
+        const template = lang === 'th_TH' ? './th/index' : './en/index';
 
-        res.render(template, { 
-            active: "Home", 
-            Posts, 
+        let recommendedContent = [];
+        if (userID) {
+            recommendedContent = await getRecommendedContent(usertoken);
+        }
+
+        // ส่งตัวแปรทั้งหมดไปยัง EJS
+        res.render(template, {
+            active: "Home",
+            Posts: Posts || [],
             Animelists,
-            userID, 
-            TopViews, 
-            page, 
-            totalPages: Math.ceil(totalPosts / limit), 
-            lang 
+            userID,
+            TopViews,
+            page, // ส่งตัวแปร page ไปยัง EJS
+            totalPages: Math.ceil(totalPosts / limit),
+            lang,
+            recommendedContent,
         });
+
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
+        console.error("Error fetching posts:", error);
         res.status(500).render('./th/index', {
             error: errorMessage,
             userID,
             lang,
             translations: req.translations,
+            Posts: [],
         });
     }
 };

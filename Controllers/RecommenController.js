@@ -39,6 +39,42 @@ const getRecommen = async (req, res) => {
     }
 }
 
+
+async function getRecommendedContent(userId) {
+    const user = await User.findById(userId).populate('interactions.contentId');
+  
+    // ตรวจสอบว่าผู้ใช้มีข้อมูลหรือไม่
+    if (!user || !user.interactions.length) {
+        return []; // หากไม่มีการมีส่วนร่วม แนะนำว่าไม่ต้องแสดงเนื้อหา
+    }
+
+    // เก็บหมวดหมู่และแท็กที่ผู้ใช้เคยดูหรือมีส่วนร่วม
+    const viewedCategories = new Set();
+    const viewedTags = new Set();
+    const viewedUrlslug = new Set();
+
+    user.interactions.forEach((interaction) => {
+        const content = interaction.contentId;
+        if (content) {
+            viewedCategories.add(content.category);
+            viewedUrlslug.add(content.urlslug);
+            content.tags.forEach(tag => viewedTags.add(tag));
+        }
+    });
+
+    // ค้นหาเนื้อหาที่มีหมวดหมู่และแท็กคล้ายกับที่ผู้ใช้สนใจ
+    const recommendedContent = await Article.find({
+        $or: [
+            { categories: { $in: Array.from(viewedCategories) } },
+            { tags: { $in: Array.from(viewedTags) } },
+            { urlslug: { $in: Array.from(viewedUrlslug) } } // ใช้ Array.from แทน String.from
+        ]
+    }).limit(10);
+
+    return recommendedContent;
+}
+
 module.exports = {
-    getRecommen
+    getRecommen,
+    getRecommendedContent
 }

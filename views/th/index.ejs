@@ -126,6 +126,21 @@
        </script>
           </div>
         </div>
+
+
+        <% if (userID) {%>
+          <% if (recommendedContent.length > 0) { %>
+            <h2 class="text-xl font-semibold mb-4">เนื้อหาที่แนะนำสำหรับคุณ</h2>
+            <div class="grid grid-cols-1">
+                <% recommendedContent.forEach(post => { %>
+                    <%- include('./Component/carditem', { post }); %> <!-- Adjust according to your card item structure -->
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>ไม่มีเนื้อหาที่แนะนำในขณะนี้</p>
+        <% } %>
+        
+        <% } %>
       </aside>
     </div>
   </main>

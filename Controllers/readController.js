@@ -6,39 +6,67 @@ const Article = require("../models/ArticleModel")
 const getRead = async (req, res, next) => {
     const { urlslug } = req.params;
     const lang = res.locals.lang;
-    const userID = req.session.userlogin;
+    const userID = req.session.userlogin; // Ensure user ID is correctly extracted
+    const usertoken = req.session.userlogin?.user?._id; // Ensure user ID is correctly extracted
+
     try {
-        // Fetch all posts and populate the 'creator.id' field
-        const post = await Article.findOne({ urlslug: urlslug }).populate('creator.id').exec();
+        // Fetch the article and populate the creator field
+        const post = await Article.findOne({ urlslug }).populate('creator.id').exec();
         const recentUpdates = await Article.find().sort({ createdAt: -1 }).limit(4).populate('creator.id').exec();
+
         if (!post) {
             return res.status(404).render(`${lang}/read`, {
                 post: { title: "ไม่พบข้อมูล" },
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
                 userID,
-                translations: req.translations, lang
+                translations: req.translations,
+                lang
             });
         }
 
+        // Save user interaction if logged in
+        if (userID) {
+            console.log("ผู้ใช้เข้าสู่ระบบ", usertoken);
+
+            // Log the interaction with the correct contentId
+            const saveinteraction = await User.findByIdAndUpdate(usertoken, {
+                $push: {
+                    interactions: {
+                        contentId: post._id, // Correctly using post._id
+                        viewedAt: new Date(),
+                        liked: post.likes.length > 0, // Checks if there are any likes
+                        watchedDuration: post.views || 0
+                    }
+                }
+            });
+
+            console.log("บันทึกสิ่งที่น่าสนใน", saveinteraction.interactions);
+
+        }
+
+        // Increment the view count
         post.views = (post.views || 0) + 1;
         await post.save();
 
+        // Check if the post is saved by the user
         let isSaved = false;
-        if (userID && userID.user._id && post.savearticles) {
-            isSaved = post.savearticles.includes(userID.user._id.toString());
+        if (userID && post.savearticles) {
+            isSaved = post.savearticles.includes(userID.toString());
         }
-        // console.log(post)
-        // Pass 'posts' to the template
+
+        // Render the read page with the post details
         res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/read`, {
             error: errorMessage,
             userID,
-            translations: req.translations, lang
+            translations: req.translations,
+            lang
         });
     }
 };
+
 
 // GET : API
 const getReadAPI = async (req, res, next) => {
