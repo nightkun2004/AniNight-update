@@ -69,7 +69,7 @@ async function getRecommendedContent(userId) {
             { tags: { $in: Array.from(viewedTags) } },
             { urlslug: { $in: Array.from(viewedUrlslug) } } // ใช้ Array.from แทน String.from
         ]
-    }).limit(10);
+    }).sort({ createdAt: -1 }).limit(5);
 
     return recommendedContent;
 }

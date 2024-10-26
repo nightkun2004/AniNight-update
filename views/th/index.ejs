@@ -133,7 +133,29 @@
             <h2 class="text-xl font-semibold mb-4">เนื้อหาที่แนะนำสำหรับคุณ</h2>
             <div class="grid grid-cols-1">
                 <% recommendedContent.forEach(post => { %>
-                    <%- include('./Component/carditem', { post }); %> <!-- Adjust according to your card item structure -->
+                  <a href="/read/<%= post.urlslug %>" class="block">
+                    <!-- ใช้ aspect-w-16 และ aspect-h-9 เพื่อให้อัตราส่วนเป็น 16:9 -->
+                    <div class="relative aspect-w-16 aspect-h-9">
+                        <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>"
+                            class="w-full object-cover rounded-lg">
+                        <!-- <span
+                            class="absolute bottom-2 right-2 bg-overlay-dark-color text-white text-sm px-2 py-1 rounded">10:03</span> -->
+                    </div>
+                    <% if (post.creator && post.creator.id) { %>
+                        <div class="flex items-center mt-2">
+                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>"
+                                alt="<%= post.creator.username %>" class="w-9 h-9 rounded-full">
+                            <div class="ml-3">
+                                <h2 class="text-sm font-semibold text-black-color dark:text-black-color line-clamp-2">
+                                    <%= post.title %>
+                                </h2>
+                                <p class="text-xs text-secondary-color" data-link="/editor/<%= post.creator.username %>"><%= post.creator.username %></p>
+        
+                                <p class="text-xs text-secondary-color">การดู <%= formatNumber(post.views) %> วิว • <%= moment(post.createdAt).locale('th').fromNow() %></p>
+                            </div>
+                        </div>
+                        <% } %>
+                </a>
                 <% }) %>
             </div>
         <% } else { %>
