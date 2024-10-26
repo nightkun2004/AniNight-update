@@ -93,7 +93,32 @@
                                     <div class="mb-6 mt-4">
                                         <% if (typeof message !== 'undefined') { %>
                                             <div class="mb-4 text-emerald-500 text-center"><%= message %></div>
-                                        <% } %>
+                                 <% } %>
+                                 
+                                 <form id="logoutForm" action="/api/v2/logout" method="post">
+                                    <a href="#" class="active flex items-center text-center text-white bg-red-500 rounded-lg md:pl-5 md:w-full md:h-full" onclick="showLogoutPopup(event)">
+                                        <i class='bx bx-log-out text-2xl text-center pr-5'></i>
+                                        <span>ออกจากระบบ</span>
+                                    </a>
+                                </form>
+
+                                <!-- Logout Confirmation Popup -->
+<div id="logout-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-80 p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">ยืนยันการออกจากระบบ</h2>
+        <p class="text-gray-600 mb-6">คุณต้องการออกจากระบบหรือไม่?</p>
+        <div class="flex justify-end space-x-3">
+            <button onclick="hideLogoutPopup()"
+                class="px-4 py-2 rounded-md text-gray-600 hover:bg-gray-100">
+                ยกเลิก
+            </button>
+            <button onclick="confirmLogout()"
+                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                ออกจากระบบ
+            </button>
+        </div>
+    </div>
+</div>
                                 </section>
                                 <!-- Profile Details -->
                                 <section class="md:col-span-2 bg-gray-50 p-4 rounded-lg shadow-md">
@@ -172,5 +197,23 @@
 
     <script src="/js/script.js  "></script>
     <script src="/js/profile.js"></script>
+    <script>
+        // แสดง popup ยืนยันการ logout
+        function showLogoutPopup(event) {
+            event.preventDefault(); // ป้องกันการส่ง form ทันที
+            document.getElementById('logout-popup').classList.remove('hidden');
+        }
+    
+        // ซ่อน popup
+        function hideLogoutPopup() {
+            document.getElementById('logout-popup').classList.add('hidden');
+        }
+    
+        // ยืนยันการ logout และส่ง form
+        function confirmLogout() {
+            document.getElementById('logoutForm').submit();
+            hideLogoutPopup(); // ซ่อน popup หลังจากกดยืนยัน
+        }
+    </script>
 </body>
 </html>
