@@ -4,6 +4,8 @@ const Payment = require("../models/PaymentModel")
 const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
+const FormData = require('form-data');
+const axios = require('axios');
 
 const getDashboard = async (req, res) => {
     const lang = res.locals.lang;
@@ -114,24 +116,45 @@ const gatPlaymentEdit = async (req, res) => {
     }
 }
 
+// 
+// if (req.files && req.files.thumbnail) {
+           
+//     if (thumbnail.size > 5000000) {
+//         return res.status(400).json({ msg: `Image size exceeds 5MB limit`, translations: req.translations, lang, userID, article: searcharticle });
+//     }
+
+//     const fileName = thumbnail.name;
+//     const splittedFilename = fileName.split('.');
+//     const newFilename = crypto.randomUUID() + "." + splittedFilename[splittedFilename.length - 1];
+//     const newThumbnailPath = path.join(__dirname, '..', 'public/uploads/thumbnails', newFilename);
+
+//     try {
+//         await thumbnail.mv(newThumbnailPath); 
+//         updateData.thumbnail = newFilename;
+
+//         // Delete old thumbnail if exists
+//         if (searcharticle.thumbnail) {
+//             const oldThumbnailPath = path.join(__dirname, '..', 'public/uploads/thumbnails', searcharticle.thumbnail);
+//             fs.unlink(oldThumbnailPath, (err) => {
+//                 if (err) console.error("Error deleting old thumbnail:", err);
+//             });
+//         }
+//     } catch (err) {
+//         return res.status(500).json({ msg: `Error uploading new thumbnail: ${err}`, userID, translations: req.translations, lang, article: searcharticle });
+//     }
+// }
 
 // POST: /api/v2/edit/post/article/:id
 const EditPostArticle = async (req, res, next) => { 
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
+    const template = lang === 'th_TH' ? './th/pages/dashboard/edits/article' : './th/pages/dashboard/edits/article';
     try {
         const postId = req.body.update_id;
-        let { title, tags, content, categories, published, urlslug } = req.body;
-
-        const searcharticle = await Article.findById(postId).exec();
-
-        if (!searcharticle) {
-            return res.status(404).render('./th/pages/dashboard/edits/article', { error: "Post not found.", userID, translations: req.translations,lang   });
-        }
-
-        if (!title || !content) {
-            return res.status(400).render('./th/pages/dashboard/edits/article', { error: "Title and content are required.", userID, translations: req.translations,lang  , article: searcharticle });
-        }
+        let { title, tags, content, categories, published, urlslug } = req.body; 
+        
+        // ตรวจสอบว่า thumbnail ถูกส่งมาหรือไม่
+        const thumbnail = req.files?.thumbnail; 
 
         const tagsArray = tags ? tags.split(' ').map(tag => tag.replace('#', '').trim()).filter(tag => tag) : [];
 
@@ -143,51 +166,51 @@ const EditPostArticle = async (req, res, next) => {
 
         let updateData = { title, tags: tagsArray, content, categories, published, urlslug };
 
-        if (req.files && req.files.thumbnail) {
-            const { thumbnail } = req.files;
-            if (thumbnail.size > 5000000) {
-                return res.status(400).render('./th/pages/dashboard/edits/article', { error: `Image size exceeds 5MB limit`, translations: req.translations,lang  , userID, article: searcharticle });
+        // สร้าง FormData สำหรับการอัปโหลดไฟล์
+        const formData = new FormData();
+        formData.append('file', thumbnail.data, thumbnail.name);
+    
+        // อัปโหลดไฟล์ไปยังเซิร์ฟเวอร์
+        const response = await axios.post('https://sv7.ani-night.online/api/v2/upload/post/article', formData, {
+            headers: {
+                ...formData.getHeaders(),
+            },
+        });
+
+        // ตรวจสอบการตอบกลับจากการอัปโหลด
+        if (response && response.data) {
+            const imageUrl = response.data.url;
+            if (!imageUrl) {
+                return res.status(400).json({ msg: "Image URL not returned from upload.", userID, translations: req.translations, lang });
             }
-
-            const fileName = thumbnail.name;
-            const splittedFilename = fileName.split('.');
-            const newFilename = crypto.randomUUID() + "." + splittedFilename[splittedFilename.length - 1];
-            const newThumbnailPath = path.join(__dirname, '..', 'public/uploads/thumbnails', newFilename);
-
-            try {
-                await thumbnail.mv(newThumbnailPath);
-                updateData.thumbnail = newFilename;
-
-                // Delete old thumbnail if exists
-                if (searcharticle.thumbnail) {
-                    const oldThumbnailPath = path.join(__dirname, '..', 'public/uploads/thumbnails', searcharticle.thumbnail);
-                    fs.unlink(oldThumbnailPath, (err) => {
-                        if (err) console.error("Error deleting old thumbnail:", err);
-                    });
-                }
-            } catch (err) {
-                return res.status(500).render('./th/pages/dashboard/edits/article', { error: `Error uploading new thumbnail: ${err}`, userID, translations: req.translations,lang  , article: searcharticle });
-            }
+            updateData.thumbnail = imageUrl;
+        } else {
+            return res.status(400).json({ msg: "No response or data from upload.", userID, translations: req.translations, lang });
         }
 
+        // อัปเดตโพสต์ในฐานข้อมูล
         const updatedPost = await Article.findByIdAndUpdate(postId, updateData, { new: true });
-
         if (!updatedPost) {
-            return res.status(400).render('./th/pages/dashboard/edits/article', { error: "Couldn't update post.", userID, translations: req.translations,lang  , article: searcharticle });
+            return res.status(400).json({ msg: "Couldn't update post.", userID, translations: req.translations, lang});
         }
 
-        res.status(200).render('./th/pages/dashboard/edits/article', { message: `อัปเดตสำเร็จ`, userID, translations: req.translations,lang  , article: updatedPost });
+        res.status(200).json({ status: 'ok', msg: `อัปเดตสำเร็จ`, userID, translations: req.translations, lang, article: updatedPost });
 
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/dashboard/edits/article', {
-            error: errorMessage,
+        console.log("Error Response:", error.response ? error.response.data : errorMessage);
+        res.status(500).json({
+            msg: errorMessage,
             userID,
-            article: updatedPost,
-            translations: req.translations,lang  
+            article: null,
+            translations: req.translations,
+            lang  
         });
     }
+    
 };
+
+
 
 // ============================= DELETE Post
 // GET : /api/v2/post/article/delete/:id

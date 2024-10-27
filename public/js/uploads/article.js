@@ -42,6 +42,44 @@ function previewImages(input) {
     previewContainer.style.display = 'block'; // Show the container if images are present
 }
 
+const example_image_upload_handler = (blobInfo, progress) => {
+    return new Promise((resolve, reject) => {
+        // สร้าง FormData เพื่อส่งข้อมูล
+        const formData = new FormData();
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+        fetch('https://sv7.ani-night.online/api/v2/upload/post/article', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin' // หรือ 'include' หากต้องการส่ง cookies
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 403) {
+                    reject({ message: 'HTTP Error: ' + response.status, remove: true });
+                    return;
+                }
+                reject('HTTP Error: ' + response.status);
+            }
+
+            return response.json();
+        })
+        .then(json => {
+            // ตรวจสอบว่ามี location หรือไม่
+            if (!json || typeof json.src !== 'string') {
+                reject('Invalid JSON: ' + JSON.stringify(json));
+                return;
+            }
+
+            resolve(json.src); // ส่ง URL กลับไปยัง TinyMCE
+        })
+        .catch(error => {
+            reject('Image upload failed: ' + error.message);
+        });
+    });
+};
+
+
 // Initialize editor
 tinymce.init({
     selector: '#editor',
@@ -54,7 +92,8 @@ tinymce.init({
             var content = editor.getContent();
             document.getElementById('content').value = content;  // อัพเดทค่าใน input hidden
         });
-    }
+    },
+    images_upload_handler: example_image_upload_handler 
 });
 
 function selectLocalImage() {

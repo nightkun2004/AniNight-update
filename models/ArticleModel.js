@@ -50,7 +50,7 @@ const ArticleSchema = new mongoose.Schema({
     }],
     imagesarticle: {
         type: [String],
-    },
+    }, 
     views: { type: Number, default: 0 },
     urlslug: {
         type: String

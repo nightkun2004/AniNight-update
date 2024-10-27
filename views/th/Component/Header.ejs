@@ -46,10 +46,10 @@
                             <% if (userID) {%>
                             <a href="/@<%= userID.user.username %>" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">โปรไฟล์ของคุณ   </a>
                             <a href="/top/coin" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">เติมเงิน</a>
-                            <% if (userID.user.role === 'content_creator' || userID.user.username === 'Night') { %>
+                            <% if (userID.user.role === 'content_creator' || userID.user.role === 'user' || userID.user.username === 'Night') { %>
                                 <a href="/dashboard" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">จัดการเนื้อหา</a>
                             <% } %>
-                            <% if (userID.user.role === 'admin' || userID.user.role === 'moderator' || userID.user.username === 'Night') { %>
+                            <% if (userID.user.role === 'admin' || userID.user.role === 'moderator'  || userID.user.username === 'Night') { %>
                                 <a href="/admin" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">เข้าสู่ผู้ดูแล</a>
                             <% } %>
                             <% } %>
@@ -67,7 +67,7 @@
                         stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button> -->
-            <div class="hidden md:block">
+            <!-- <div class="hidden md:block">
                 <div class="flex items-center">
                     <div class="mx-auto">
                         <div class="flex justify-end">
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <% if (userID) {%>
             <div class="relative group hidden md:block">
                 <% if (userID.user.profilePicture) { %>

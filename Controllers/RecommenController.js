@@ -67,7 +67,7 @@ async function getRecommendedContent(userId) {
         $or: [
             { categories: { $in: Array.from(viewedCategories) } },
             { tags: { $in: Array.from(viewedTags) } },
-            { urlslug: { $in: Array.from(viewedUrlslug) } } // ใช้ Array.from แทน String.from
+            { urlslug: { $in: Array.from(viewedUrlslug) } } 
         ]
     }).populate('creator.id').sort({ createdAt: -1 }).limit(5);
 
