@@ -1,5 +1,119 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
+const Notification = require("../models/NotificationModel");
+const { sendEmail } = require("../transporter"); // นำเข้า transporter
+require("dotenv").config();
+
+const addViewToArticle = async (articleId, userId) => {
+    try {
+        const article = await Article.findById(articleId);
+        const user = await User.findById(userId);
+
+        if (!article || !user) return;
+
+        // Increment article views and user's earnings
+        article.views += 1;
+        user.earnings += 0.40;
+
+        // Update interactions
+        const interaction = user.interactions.find(interaction => interaction.contentId.equals(articleId));
+        if (interaction) {
+            interaction.viewedAt = new Date();
+            interaction.watchedDuration = (interaction.watchedDuration || 0) + 1;
+        } else {
+            user.interactions.push({
+                contentId: articleId,
+                viewedAt: new Date(),
+                watchedDuration: 1 // Initial watch duration
+            });
+        }
+
+        const notificationMessage = `คุณผู้ใช้ ${user.username} ได้รับรายได้ ${user.earnings.toFixed(2)} จากบทความ "${article.title}".`;
+        const lognotification = await Notification.create({
+            ownerId: article.creator.id,
+            message: notificationMessage,
+            articleId: article._id,
+        });
+
+        // สร้าง HTML สำหรับอีเมล
+        const emailHtml = `
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #4A90E2;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content p {
+            line-height: 1.6;
+            color: #333333;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            font-size: 12px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>การแจ้งเตือนรายได้</h1>
+        </div>
+        <div class="content">
+            <p>สวัสดี ${user.username},</p>
+            <p>คุณผู้ใช้ <strong>${user.username}</strong> ได้รับรายได้ <strong>${user.earnings.toFixed(2)}</strong> บาทจากบทความ <strong>${article.title}</strong>.</p>
+            <p>ขอบคุณที่เป็นส่วนหนึ่งของเรา!</p>
+        </div>
+        <div class="footer">
+            <p>© ${new Date().getFullYear()} Ani-Night. สงวนสิทธิ์.</p>
+        </div>
+    </div>
+</body>
+</html>
+`;
+
+        await sendEmail(user.email, 'แจ้งเตือนรายได้จากบทความ', emailHtml);
+        console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
+
+        // บันทึกการเปลี่ยนแปลง
+        await Promise.all([article.save(), user.save()]);
+        console.log("ผู้ใช้ได้ทั้งหมด", user.earnings);
+        console.log(notificationMessage);
+        console.log("Notification create", lognotification);
+    } catch (error) {
+        console.error("Error adding view to article:", error);
+    }
+};
+
 
 // ============================= get SINGLE POST
 // GET : /api/posts
@@ -26,7 +140,7 @@ const getRead = async (req, res, next) => {
 
         // Save user interaction if logged in
         if (userID) {
-            console.log("ผู้ใช้เข้าสู่ระบบ", usertoken);
+            // console.log("ผู้ใช้เข้าสู่ระบบ", usertoken);
 
             // Log the interaction with the correct contentId
             const saveinteraction = await User.findByIdAndUpdate(usertoken, {
@@ -40,13 +154,15 @@ const getRead = async (req, res, next) => {
                 }
             });
 
-            console.log("บันทึกสิ่งที่น่าสนใน", saveinteraction.interactions);
+            // console.log("บันทึกสิ่งที่น่าสนใน", saveinteraction.interactions);
 
         }
 
         // Increment the view count
         post.views = (post.views || 0) + 1;
-        await post.save();
+        addViewToArticle(post._id, post.creator.id);
+        // console.log()
+        await post.save("ครีเอตเอร์บทความ", post.creator.id);
 
         // Check if the post is saved by the user
         let isSaved = false;

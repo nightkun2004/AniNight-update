@@ -5,14 +5,33 @@ const Play = require("../models/PlayModel")
 const { getRecommendations } = require("../lib/generateRecommen")
 const { getRecommendedContent } = require("../Controllers/RecommenController")
 
+const checkScheduledArticles = async () => {
+    try {
+        const now = new Date();
+        const articles = await Article.find({ scheduledAt: { $lte: now }, published: false });
+
+        if (articles.length > 0) {
+            for (const article of articles) {
+                article.published = true;
+                await article.save();
+                console.log(`Article "${article.title}" has been published.`);
+            }
+        }
+    } catch (error) {
+        console.error("Error checking scheduled articles:", error);
+    }
+};
+
+setInterval(checkScheduledArticles, 60000); // ตั้งเวลาให้ทำงานทุกๆ 1 นาที (60000 มิลลิวินาที)
+
 // ============================= get SINGLE POST
 // HOME PAGE MAIN
 const getPosts = async (req, res, next) => {
     const userID = req.session.userlogin; 
     const usertoken = userID?.user?._id; 
     const lang = res.locals.lang; 
-    const page = parseInt(req.params.page) || 1; // กำหนดตัวแปร page
-    const limit = 15; 
+    const page = parseInt(req.params.page) || 1;
+    const limit = 25; 
 
     try {
         const Posts = await Article.find()
@@ -47,7 +66,7 @@ const getPosts = async (req, res, next) => {
             Animelists,
             userID,
             TopViews,
-            page, // ส่งตัวแปร page ไปยัง EJS
+            page,
             totalPages: Math.ceil(totalPosts / limit),
             lang,
             recommendedContent,

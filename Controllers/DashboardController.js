@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
 const Payment = require("../models/PaymentModel")
+const Notification = require("../models/NotificationModel");
 const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
@@ -16,7 +17,10 @@ const getDashboard = async (req, res) => {
     const daysLeft = Math.max(Math.ceil((deadline - today) / (1000 * 60 * 60 * 24)), 0); // Calculate days left
 
     try {
-        const userDatas = await User.findById(req.user.id).populate('articles').exec();
+        const userDatas = await User.findById(req.user.id).populate({
+            path: 'articles',
+            options: { sort: { createdAt: -1 } }
+        }).exec();
         const publishedArticlesCount = userDatas.articles.filter(article => article.published).length;
         res.render("./th/pages/dashboard/index", { userID, userDatas, daysLeft, publishedArticlesCount, translations: req.translations,lang   });
     } catch (error) {
@@ -28,6 +32,54 @@ const getDashboard = async (req, res) => {
         });
     }
 };
+
+const getNotifications = async (req, res) => {
+    const userID = req.session.userlogin; // ตรวจสอบว่าผู้ใช้ล็อกอินอยู่
+    try {
+        const userId = req.params.id; // รับ userID จาก parameters
+        const user = await User.findById(userId); // แก้ไขเป็น userId
+
+        // ตรวจสอบว่าผู้ใช้มีอยู่ในฐานข้อมูลหรือไม่
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // ดึงรายการแจ้งเตือนทั้งหมดที่เกี่ยวข้องกับผู้ใช้
+        const notifications = await Notification.find({ ownerId: userId }).sort({ createdAt: -1 }); // ใช้ ownerId
+        // console.log(notifications); 
+
+        // เรนเดอร์หน้า EJS พร้อมข้อมูลแจ้งเตือน
+        res.render('th/pages/notification/notifications', { notifications, user, userID });
+    } catch (error) {
+        console.error('Error retrieving notifications:', error); // เพิ่มการล็อกข้อผิดพลาด
+        res.render('th/pages/notification/notifications', { notifications: [], userID, err: 'Error retrieving notifications', error });
+    }
+};
+
+
+
+
+const getNotificationisRead = async (req, res) => {
+    const userID = req.session.userlogin;
+    try {
+        const notification = await Notification.findById(req.params.notificationId);
+
+        // ตรวจสอบว่าการแจ้งเตือนและผู้ใช้มีอยู่จริง
+        if (!notification) {
+            return res.status(404).render("th/pages/notification/notifications",{ userID, message: 'Notification not found' });
+        }
+
+        // ทำเครื่องหมายการแจ้งเตือนว่าอ่านแล้ว
+        notification.isRead = true;
+        await notification.save();
+
+        // ส่งกลับข้อความที่เหมาะสม
+        res.redirect(`/notifications/${userID.user._id}`);
+    } catch (error) {
+        res.status(500).json({ message: 'Error marking notification as read', error });
+    }
+};
+
 
 // GET: /api/v2/edit/post/article
 const Getedit = async (req, res) => {
@@ -151,47 +203,55 @@ const EditPostArticle = async (req, res, next) => {
     const template = lang === 'th_TH' ? './th/pages/dashboard/edits/article' : './th/pages/dashboard/edits/article';
     try {
         const postId = req.body.update_id;
-        let { title, tags, content, categories, published, urlslug } = req.body; 
-        
-        // ตรวจสอบว่า thumbnail ถูกส่งมาหรือไม่
-        const thumbnail = req.files?.thumbnail; 
+        const { title, tags, content, categories, published, urlslug } = req.body; 
+        const thumbnail = req.files?.thumbnail; // รูปภาพใหม่ที่อัปโหลด (ถ้ามี)
 
         const tagsArray = tags ? tags.split(' ').map(tag => tag.replace('#', '').trim()).filter(tag => tag) : [];
 
         const validCategories = ["อาหาร", "การท่องเที่ยว", "ข่าวสาร", "การ์ตูน", "เพลง", "บันเทิง", "อนิเมะ"];
-        categories = Array.isArray(categories) ? categories : [categories];
-        categories = categories.filter(cat => validCategories.includes(cat));
+        let selectedCategories = Array.isArray(categories) ? categories : [categories];
+        selectedCategories = selectedCategories.filter(cat => validCategories.includes(cat));
 
-        published = published === 'on' || published === true;
+        const isPublished = published === 'on' || published === true;
 
-        let updateData = { title, tags: tagsArray, content, categories, published, urlslug };
+        let updateData = { title, tags: tagsArray, content, categories: selectedCategories, published: isPublished, urlslug };
 
-        // สร้าง FormData สำหรับการอัปโหลดไฟล์
-        const formData = new FormData();
-        formData.append('file', thumbnail.data, thumbnail.name);
-    
-        // อัปโหลดไฟล์ไปยังเซิร์ฟเวอร์
-        const response = await axios.post('https://sv7.ani-night.online/api/v2/upload/post/article', formData, {
-            headers: {
-                ...formData.getHeaders(),
-            },
-        });
+        // เช็คว่ามีไฟล์อัปโหลดใหม่หรือไม่
+        if (thumbnail) {
+            // สร้าง FormData สำหรับการอัปโหลดไฟล์
+            const formData = new FormData();
+            formData.append('file', thumbnail.data, thumbnail.name);
 
-        // ตรวจสอบการตอบกลับจากการอัปโหลด
-        if (response && response.data) {
-            const imageUrl = response.data.url;
-            if (!imageUrl) {
-                return res.status(400).json({ msg: "Image URL not returned from upload.", userID, translations: req.translations, lang });
+            // อัปโหลดไฟล์ไปยังเซิร์ฟเวอร์
+            const response = await axios.post('https://sv7.ani-night.online/api/v2/upload/post/article', formData, {
+                headers: {
+                    ...formData.getHeaders(),
+                },
+            });
+
+            // ตรวจสอบการตอบกลับจากการอัปโหลด
+            if (response && response.data) {
+                const imageUrl = response.data.url;
+                if (!imageUrl) {
+                    return res.status(400).json({ msg: "Image URL not returned from upload.", userID, translations: req.translations, lang });
+                }
+                updateData.thumbnail = imageUrl;
+            } else {
+                return res.status(400).json({ msg: "No response or data from upload.", userID, translations: req.translations, lang });
             }
-            updateData.thumbnail = imageUrl;
         } else {
-            return res.status(400).json({ msg: "No response or data from upload.", userID, translations: req.translations, lang });
+            // ถ้าไม่มีการอัปโหลดภาพใหม่ ให้ใช้ภาพเดิม
+            const existingPost = await Article.findById(postId);
+            if (!existingPost) {
+                return res.status(400).json({ msg: "Post not found.", userID, translations: req.translations, lang });
+            }
+            updateData.thumbnail = existingPost.thumbnail; // ใช้ภาพเดิม
         }
 
         // อัปเดตโพสต์ในฐานข้อมูล
         const updatedPost = await Article.findByIdAndUpdate(postId, updateData, { new: true });
         if (!updatedPost) {
-            return res.status(400).json({ msg: "Couldn't update post.", userID, translations: req.translations, lang});
+            return res.status(400).json({ msg: "Couldn't update post.", userID, translations: req.translations, lang });
         }
 
         res.status(200).json({ status: 'ok', msg: `อัปเดตสำเร็จ`, userID, translations: req.translations, lang, article: updatedPost });
@@ -207,7 +267,6 @@ const EditPostArticle = async (req, res, next) => {
             lang  
         });
     }
-    
 };
 
 
@@ -301,6 +360,8 @@ const deletePostArticle = async (req, res, next) => {
 
 module.exports = {
     getDashboard,
+    getNotifications,
+    getNotificationisRead,
     Getedit,
     gatManagePlayment,
     gatPlaymentEdit,

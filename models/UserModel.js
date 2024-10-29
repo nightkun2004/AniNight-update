@@ -96,6 +96,10 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Anime'
     }],
+    earnings: {
+        type: Number,
+        default: 0 // ฟิลด์ใหม่สำหรับเก็บรายได้จากบทความ
+    },
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);

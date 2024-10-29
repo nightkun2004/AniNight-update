@@ -68,6 +68,7 @@ const ArticleSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    scheduledAt: { type: Date, default: null },
     adsDisplayed: { type: Number, default: 0 }
 }, { timestamps: true });
 

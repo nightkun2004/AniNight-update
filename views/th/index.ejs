@@ -52,9 +52,9 @@
         <h2 class="text-xl font-semibold mb-4">อัพเดตใหม่ 🎃</h2>
         <% if (Posts.length> 0 && typeof error === 'undefined') { %>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <!-- Example Anime Card -->
-         <%- include('./Component/carditem') %>
-          <!-- Add more Anime Cards here -->
+          <% Posts.slice(0, 10).forEach((post, index)=> { %>
+            <%- include('./Component/carditem', {post: post, index: index}) %>
+             <% }) %>
         </div>
         <% } else { %>
             <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
@@ -130,32 +130,10 @@
 
         <% if (userID) {%>
           <% if (recommendedContent.length > 0) { %>
-            <h2 class="text-xl font-semibold mb-4">เนื้อหาที่แนะนำสำหรับคุณ</h2>
+            <h2 class="text-xl font-semibold mb-4 mt-5">เนื้อหาที่แนะนำสำหรับคุณ</h2>
             <div class="grid grid-cols-1">
-                <% recommendedContent.forEach(post => { %>
-                  <a href="/read/<%= post.urlslug %>" class="block">
-                    <!-- ใช้ aspect-w-16 และ aspect-h-9 เพื่อให้อัตราส่วนเป็น 16:9 -->
-                    <div class="relative aspect-w-16 aspect-h-9">
-                        <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>"
-                            class="w-full object-cover rounded-lg">
-                        <!-- <span
-                            class="absolute bottom-2 right-2 bg-overlay-dark-color text-white text-sm px-2 py-1 rounded">10:03</span> -->
-                    </div>
-                    <% if (post.creator && post.creator.id) { %>
-                        <div class="flex items-center mt-2">
-                            <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>"
-                                alt="<%= post.creator.username %>" class="w-9 h-9 rounded-full">
-                            <div class="ml-3">
-                                <h2 class="text-sm font-semibold text-black-color dark:text-black-color line-clamp-2">
-                                    <%= post.title %>
-                                </h2>
-                                <p class="text-xs text-secondary-color" data-link="/editor/<%= post.creator.username %>"><%= post.creator.username %></p>
-        
-                                <p class="text-xs text-secondary-color">การดู <%= formatNumber(post.views) %> วิว • <%= moment(post.createdAt).locale('th').fromNow() %></p>
-                            </div>
-                        </div>
-                        <% } %>
-                </a>
+                <% recommendedContent.forEach((post, index) => { %>
+                  <%- include('./Component/carditem', {post: post, index: index}) %> 
                 <% }) %>
             </div>
         <% } else { %>

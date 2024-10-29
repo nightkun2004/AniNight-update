@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการแจ้งเตือน</title>
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <%- include('../../Component/Header') %>
+    <div class="max-w-md mx-auto mt-8">
+        <div class="mb-6 mt-4">
+            <% if (typeof err !== 'undefined') { %>
+                <div class="mb-4 text-red-500 text-center"><%= err %></div>
+            <% } %>
+        </div>
+        <h2 class="text-xl font-bold mb-4">รายการแจ้งเตือนของคุณ </h2>
+        <ul class="space-y-2">
+            <% notifications.forEach(notification => { %>
+                <li>
+                    <a href="/notifications/<%= notification._id %>/read" class="<%= notification.isRead ? 'bg-gray-200' : 'bg-white' %> p-4 rounded shadow mb-5 block">
+                        <p><%= notification.message %></p>
+                        <p class="text-gray-500 text-sm"> <%= moment(notification.createdAt).locale('th').fromNow() %></p>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>        
+    </div>
+
+    <%- include('../../Component/Footer') %>
+</body>
+</html>

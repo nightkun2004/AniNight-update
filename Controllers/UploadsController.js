@@ -33,7 +33,7 @@ const CreateArticle = async (req, res, next) => {
     const userID = req.session.userlogin;
 
     try {
-        const { title, tags, content, categories, urlslug } = req.body;
+        const { title, tags, content, categories, urlslug, scheduledAt  } = req.body;
         const { thumbnail } = req.files;
 
         if (!thumbnail) {
@@ -66,7 +66,8 @@ const CreateArticle = async (req, res, next) => {
             tags: tagsArray,
             thumbnail: `${thumbnailFilename}`,
             urlslug: urlslug || postId,
-            published: req.body.published === 'on',
+            published: req.body.published === 'on' && !scheduledAt,
+            scheduledAt: scheduledAt ? new Date(scheduledAt) : null,  // กำหนดเวลาการโพสต์
             creator: {
                 id: useridnew._id,
                 username: useridnew.username,
@@ -77,6 +78,7 @@ const CreateArticle = async (req, res, next) => {
 
         const Articlesave = new Article(postcreate);
         await Articlesave.save();
+        console.log(Articlesave)
         await User.findByIdAndUpdate(req.user.id, { $push: { articles: Articlesave._id } }, { new: true });
 
         res.json({ status: 'ok', Articlesave, msg: "ทำการสร้างโพสต์สำเร็จ", userID, translations: req.translations, lang });
