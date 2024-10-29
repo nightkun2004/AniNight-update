@@ -48,7 +48,7 @@
                             <% if (userID) {%>
                             <a href="/@<%= userID.user.username %>" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">โปรไฟล์ของคุณ   </a>
                             <a href="/top/coin" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">เติมเงิน</a>
-                            <% if (userID.user.role === 'content_creator' || userID.user.role === 'user' || userID.user.username === 'Night') { %>
+                            <% if (userID.user.role === 'content_creator' || userID.user.role === 'user' || userID.user.username === 'Night'  || userID.user.role === 'admin') { %>
                                 <a href="/dashboard" class="text-black text-md md:text-text-1xl px-5 py-3 hover:bg-gray-100 rounded-lg">จัดการเนื้อหา</a>
                             <% } %>
                             <% if (userID.user.role === 'admin' || userID.user.role === 'moderator'  || userID.user.username === 'Night') { %>

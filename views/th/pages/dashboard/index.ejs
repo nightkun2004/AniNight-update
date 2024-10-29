@@ -45,7 +45,7 @@
                 <!-- Card 2: Published Articles -->
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <h2 class="text-xl font-semibold text-gray-700">บทความที่เผยแพร่</h2>
-                    <p class="text-gray-500">
+                    <p class="text-gray-500"  id="articles-count">
                         <%= userDatas.articles.filter(article => article.published).length %>
                     </p>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <h2 class="text-xl font-semibold text-gray-700">บทความที่ยังไม่เผยแพร่</h2>
                     <p class="text-gray-500">
-                        <%= userDatas.articles.filter(article => !article.published).length %>
+                        <%= userDatas.articles.filter(article => !article.published).length %> 
                     </p>
                 </div>   
                 
@@ -65,20 +65,38 @@
                        data-published-articles="<%= publishedArticlesCount %>">
                        <!-- This will be updated dynamically -->
                     </p>
-                    <div class="relative bg-gray-200 rounded-full h-4 mt-2">
-                        <div id="progress-bar-article" class="absolute top-0 left-0 h-full bg-green-500 rounded-full"></div>
+                    <p class="text-gray-700">เราต้องการ <span class="font-bold">5</span> บทความ</p>
+                    <div class="mt-2 bg-gray-200 rounded-full">
+                        <div id="article-bar"
+                            class="bg-blue-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                            style="width: 0%">0%</div>
                     </div>
-                    <p id="progress-text">0/5</p>
+                    <!-- <p id="progress-text">0/5</p> -->
                 </div>
 
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-700">ต้องเผยแพร่บทความภายใน</h2>
-                    <p id="days-left" class="text-gray-500"><%= daysLeft %> วัน</p>
-                    <div class="relative bg-gray-200 rounded-full h-4 mt-2">
-                        <div id="deadline-bar" class="absolute top-0 left-0 h-full bg-blue-500 rounded-full"></div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold text-gray-800">ผู้ติดตาม</h3>
+                    <p class="text-3xl text-gray-600" id="followers-count">
+                        <%= userDatas.followers.length %> คน
+                    </p>
+                    <p class="text-gray-700">เราต้องการ <span class="font-bold">100</span>
+                        ผู้ติดตามเพื่อเริ่มสร้างรายได้</p>
+                    <div class="mt-2 bg-gray-200 rounded-full">
+                        <div id="follower-bar"
+                            class="bg-blue-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                            style="width: 0%">0%</div>
                     </div>
-                    <p class="text-gray-500">ถึงจะสร้างรายได้</p>
                 </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">รายได้จากบทความ</h2>
+                    <p class="text-gray-500"><strong>ยอดทั้งหมด</strong> <%= userDatas.earnings.toFixed(2) %> บาท</p>
+                    <% if (userDatas.role === 'user' || userDatas.username === 'Night'  ||userDatas.role === 'admin') { %>
+                        <p class="notification text-red-500">
+                            <strong>*โปรดทราบ:</strong> รายได้ของคุณอาจจะยังไม่เข้าบัญชีหากคุณยังไม่ผ่านกฎของเรา หากผ่านกฎแล้วให้เพิ่มข้อมูลชำระเงินเพื่อรับเงินจากผลงาน <strong> แล้วระบบจะเปิดให้อัตโนมัติ</strong>
+                        </p> 
+                    <% } %>
+                </div>
+                <p id="monetization-message" class="text-center text-2xl text-blue-600 font-medium mt-4"></p>
             </section>
 
             <!-- Articles Management Section -->
@@ -138,8 +156,8 @@
             </section>
         </main>
     </div>
-    <script src="/js/script.js"></script>
-    <script>
+    <!-- <script src="/js/script.js"></script> -->
+    <!-- <script>
         function deletearticle(event, postId) {
             event.preventDefault();
             Swal.fire({
@@ -191,6 +209,37 @@
             updateProgressBar(totalArticles, publishedArticles);
             updateDeadlineBar(daysLeft);
         });
+    </script> -->
+     <script>
+        // Set the target thresholds
+        const followerTarget = 100;
+        const articleTarget = 5;
+
+        // Get the actual follower and article count from the data
+        const actualFollowers = parseInt(document.getElementById('followers-count').textContent, 10);
+        const actualArticles = parseInt(document.getElementById('articles-count').textContent, 10);
+
+        // Calculate the percentages
+        const followerPercent = Math.min((actualFollowers / followerTarget) * 100, 100);
+        const articlePercent = Math.min((actualArticles / articleTarget) * 100, 100);
+
+        // Update the follower progress bar
+        const followerBar = document.getElementById('follower-bar');
+        followerBar.style.width = `${followerPercent}%`;
+        followerBar.textContent = `${Math.floor(followerPercent)}%`;
+
+        // Update the article progress bar
+        const articleBar = document.getElementById('article-bar');
+        articleBar.style.width = `${articlePercent}%`;
+        articleBar.textContent = `${Math.floor(articlePercent)}%`;
+
+        // Check if the user meets the monetization requirements
+        const monetizationMessage = document.getElementById('monetization-message');
+        if (followerPercent === 100 && articlePercent === 100) {
+            monetizationMessage.textContent = 'ยินดีด้วย! คุณผ่านเกณฑ์เพื่อเปิดการสร้างรายได้ เรากำลังตรวจสอบบัญชีคุณ คุณจะได้รับการแจ้งในกล่องข้อความหรืออีเมล';
+        } else {
+            monetizationMessage.textContent = 'ยังไม่ผ่านเกณฑ์การสร้างรายได้';
+        }
     </script>
 </body>
 </html>
