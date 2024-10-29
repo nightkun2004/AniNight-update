@@ -14,7 +14,7 @@ const addViewToArticle = async (articleId, userId) => {
         const pointsPerView = 1;
         const ratePerPoint = 0.10;
         article.views += 1; // เพิ่มยอดวิวของบทความ
-        user.earnings += pointsPerView * ratePerPoint; 
+        user.earnings += pointsPerView * ratePerPoint;
 
         // Update interactions
         const interaction = user.interactions.find(interaction => interaction.contentId.equals(articleId));
@@ -247,11 +247,26 @@ const getRead = async (req, res, next) => {
 
         }
 
-        // Increment the view count
-        post.views = (post.views || 0) + 1;
-        addViewToArticle(post._id, post.creator.id);
-        // console.log()
-        await post.save("ครีเอตเอร์บทความ", post.creator.id);
+        const lastRead = req.cookies[`lastRead_${post._id}`];
+        const now = new Date();
+
+        // if (!lastRead || (now - new Date(lastRead)) >= 10 * 60 * 1000) {
+        //     post.views = (post.views || 0) + 1;
+        //     addViewToArticle(post._id, post.creator.id);
+        //     await post.save("ครีเอตเอร์บทความ", post.creator.id);
+
+        //     res.cookie(`lastRead_${post._id}`, now.toISOString(), { maxAge: 10 * 60 * 1000, httpOnly: true });
+        // }
+
+        if (!lastRead || (now - new Date(lastRead)) >= 2 * 60 * 1000) {
+            // Increment the view count
+            post.views = (post.views || 0) + 1;
+            addViewToArticle(post._id, post.creator.id);
+            await post.save("ครีเอตเอร์บทความ", post.creator.id);
+
+            // Set a cookie for the article read timestamp
+            res.cookie(`lastRead_${post._id}`, now.toISOString(), { maxAge: 2 * 60 * 1000, httpOnly: true });
+        }
 
         // Check if the post is saved by the user
         let isSaved = false;
