@@ -17,13 +17,18 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: function() {
-            return !this.googleId;  // ถ้าไม่มี googleId ให้บังคับให้ใส่ password
+            return !this.googleId; 
         }
     },
     bank: {
         truemoneywallet: {
-            truemonname: String,
-            truemoneynumber: Number
+            name: String,
+            truemoneynumber: String 
+        },
+        bankaccount: {
+            name: String, // ชื่อบัญชีธนาคาร
+            number: String, // เลขบัญชีธนาคาร
+            bankname: String // ชื่อธนาคาร
         }
     },
     // serverUrl: {

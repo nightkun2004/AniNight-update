@@ -1,29 +1,31 @@
-<% if (post.published || new Date(post.scheduledAt) <= Date.now()) { %>
+<% if (post.published) { %>
     <a href="/read/<%= post.urlslug %>" class="block">
         <div class="relative aspect-w-16 aspect-h-9">
             <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>"
                 class="w-full object-cover rounded-lg">
-            <!-- <span
-                class="absolute bottom-2 right-2 bg-overlay-dark-color text-white text-sm px-2 py-1 rounded">10:03</span> -->
+            <!-- <span class="absolute bottom-2 right-2 bg-overlay-dark-color text-white text-sm px-2 py-1 rounded">10:03</span> -->
         </div>
-        <% if (post.creator && post.creator.id) { %>
-            <div class="flex items-center mt-2">
+        <div class="flex items-center mt-2 p-4">
+            <% if (post.creator && post.creator.id) { %>
                 <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>"
-                    alt="<%= post.creator.username %>" class="w-9 h-9 rounded-full">
-                <div class="ml-3">
-                    <h2 class="text-sm font-semibold text-black-color dark:text-black-color line-clamp-2">
-                        <%= post.title %>
+                    alt="<%= post.creator.username %>" class="w-10 h-10 rounded-full">
+                <div class="ml-3 flex-1">
+                    <h2 class="text-sm font-semibold text-white line-clamp-2">
+                       <%= post.title %>
                     </h2>
-                    <p class="text-xs text-secondary-color" data-link="/editor/<%= post.creator.username %>">
+                    <p class="text-xs text-secondary-color" href="/channel/<%= post.creator.username %>" data-link="/editor/<%= post.creator.username %>">
                         <%= post.creator.username %>
                     </p>
                     <p class="text-xs text-secondary-color">การดู <%= formatNumber(post.views) %> วิว •
                         <%= moment(post.createdAt).locale('th').fromNow() %>
                     </p>
                 </div>
-            </div>
-        <% } %>
+            <% } else { %>
+                <p class="text-gray-600 text-sm">โพสต์นี้ไม่มีผู้สร้าง</p>
+            <% } %>
+        </div>
     </a>
+    
 
     
         <% if ((index + 1) % 4 === 0) { %>

@@ -17,12 +17,27 @@
                 </button>
 
                 <div class="bg-white card_menus px-4 absolute top-20 rounded-lg shadow-lg hidden">
+                    <style>
+                        .scroll_custom::-webkit-scrollbar {
+                            display: none;
+                        }
+                    </style>
                     <div class="overflow-y-auto h-52 scroll_custom">
                         <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/">หน้าหลัก</a></div>
                         <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/foryou">แนะนำเนื้อหา</a></div>
                         <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/Trending/th">เนื้อหามาแรกที่สุด</a></div>
                         <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/schedule/anime">ตารางอนิเมะ</a></div>
                         <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/memes">มีม</a></div>
+                        <% if (userID) {%>
+                            <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/@<%= userID.user.username %>">โปรไฟล์ของคุณ</a></div>
+                            <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/top/coin">เติมเงิน</a></div>
+                            <% if (userID.user.role === 'content_creator' || userID.user.role === 'user' || userID.user.username === 'Night'  || userID.user.role === 'admin') { %>
+                                <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/dashboard">จัดการเนื้อหา</a></div>
+                            <% } %>
+                            <% if (userID.user.role === 'admin' || userID.user.role === 'moderator'  || userID.user.username === 'Night') { %>
+                                <div class="option text-black px-2 py-3 hover:text-blue-400 cursor-pointer"><a href="/admin">เข้าสู่ผู้ดูแล</a></div>
+                            <% } %>
+                            <% } %>
                     </div>
                 </div>
             </div>

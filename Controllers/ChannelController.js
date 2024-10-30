@@ -13,6 +13,9 @@ const getChannel = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     const username = req.params.username;
+    const page = parseInt(req.params.page) || 1;
+    const limit = 25; 
+    
     try {
        
         const channelUser = await User.findOne({username: username}).populate('articles').exec()

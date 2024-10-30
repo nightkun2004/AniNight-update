@@ -9,6 +9,7 @@
     </title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/pages/editor.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
@@ -28,20 +29,179 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-white-color dark:bg-white-color transition-colors duration-300 font-open-sans">
+<body>
 
-    <div class="flex flex-col h-screen overflow-hidden">
-        <%- include('../../Component/Header/Header') %>
-            <!-- Main Layout -->
-            <main class="flex flex-1 overflow-hidden">
-                <%- include('../../Component/Sidebar/Sidebar') %>
-                    <!-- Overlay สำหรับหน้าจอขนาดเล็กเมื่อ Sidebar เปิด -->
-                    <div id="overlay"
-                        class="fixed inset-0 bg-overlay-dark-color opacity-0 pointer-events-none transition-opacity duration-300 md:hidden">
+        <%- include('../../Component/Header') %>
+
+
+        <main class="container-editor">
+            <div class="content-editor">
+                <div class="editor-profile">
+                    <% if (channel.bannerImagePath) { %>
+                        <div class="banner-file w-full">
+                            <img style="user-select: none;" src="/uploads/banners/<%= channel.bannerImagePath %>" alt="banner" class="w-full rounded-lg h-full object-cover">
+                        </div>
+                    <% } %>
+                    <div class="profile-user">
+                        <div class="profile-pic">
+                            <img src="/uploads/profiles/<%= channel.profilePicture %>" alt="<%= channel.username %>">
+                        </div>
                     </div>
+                    
+                </div>
+        
+                <div class="user-info">
+                    <div class="user-do">
+                        <div class="profile-name">
+                            <h2><%= channel.username %></h2>
+                            <p><%= channel.bio %></p>
+                        </div>
+                        <div class="mt-4 flex justify-center sm:justify-start space-x-4">
+                            <span class="text-sm text-gray-600"><strong> <%= formatNumber(channel.followers.length) %></strong> : ผู้ติดตาม</span>
+                            <span class="text-sm text-gray-600"><strong><%= formatNumber(channel.following.length) %></strong> : กำลังติดตาม</span>
+                        </div>
+                        <div class="mt-4 flex justify-center md:justify-start">
+                            <% if (userID) { %>
+                                <% if (channel.followers.includes(userID.user._id)) { %>
+                                    <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 w-full py-2 rounded-lg"
+                                        onclick="confirmUnfollow('<%= channel._id %>')">
+                                        <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
+                                    </button>
+                                <% } else { %>
 
+                                    <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 w-full rounded-lg"
+                                            onclick="toggleFollow('<%= channel._id %>')">
+                                        <i class="fa-solid fa-user-plus"></i> ติดตาม
+                                    </button>
+                                <% } %>
+                            <% } else { %>
+                              <a href="/auth/login" class="bg-pink-600 px-4 py-2 hover:bg-pink-800 rounded-lg text-white">ติดตาม</a>
+                            <% } %>
+                        </div>
+                        <ul class="items-center">
+                            <li class="text-sm text-gray-400"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
+                        </ul>
+                        <!-- <div class="profile-share-form">
+                            <input class="input-sh" type="text" id="profileLink" value="https://nightkun/user/<%= channel.username %>" readonly>
+                            <button class="copy-link-button" onclick="copyProfileLink()">แชร์โปรไฟล์ของคุณ</button>
+                            <div class="notification" id="copyNotification">ลิงก์ถูกคัดลอกแล้ว!</div>
+                        </div>                     -->
+        
+                        <div class="shares"> 
+                            <% if (channel && channel.youtube) { %> 
+                                <button class="btns"><a href="<%= channel.youtube %>" target="_blank"><i class="bi bi-youtube"></i>YouTube</a></button>
+                            <% } %>
+                            
+                            <% if (channel && channel.tiktok) { %>
+                                <button class="btns"><a href="<%= channel.tiktok %>" target="_blank"><i class="fa-brands fa-tiktok"></i>TikTok</a></button>
+                            <% } %>
+                                                    
+                            <% if (channel && channel.facebook) { %>
+                                <button class="btns"><a href="<%= channel.facebook %>" target="_blank"><i class="bi bi-facebook"></i>Facebook</a></button>
+                            <% } %>                         
+                        </div>
+                        <hr style="border: none; background-color: #ccc; height: 1px; width: 100%;">
+                    </div>
+                </div>
+        
+
+                <div class="content-user-app">
+                    <div class="header-userarticle">
+                        <nav>
+                            <ul class="article-user-menus">
+                                <li class="item-article-user active" onclick="showSection('home-section', this)" id="home-tab"> 
+                                    <a href="javascript:void(0)">หน้าหลัก</a>
+                                </li>
+                                <li class="item-article-user" onclick="showSection('videos-section', this)" id="videos-tab">
+                                    <a href="javascript:void(0)">มีม</a>
+                                </li>
+                                <% if (channel && channel.posts) { %> 
+                                <li class="item-article-user" onclick="showSection('posts-section', this)" id="posts-tab">
+                                    <a href="javascript:void(0)">โพสต์</a>
+                                </li>
+                                <% } %>    
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-fb+5w+4e-db+86"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="7071553309"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
+                <section class="home-section" id="home-section">
+                    <h2 class="app-h2">ผลงานของครีเอเตอร์</h2>
+                    <% if (channel.articles.length > 0) { %>
+                        <div class="article-user">
+                        <% channel.articles.forEach(item => { %>
+                            <a class="hover-de" target="_blank" href="/read/<%= item.urlslug %>">
+                                <div class="item-article-user">
+                                    <div class="article-pic">
+                                        <img src="/uploads/thumbnails/<%= item.thumbnail %>" alt="">
+                                        <p class="views"><i class="bi bi-eye"></i><%= formatNumber(item.views) %></p>
+                                    </div>
+                                    <div class="name-article">
+                                        <h2><%= item.title.substring(0, 40) + '...' %></h2>
+                                    </div>
+                                </div>
+                            </a>
+                        <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p style="text-align: center;">ครีเอเตอร์นี้ยังไม่มีบทความครับ..</p>
+                    <% } %>
+                    
+                </section>
+
+                <section class="videos-section" id="videos-section" style="display: none;">
+                    <h2 class="videos-all app-h2">
+                        มีมผู้สร้าง
+                    </h2>
+    
+    
+                    <% if (channel.Mememes.length > 0) { %>
+                        <div class="videos article-user">
+                            <% channel.Mememes.forEach(item => { %>
+                                <a class="hover-de" target="_blank" href="/play/<%= item.videoid %>">
+                                    <div class="item-article-user">
+                                        <div class="article-pic">
+                                            <video src="<%= item.memeimageUrl %>" controls loop muted></video>
+                                        </div>
+                                        <div class="name-article">
+                                            <h2><%= item.description %></h2>
+                                        </div>
+                                    </div>
+                                </a>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p style="text-align: center; color: #000;">ยังไม่มีเนื้อหาวีดีโอที่สร้างครับ.</p>
+                    <% } %>
+                    
+                   </section>
+    
+                   <section class="posts-section" id="posts-section" style="display: none;">
+                    <h2 class="videos-all app-h2">
+                        โพสต์
+                    </h2>
+                   </section>
+
+            </div>
+        </main>
+        
+
+
+        <%- include('../../Component/Footer') %>
                     <!-- Content Wrapper -->
-                    <div class="flex-1 overflow-auto p-4 content-layout md:ml-[270px] lg:ml-[250px]">
+                    <!-- <div class="flex-1 overflow-auto p-4 content-layout md:ml-[270px] lg:ml-[250px]">
                         <section class="container mx-auto px-4 py-8 bg-white rounded-lg shadow">
                             <% if (channel.bannerImagePath) {%>
                                 <div class="banner relative w-full h-40 sm:h-64">
@@ -64,13 +224,12 @@
                                     <div class="mt-4 flex justify-center md:justify-start">
                                         <% if (userID) { %>
                                             <% if (channel.followers.includes(userID.user._id)) { %>
-                                                <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->
                                                 <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
                                                     onclick="confirmUnfollow('<%= channel._id %>')">
                                                     <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
                                                 </button>
                                             <% } else { %>
-                                                <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
+    
                                                 <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
                                                         onclick="toggleFollow('<%= channel._id %>')">
                                                     <i class="fa-solid fa-user-plus"></i> ติดตาม
@@ -117,8 +276,8 @@
                               </div>
                               
                         </section>
-            </main>
-    </div>
+                     </div> -->
+
 
     <!-- <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -239,7 +398,25 @@
 }
 
     </script>
-    
+       <script>
+        function showSection(sectionId, tabElement) {
+           const sections = ['home-section','videos-section', 'posts-section'];
+           const tabs = ['home-tab','videos-tab', 'posts-tab'];
+   
+           sections.forEach((section, index) => {
+               const sectionElement = document.getElementById(section);
+               const tabElement = document.getElementById(tabs[index]);
+   
+               if (section === sectionId) {
+                   sectionElement.style.display = 'block';
+                   tabElement.classList.add('active');
+               } else {
+                   sectionElement.style.display = 'none';
+                   tabElement.classList.remove('active');
+               }
+           });
+       }
+   </script>
 
     <script>
         const menuButtons = document.querySelectorAll(".menu-button");

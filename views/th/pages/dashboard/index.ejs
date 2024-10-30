@@ -28,7 +28,7 @@
         <main class="flex-grow p-6">
             <!-- Dashboard Header -->
             <header class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">จัดการบทความ</h1>
+                <h1 class="text-2xl font-bold text-gray-800">จัดการบทความ / การสร้างรายได้</h1>
                 <p class="text-gray-600">ภาพรวมของบทความและเครื่องมือการจัดการของคุณ</p>
             </header>
 
@@ -71,6 +71,7 @@
                             class="bg-blue-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
                             style="width: 0%">0%</div>
                     </div>
+                    <p id="monetization-message" class="text-center text-2xl text-blue-600 font-medium mt-4"></p>
                     <!-- <p id="progress-text">0/5</p> -->
                 </div>
 
@@ -96,7 +97,117 @@
                         </p> 
                     <% } %>
                 </div>
-                <p id="monetization-message" class="text-center text-2xl text-blue-600 font-medium mt-4"></p>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">ช่องทางการชำระเงิน</h2>
+                    <button onclick="showAddPaymentPopup(event)"
+                        class="bg-blue-400 text-white border-none outline-none rounded-lg px-4 py-2 flex items-center">
+                        <img src="/annight/logo/bank/Bank-Logo-Transparent.png" alt="Bank-Logo" class="w-10">
+                       <span class="pl-4"> เพิ่มการช่องทางการชำระเงิน</span>
+                    </button>
+                </div>
+
+                <div id="bank-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-lg shadow-lg w-80 p-6">
+                        <h3 class="text-xl font-semibold text-gray-800">ช่องทางการชำระเงิน</h3>
+                        <div class="mt-4 p-2">
+                            <p class="text-gray-700">กรุณากรอกข้อมูลช่องทางการชำระเงินเพื่อรับรายได้</p>
+                            <p class="text-yellow-400 font-light">เพิ่มได้ 1 ช่องทางการชำระเงิน เท่านั้น !!</p>
+                            <form id="payment-form" action="/api/v2/save/truemoney/user/:userId" method="POST" enctype="multipart/form-data" class="mt-4 space-y-4" data-userid="<%= userDatas._id %>">
+                                <div>
+                                    <label for="payment-method" class="block text-gray-700">วิธีการชำระเงิน</label>
+                                    <select id="payment-method" name="paymentMethod"
+                                        class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
+                                        <option value="truemoney">true wallet</option>
+                                        <option value="bank">บัญชีธนาคาร</option>
+                                    </select>
+                                </div>
+                                <div id="truemoney-info" class="hidden">
+                                    <label for="truemoneyname" class="block text-gray-700">ชื่อบัญชี TrueMoney</label>
+                                    <input type="text" id="truemoneyname" name="name"
+                                        class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
+                                    <label for="truemoney-account" class="block text-gray-700">เลขบัญชี TrueMoney</label>
+                                    <input type="text" id="truemoney-account" name="truemoneynumber"
+                                        class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
+                                </div>
+                                <div id="bank-info" class="hidden">
+                                    <p class="text-red-500">บัญชีธนาคารยังไม่ได้ให้บริการ</p>
+                                    <label for="bank-account" class="block text-gray-700">เลขบัญชีธนาคาร</label>
+                                    <input type="text" id="bank-account" name="bankAccount"
+                                        class="block w-full mt-1 p-2 border border-gray-300 rounded-md" readonly>
+                                    <label for="name-account" class="block text-gray-700">ชื่อบัญชีธนาคาร</label>
+                                    <input type="text" id="name-account" name="nameAccount"
+                                        class="block w-full mt-1 p-2 border border-gray-300 rounded-md" readonly>
+                                    <label for="bank-name" class="block text-gray-700 mt-2">ชื่อธนาคาร</label>
+                                    <input type="text" id="bank-name" name="bankName"
+                                        class="block w-full mt-1 p-2 border border-gray-300 rounded-md" readonly>
+                                </div>
+                                <button type="submit" class="bg-blue-500 w-full mb-2 text-white px-4 py-2 rounded-md">บันทึกข้อมูล</button>
+                            </form>
+                        </div>
+                
+                        <button onclick="hideAddPaymentPopup()" class="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-700 w-full">
+                            ยกเลิก
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">ช่องทางการชำระเงินที่บันทึก</h2>
+                    <div class="space-y-4">
+                       
+                        <% if (userDatas.bank.truemoneywallet) { %>
+                            <div class="flex items-center p-4 border border-gray-300 rounded-lg">
+                                <div class="flex-shrink-0">
+                                    <img src="/logo/playments/truemoney.png" alt="TrueMoney Logo" class="w-10 text-blue-600">
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-medium text-gray-800">TrueMoney</h3>
+                                    <p class="text-gray-600">ชื่อบัญชี TrueMoney: <%= userDatas.bank.truemoneywallet.name %></p>
+                                    <p class="text-gray-600">เลขบัญชี: <%= userDatas.bank.truemoneywallet.truemoneynumber %></p>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="flex items-center p-4 border border-gray-300 rounded-lg">
+                                <div class="flex-shrink-0">
+                                    <img src="/logo/playments/truemoney.png" alt="TrueMoney Logo" class="w-10 text-blue-600">
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-medium text-gray-800">TrueMoney</h3>
+                                    <p class="text-gray-600">เบอร์ TrueMoney: 08X-XXX-XXXX</p>
+                                    <p class="text-gray-600">เลขบัญชี: 123-456-789</p>
+                                </div>
+                            </div>
+                        <% } %>
+                        
+                        <% if (userDatas.bank.bankaccount) { %>
+                            <div class="flex items-center p-4 border border-gray-300 rounded-lg mt-4">
+                                <div class="flex-shrink-0">
+                                    <img src="/annight/logo/bank/Bank-Logo-Transparent.png" alt="Bank-Logo" class="w-10">
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-medium text-gray-800">บัญชีธนาคาร</h3>
+                                    <p class="text-gray-600">ชื่อบัญชีธนาคาร: <%= userDatas.bank.bankaccount.name %></p>
+                                    <p class="text-gray-600">เลขบัญชี: <%= userDatas.bank.bankaccount.number %></p>
+                                    <p class="text-gray-600">ชื่อธนาคาร: <%= userDatas.bank.bankaccount.bankname %></p>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="flex items-center p-4 border border-gray-300 rounded-lg">
+                                <div class="flex-shrink-0">
+                                    <img src="/annight/logo/bank/Bank-Logo-Transparent.png" alt="Bank-Logo" class="w-10">
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-medium text-gray-800">บัญชีธนาคาร</h3>
+                                    <p class="text-gray-600">เลขบัญชี: 456-789-123</p>
+                                    <p class="text-gray-600">ชื่อบัญชี: นาย AniNight Animelove</p>
+                                    <p class="text-gray-600">ชื่อธนาคาร: ธนาคารกสิกร</p>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+             
             </section>
 
             <!-- Articles Management Section -->
@@ -107,57 +218,135 @@
                         <a href="/uploads/create/article">เพิ่มบทความใหม่</a>
                     </button>
                 </div>
-                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                    <thead class="bg-gray-100 text-gray-600">
-                        <tr class="text-black">
-                            <th class="py-2 px-4 border-b">#</th>
-                            <th class="py-2 px-4 border-b">ชื่อบทความ</th>
-                            <th class="py-2 px-4 border-b">วันที่เผยแพร่</th>
-                            <th class="py-2 px-4 border-b">ตั้งเวลาเผยแพร่ไว้</th>
-                            <th class="py-2 px-4 border-b">จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (userDatas && userDatas.articles.length > 0) { %>
-                            <% userDatas.articles.forEach((article, index) => { %>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                        <thead class="bg-gray-100 text-gray-600">
                             <tr class="text-black">
-                                <td class="py-2 px-4 border-b text-center"><%= index + 1 %></td>
-                                <td class="py-2 px-4 border-b">
-                                    <%= article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %>
-                                </td>                                
-                                <td class="py-2 px-4 border-b text-center">
-                                    <%= article.published ? 'เผยแพร่แล้ว' : 'ไม่ได้เผยแพร่' %>
-                                </td>
-                                <td class="py-2 px-4 border-b text-center">
-                                    <%= article.scheduledAt 
-                                        ? moment(article.scheduledAt).locale('th').format('DD MMM YYYY HH:mm') 
-                                        : 'ไม่ได้ตั้งการเผยแพร่' %>
-                                </td>
-                                
-                                <td class="py-2 px-4 border-b text-center">
-                                    <button class="text-blue-500 hover:text-blue-700">
-                                        <a href="/edit/post/article?articleid=<%= article._id %>">แก้ไข</a>
-                                    </button>
-                                    <button class="text-red-500 hover:text-red-700 ml-2" onclick="deletearticle(event, '<%= article._id %>')" type="button">
-                                        ลบ
-                                    </button>
+                                <th class="py-2 px-4 border-b text-sm ">ภาพปก</th>
+                                <th class="py-2 px-4 border-b text-sm ">ชื่อบทความ</th>
+                                <th class="py-2 px-4 border-b text-sm ">วันที่เผยแพร่</th>
+                                <!-- <th class="py-2 px-4 border-b text-sm"><span class="hidden md:block">ตั้งเวลาเผยแพร่ไว้</span></th> -->
+                                <th class="py-2 px-4 border-b text-sm ">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (userDatas && userDatas.articles.length > 0) { %>
+                                <% userDatas.articles.forEach((article, index) => { %>
+                                <tr class="text-black">
+                                    <td class="py-2 px-4 border-b flex justify-center">
+                                        <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="Cover Image" class="w-16 object-cover rounded-md md:w-[200px] md:h-24">
+                                    </td>
+                                    <td class="py-2 px-4 border-b">
+                                        <%= article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %>
+                                    </td>                                
+                                    <td class="py-2 px-4 border-b text-center">
+                                        <%= article.published ? 'เผยแพร่แล้ว' : 'ไม่ได้เผยแพร่' %>
+                                    </td>
+                                    <!-- <td class="py-2 px-4 border-b text-center hidden md:block">
+                                        <%= article.scheduledAt 
+                                            ? moment(article.scheduledAt).locale('th').format('DD MMM YYYY HH:mm') 
+                                            : 'ไม่ได้ตั้งการเผยแพร่' %>
+                                    </td> -->
+                                    <td class="py-2 px-4 border-b text-center relative">
+                                        <!-- Icon button for opening the menu -->
+                                        <button id="button_<%= article._id %>" onclick="event.stopPropagation(); toggleMenu('<%= article._id %>')" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/>
+                                            </svg>
+                                        </button>
                                     
-                                </td>
-                            </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="5" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                    
-                </table>
+                                        <!-- Dropdown menu -->
+                                        <div id="menu_<%= article._id %>" class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                                            <a href="/edit/post/article?articleid=<%= article._id %>" class="block px-4 py-2 text-sm text-blue-500 hover:bg-blue-100">
+                                                แก้ไข
+                                            </a>
+                                            <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="deletearticle(event, '<%= article._id %>')" type="button">
+                                                ลบ
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                
             </section>
         </main>
     </div>
+
+    <script>
+         function showAddPaymentPopup(event) {
+            event.preventDefault();
+            document.getElementById('bank-popup').classList.remove('hidden');
+        }
+    
+        function hideAddPaymentPopup() {
+            document.getElementById('bank-popup').classList.add('hidden');
+        }
+    
+        const paymentMethodSelect = document.getElementById('payment-method');
+    const paymentForm = document.getElementById('payment-form');
+    const truemoneyInfo = document.getElementById('truemoney-info');
+    const bankInfo = document.getElementById('bank-info');
+
+    paymentMethodSelect.addEventListener('change', function () {
+        const selectedMethod = paymentMethodSelect.value;
+
+        if (selectedMethod === 'truemoney') {
+            truemoneyInfo.classList.remove('hidden');
+            bankInfo.classList.add('hidden');
+            paymentForm.action = '/api/v2/save/truemoney/user/' + paymentForm.dataset.userid;
+        } else if (selectedMethod === 'bank') {
+            truemoneyInfo.classList.add('hidden');
+            bankInfo.classList.remove('hidden');
+            paymentForm.action = '/api/v2/save/bank/user/' + paymentForm.dataset.userid;
+        } else {
+            truemoneyInfo.classList.add('hidden');
+            bankInfo.classList.add('hidden');
+        }
+    });
+
+
+    paymentMethodSelect.dispatchEvent(new Event('change'));
+
+    paymentForm.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        if (paymentMethodSelect.value) {
+            this.submit();
+        } else {
+            alert("กรุณาเลือกช่องทางการชำระเงิน");
+        }
+    });
+    </script>
+    <script>
+        function toggleMenu(articleId) {
+            // ปิดเมนูอื่นๆ ก่อนเปิดเมนูที่เลือก
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== `menu_${articleId}`) {
+                    menu.classList.add('hidden');
+                }
+            });
+    
+            const menu = document.getElementById(`menu_${articleId}`);
+            menu.classList.toggle('hidden');
+    
+            // ตรวจสอบการคลิกนอกเมนู
+            document.addEventListener('click', function handleClickOutside(event) {
+                if (!menu.contains(event.target) && event.target.id !== `button_${articleId}`) {
+                    menu.classList.add('hidden');
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            });
+        }
+    </script>
     <!-- <script src="/js/script.js"></script> -->
-    <!-- <script>
+    <script>
         function deletearticle(event, postId) {
             event.preventDefault();
             Swal.fire({
@@ -209,7 +398,7 @@
             updateProgressBar(totalArticles, publishedArticles);
             updateDeadlineBar(daysLeft);
         });
-    </script> -->
+    </script>
      <script>
         // Set the target thresholds
         const followerTarget = 100;

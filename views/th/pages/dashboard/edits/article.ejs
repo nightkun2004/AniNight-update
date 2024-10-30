@@ -158,6 +158,20 @@
                             </h2>
                             <p id="previewUsername" class="text-xs text-secondary-color"><%= userID.user.username %></p>
                             <p id="previewStats" class="text-xs text-yellow-500">อยู่ในการแก้ไข</p>
+                            <% const isPublished = article.scheduledAt && moment().isAfter(moment(article.scheduledAt)); %>
+
+                            <% if (article.scheduledAt) { %>
+                                <% if (isPublished) { %>
+                                    <p class="text-xs text-green-500">เผยแพร่แล้ว</p>
+                                <% } else { %>
+                                    <p class="text-xs text-yellow-500">
+                                        เผยแพร่ในอีก 
+                                        <%= moment(article.scheduledAt).locale('th').format('DD MMM YYYY HH:mm') %>
+                                    </p>
+                                <% } %>
+                            <% } else { %>
+                                <p class="text-xs text-gray-500">ไม่ได้ตั้งการเผยแพร่</p>
+                            <% } %>                            
                         </div>
                     </div>
                 </a>
