@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขบทความ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+</head>
+<body>
+
+        <%- include('../../../Component/Header') %>
+
+        <section class="flex flex-col md:flex-row gap-5 p-2 md:p-5">
+
+            <div class="flex-1 md:w-2/3 bg-white p-4 rounded shadow-md">
+                <div class="mb-6 mt-4mb-6 mt-4">
+                    <% if (typeof error !== 'undefined') { %>
+                        <div class="mb-4 bg-gray-100 rounded-lg text-red-600 text-center"><%= error %></div>
+                    <% } %>
+                    <% if (typeof message !== 'undefined') { %>
+                        <div class="mb-4 bg-gray-100 rounded-lg text-emerald-500 text-center"><%= message %></div>
+                    <% } %>
+                </div>
+
+                <h1 class="text-2xl font-semibold text-gray-800 mb-6 pr-6">
+                    <a href="/dashboard/manage/memes">
+                        <i class="fa-solid fa-arrow-left"></i> กลับ
+                    </a>
+                </h1>
+
+                <div class="flex-1 bg-white p-4 rounded shadow-md">
+                    <h2 class="text-2xl font-bold text-center">แก้ไขบทความ</h2>
+                    <form id="editArticle" action="/api/v2/edit/post/meme" method="post" enctype="multipart/form-data">
+                        <div class="mb-5">
+                            <label for="name_act" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
+                            <input type="text" id="update_id" name="update_id" value="<%= meme._id %>" readonly
+                             class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg outline-none bg-gray-100 p-2.5 w-full" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="name_act" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อบทความ</label>
+                            <input type="text" id="title" name="title" value="<%= meme.description %>"
+                             class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
+                        </div>
+
+                        <div class="mb-5">
+                            <label for="thumbnail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่มไฟล์มีม</label>
+                            <input id="thumbnail"
+                                class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
+                                type="file" name="thumbnail" accept="image/*"  onchange="previewImage(this)">
+                        </div>
+            
+                        <div class="mb-5">
+                            <div class="flex">
+                                <div class="flex items-center h-5">
+                                    <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" id="published" name="published"  <% if (meme.published) { %> checked <% } %> 
+                                     class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                </div>
+                                <div class="ms-2 text-sm">
+                                    <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
+                                    <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้ หากคุณต้องการเผยแพร่เลยให้ติ้งไว้</p>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+            <!-- ตัวอย่าง Section -->
+        <div class="w-full md:w-1/3 bg-white p-4 rounded shadow-md">
+            <div id="previewContainer" class="block border rounded-lg p-5">
+                <!-- ตัวอย่างโพสต์ -->
+                <a href="javascript:void(0)" title="ดูบทความที่เผยแพร่" class="block">
+                    <!-- ใช้ aspect-w-16 และ aspect-h-9 เพื่อให้อัตราส่วนเป็น 16:9 -->
+                    <div class="relative aspect-w-16 aspect-h-9">
+                        <% 
+                        const isVideo = meme.memeimageUrl.split('?')[0].endsWith('.mp4'); 
+                      %>
+                      <% if (isVideo) { %>
+                        <video id="video-player" controls muted loop controlsList="nodownload" oncontextmenu="return false;"  class="h-[250px] w-full rounded-lg">
+                          <source src="<%= meme.memeimageUrl %>" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      <% } else { %>
+                        <img id="previewThumbnail" src="<%= meme.memeimageUrl %>" alt="ตัวอย่างชื่อโพสต์" class="w-full object-cover rounded-lg">
+                      <% } %>
+                      
+                    </div>
+                    <div class="flex items-center mt-2" id="previewCreatorInfo">
+                        <% if (userID.user.profilePicture) { %>
+                            <% if (userID.user.profilePicture.startsWith('http')) { %>
+                                <img id="previewCreatorImage" src="<%= userID.user.profilePicture %>" class="w-9 h-9 rounded-full" alt="Profile Picture">
+                            <% } else { %>
+                                <img id="previewCreatorImage" src="/uploads/profiles/<%= userID.user.profilePicture %>"class="w-9 h-9 rounded-full" alt="Profile Picture">
+                            <% } %>
+                        <% } %>
+                        <div class="ml-3">
+                            <h2 id="previewTitle" class="text-sm font-semibold text-black-color dark:text-black-color line-clamp-2">
+                                <%= meme.title %>
+                            </h2>
+                            <p id="previewUsername" class="text-xs text-secondary-color"><%= userID.user.username %></p>
+                            <p id="previewStats" class="text-xs text-yellow-500">อยู่ในการแก้ไข</p>
+                        </div>
+                    </div>
+                </a>
+                <div class="mt-3">
+                    <div id="statusBar" class="bg-gray-200 rounded-md h-2">
+                      <div id="progressBar" class="bg-blue-500 h-2 rounded-md" style="width: 0%;"></div>
+                    </div>
+                    <p id="statusText" class="text-sm font-bold text-gray-600 mt-1"></p>
+              </div>
+              <button type="submit" class="text-white w-full mt-5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                แก้ไขบมีม</button>
+            </form>
+            </div>
+        </div>
+        </section>
+
+   
+  
+        <script src="https://cdn.tiny.cloud/1/k10l81kijx2sgrr3h6dofsi509gkpluq1ugssphl6wz0kp53/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="/js/uploads/article.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const player = new Plyr('#video-player');
+            });
+        </script>
+    <script>
+        document.getElementById("title").addEventListener("input", function () {
+            const previewTitle = document.getElementById("previewTitle");
+            previewTitle.textContent = this.value || "ตัวอย่างชื่อโพสต์"; // แสดงตัวอย่างชื่อโพสต์เมื่อ input ว่างเปล่า
+        });
+
+        function previewImage(input) {
+            const file = input.files[0];
+            const previewThumbnail = document.getElementById("previewThumbnail");
+
+            if (file) {
+                const reader = new FileReader();
+
+                // โหลดภาพและตั้งค่า src ของ <img> ให้เป็นภาพที่เลือก
+                reader.onload = function (e) {
+                    previewThumbnail.src = e.target.result;
+                }
+
+                reader.readAsDataURL(file);
+            } else {
+                // ถ้าไม่มีไฟล์ ให้เคลียร์ src ของ <img>
+                previewThumbnail.src = "";
+            }
+        }
+
+        const form = document.getElementById("editArticle");
+        const progressBar = document.getElementById('progressBar');
+        const statusText = document.getElementById('statusText');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('POST', form.action, true);
+
+            // ติดตามความก้าวหน้า
+            xhr.upload.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    const percent = Math.round((event.loaded * 100) / event.total);
+                    // หยุดที่ 90%
+                    const progressPercent = percent < 90 ? percent : 90;
+                    progressBar.style.width = progressPercent + '%';
+                    statusText.innerHTML = `กำลังอัปโหลด... ${progressPercent}%`;
+                }
+            };
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response && response.status === 'ok') {
+                            // ตั้งค่าบาร์ความก้าวหน้าเป็น 90%
+                            progressBar.style.width = '90%';
+                            statusText.innerHTML = 'การอัปโหลดกำลังเริ่มต้น...';
+
+                            // รอ 1 วินาทีก่อนขึ้น 100%
+                            setTimeout(() => {
+                                progressBar.style.width = '100%';
+                                statusText.innerHTML = `<i class="fas fa-check-circle text-green-500"></i> แก้ไขเสร็จสมบูรณ์! "${response.msg}" โปรดรีโหลดหน้านี้หรือกดที่บทความเพื่อดูการเผยแพร่`;
+                                form.reset(); // Reset the form after submission
+                            }, 5000);
+                        } else {
+                            statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> เกิดข้อผิดพลาด: ${response.msg || 'ไม่ทราบข้อผิดพลาด'}`; // Show server error message
+                        }
+                    } catch (e) {
+                        console.error('Error parsing server response:', e);
+                        statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> เกิดข้อผิดพลาดในการประมวลผลข้อมูลที่ตอบกลับจากเซิร์ฟเวอร์`;
+                    }
+                } else {
+                    console.error('Upload failed:', xhr.statusText || 'Unknown error');
+                    statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การแก้ไขล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`;
+                }
+            };
+
+            xhr.onerror = () => {
+                console.error('Upload failed:', xhr.statusText || 'Unknown error');
+                statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การอัปโหลดล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`;
+            };
+
+            // ส่งข้อมูลฟอร์ม
+            xhr.send(formData);
+        });
+
+
+    </script>
+    
+</body>
+</html>

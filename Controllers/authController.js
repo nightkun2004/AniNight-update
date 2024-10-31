@@ -9,6 +9,7 @@ const fs = require("fs")
 const axios = require('axios')
 const { sendEmail } = require("../transporter");
 const { emailHtmlWelcomeUser } = require("../emailHtml/welcomeuserHtml")
+const { addPaymenthtml } = require("../emailHtml/addPaymenthtml")
 require("dotenv").config()
 
 const { checkAuth } = require("../lib/auth")
@@ -501,8 +502,15 @@ const saveTrueMoney = async (req, res) => {
             truemoneynumber
         };
 
+        await sendEmail(
+            user.email, 
+            `ถึง ${name} ยินดีด้วย คุณได้เพิ่ม TrueMoney Wallet เรียบร้อยแล้ว!`,
+            addPaymenthtml("เพิ่ม True Money", name, truemoneynumber)
+        );
+        
+
         await user.save();
-        console.log(user)
+        // console.log(user)
         // Redirect หลังจากการบันทึกสำเร็จ
         return res.redirect(`/dashboard?id${userID.user._id}`);
     } catch (error) {
@@ -518,24 +526,35 @@ const savebankaccount = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'ไม่พบผู้ใช้' });
         }
 
+        // อัปเดตข้อมูลบัญชีธนาคารของผู้ใช้
         user.bank.bankaccount = {
             name,
-            number: banknumber, // เปลี่ยนเป็น banknumber เพื่อให้ตรงกับชื่อที่ใช้
+            number: banknumber, // ใช้ banknumber ตามที่ระบุ
             bankname
         };
 
+        // ส่งอีเมลแจ้งเตือนผู้ใช้
+        await sendEmail(
+            user.email, 
+            `ถึง ${name} ยินดีด้วย คุณได้เพิ่มบัญชีธนาคารเรียบร้อยแล้ว!`,
+            addPaymenthtml("เพิ่มการชำระเงินธนาคาร", name, banknumber) // เปลี่ยนเป็น name และ banknumber
+        );
+
+        // บันทึกการเปลี่ยนแปลงในฐานข้อมูล
         await user.save();
-        console.log(user)
+        // console.log(user);
+
         // Redirect หลังจากการบันทึกสำเร็จ
-        return res.redirect(`/dashboard?id${userID.user._id}`);
+        return res.redirect(`/dashboard?id=${userID.user._id}`);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์' });
     }
 }
+
 
 const logout = (req, res) => {
     // ลบข้อมูลในเซสชัน

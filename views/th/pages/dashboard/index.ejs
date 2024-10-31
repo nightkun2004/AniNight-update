@@ -25,12 +25,27 @@
 
     <div class="flex-1 flex flex-col">
         <%- include('../../Component/Header') %>
-        <main class="flex-grow p-6">
+        <main class="flex-grow md:p-6 mx-auto max-w-6xl">
             <!-- Dashboard Header -->
             <header class="mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">จัดการบทความ / การสร้างรายได้</h1>
                 <p class="text-gray-600">ภาพรวมของบทความและเครื่องมือการจัดการของคุณ</p>
             </header>
+
+
+            <nav class="bg-white shadow-lg mb-5">
+                <div class=" px-4 py-4 flex items-center justify-between">
+                    <ul class="flex space-x-4">
+                        <li>
+                            <a href="/dashboard/manage/articles" class="text-gray-600 hover:text-blue-500 font-medium">จัดการบทความ</a>
+                        </li>
+                        <li>
+                            <a href="/dashboard/manage/memes" class="text-gray-600 hover:text-blue-500 font-medium">จัดการโพสต์มีม</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
 
             <!-- Overview Section -->
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
@@ -132,13 +147,13 @@
                                 <div id="bank-info" class="hidden">
                                     <p class="text-red-500">บัญชีธนาคารยังไม่ได้ให้บริการ</p>
                                     <label for="bank-account" class="block text-gray-700">เลขบัญชีธนาคาร</label>
-                                    <input type="text" id="bank-account" name="bankAccount"
+                                    <input type="text" id="bank-account" name="banknumber"
                                         class="block w-full mt-1 p-2 border border-gray-300 rounded-md" readonly>
                                     <label for="name-account" class="block text-gray-700">ชื่อบัญชีธนาคาร</label>
-                                    <input type="text" id="name-account" name="nameAccount"
+                                    <input type="text" id="name-account" name="name"
                                         class="block w-full mt-1 p-2 border border-gray-300 rounded-md" readonly>
                                     <label for="bank-name" class="block text-gray-700 mt-2">ชื่อธนาคาร</label>
-                                    <input type="text" id="bank-name" name="bankName"
+                                    <input type="text" id="bank-name" name="bankname"
                                         class="block w-full mt-1 p-2 border border-gray-300 rounded-md" readonly>
                                 </div>
                                 <button type="submit" class="bg-blue-500 w-full mb-2 text-white px-4 py-2 rounded-md">บันทึกข้อมูล</button>
@@ -207,78 +222,32 @@
                     </div>
                 </div>
                 
+               
+                
              
             </section>
 
-            <!-- Articles Management Section -->
-            <section>
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold">บทความ</h2>
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <a href="/uploads/create/article">เพิ่มบทความใหม่</a>
-                    </button>
+             <!-- สำหรับผู้ใช้ -->
+              <h2 class="mb-5 text-2xl text-gray-800">แผงควบคุมผู้ใช้ทั่วไป</h2>
+              <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">ยอดคะแนนทั้งหมด</h2>
+                    <p class="text-gray-500">
+                        <%= userDatas.points %>
+                    </p>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                        <thead class="bg-gray-100 text-gray-600">
-                            <tr class="text-black">
-                                <th class="py-2 px-4 border-b text-sm ">ภาพปก</th>
-                                <th class="py-2 px-4 border-b text-sm ">ชื่อบทความ</th>
-                                <th class="py-2 px-4 border-b text-sm ">วันที่เผยแพร่</th>
-                                <!-- <th class="py-2 px-4 border-b text-sm"><span class="hidden md:block">ตั้งเวลาเผยแพร่ไว้</span></th> -->
-                                <th class="py-2 px-4 border-b text-sm ">จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% if (userDatas && userDatas.articles.length > 0) { %>
-                                <% userDatas.articles.forEach((article, index) => { %>
-                                <tr class="text-black">
-                                    <td class="py-2 px-4 border-b flex justify-center">
-                                        <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="Cover Image" class="w-16 object-cover rounded-md md:w-[200px] md:h-24">
-                                    </td>
-                                    <td class="py-2 px-4 border-b">
-                                        <%= article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %>
-                                    </td>                                
-                                    <td class="py-2 px-4 border-b text-center">
-                                        <%= article.published ? 'เผยแพร่แล้ว' : 'ไม่ได้เผยแพร่' %>
-                                    </td>
-                                    <!-- <td class="py-2 px-4 border-b text-center hidden md:block">
-                                        <%= article.scheduledAt 
-                                            ? moment(article.scheduledAt).locale('th').format('DD MMM YYYY HH:mm') 
-                                            : 'ไม่ได้ตั้งการเผยแพร่' %>
-                                    </td> -->
-                                    <td class="py-2 px-4 border-b text-center relative">
-                                        <!-- Icon button for opening the menu -->
-                                        <button id="button_<%= article._id %>" onclick="event.stopPropagation(); toggleMenu('<%= article._id %>')" class="text-gray-600 hover:text-gray-800 focus:outline-none">
-                                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/>
-                                            </svg>
-                                        </button>
-                                    
-                                        <!-- Dropdown menu -->
-                                        <div id="menu_<%= article._id %>" class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                                            <a href="/edit/post/article?articleid=<%= article._id %>" class="block px-4 py-2 text-sm text-blue-500 hover:bg-blue-100">
-                                                แก้ไข
-                                            </a>
-                                            <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="deletearticle(event, '<%= article._id %>')" type="button">
-                                                ลบ
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                            <% } else { %>
-                                <tr>
-                                    <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700">ข้อความแจ้งเตือน</h2>
+                    <p class="text-gray-500">
+                        <a href="/notifications/<%= userDatas._id %>">ดูการแจ้งเตือน</a>
+                    </p>
                 </div>
-                
-            </section>
+              </section> 
         </main>
     </div>
+
+    <%- include('../../Component/Footer') %>
 
     <script>
          function showAddPaymentPopup(event) {
@@ -324,27 +293,7 @@
         }
     });
     </script>
-    <script>
-        function toggleMenu(articleId) {
-            // ปิดเมนูอื่นๆ ก่อนเปิดเมนูที่เลือก
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                if (menu.id !== `menu_${articleId}`) {
-                    menu.classList.add('hidden');
-                }
-            });
-    
-            const menu = document.getElementById(`menu_${articleId}`);
-            menu.classList.toggle('hidden');
-    
-            // ตรวจสอบการคลิกนอกเมนู
-            document.addEventListener('click', function handleClickOutside(event) {
-                if (!menu.contains(event.target) && event.target.id !== `button_${articleId}`) {
-                    menu.classList.add('hidden');
-                    document.removeEventListener('click', handleClickOutside);
-                }
-            });
-        }
-    </script>
+   
     <!-- <script src="/js/script.js"></script> -->
     <script>
         function deletearticle(event, postId) {

@@ -4,38 +4,93 @@ const FormData = require('form-data');
 const axios = require('axios');
 const WebSocket = require('ws');
 
+
 const getMeme = async (req, res) => {
     const userID = req.session.userlogin;
     const page = parseInt(req.params.page) || 1; // ค่าเริ่มต้นเป็นหน้า 1
     const limit = 10;
 
     try {
-        const totalMemes = await Meme.countDocuments(); // นับจำนวนมีมทั้งหมด
+        const totalMemes = await Meme.countDocuments();
         const memes = await Meme.find({})
-            .skip((page - 1) * limit) // ข้ามมีมก่อนหน้านี้
-            .limit(limit) // จำกัดจำนวนมีมที่ดึงมา
-            .populate('creator') // นำข้อมูล creator ของมีมมาแสดง
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .populate('creator')
             .populate({
-                path: 'comments.username.id', // นำข้อมูล user ของแต่ละคอมเมนต์มาแสดง
-                select: 'name profilePicture' // เลือกเฉพาะชื่อและรูปโปรไฟล์
+                path: 'comments.username.id',
+                select: 'name profilePicture'
             })
             .populate({
-                path: 'comments.replies.username.id', // นำข้อมูล user ของการตอบกลับคอมเมนต์มาแสดง
-                select: 'name profilePicture' // เลือกเฉพาะชื่อและรูปโปรไฟล์
+                path: 'comments.replies.username.id',
+                select: 'name profilePicture'
             });
 
-        res.render("./th/pages/Meme", { 
-            active: "Memes", 
-            userID, 
-            memes, 
-            page, 
-            totalPages: Math.ceil(totalMemes / limit) 
+        res.render("./th/pages/Meme", {
+            active: "Memes",
+            userID,
+            memes,
+            page,
+            totalPages: Math.ceil(totalMemes / limit)
         });
     } catch (error) {
         console.log(error);
         res.json({ msg: "Server Error", error });
     }
 };
+
+const getDashboardManageMeme = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+
+    try {
+        const userDatas = await User.findById(req.user.id).populate({
+            path: 'Mememes',
+            options: { sort: { createdAt: -1 } }
+        }).exec();
+        const publishedArticlesCount = userDatas.Mememes.filter(article => article.published).length;
+        res.render("./th/pages/dashboard/manage/meme", { userID, userDatas, publishedArticlesCount, translations: req.translations,lang   });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/dashboard/manage/meme', {
+            error: errorMessage,
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+};
+
+const GeteditMeme = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const memeId = req.query.memeId;
+    if (!memeId) {
+        return res.status(400).render('./errors/error', {
+            error: 'Article ID is required',
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+    try {
+        const meme = await Meme.findById(memeId).exec();
+        if (!meme) {
+            return res.status(404).render('./errors/error', {
+                error: 'meme not found',
+                userID,
+                translations: req.translations,lang  
+            });
+        }
+        console.log(meme)
+        res.render("./th/pages/dashboard/edits/meme", { userID, meme, translations: req.translations,lang   });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/dashboard/edits/meme', {
+            error: errorMessage,
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+}
+
 
 
 const likeMeme = async (req, res) => {
@@ -121,7 +176,7 @@ const addReply = async (req, res) => {
 const getCreateMeme = async (req, res) => {
     const userID = req.session.userlogin;
     try {
-        res.render("./th/pages/Creatememe", { userID,  active: "creatememe" });
+        res.render("./th/pages/Creatememe", { userID, active: "creatememe" });
     } catch (error) {
         console.log(error);
         res.json({ msg: "Server Error", error });
@@ -131,12 +186,12 @@ const getCreateMeme = async (req, res) => {
 // ฟังก์ชันสำหรับการดึงโพสต์มีม
 const getPostMeme = async (req, res) => {
     const userID = req.session.userlogin;
-    const { id } = req.params; 
+    const { id } = req.params;
     try {
         const post = await Meme.findOne({ _id: id })
             .populate({
                 path: 'creator',
-                select: '-password' 
+                select: '-password'
             })
             .populate({
                 path: 'comments.username.id', // นำข้อมูล user ของแต่ละคอมเมนต์มาแสดง
@@ -152,12 +207,12 @@ const getPostMeme = async (req, res) => {
             .exec();
 
         post.adsDisplayed = (post.adsDisplayed || 0) + 1;
-        await post.save(); 
+        await post.save();
 
-        res.render("./th/pages/post", { 
-            userID, 
+        res.render("./th/pages/post", {
+            userID,
             active: "Memes",
-            post 
+            post
         });
     } catch (error) {
         console.log(error);
@@ -265,7 +320,7 @@ const postComment = async (req, res,) => {
         // เพิ่มความคิดเห็นลงในโพสต์
         meme.comments.push(newComment);
         await meme.save();
-        
+
         // ส่งความคิดเห็นใหม่ที่มีชื่อผู้ใช้ไปยัง WebSocket
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
@@ -283,6 +338,8 @@ const postComment = async (req, res,) => {
 
 module.exports = {
     getMeme,
+    getDashboardManageMeme,
+    GeteditMeme,
     likeMeme,
     getCreateMeme,
     getPostMeme,

@@ -35,11 +35,11 @@
   </style>
 </head>
 
-<body class="overflow-hidden">
-  <div class="bg-white flex flex-row w-full h-screen">
-    <%- include('../Component/Sidebar') %>
-      <section class="flex-1 w-full h-full p-5 overflow-y-scroll">
-        <h2 class="font-normal text-2xl">อัพโหลดมีมของคุณที่นี่</h2>
+<body class="bg-gray-100">
+
+    <%- include('../Component/Header') %>
+      <section class="bg-white md:p-6 mx-auto max-w-6xl">
+        <h2 class="font-normal text-2xl p-2 mt-7 mb-5">อัพโหลดมีมของคุณที่นี่</h2>
         <!-- Display success or error messages -->
         <% if (typeof msg !=='undefined' ) { %>
           <p class="text-center bg-gray-200 rounded-lg text-green-500 font-bold p-5 mb-4">
@@ -54,7 +54,7 @@
               <% } %>
 
                 <form id="memeForm" action="/api/v2/post/meme/new" method="POST" enctype="multipart/form-data"
-                  class="space-y-4">
+                  class="space-y-4 p-6">
                   <!-- Meme Description -->
                   <div class="mt-5">
                     <label for="description" class="block text-gray-600 font-bold mb-2">คำอธิบายมีมของคุณ</label>
@@ -103,13 +103,9 @@
                   </button>
                 </form>
 
-                <footer class="bg-white shadow mt-8">
-                  <div class="container mx-auto px-4 py-4 text-center text-gray-600">
-                    Design By AniNight 2024 &copy; 2024 MemePost - All Rights Reserved.
-                  </div>
-                </footer>
       </section>
-  </div>
+
+      <%- include('../Component/Footer') %>
 
   <script>
     const form = document.getElementById('memeForm');

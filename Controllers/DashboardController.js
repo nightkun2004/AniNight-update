@@ -33,6 +33,31 @@ const getDashboard = async (req, res) => {
     }
 };
 
+const getDashboardManageArticle = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const today = new Date();
+    const deadline = new Date(today);
+    deadline.setDate(today.getDate() + 29); // 29 days from today
+    const daysLeft = Math.max(Math.ceil((deadline - today) / (1000 * 60 * 60 * 24)), 0); // Calculate days left
+
+    try {
+        const userDatas = await User.findById(req.user.id).populate({
+            path: 'articles',
+            options: { sort: { createdAt: -1 } }
+        }).exec();
+        const publishedArticlesCount = userDatas.articles.filter(article => article.published).length;
+        res.render("./th/pages/dashboard/manage/article", { userID, userDatas, daysLeft, publishedArticlesCount, translations: req.translations,lang   });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/dashboard/manage/article', {
+            error: errorMessage,
+            userID,
+            translations: req.translations,lang  
+        });
+    }
+};
+
 const getNotifications = async (req, res) => {
     const userID = req.session.userlogin; // ตรวจสอบว่าผู้ใช้ล็อกอินอยู่
     try {
@@ -360,6 +385,7 @@ const deletePostArticle = async (req, res, next) => {
 
 module.exports = {
     getDashboard,
+    getDashboardManageArticle,
     getNotifications,
     getNotificationisRead,
     Getedit,

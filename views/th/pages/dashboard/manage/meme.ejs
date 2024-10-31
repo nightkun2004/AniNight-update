@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการโพสต์มีม</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+        .progress-bar-bg {
+            position: relative;
+            background-color: #f3f4f6;
+        }
+    
+        .progress-bar-fill {
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../../../Component/Header') %>
+
+     <!-- Articles Management Section -->
+     <section class="md:p-6 mx-auto max-w-6xl">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">จัดการโพสต์มีม</h2>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <a href="/create/meme/new">เพิ่มมีมใหม่</a>
+            </button>
+        </div>
+        <div class="overflow-x-auto rounded-lg">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr class="text-black">
+                        <th class="py-2 px-4 border-b text-sm ">ภาพมีม/วีดีโอ</th>
+                        <th class="py-2 px-4 border-b text-sm ">ชื่อบทความ</th>
+                        <th class="py-2 px-4 border-b text-sm ">วันที่เผยแพร่</th>
+                        <!-- <th class="py-2 px-4 border-b text-sm"><span class="hidden md:block">ตั้งเวลาเผยแพร่ไว้</span></th> -->
+                        <th class="py-2 px-4 border-b text-sm ">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (userDatas && userDatas.Mememes.length > 0) { %>
+                        <% userDatas.Mememes.forEach((post, index) => { %>
+                        <tr class="text-black">
+                            <td class="py-2 px-4 border-b flex justify-center">
+                                <% 
+                                const isVideo = post.memeimageUrl.split('?')[0].endsWith('.mp4'); 
+                              %>
+                              <% if (isVideo) { %>
+                                <video controls muted loop controlsList="nodownload" oncontextmenu="return false;"  class="h-[100px] max-w-full rounded-lg">
+                                  <source src="<%= post.memeimageUrl %>" type="video/mp4">
+                                  Your browser does not support the video tag.
+                                </video>
+                              <% } else { %>
+                                <img src="<%= post.memeimageUrl %>" alt="Cover Image" class="w-16 h-28 object-cover rounded-md md:w-[200px] md:h-24">
+                              <% } %>
+                            </td>
+                            <td class="py-2 px-4 border-b">
+                                <%= post.description.length > 30 ? post.description.substring(0, 30) + '...' : post.description %>
+                            </td>                                
+                            <td class="py-2 px-4 border-b text-center">
+                                <%= post.published ? 'เผยแพร่แล้ว' : 'ไม่ได้เผยแพร่' %>
+                            </td>
+                            <!-- <td class="py-2 px-4 border-b text-center hidden md:block">
+                                <%= post.scheduledAt 
+                                    ? moment(post.scheduledAt).locale('th').format('DD MMM YYYY HH:mm') 
+                                    : 'ไม่ได้ตั้งการเผยแพร่' %>
+                            </td> -->
+                            <td class="py-2 px-4 border-b text-center relative">
+                                <!-- Icon button for opening the menu -->
+                                <button id="button_<%= post._id %>" onclick="event.stopPropagation(); toggleMenu('<%= post._id %>')" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/>
+                                    </svg>
+                                </button>
+                            
+                                <!-- Dropdown menu -->
+                                <div id="menu_<%= post._id %>" class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                                    <a href="/edit/post/meme?memeId=<%= post._id %>" class="block px-4 py-2 text-sm text-blue-500 hover:bg-blue-100">
+                                        แก้ไข
+                                    </a>
+                                    <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="deletepost(event, '<%= post._id %>')" type="button">
+                                        ลบ
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        
+    </section>
+
+    <%- include('../../../Component/Footer') %>
+
+    <script>
+        function toggleMenu(articleId) {
+            // ปิดเมนูอื่นๆ ก่อนเปิดเมนูที่เลือก
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== `menu_${articleId}`) {
+                    menu.classList.add('hidden');
+                }
+            });
+    
+            const menu = document.getElementById(`menu_${articleId}`);
+            menu.classList.toggle('hidden');
+    
+            // ตรวจสอบการคลิกนอกเมนู
+            document.addEventListener('click', function handleClickOutside(event) {
+                if (!menu.contains(event.target) && event.target.id !== `button_${articleId}`) {
+                    menu.classList.add('hidden');
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
