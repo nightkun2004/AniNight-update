@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@huggingface/inference": "^2.8.1",
     "@tensorflow/tfjs": "^4.20.0",
     "aws-sdk": "^2.1684.0",
     "axios": "^1.7.2",
@@ -30,6 +31,7 @@
     "mongoose": "^8.5.2",
     "nodemailer": "^6.9.16",
     "nodemon": "^3.1.4",
+    "openai": "^4.69.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "sharp": "^0.33.4",

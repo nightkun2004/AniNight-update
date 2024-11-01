@@ -38,6 +38,8 @@ const channalRouter = require("./routers/ChannelRouter")
 const SurveyRouter = require("./routers/SurveyRouter")
 const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
 const PlaymentRoute = require("./routers/PlaymentRouter") 
+const RewardRoute = require("./routers/RewardRouter")
+const AiRoute = require("./routers/AiRouter")
 const MemeRouter = require("./routers/MemeRouter")
 // const TrendingRouter = require("./")
 
@@ -200,6 +202,8 @@ app.use("/api/v2", channalRouter)
 app.use("/api/v2", SurveyRouter)
 app.use("/api/v2", SurveyRouterCrerate)
 app.use("/api/v2", PlaymentRoute)
+app.use("/api/v2", RewardRoute)
+app.use("/api/v2", AiRoute)
 
 app.use(helmet());
 

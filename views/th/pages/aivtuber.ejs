@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vtuber Chat</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        async function sendMessage(event) {
+            event.preventDefault(); // หยุดการส่งฟอร์มแบบปกติ
+            const form = document.getElementById('form');
+            const formData = new FormData(form);
+            const button = document.querySelector('button[type="submit"]');
+
+            // เปลี่ยนปุ่มส่งให้เป็นสถานะกำลังส่ง
+            button.disabled = true;
+            button.innerHTML = 'กำลังส่ง...'; // แสดงข้อความกำลังส่ง
+
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            // รีเซ็ตปุ่มหลังจากส่งเสร็จ
+            button.disabled = false;
+            button.innerHTML = 'ส่ง'; // เปลี่ยนกลับเป็นข้อความเดิม
+
+            if (response.ok) {
+                const result = await response.json(); // แปลงผลลัพธ์เป็น JSON
+                console.log(result.aiResponse); // แสดงผลใน console
+                // อัปเดต UI หรือแสดงผลการตอบกลับจาก AI Vtuber
+                document.getElementById('responseContainer').innerHTML += `
+                    <div class="p-2 bg-blue-100 rounded-md mb-2">
+                        <strong>AI Vtuber:</strong> ${result.aiResponse}
+                    </div>`;
+                document.querySelector('input[name="usermessage"]').value = ''; // ล้างช่องข้อความหลังส่ง
+            } else {
+                console.error('Error:', response.statusText);
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+    <%- include('../Component/Header') %>
+    
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-4">AI Vtuber Chat</h1>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <form id="form" method="POST" action="/api/v2/user/ai/res/vtuber" onsubmit="sendMessage(event)" class="flex space-x-2">
+                <input type="text" id="usermessage" name="usermessage" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="พิมพ์ข้อความที่นี่..." required>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">ส่ง</button>
+            </form>
+            
+            <div id="responseContainer" class="mt-4 max-h-60 overflow-y-auto">
+                <!-- ที่นี่จะใช้สำหรับแสดงข้อความตอบกลับจาก AI -->
+            </div>
+        </div>
+    </div>
+
+    <%- include('../Component/Footer') %>
+</body>
+</html>

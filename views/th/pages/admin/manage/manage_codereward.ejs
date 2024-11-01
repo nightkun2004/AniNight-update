@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการบทความ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+        .progress-bar-bg {
+            position: relative;
+            background-color: #f3f4f6;
+        }
+    
+        .progress-bar-fill {
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../../../Component/Header') %>
+
+     <!-- Articles Management Section -->
+     <section class="md:p-6 mx-auto max-w-6xl">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">เพิ่มโค้ดรางวัล</h2>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <a href="/admin/add/Reward">เพิ่มโค้ดรางวัล</a>
+            </button>
+        </div>
+        <div class="overflow-x-auto rounded-lg">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr class="text-black">
+                        <th class="py-2 px-4 border-b text-sm ">#</th>
+                        <th class="py-2 px-4 border-b text-sm ">Id reward</th>
+                        <th class="py-2 px-4 border-b text-sm ">ชื่อรางวัล</th>
+                        <th class="py-2 px-4 border-b text-sm ">ip</th>
+                        <th class="py-2 px-4 border-b text-sm ">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (datarewards && datarewards.length > 0) { %>
+                        <% datarewards.forEach((item, index) => { %>
+                        <tr class="text-black border-b border-gray-200 ">
+                            <td class="px-6 py-4 text-sm text-gray-700"><%= index + 1 %></td>
+                            <td class="px-6 py-4 text-sm text-gray-700"><%= item._id %></td>
+                            <td class="px-6 py-4 text-sm text-gray-700"><%= item.reward %></td>
+                            <td class="px-6 py-4 text-sm text-gray-700"><%= item.redeemedIPs.join(', ') %></td>
+                            <td class="py-2 px-4 border-b text-center relative">
+                                <!-- Icon button for opening the menu -->
+                                <button id="button_<%= item._id %>" onclick="event.stopPropagation(); toggleMenu('<%= item._id %>')" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/>
+                                    </svg>
+                                </button>
+                            
+                                <!-- Dropdown menu -->
+                                <div id="menu_<%= item._id %>" class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                                    <a href="/edit/post/article?articleid=<%= item._id %>" class="block px-4 py-2 text-sm text-blue-500 hover:bg-blue-100">
+                                        แก้ไข
+                                    </a>
+                                    <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="deleteitem(event, '<%= item._id %>')" type="button">
+                                        ลบ
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีรางวัล</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        
+    </section>
+
+    <%- include('../../../Component/Footer') %>
+
+    <script>
+        function toggleMenu(articleId) {
+            // ปิดเมนูอื่นๆ ก่อนเปิดเมนูที่เลือก
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== `menu_${articleId}`) {
+                    menu.classList.add('hidden');
+                }
+            });
+
+            const menu = document.getElementById(`menu_${articleId}`);
+            menu.classList.toggle('hidden');
+
+            // ตรวจสอบการคลิกนอกเมนู
+            document.addEventListener('click', function handleClickOutside(event) {
+                if (!menu.contains(event.target) && event.target.id !== `button_${articleId}`) {
+                    menu.classList.add('hidden');
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            });
+        }
+
+        function deleteitem(event, itemid) {
+            event.stopPropagation();
+
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณจะไม่สามารถกู้คืนรายการนี้ได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบมัน!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/v2/admin/delete/reward/${itemid}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                Swal.fire(
+                                    'ลบแล้ว!',
+                                    'รายการถูกลบเรียบร้อยแล้ว.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                throw new Error('Error deleting item');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                'ไม่สามารถลบรายการได้, กรุณาลองใหม่.',
+                                'error'
+                            );
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

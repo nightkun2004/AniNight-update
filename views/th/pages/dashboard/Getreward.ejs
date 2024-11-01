@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โค้ดแลกรับ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100">
+    <%- include('../../Component/Header') %>
+
+        <main class="max-w-lg mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
+            <h1 class="text-2xl font-bold text-center mb-4">แลกรับโค้ด</h1>
+            <p class="text-gray-600 text-center mb-6">กรุณาใส่โค้ดแลกรับของคุณด้านล่าง:</p>
+
+            <form id="redeem-form" action="/api/v2/redeem/add/reward?rewardId=<%= rewardId %>" method="post"
+                class="space-y-4">
+                <div>
+                    <label for="redeem-code" class="block text-gray-700 font-semibold">โค้ดแลกรับ:</label>
+                    <input type="text" id="redeem-code" name="code" required
+                        class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none"
+                        placeholder="ใส่โค้ดที่นี่">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-orange-500 text-white p-3 rounded-md hover:bg-orange-700 transition">แลกรับ</button>
+            </form>
+        </main>
+
+        <%- include('../../Component/Footer') %>
+
+
+            <!-- <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script> -->
+            <script>
+                document.getElementById('redeem-form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    let countdown = 10;
+                    const adDisplayInterval = setInterval(() => {
+                        countdown -= 1;
+                        Swal.update({
+                            html: `<p>กรุณารอ <strong>${countdown}</strong> วินาทีเพื่อดำเนินการต่อ</p>`
+                        });
+                        if (countdown <= 0) {
+                            clearInterval(adDisplayInterval);
+                            Swal.close(); // ปิดการแสดงโฆษณาเมื่อหมดเวลา
+                            handleRedeemCode(); // เรียกฟังก์ชันส่งโค้ดเมื่อครบเวลา
+                        }
+                    }, 1000);
+
+                    // แสดง SweetAlert พร้อมนับถอยหลังและโฆษณา
+                    Swal.fire({
+                        title: 'โปรดรอสักครู่ !!',
+                        html: `<p>กรุณารอ <strong>${countdown}</strong> วินาทีเพื่อดำเนินการต่อ</p>` +
+                            `<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6579807593228261"
+     data-ad-slot="9453780851"></ins>`,
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        }
+                    });
+                });
+
+                function handleRedeemCode() {
+                    Swal.fire({
+                        title: 'กำลังดำเนินการ...',
+                        text: 'กรุณารอสักครู่',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    const code = document.getElementById('redeem-code').value;
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', document.getElementById('redeem-form').action, true);
+                    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            Swal.close();
+                            const response = JSON.parse(xhr.responseText);
+                            if (xhr.status === 200 && response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'แลกรับสำเร็จ!',
+                                    text: response.message || 'โค้ดของคุณถูกแลกรับเรียบร้อยแล้ว.',
+                                    confirmButtonText: 'ตกลง'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'เกิดข้อผิดพลาด!',
+                                    text: response.message || 'ไม่สามารถแลกรับโค้ดนี้ได้ กรุณาลองอีกครั้ง.',
+                                    confirmButtonText: 'ตกลง'
+                                });
+                            }
+                        }
+                    };
+
+                    xhr.onerror = function () {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด!',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองอีกครั้ง.',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    };
+
+                    xhr.send(JSON.stringify({ code }));
+                }
+            </script>
+</body>
+
+</html>

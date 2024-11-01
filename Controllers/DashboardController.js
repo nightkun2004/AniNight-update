@@ -140,6 +140,22 @@ const Getedit = async (req, res) => {
 }
 
 
+// =========================================================== GET Reward ================================================
+// =======================================================================================================================
+const GetRewardCode = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const { rewardId } = req.query;
+    try {
+        console.log(rewardId)
+        res.render("./th/pages/dashboard/Getreward", { userID, rewardId, lang   });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.json({ message: "Server Error Internal Server Error", errorMessage})
+    }
+}
+
+
 // =========================================================== Router Playment manage =====================================
 // ========================================================================================================================
 const gatManagePlayment = async (req, res) => {
@@ -389,6 +405,7 @@ module.exports = {
     getNotifications,
     getNotificationisRead,
     Getedit,
+    GetRewardCode,
     gatManagePlayment,
     gatPlaymentEdit,
     EditPostArticle,

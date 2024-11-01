@@ -3,6 +3,7 @@ const Play = require("../models/PlayModel")
 const ApiKey = require("../models/ApiKeyModel")
 const Article = require("../models/ArticleModel")
 const Anime = require("../models/AnimeModel")
+const Reward = require("../models/Reward")
 const { v4: uuidv4 } = require('uuid');
 
 const getAdmin = async (req, res) => {
@@ -31,6 +32,17 @@ const getAdmin = async (req, res) => {
             userID,
             translations: req.translations, lang
         });
+    }
+}
+
+const getAdminReward = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    try {
+        res.render("./th/pages/admin/add/Reward", { userID , lang})
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ message: "Server Error", errorMessage})
     }
 }
 
@@ -86,6 +98,18 @@ const ManageAnimes = async (req, res) => {
             userID,
             translations: req.translations, lang
         });
+    }
+}
+
+const getAdminRewardManage = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    try {
+        const datarewards = await Reward.find().sort({ createdAt: -1 }).exec();
+        res.render("./th/pages/admin/manage/manage_codereward", { userID , datarewards, lang})
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ message: "Server Error", errorMessage})
     }
 }
 
@@ -191,11 +215,13 @@ const filterUsers = async (req, res) => {
 
 module.exports = {
     getAdmin,
+    getAdminReward,
     getAdminAPIKEY,
     generateAPIKEY,
     ManageAnimes,
     ManageActor,
     ManageActPIKey,
+    getAdminRewardManage,
     ManageVideos,
     updateUserRole,
     filterUsers

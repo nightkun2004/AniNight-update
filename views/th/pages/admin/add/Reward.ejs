@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มรางวัล</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <%- include('../../../Component/Header') %>
+    <main class="max-w-lg mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-center mb-4">เพิ่มรางวัลใหม่</h1>
+
+        <!-- กล่องข้อความสำหรับแสดงผลลัพธ์ -->
+        <div id="messageBox" class="hidden mb-4 p-4 rounded-md" role="alert"></div>
+        
+        <form id="adminRewardForm" class="space-y-4" method="POST">
+            <div>
+                <label for="message" class="block text-gray-700 font-semibold">ข้อความ:</label>
+                <input type="text" id="message" name="message" required 
+                       class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" 
+                       placeholder="กรอกข้อความที่จะแสดง">
+            </div>
+            
+            <div>
+                <label for="linkreward" class="block text-gray-700 font-semibold">ลิงก์รางวัล:</label>
+                <input type="text" id="linkreward" name="linkreward" required 
+                       class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" 
+                       placeholder="กรอกลิงก์รางวัล">
+            </div>
+            
+            <div>
+                <label for="reward" class="block text-gray-700 font-semibold">ชื่อรางวัล:</label>
+                <input type="text" id="reward" name="reward" required 
+                       class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" 
+                       placeholder="กรอกชื่อรางวัล">
+            </div>
+
+            <div>
+                <label for="code" class="block text-gray-700 font-semibold">สร้างโค้ดรางวัล:</label>
+                <input type="text" id="code" name="code" required 
+                       class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" 
+                       placeholder="สร้างโค้ดรางวัล">
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition">เพิ่มรางวัล</button>
+        </form>
+    </main>
+
+    <%- include('../../../Component/Footer') %>
+
+    <script>
+        // ดึง rewardId จาก URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const rewardId = urlParams.get('rewardId');
+    
+        document.getElementById('adminRewardForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            console.log(rewardId)
+    
+            const data = Object.fromEntries(formData.entries());
+    
+            try {
+                const response = await fetch(`/api/v2/admin/add/reward?rewardId=${rewardId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+    
+                const messageBox = document.getElementById('messageBox');
+                messageBox.classList.remove('hidden'); // แสดงกล่องข้อความ
+    
+                if (result.success) {
+                    messageBox.classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+                    messageBox.innerText = result.reward.reward; // แสดงข้อความสำเร็จ
+                } else {
+                    messageBox.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+                    messageBox.innerText = result.reward.message; // แสดงข้อความข้อผิดพลาด
+                }
+                
+                console.log(result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+    
+</body>
+</html>
