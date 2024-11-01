@@ -37,10 +37,10 @@
 
         <%- include('../../Component/Footer') %>
 
-
+<!-- 
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            </script> -->
             <script>
                 document.getElementById('redeem-form').addEventListener('submit', function (event) {
                     event.preventDefault();
@@ -63,13 +63,16 @@
                         title: 'โปรดรอสักครู่ !!',
                         html: `<p>กรุณารอ <strong>${countdown}</strong> วินาทีเพื่อดำเนินการต่อ</p>` +
                             `<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-layout="in-article"
-     data-ad-format="fluid"
-     data-ad-client="ca-pub-6579807593228261"
-     data-ad-slot="9453780851"></ins>`,
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-6579807593228261"
+                     data-ad-slot="9453780851"></ins>`,
                         allowOutsideClick: false,
                         showConfirmButton: false,
+                        willClose: () => {
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        }
                     });
                 });
 
