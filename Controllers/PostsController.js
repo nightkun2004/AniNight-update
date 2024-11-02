@@ -52,7 +52,7 @@ const getPosts = async (req, res, next) => {
             .sort({ createdAt: -1 })
             .exec();
 
-        const template = lang === 'th_TH' ? './th/index' : './en/index';
+        const template = lang === 'th_TH' ? './th/index' : './th/index';
 
         let recommendedContent = [];
         if (userID) {
