@@ -19,7 +19,6 @@ const getResponse = async (role, user, content) => {
             max_tokens: 100,
         });
 
-        // ส่งคืนข้อความที่ตอบกลับจาก AI
         return completion.choices[0].message.content; // แก้ไขให้ดึงค่าจาก message.content
     } catch (error) {
         console.error("Error fetching response:", error);

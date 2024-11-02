@@ -158,7 +158,7 @@
                                                 <a href="/channel/<%= post.creator.username %>">
                                                     <img class="w-10 h-10 rounded-full" src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="Jese Leos">
                                                 </a>
-
+                                                
                                             </div>
                                             <p class="text-base font-semibold leading-none text-gray-900 dark:text-white">
                                                 <a href="/channel/<%= post.creator.username %>"><%= post.creator.id.username %></a>
@@ -185,8 +185,11 @@
                                         <div data-popper-arrow></div>
                                     </div>    
                                     <div>
-                                        <a href="/channel/<%= post.creator.username %>">
+                                        <a href="/channel/<%= post.creator.username %>" class="flex items-center">
                                             <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.username %></h1>
+                                            <% if (post.creator.id.role  === 'admin') { %>
+                                                <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
+                                            <% } %>
                                         </a>
                                        <p class="text-gray-600">ผู้ติดตาม <%= formatNumber(post.creator.id.followers.length) %> คน</p>
                                     </div>
