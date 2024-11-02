@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
+const Banner = require("../models/bannnerModel")
 const Notification = require("../models/NotificationModel");
 const { sendEmail } = require("../transporter");
 const { emailHtmlAddViewsArticle } = require("../emailHtml/addViewToArticle")
@@ -69,6 +70,10 @@ const getRead = async (req, res, next) => {
         const post = await Article.findOne({ urlslug }).populate('creator.id').exec();
         const recentUpdates = await Article.find().sort({ createdAt: -1 }).limit(4).populate('creator.id').exec();
 
+        const currentDate = new Date();
+        const banners = await Banner.find({ expiryDate: { $gt: currentDate } });
+
+
         if (!post) {
             return res.status(404).render(`${lang}/read`, {
                 post: { title: "ไม่พบข้อมูล" },
@@ -127,7 +132,7 @@ const getRead = async (req, res, next) => {
         }
 
         // Render the read page with the post details
-        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, translations: req.translations, lang });
+        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, Bannerlists: banners,  translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/read`, {

@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const Article = require("../models/ArticleModel")
 const Payment = require("../models/PaymentModel")
+const Banner = require("../models/bannnerModel")
 const Notification = require("../models/NotificationModel");
 const path = require('path');
 const fs = require('fs').promises;
@@ -22,7 +23,12 @@ const getDashboard = async (req, res) => {
             options: { sort: { createdAt: -1 } }
         }).exec();
         const publishedArticlesCount = userDatas.articles.filter(article => article.published).length;
-        res.render("./th/pages/dashboard/index", { userID, userDatas, daysLeft, publishedArticlesCount, translations: req.translations,lang   });
+
+        const currentDate = new Date();
+        const banners = await Banner.find({ expiryDate: { $gt: currentDate } });
+
+
+        res.render("./th/pages/dashboard/index", { userID, userDatas, daysLeft, publishedArticlesCount, Bannerlists: banners, translations: req.translations,lang   });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/dashboard/index', {

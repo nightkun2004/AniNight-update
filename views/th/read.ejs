@@ -307,9 +307,36 @@
                             <hr class="mt-4 mb-6">
                         </div>
 
-                        <article class="bg-white text-black font-light">
-                            <%- post.content %>
-                        </article>
+                        <div class="flex justify-center mt-6 mb-5">
+                            <div class="relative w-full max-w-lg overflow-hidden md:rounded-lg shadow-lg">
+                                <div class="slides flex transition-transform duration-500">
+                                    <% if (Bannerlists.length > 0) { %>
+                                        <% Bannerlists.forEach(banner => { %>
+                                            <div class="slide w-full flex-shrink-0">
+                                                <a href="<%= banner.link %>" target="_blank">
+                                                    <img src="<%= banner.imageUrl %>" alt="<%= banner.title %>" class="w-full h-auto md:rounded-lg">
+                                                </a>
+                                            </div>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <div class="slide w-full flex-shrink-0">
+                                            <a href="mailto:aninight.info@gmail.com" target="_blank" class="block">
+                                                <img src="/annight/banner/b3-ads.svg" alt="ads ติดต่อโฆษณา" class="w-full h-auto md:rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out">
+                                            </a>
+                                        </div>
+                                        
+                                    <% } %>
+                                </div>
+                                <button class="prev absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-900 focus:outline-none">❮</button>
+                                <button class="next absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-900 focus:outline-none">❯</button>
+                            </div>
+                            
+                        </div>
+
+                      <article class="bg-white text-black font-light p-6 space-y-4 leading-relaxed">
+                        <%- post.content %>
+                    </article>
+
                     
 
                         <div class="gallery w-full mt-5 z-0">
@@ -403,6 +430,41 @@
 
     <script src="/js/script.js"></script>
     <script src="/js/read.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script> 
+    <script>
+        $(document).ready(function () {
+            let currentIndex = 0;
+            const slides = $('.slide');
+            const totalSlides = slides.length;
+    
+            function showSlide(index) {
+                const offset = -index * 100;
+                $('.slides').css('transform', `translateX(${offset}%)`);
+            }
+    
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                showSlide(currentIndex);
+            }
+    
+            // เลื่อนสไลด์ทุก 5 วินาที
+            setInterval(nextSlide, 5000);
+    
+            // ปุ่มสำหรับเลื่อนสไลด์
+            $('.next').click(function () {
+                nextSlide();
+            });
+    
+            $('.prev').click(function () {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                showSlide(currentIndex);
+            });
+    
+            // เริ่มต้นการแสดงภาพแรก
+            showSlide(currentIndex);
+        });
+    
+    </script>
     <script>
         function toggleFollow(channelId) {
             fetch(`/api/v2/user/follow/${channelId}`, {

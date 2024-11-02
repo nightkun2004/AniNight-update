@@ -4,6 +4,7 @@ const ApiKey = require("../models/ApiKeyModel")
 const Article = require("../models/ArticleModel")
 const Anime = require("../models/AnimeModel")
 const Reward = require("../models/Reward")
+const Banner = require("../models/bannnerModel")
 const { v4: uuidv4 } = require('uuid');
 
 const getAdmin = async (req, res) => {
@@ -62,6 +63,18 @@ const getAdminAPIKEY = async (req, res) => {
         });
     }
 }
+const getAdminAddBanner = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    try {
+
+        res.render("./th/pages/admin/add/banner", { userID, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ message: "Server Error", errorMessage})
+    }
+}
+
 
 const generateAPIKEY = async (req, res) => {
     const lang = res.locals.lang;
@@ -81,6 +94,20 @@ const generateAPIKEY = async (req, res) => {
             userID,
             lang
         });
+    }
+}
+
+const ManageBanner = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    // console.log(userID)
+    try {
+        const Bannerlists = await Banner.find().sort({ createdAt: -1 }).exec();
+
+        res.render("./th/pages/admin/manage/manage_banner", { userID, Bannerlists, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ message: "Server Error", errorMessage})
     }
 }
 
@@ -217,7 +244,9 @@ module.exports = {
     getAdmin,
     getAdminReward,
     getAdminAPIKEY,
+    getAdminAddBanner,
     generateAPIKEY,
+    ManageBanner,
     ManageAnimes,
     ManageActor,
     ManageActPIKey,
