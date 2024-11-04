@@ -6,15 +6,18 @@
             <!-- <span class="absolute bottom-2 right-2 bg-overlay-dark-color text-white text-sm px-2 py-1 rounded">10:03</span> -->
         </div>
         <div class="flex items-center mt-2 p-4">
-            <% if (post.creator && post.creator.id) { %>
-                <img src="/uploads/profiles/<%= post.creator.id.profilePicture %>"
-                    alt="<%= post.creator.username %>" class="w-10 h-10 rounded-full">
+            <% if (post.creator && post.creator.profilePicture) { %>
+                <% let profilePic = post.creator.profilePicture.startsWith('http') ? post.creator.profilePicture : '/uploads/profiles/' + (post.creator.profilePicture || 'default.png'); %>
+                <img data-popover-target="popover-user-<%= post.creator.username %>" src="<%= profilePic %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
                 <div class="ml-3 flex-1">
-                    <h2 class="text-sm font-semibold text-white line-clamp-2">
-                       <%= post.title %>
+                    <h2 class="text-sm font-semibold text-black line-clamp-2">
+                        <%= post.title %>
                     </h2>
                     <p class="text-xs text-secondary-color" href="/channel/<%= post.creator.username %>" data-link="/editor/<%= post.creator.username %>">
                         <%= post.creator.username %>
+                        <% if (post.creator.id.role  === 'admin') { %>
+                            <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
+                        <% } %>
                     </p>
                     <p class="text-xs text-secondary-color">การดู <%= formatNumber(post.views) %> วิว •
                         <%= moment(post.createdAt).locale('th').fromNow() %>
@@ -23,6 +26,7 @@
             <% } else { %>
                 <p class="text-gray-600 text-sm">โพสต์นี้ไม่มีผู้สร้าง</p>
             <% } %>
+            
         </div>
     </a>
     
@@ -47,7 +51,7 @@
         <% } %>
 
 
-        <% if ((index + 1) % 7 === 0) { %>
+        <% if ((index + 1) % 8 === 0) { %>
             <div class="overflow-hidden ">
                 <div class="grid gap-1 md:gap-4 lg:gap-2">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"

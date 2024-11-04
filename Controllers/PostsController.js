@@ -31,7 +31,7 @@ const getPosts = async (req, res, next) => {
     const usertoken = userID?.user?._id; 
     const lang = res.locals.lang; 
     const page = parseInt(req.params.page) || 1;
-    const limit = 25; 
+    const limit = 15; 
 
     try {
         const Posts = await Article.find()

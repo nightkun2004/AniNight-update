@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="th_TH">
 <head>
-    <title><%= post.title %> | ANINIGHT</title>
+    <title><%= post.title %></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="อัตเดตข่าวสารด้านอนิเมะที่คุณชอบ พร้อมเนื้อหาที่มีประโยนช์แ่คุณ!!">
@@ -9,10 +9,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta property="og:locale" content="th_TH">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="<%= post.title %> | ANINIGHT.ONLINE">
+    <meta property="og:title" content="<%= post.title %> | ani-night.online">
     <meta property="og:description" content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !">
     <meta property="og:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>">
-    <meta property="og:image:width" content="1200">
+    <meta property="og:image:width" content="1280">
     <meta property="og:image:height" content="720">
     <meta property="og:site_name" content="ani-night.online">
     <meta property="og:type" content="website" />
@@ -22,7 +22,7 @@
     <meta property="og:image:type" content="image/jpg">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<%= post.title %> | ANINIGHT.ONLINE">
+    <meta name="twitter:title" content="<%= post.title %> |  ani-night.online">
     <meta name="twitter:description" content="เว็บที่ให้คุณเขียนบทความข่าวสารด้านอนิเมะ และรับรายได้จากค่าโฆษณา">
     <meta property="twitter:url" content="ANI-NIGHT.ONLINE" />
     <meta name="twitter:image" content="https://www.ani-night.online/uploads/thumbnails/<%= post.thumbnail %>">
@@ -122,12 +122,11 @@
                                 </p>
                             </div>
                             <div class="tages">
-                                <div class="mt-1 flex justify-between">
+                                <div class="mt-1 flex">
                                     <% if (post && post.tags && post.tags.length> 0) { %>
-                                        <h2
-                                            class="inline-block rounded-full border-2 mr-2 bg-white mb-2 border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black">
-                                            Tags: <% post.tags.forEach((tag, index)=> { %>
-                                                <a class="text-sky-500 txt-sm md:text-base" href="/tag/<%= tag %>">
+                                        <h2>
+                                             <% post.tags.forEach((tag, index)=> { %>
+                                                <a class="inline-block rounded-full border-2 mr-2 bg-white mb-2 border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black" href="/tag/<%= tag %>">
                                                     <%= tag %>
                                                 </a>
                                                 <% if (index < post.tags.length - 1) { %>

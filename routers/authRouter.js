@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { checkAuth } = require("../lib/auth")
 const { authMiddleware } = require("../Middlewares/authMiddleware")
-const {authLogin, getEditProfile, authRegister, authProfile,EditProfileAvater, EditBannerPost, EditProfile, logout} = require("../Controllers/authController")
+const {authLogin, getEditProfile, authRegister, authProfile, ResetPassword , checkTokenNewPassword,  EditProfileAvater, EditBannerPost, EditProfile, logout} = require("../Controllers/authController")
 const { getFollow, getUnfollow } = require("../Controllers/ChannelController")
 
 router.get("/auth/login", (req,res)=>{
@@ -20,6 +20,8 @@ router.get("/profile/:username/editprofile", checkAuth, authMiddleware, getEditP
 // เส้นทางสำหรับ Controllers
 router.post("/auth/login", authLogin)
 router.post("/auth/register", authRegister)
+router.post("/forget/password", ResetPassword)
+router.post("/new/password", checkTokenNewPassword)
 
 router.post("/editprofile",checkAuth, authMiddleware, EditProfile);
 router.post("/editprofile/changeProfile",checkAuth, authMiddleware, EditProfileAvater);

@@ -22,10 +22,9 @@
         }
     </style>
 </head>
-<body class="overflow-hidden">
+<body class="bg-gray-100 text-black">
 
-<main class="bg-white flex flex-row w-full h-screen">
-    <%- include('../../Component/Sidebar') %>
+    <%- include('../../Component/Header') %>
 
     <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
         <div class="flex justify-center items-center h-screen mt-8 mb-9">
@@ -54,10 +53,15 @@
                     </div>
 
                     <div class="flex items-center mb-4 mt-4">
-                        <input type="checkbox" id="remember" class="custom-checkbox  mr-2" required>
-                        <label for="remember" class="text-sm text-gray-700">ยอมรับเงื่อนไขการเข้าสู่ระบบของเราใช้ไหมครับ <a
-                                href="https://ani-night.online/term" target="_blank"
-                                rel="noopener noreferrer">อ่านนโบบาย</a></label>
+                        <div class="relative flex items-center">
+                            <input type="checkbox" id="remember" class="custom-checkbox mr-2" required>
+                            <label for="remember" class="text-sm text-gray-700">
+                                กรุณายอมรับข้อกำหนดและเงื่อนไขของเรา โดยการคลิกที่ช่องนี้ เพื่อให้คุณสามารถเข้าถึงและใช้บริการต่างๆ ได้อย่างเต็มที่ 
+                                <a href="https://ani-night.online/term" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">อ่านข้อกำหนดและเงื่อนไข</a>
+                                ที่เราได้กำหนดไว้
+                            </label>
+                            <div id="alertMessage" class="absolute -top-5 bg-gray-200 p-2 rounded-lg -left-4 text-red-500 text-center mt-0 ml-2 hidden"></div> 
+                        </div>
                     </div>
 
                     <div class="mb-6">
@@ -82,7 +86,8 @@
             </div>
         </div>
     </section>
+
+    <%- include('../../Component/Footer') %>
       
-    </main>
 </body>
 </html>

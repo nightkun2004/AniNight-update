@@ -4,33 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AniNight</title>
-  <meta name="keywords"
-  content="อ่านบทความ อ่านอนิเมะ ข่าวสาร อนิเมะ ตารางสารอนิเมะ พากย์ไทย ออนไลน์ มังงะ manga anime ได้ที่ AniNight อนิเมะไนท์">
+  <meta name="description" content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ อ่านบทความที่น่าสนใจ และอัปเดตตารางอนิเมะได้ที่ AniNight">
+  <meta name="keywords" content="อ่านบทความ, ข่าวอนิเมะ, ตารางอนิเมะ, อนิเมะพากย์ไทย, มังงะ, manga, anime, ออนไลน์, AniNight, อนิเมะไนท์">
+  <meta name="robots" content="index,follow">
+  <meta name="googlebot" content="index,follow">
+  <meta name="author" content="Nightun">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<meta name="robots" content="index,follow">
-<meta name="googlebot" content="index,follow">
-<meta name="author" content="Nightun">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
-<meta property="og:locale" content="th_TH">
-<meta property="og:type" content="article">
-<link rel="canonical" href="https://www.ani-night.online">
-<meta property="og:url" content="https://www.ani-night.online">
-<meta property="og:title" content="แพลตฟอร์มข่าวสาร อนิเมะ อัตเดตตารางสารอนิเมะ เรามีให้ติดตามที่นี่" />
-<meta property="og:description"
-  content="พบกับเว็บที่คุณสร้างสรรค์ผมลานข่าว บทความอนิเมะของคุณ ขอแค่คุณมีความคิดสร้างสรรค์คุณสามารถสร้างรายได้จาดเครื่องมือสร้างรายได้ของเรา !">
-<meta property="og:image" content="https://www.ani-night.online/annight/logo_mini.png">
-<meta property="og:image:width" content="1280">
-<meta property="og:image:height" content="800">
-<meta property="og:site_name" content="ani-night.online/">
-<meta property="og:type" content="website">
-<meta property="og:image:type" content="image/png">
-<link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+  <meta property="og:locale" content="th_TH">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://www.ani-night.online">
+  <meta property="og:url" content="https://www.ani-night.online">
+  <meta property="og:title" content="AniNight - แพลตฟอร์มข่าวสารและบทความเกี่ยวกับอนิเมะ">
+  <meta property="og:description" content="ติดตามข่าวสารอนิเมะ บทความสุดพิเศษ และตารางอนิเมะล่าสุดได้ที่ AniNight! สร้างสรรค์เนื้อหาและสร้างรายได้ผ่านเครื่องมือของเรา">
+  <meta property="og:image" content="https://www.ani-night.online/annight/logo_mini.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="800">
+  <meta property="og:site_name" content="AniNight">
+  <meta property="og:image:type" content="image/png">
+  <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-black text-white font-sans">
+<body class="bg-gray-100 text-black font-sans">
 
   <!-- Header -->
  <%- include('./Component/Header') %>
@@ -40,16 +37,16 @@
       <!-- Left Side (Anime Thumbnails) -->
       <section class="w-full lg:w-3/4">
 
-        <section class="relative bg-cover bg-center py-5 mb-5 rounded-lg" style="background-image: url('/annight/halloween-anime-girl.jpg');">
+        <!-- <section class="relative bg-cover bg-center py-5 mb-5 rounded-lg" style="background-image: url('/annight/halloween-anime-girl.jpg');">
           <div class="absolute inset-0 bg-black opacity-60 rounded-lg"></div>
           <div class="relative flex flex-col justify-center items-center h-full">
               <h2 class="md:text-5xl font-extrabold mb-4 text-orange-500">ขอต้อนรับสู่ฮาโลวีน!</h2>
               <p class="md:text-2xl mb-6">เช็คอนิเมะเดือนตุลาคม ในช่วงฮาโลวีนเลยย  !!.</p>
               <a href="/schedule/anime" class="px-6 py-3 bg-orange-600 text-white rounded-lg shadow-lg hover:bg-orange-500">ไปเลยย!</a>
           </div>
-      </section>
+      </section> -->
 
-        <h2 class="text-xl font-semibold mb-4">อัพเดตใหม่ 🎃</h2>
+        <h2 class="text-xl font-semibold mb-4">อัพเดตใหม่</h2>
         <% if (Posts.length> 0 && typeof error === 'undefined') { %>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <% Posts.slice(0, 10).forEach((post, index)=> { %>

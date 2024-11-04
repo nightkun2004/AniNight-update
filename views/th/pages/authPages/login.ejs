@@ -31,7 +31,7 @@
        <div class="flex justify-center mt-5 mb-6 h-screen items-center">
         <div class="bg-white relative p-8 rounded-lg shadow-lg w-full max-w-md overflow-hidden">
             <h2 class="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h2>
-            <form action="/api/v2/auth/login" method="POST" class="z-10">
+            <form id="loginForm" action="/api/v2/auth/login" method="POST" class="z-10">
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700">อีเมล</label>
                     <input type="email" id="email" name="email" class="mt-2 p-2 w-full border rounded-md outline-none" required>
@@ -41,9 +41,34 @@
                     <input type="password" id="password" name="password" class="mt-2 p-2 w-full border rounded-md outline-none" required>
                 </div>
                 <div class="mb-6">
-                    <button type="submit" class="w-full bg-black text-white p-2 rounded-md focus:ring-opacity-50">เข้าสู่ระบบ</button>
+                    <button type="submit" id="submitButton" class="w-full bg-black text-white p-2 rounded-md focus:ring-opacity-50">เข้าสู่ระบบ</button>
+                </div>
+                <div class="mb-4">
+                    <button type="button" id="forgotPasswordButton" class="text-blue-500 hover:underline">ลืมรหัสผ่าน?</button>
                 </div>
             </form>
+
+            <div id="forgotPasswordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <div class="bg-white p-6 rounded-md shadow-md w-80">
+                    <span id="closeModal" class="cursor-pointer float-right text-gray-600"><i class="fas fa-times"></i></span>
+                    <h2 class="text-lg font-semibold mb-2">ลืมรหัสผ่าน</h2>
+                    <p>กรุณาใส่อีเมลของคุณเพื่อรีเซ็ตรหัสผ่าน</p>
+                    <form id="resetForm" action="/api/v2/forget/password" method="post" enctype="multipart/form-data">
+                        <input type="email" id="resetEmail" name="email" class="mt-2 p-2 w-full border rounded-md outline-none" placeholder="อีเมล" required>
+                        <div class="mt-4 justify-center flex">
+                            <button type="submit" id="sendResetLink" class="bg-blue-500 text-white p-2 rounded-md">ส่งลิงก์รีเซ็ตรหัสผ่าน</button>
+                        </div>
+                    </form>
+                    <p id="responseMessage" class="mt-4 text-red-500"></p>
+                    <div id="loadingIndicator" class="hidden mt-2 flex justify-center">
+                        <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12c0-1.1.9-2 2-2h4v4H6c-1.1 0-2-.9-2-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
             <div class="mb-6 mt-4">
                 <% if (typeof error !== 'undefined') { %>
                     <div class="mb-4 text-red-500 text-center"><%= error %></div>
@@ -69,8 +94,8 @@
             <hr class="mt-4 mb-6">
             <div class="google-login mb-4 w-full">
                 <a href="/auth/google" target="_blank">
-                    <button class="login_button flex items-center border-2 px-4 py-2 rounded-lg w-full">
-                        <img src="/logo/google_icon.png" alt="google icon" class="w-10 h-10">
+                    <button id="googleLogin" class="login_button flex items-center border-2 px-4 py-2 rounded-lg w-full">
+                        <img src="/logo/google_icon.png" alt="google icon" class="w-7 h-7">
                         <div class="login_text pl-5">
                            เข้าสู่ระบบ / สมัครด้วย Google
                         </div>
@@ -78,17 +103,142 @@
                 </a>
                 <!-- <span class="text-red-500 font-medium text-sm text-center">เนื่องจากการเข้าสู่ระบบ Google ยังอยู่ระหว่างตรวจสอบจาก Google คุณอาจจะได้รับข้อผิดพลาดที่หน้าของ Google</span> -->
             </div>
-            <!-- Character Image Section -->
-            <div class="absolute top-0 pr-10 select-none" style="right: -60px;">
-                <img src="/annight/refister.png" alt="ตัวละคร" class="h-40 object-contain pointer-events-none w-auto">
+            <div class="tiktok-login mb-4 w-full">
+                <a href="javascriptt:void(0)">
+                    <button id="tiktokLogin" class="login_button cursor-not-allowed flex items-center border-2 px-4 py-2 rounded-lg w-full bg-black">
+                        <img src="/annight/icons/tiktok_icon.png" alt="google icon" class="w-7 h-7">
+                        <div class="text-white pl-10">
+                           เข้าสู่ระบบ / สมัครด้วย TikTok
+                        </div>
+                    </button>
+                </a>
             </div>
+
+            <div class="flex items-center mb-4 mt-4">
+                <div class="relative flex items-center">
+                    <input type="checkbox" id="remember" class="custom-checkbox mr-2" required>
+                    <label for="remember" class="text-sm text-gray-700">
+                        กรุณายอมรับข้อกำหนดและเงื่อนไขของเรา โดยการคลิกที่ช่องนี้ เพื่อให้คุณสามารถเข้าถึงและใช้บริการต่างๆ ได้อย่างเต็มที่ 
+                        <a href="https://ani-night.online/term" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">อ่านข้อกำหนดและเงื่อนไข</a>
+                        ที่เราได้กำหนดไว้
+                    </label>
+                    <div id="alertMessage" class="absolute -top-5 bg-gray-200 p-2 rounded-lg -left-4 text-red-500 text-center mt-0 ml-2 hidden"></div> 
+                </div>
+            </div>
+            
         </div>
        </div>
      </section>
 
+     <%- include('../../Component/Footer') %>
 
+     <script>
+        const modal = document.getElementById("forgotPasswordModal");
+        const forgotPasswordButton = document.getElementById("forgotPasswordButton");
+        const closeModal = document.getElementById("closeModal");
+        const resetForm = document.getElementById("resetForm");
+        const responseMessage = document.getElementById("responseMessage");
+        const loadingIndicator = document.getElementById("loadingIndicator");
 
-    <script src="/js/script.js  "></script>
+        // Show modal when button is clicked
+        forgotPasswordButton.onclick = function() {
+            modal.classList.remove("hidden");
+        }
+
+        // Close modal when close button is clicked
+        closeModal.onclick = function() {
+            modal.classList.add("hidden");
+            responseMessage.innerText = ""; // Clear previous messages
+        }
+
+        // Close modal when clicking outside of the modal content
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.classList.add("hidden");
+                responseMessage.innerText = ""; // Clear previous messages
+            }
+        }
+
+        // Handle form submission
+        resetForm.onsubmit = async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            loadingIndicator.classList.remove("hidden"); // Show loading indicator
+            responseMessage.innerText = ""; // Clear previous messages
+
+            const formData = new FormData(resetForm);
+
+            try {
+                const response = await fetch(resetForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                loadingIndicator.classList.add("hidden"); // Hide loading indicator
+
+                if (response.ok) {
+                    responseMessage.classList.remove("text-red-500");
+                    responseMessage.classList.add("text-green-500");
+                    responseMessage.innerText = data; // Display success message
+                } else {
+                    responseMessage.classList.remove("text-green-500");
+                    responseMessage.classList.add("text-red-500");
+                    responseMessage.innerText = data; // Display error message
+                }
+            } catch (error) {
+                loadingIndicator.classList.add("hidden"); // Hide loading indicator
+                responseMessage.classList.remove("text-green-500");
+                responseMessage.classList.add("text-red-500");
+                responseMessage.innerText = 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์';
+            }
+        }
+    </script>
+     <script>
+        const checkbox = document.getElementById('remember');
+const submitButton = document.getElementById('submitButton');
+const googleLoginButton = document.getElementById('googleLogin');
+const tiktokLoginButton = document.getElementById('tiktokLogin');
+const alertMessage = document.getElementById('alertMessage');
+
+function showAlert(message) {
+    alertMessage.textContent = message;
+    alertMessage.classList.remove('hidden');
+
+    setTimeout(() => {
+        alertMessage.classList.add('hidden');
+    }, 5000);
+}
+
+// Event listener for login button
+submitButton.addEventListener('click', function(event) {
+    if (!checkbox.checked) {
+        event.preventDefault(); 
+        showAlert('กรุณายอมรับนโยบายของเราเพื่อเข้าสู่ระบบ'); 
+    } else {
+        alertMessage.classList.add('hidden'); 
+    }
+});
+
+// Event listener for Google login button
+googleLoginButton.addEventListener('click', function(event) {
+    if (!checkbox.checked) {
+        event.preventDefault();
+        showAlert('กรุณายอมรับนโยบายของเราเพื่อเข้าสู่ระบบ');
+    } else {
+        alertMessage.classList.add('hidden');
+    }
+});
+
+// Event listener for TikTok login button
+tiktokLoginButton.addEventListener('click', function(event) {
+    if (!checkbox.checked) {
+        event.preventDefault(); // Prevent link navigation
+        showAlert('กรุณายอมรับนโยบายของเราเพื่อเข้าสู่ระบบ'); // Show alert message
+    } else {
+        alertMessage.classList.add('hidden'); // Hide alert message if checked
+    }
+});
+    </script>
 </body>
 
 </html>

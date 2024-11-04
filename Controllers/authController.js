@@ -5,11 +5,13 @@ const path = require("path")
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const crypto = require("crypto")
+const jsonwebtoken = require("jsonwebtoken")
 const fs = require("fs")
 const axios = require('axios')
 const { sendEmail } = require("../transporter");
 const { emailHtmlWelcomeUser } = require("../emailHtml/welcomeuserHtml")
 const { addPaymenthtml } = require("../emailHtml/addPaymenthtml")
+const { ResetPasswordHtml } = require("../emailHtml/resetPasswordhtml")
 require("dotenv").config()
 
 const { checkAuth } = require("../lib/auth")
@@ -25,7 +27,7 @@ const authLogin = async (req, res, next) => {
 
         // ตรวจสอบว่าข้อมูลที่ส่งมาครบถ้วนหรือไม่
         if (!email || !password) {
-            return res.status(400).render(`./th/pages/authPages/login`, { notdata: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID,  active: "profile", translations: req.translations, lang });
+            return res.status(400).render(`./th/pages/authPages/login`, { notdata: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, active: "profile", translations: req.translations, lang });
         }
 
         // Normalize email
@@ -34,14 +36,14 @@ const authLogin = async (req, res, next) => {
 
         // ตรวจสอบว่าผู้ใช้มีอยู่ในระบบหรือไม่
         if (!user) {
-            return res.status(404).render(`./th/pages/authPages/login`, { notsystem: 'ไม่พบผู้ใช้นี้ในระบบ', userID,  active: "profile", translations: req.translations, lang });
+            return res.status(404).render(`./th/pages/authPages/login`, { notsystem: 'ไม่พบผู้ใช้นี้ในระบบ', userID, active: "profile", translations: req.translations, lang });
         }
 
         // ตรวจสอบความถูกต้องของรหัสผ่าน
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).render(`./th/pages/authPages/login`, { error: 'รหัสผ่านไม่ถูกต้อง', userID,  active: "profile", translations: req.translations, lang });
+            return res.status(401).render(`./th/pages/authPages/login`, { error: 'รหัสผ่านไม่ถูกต้อง', userID, active: "profile", translations: req.translations, lang });
         }
 
         // สร้าง JWT token
@@ -83,7 +85,7 @@ const authRegister = async (req, res, next) => {
 
         // ตรวจสอบข้อมูลที่จำเป็น
         if (!username || !email || !password) {
-            return res.status(400).render(`./th/pages/authPages/register`, { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID,  active: "register", siteKey, translations: req.translations, lang });
+            return res.status(400).render(`./th/pages/authPages/register`, { error: 'ข้อมูลที่ส่งมาไม่ครบถ้วน', userID, active: "register", siteKey, translations: req.translations, lang });
         }
 
         if (password.length < 6) {
@@ -140,8 +142,8 @@ const authRegister = async (req, res, next) => {
         );
 
         await sendEmail(
-            newUser.email, 
-            `ถึง ${username} ยินดีด้วยคุณสมัครสมาชิกของเราเรียนร้อยแล้วว !! 😎😍`, 
+            newUser.email,
+            `ถึง ${username} ยินดีด้วยคุณสมัครสมาชิกของเราเรียนร้อยแล้วว !! 😎😍`,
             emailHtmlWelcomeUser()
         );
 
@@ -197,7 +199,7 @@ const authProfile = async (req, res) => {
         checkAuth(req, res, async () => {
             const user = await User.findById(userID.user._id).select('-password').populate('articles').exec();
             if (!user) {
-                return res.status(404).render(`./th/pages/authPages/profile`, { error: 'ไม่พบผู้ใช้นี้ในระบบ',  active: "profile", translations: req.translations, lang });
+                return res.status(404).render(`./th/pages/authPages/profile`, { error: 'ไม่พบผู้ใช้นี้ในระบบ', active: "profile", translations: req.translations, lang });
             }
             res.render(`./th/pages/authPages/profile`, {
                 active: "profile",
@@ -216,6 +218,119 @@ const authProfile = async (req, res) => {
         });
     }
 };
+
+
+// ====================================== ResetPassword ====================================================
+// =========================================================================================================
+const ResetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json('ไม่พบบัญชีนี้');
+        }
+
+        // Generate reset token
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '10m' }
+        );
+
+        user.resetToken = token;
+        user.resetTokenExpiry = Date.now() + 10 * 60 * 1000; // 10 นาทีหมดอายุ
+        await user.save()
+
+        const resetLink = `http://localhost:5000/reset-password?token=${token}`;
+
+        await sendEmail(
+            user.email,
+            `แจ้งเตือน: มีการส่งคำขอรีเซ็ตรหัสผ่านสำหรับ ${user.email}`,
+            ResetPasswordHtml(resetLink)
+        );
+
+
+        res.status(200).json('เราส่งคำขอรีเซ้นรหัสผ่านไปทางอีเมลของคุณแล้ว');
+    } catch (error) {
+       res.status(500).json({ message: 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์' });
+    }
+}
+
+
+
+// ====================================== Get ResetPassword ===================================================
+// ============================================================================================================
+const getResetPassword = async (req,res) => {
+    const userID = req.session.userlogin;
+    const { token } = req.query;
+    try {
+        const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Token ไม่ถูกต้องหรือหมดอายุ' });
+        }
+
+        const siteKey = process.env.SITE_KEY;
+
+        res.render("./th/pages/authPages/reset-password", {userID, token, siteKey })
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error, status: 500})
+    }
+}
+
+
+
+// ====================================== post checkToken ResetPassword new ===================================================
+// ============================================================================================================
+const checkTokenNewPassword = async (req,res) => {
+    const { token } = req.query; // รับ token จาก query string
+    const { newPassword, 'g-recaptcha-response': recaptchaResponse } = req.body;
+    try {
+        const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
+
+
+         // ตรวจสอบ reCAPTCHA
+         const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA;
+         if (!secretKey) {
+             throw new Error('ไม่พบ secretKey ในการตรวจสอบ reCAPTCHA');
+         }
+
+    
+ 
+         // ตรวจสอบ reCAPTCHA
+         const recaptchaResponseData = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+             params: {
+                 secret: secretKey,
+                 response: recaptchaResponse
+             }
+         });
+ 
+         if (!recaptchaResponseData.data.success) {
+             return res.status(400).json({ message: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตโนมัติ' });
+         }
+
+        if (!user) {
+            return res.status(400).json({ message: 'Token ไม่ถูกต้องหรือหมดอายุ' });
+        }
+
+        // ตรวจสอบว่าผู้ใช้มีการลงชื่อเข้าใช้ผ่าน Google
+        if (user.googleId && !user.password) {
+            return res.status(400).json({ message: 'ผู้ใช้ลงชื่อเข้าใช้ผ่าน Google และยังไม่มีรหัสผ่าน เรากำลังแก้ไขปัญหานี้โปรดรอ' })
+        }
+
+        // ตั้งค่ารหัสผ่านใหม่
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetToken = undefined; 
+        user.resetTokenExpiry = undefined;
+        await user.save();
+
+        res.status(200).json({ message: 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว' });
+    } catch (error) {
+        res.status(500).json({ message: `Server Error ${error}`, error: error, status: 500})
+    }
+}
 
 
 // =============================================== Profile Save Anime =========================================
@@ -503,11 +618,11 @@ const saveTrueMoney = async (req, res) => {
         };
 
         await sendEmail(
-            user.email, 
+            user.email,
             `ถึง ${name} ยินดีด้วย คุณได้เพิ่ม TrueMoney Wallet เรียบร้อยแล้ว!`,
             addPaymenthtml("เพิ่ม True Money", name, truemoneynumber)
         );
-        
+
 
         await user.save();
         // console.log(user)
@@ -538,7 +653,7 @@ const savebankaccount = async (req, res) => {
 
         // ส่งอีเมลแจ้งเตือนผู้ใช้
         await sendEmail(
-            user.email, 
+            user.email,
             `ถึง ${name} ยินดีด้วย คุณได้เพิ่มบัญชีธนาคารเรียบร้อยแล้ว!`,
             addPaymenthtml("เพิ่มการชำระเงินธนาคาร", name, banknumber) // เปลี่ยนเป็น name และ banknumber
         );
@@ -576,6 +691,9 @@ module.exports = {
     authLogin,
     authRegister,
     authProfile,
+    ResetPassword,
+    getResetPassword,
+    checkTokenNewPassword,
     authProfileSaveAnime,
     EditProfile,
     EditProfileAvater,

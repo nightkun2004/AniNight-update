@@ -20,6 +20,8 @@ const UserSchema = new mongoose.Schema({
             return !this.googleId; 
         }
     },
+    resetToken: String,
+    resetTokenExpiry: Date,
     bank: {
         truemoneywallet: {
             name: String,
