@@ -243,7 +243,7 @@ const ResetPassword = async (req, res) => {
         user.resetTokenExpiry = Date.now() + 10 * 60 * 1000; // 10 นาทีหมดอายุ
         await user.save()
 
-        const resetLink = `http://localhost:5000/reset-password?token=${token}`;
+        const resetLink = `https://www.ani-night.online/reset-password?token=${token}`;
 
         await sendEmail(
             user.email,
