@@ -38,7 +38,7 @@
                             </div>
                             <p class="text-sm text-gray-600">ภูมิภาค: TH</p>
                             <p class="text-sm text-gray-600">คะแนนของการสำรวจ: <%= survey.score %></p>
-                            <a href="/survey/start/<%= survey._id %>" target="_blank" class="inline-block mt-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300">
+                            <a href="/survey/start/<%= survey._id %>?idUser=<%= userID.user._id %>" target="_blank" class="inline-block mt-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300">
                                 เข้าร่วมการสำรวจ
                             </a>
                         </div>

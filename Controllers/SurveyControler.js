@@ -1,6 +1,7 @@
 const User = require("../models/UserModel")
 const Survey = require("../models/SurveyModel")
 const SurveyAdmin = require("../models/SurveyAddModel")
+const Notification = require("../models/NotificationModel");
 const axios = require("axios")
 const crypto = require('crypto');
 require("dotenv").config()
@@ -23,6 +24,153 @@ function verifyHash(query, secretKey) {
 function isDemoMode(url) {
     return url.includes('DEMO MODE');
 }
+
+
+const getStartSurvey = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin || null;
+    const {idUser} = req.query
+    const { surverid } = req.params;  // แก้ไขจาก req.params.id เป็น req.params.surverid
+    try {
+        const survey = await SurveyAdmin.findById(surverid);
+        // console.log(survey);
+
+        res.render("./th/pages/Survey/start", { 
+            active: "start", 
+            surveyid: surverid,
+            survey,
+            idUser,
+            userID, 
+            translations: req.translations,
+            lang, 
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).send(errorMessage)
+    }
+}
+
+const getSurveryquestionId = async (req, res) => {
+    const lang = res.locals.lang;
+    const {idUser} = req.query;
+    const userID = req.session.userlogin || null;
+    try {
+        const survey = await SurveyAdmin.findById(req.params.id);
+        const question = survey.questions.id(req.params.questionId);
+        const currentIndex = survey.questions.findIndex(q => q._id.equals(req.params.questionId));
+        const progress = Math.round((currentIndex / survey.questions.length) * 100);
+
+
+
+        res.render("./th/pages/Survey/Surveranswers", { 
+            active: "start", 
+            survey, question, progress,
+            idUser,
+            userID, 
+            translations: req.translations,
+            lang, 
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).render('./th/pages/Survey/Surveranswers', {
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang  
+        });
+    }
+}
+const getSurveryAnswers = async (req, res) => {
+    const lang = res.locals.lang;
+    const {idUser} = req.query;
+    const userID = req.session.userlogin || null;
+    try {
+
+        const survey = await SurveyAdmin.findById(req.params.id);
+
+
+        res.render("./th/pages/Survey/Surveranswers", { 
+            active: "start", 
+            survey,
+            idUser,
+            userID, 
+            translations: req.translations,
+            lang, 
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({ msg: errorMessage})
+    }
+}
+
+
+const getSurverycomplete = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin || null;
+    const { idUser } = req.query;
+    const answers = req.body.answers;
+
+    try {
+        console.log("User ID:", idUser);
+        
+        // ค้นหาแบบสำรวจโดยใช้ id ที่ส่งมา
+        const survey = await SurveyAdmin.findById(req.params.id);
+
+        if (!survey) {
+            throw new Error("Survey not found");
+        }
+
+        // ตรวจสอบว่า responses มีอยู่หรือยัง ถ้าไม่มีก็สร้างใหม่
+        survey.responses = survey.responses || [];
+        
+        // เพิ่มคำตอบของผู้ใช้ลงใน responses
+        survey.responses.push({
+            userID: idUser,
+            answers,  // บันทึกคำตอบในรูปแบบ { questionIndex: answer }
+            completedAt: new Date(),
+        });
+
+        const user = await User.findById(idUser);
+        if (user) {
+            user.points = (user.points || 0) + survey.score;  // เพิ่มคะแนนจากแบบสำรวจ
+            await user.save();  // บันทึกการเปลี่ยนแปลงในข้อมูลผู้ใช้
+        }
+
+        const notificationMessage = `ยินด้วยคุณพึ่งได้รับ ${survey.score} คะแนน.`;
+        const lognotification = await Notification.create({
+            ownerId: idUser,
+            message: notificationMessage,
+        });
+
+        console.log(lognotification)
+        
+        // บันทึกการเปลี่ยนแปลงในแบบสำรวจ
+        await survey.save();
+        // console.log("บันทึกคำตอบสำเร็จ:", survey);
+
+        res.render("./th/pages/Survey/completion", { 
+            active: "start", 
+            survey,
+            idUser,
+            userID, 
+            translations: req.translations,
+            lang, 
+        });
+
+        // return res.status(200).json({survey })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        return res.status(200).json({errorMessage })
+        // res.status(500).render('./th/pages/Survey/completion', {
+        //     error: errorMessage,
+        //     userID,
+        //     translations: req.translations, 
+        //     lang  
+        // });
+    }
+};
+
+
+
 
 // =============================================== Route GET Survey ===========================================
 // ============================================================================================================
@@ -194,6 +342,10 @@ const ReconciliationCallback = async (req, res) => {
 
 module.exports = {
     getSurvey,
+    getStartSurvey,
+    getSurveryAnswers,
+    getSurveryquestionId,
+    getSurverycomplete,
     RewardCallback,
     OfferRewardCallback,
     ReconciliationCallback,

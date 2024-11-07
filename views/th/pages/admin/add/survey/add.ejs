@@ -18,6 +18,15 @@
         <h1 class="text-2xl font-semibold mb-6 text-gray-800">สร้างแบบสำรวจ</h1>
 
         <form action="/api/v2/admin/create-survey" method="POST" class="space-y-4">
+            <% if (typeof success !== 'undefined' || typeof error !== 'undefined') { %>
+                <% if (success) { %>
+                    <p>Survey created successfully!</p>
+                <% } else if (error) { %>
+                    <p>There was an error creating the survey: <%= errorMessage || 'Please try again.' %></p>
+                <% } %>
+            <% } %>
+            
+
             <div class="mb-4">
                 <label for="surveyName" class="block text-gray-700 font-medium mb-2">ชื่อแบบสำรวจ</label>
                 <input type="text" id="surveyName" name="surveyName" required

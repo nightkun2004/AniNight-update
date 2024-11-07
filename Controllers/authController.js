@@ -15,7 +15,6 @@ const { ResetPasswordHtml } = require("../emailHtml/resetPasswordhtml")
 require("dotenv").config()
 
 const { checkAuth } = require("../lib/auth")
-require("dotenv").config()
 
 
 // POST: /api/users/login
@@ -174,22 +173,38 @@ const authRegister = async (req, res, next) => {
     }
 }
 
-// ===================================== Google Singin =====================================================
+// ===================================== TikTok Singin =====================================================
 // =========================================================================================================
-const GoogleSingin = async (req, res) => {
-    const lang = req.params.lang || 'th';
-    const userID = req.session.userlogin;
+const TikTokLogin = async (req, res) => {
+    const CLIENT_KEY = process.env.TIKTOK_CLIENT_KEY;
+    const CLIENT_SECRET = process.env.TIKTOK_CLIENT_SECRET;
+    if (!CLIENT_KEY) {
+        return res.status(500).json({ error: 'TikTok client key is not configured' });
+    }
+    console.log('TikTok Client Key:', CLIENT_KEY);
+
+
     try {
 
+
+        const csrfState = Math.random().toString(36).substring(2);
+        res.cookie("csrfState", csrfState, { maxAge: 60000 });
+        let url = "https://www.tiktok.com/v2/auth/authorize/";
+        // the following params need to be in `application/x-www-form-urlencoded` format.
+        url += `?client_key=${CLIENT_KEY}`;
+        url += "&scope=user.info.basic,user.info.profile,user.info.stats,video.list";
+        url += "&response_type=code";
+        url += `&redirect_uri=http://localhost:5000/auth/tiktok/callback`;
+        url += "&state=" + csrfState;
+
+        res.redirect(url);
     } catch (error) {
+        console.error('Error in TikTokLogin:', error);
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./pages/authPages/login', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
+        res.status(500).json({ error: errorMessage });
     }
-}
+};
+
 
 const authProfile = async (req, res) => {
     const lang = res.locals.lang;
@@ -254,7 +269,7 @@ const ResetPassword = async (req, res) => {
 
         res.status(200).json('เราส่งคำขอรีเซ้นรหัสผ่านไปทางอีเมลของคุณแล้ว');
     } catch (error) {
-       res.status(500).json({ message: 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์' });
+        res.status(500).json({ message: 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์' });
     }
 }
 
@@ -262,7 +277,7 @@ const ResetPassword = async (req, res) => {
 
 // ====================================== Get ResetPassword ===================================================
 // ============================================================================================================
-const getResetPassword = async (req,res) => {
+const getResetPassword = async (req, res) => {
     const userID = req.session.userlogin;
     const { token } = req.query;
     try {
@@ -274,9 +289,9 @@ const getResetPassword = async (req,res) => {
 
         const siteKey = process.env.SITE_KEY;
 
-        res.render("./th/pages/authPages/reset-password", {userID, token, siteKey })
+        res.render("./th/pages/authPages/reset-password", { userID, token, siteKey })
     } catch (error) {
-        res.status(500).json({ message: "Server Error", error: error, status: 500})
+        res.status(500).json({ message: "Server Error", error: error, status: 500 })
     }
 }
 
@@ -284,32 +299,32 @@ const getResetPassword = async (req,res) => {
 
 // ====================================== post checkToken ResetPassword new ===================================================
 // ============================================================================================================
-const checkTokenNewPassword = async (req,res) => {
+const checkTokenNewPassword = async (req, res) => {
     const { token } = req.query; // รับ token จาก query string
     const { newPassword, 'g-recaptcha-response': recaptchaResponse } = req.body;
     try {
         const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
 
 
-         // ตรวจสอบ reCAPTCHA
-         const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA;
-         if (!secretKey) {
-             throw new Error('ไม่พบ secretKey ในการตรวจสอบ reCAPTCHA');
-         }
+        // ตรวจสอบ reCAPTCHA
+        const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA;
+        if (!secretKey) {
+            throw new Error('ไม่พบ secretKey ในการตรวจสอบ reCAPTCHA');
+        }
 
-    
- 
-         // ตรวจสอบ reCAPTCHA
-         const recaptchaResponseData = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
-             params: {
-                 secret: secretKey,
-                 response: recaptchaResponse
-             }
-         });
- 
-         if (!recaptchaResponseData.data.success) {
-             return res.status(400).json({ message: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตโนมัติ' });
-         }
+
+
+        // ตรวจสอบ reCAPTCHA
+        const recaptchaResponseData = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+            params: {
+                secret: secretKey,
+                response: recaptchaResponse
+            }
+        });
+
+        if (!recaptchaResponseData.data.success) {
+            return res.status(400).json({ message: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตโนมัติ' });
+        }
 
         if (!user) {
             return res.status(400).json({ message: 'Token ไม่ถูกต้องหรือหมดอายุ' });
@@ -322,13 +337,13 @@ const checkTokenNewPassword = async (req,res) => {
 
         // ตั้งค่ารหัสผ่านใหม่
         user.password = await bcrypt.hash(newPassword, 10);
-        user.resetToken = undefined; 
+        user.resetToken = undefined;
         user.resetTokenExpiry = undefined;
         await user.save();
 
         res.status(200).json({ message: 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว' });
     } catch (error) {
-        res.status(500).json({ message: `Server Error ${error}`, error: error, status: 500})
+        res.status(500).json({ message: `Server Error ${error}`, error: error, status: 500 })
     }
 }
 
@@ -691,6 +706,7 @@ module.exports = {
     authLogin,
     authRegister,
     authProfile,
+    TikTokLogin,
     ResetPassword,
     getResetPassword,
     checkTokenNewPassword,

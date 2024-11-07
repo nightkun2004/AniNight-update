@@ -34,7 +34,7 @@ const getAdminSurveyCreate = async (req,res) => {
     const userID = req.session.userlogin || null;
     try {
         res.render("./th/pages/admin/add/survey/add", { 
-            active: "tags", 
+            active: "tags",
             userID, 
             translations: req.translations,
             lang, 
@@ -87,28 +87,33 @@ const CreateSurvey = async (req,res) => {
     const { surveyName, questions, score, published } = req.body;
 
     try {
+        // ตรวจสอบและสร้างโครงสร้างคำถามจาก req.body
+        const formattedQuestions = questions.map(q => ({
+            questionText: q.questionText,
+            inputType: q.inputType,
+            options: Array.isArray(q.options) ? q.options : [],  // ตรวจสอบว่า options เป็น array หรือไม่
+            answers: q.answers?.map(ans => ({
+                text: ans.text,
+                isCorrect: ans.isCorrect || false
+            })) || []  // ตรวจสอบ answers
+        }));
+
         const survey = new SurveyAdmin({
             surveyName,
-            questions: questions.map(q => ({
-                questionText: q.questionText,
-                inputType: q.inputType,
-                options: Array.isArray(q.options) ? q.options : [] 
-            })),
+            questions: formattedQuestions,
             score,
-            published: published === 'on'
+            published: published === 'on'  // เปลี่ยน published เป็น Boolean
         });
-        
-          await survey.save();
-          console.log(survey)
-          await User.findByIdAndUpdate(req.user.id, { $push: { surveyadmin: survey._id } }, { new: true });
-          res.redirect('/admin/create/survey');
+
+        // บันทึกแบบสำรวจลงในฐานข้อมูล
+        await survey.save();
+        console.log("Survey Created:", survey);
+        // เปลี่ยนเส้นทางเมื่อสำเร็จ
+        res.redirect('/admin/create/survey?success=true');
     } catch (error) {
+        console.error("Error creating survey:", error);
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/add/survey/add', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang  
-        });
+        res.redirect(`/admin/create/survey?success=error&msg=${encodeURIComponent(errorMessage)}`);
     }
 }
 

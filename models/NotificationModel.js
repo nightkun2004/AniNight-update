@@ -8,12 +8,10 @@ const notificationSchema = new mongoose.Schema({
     },
     message: {
         type: String,
-        required: true,
     },
     articleId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Article',
-        required: true,
     },
     createdAt: {
         type: Date,

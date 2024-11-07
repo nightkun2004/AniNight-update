@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสำรวจ: <%= survey.surveyName %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        let currentQuestionIndex = 0;
+
+        // ฟังก์ชันสำหรับแสดงคำถามตามดัชนี
+        function showQuestion(index, totalQuestions) {
+            document.querySelectorAll('.question').forEach((question, i) => {
+                question.style.display = i === index ? 'block' : 'none';
+            });
+            document.getElementById('progress-bar').style.width = ((index + 1) / totalQuestions) * 100 + '%';
+            document.getElementById('progress-text').innerText = Math.round(((index + 1) / totalQuestions) * 100) + '%';
+            document.getElementById('prev-btn').style.display = index === 0 ? 'none' : 'inline-block';
+            document.getElementById('next-btn').style.display = index === totalQuestions - 1 ? 'none' : 'inline-block';
+            document.getElementById('submit-btn').style.display = index === totalQuestions - 1 ? 'block' : 'none';
+        }
+
+        // ฟังก์ชันถัดไปและก่อนหน้า
+        function nextQuestion(totalQuestions) {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex, totalQuestions);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex, survey.questions.length);
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+
+    <div class="w-full max-w-2xl mt-10 bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4"><%= survey.surveyName %></h1>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+            <div id="progress-bar" class="bg-blue-500 relative h-2 rounded-full text-center text-white font-semibold" style="width: 0%;">
+            </div>
+            <span id="progress-text" class="text-orange-400">0%</span>
+        </div>
+        <form action="/survey/<%= survey._id %>/complete?idUser=<%= idUser %>" method="POST">
+            <% survey.questions.forEach((question, index) => { %>
+                <div class="question mb-8" style="display: none;">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-2"><%= question.questionText %></h2>
+                    <input type="hidden" name="answers[<%= index %>][questionId]" value="<%= question._id %>" class="outline-none">
+        
+                    <% if (question.inputType === 'single-choice') { %>
+                        <% question.options.forEach(option => { %>
+                            <label class="block mb-2">
+                                <input type="radio" name="answers[<%= index %>][answerText]" value="<%= option %>" 
+                                    class="mr-2 text-blue-500 focus:ring focus:ring-blue-300">
+                                <span class="text-gray-600"><%= option %></span>
+                            </label>
+                        <% }); %>
+                    <% } else if (question.inputType === 'multiple-choice') { %>
+                        <% question.options.forEach(option => { %>
+                            <label class="block mb-2">
+                                <input type="checkbox" name="answers[<%= index %>][answerText][]" value="<%= option %>" 
+                                    class="mr-2 text-blue-500 focus:ring focus:ring-blue-300">
+                                <span class="text-gray-600"><%= option %></span>
+                            </label>
+                        <% }); %>
+                    <% } else if (question.inputType === 'text') { %>
+                        <input type="text" name="answers[<%= index %>][answerText]" class="w-full border outline-none border-gray-300 rounded-md p-2">
+                    <% } %>
+                </div>
+            <% }); %>
+
+            <div class="flex justify-between mt-6">
+                <button type="button" id="prev-btn" onclick="prevQuestion()" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md" style="display: none;">
+                    ก่อนหน้า
+                </button>
+                <button type="button" id="next-btn" onclick="nextQuestion(<%= survey.questions.length %>)" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                    ถัดไป
+                </button>
+                <button type="submit" id="submit-btn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md" style="display: none;">
+                    ส่งคำตอบ
+                </button>
+            </div>
+        </form>
+        
+
+        <p class="text-black text-sm mt-5 mb-5"> &copy; Survey AniNight.</p>
+    </div>
+
+    <script>
+        // เริ่มต้นแสดงคำถามแรก
+        document.addEventListener('DOMContentLoaded', () => {
+            showQuestion(0, <%= survey.questions.length %>);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เริ่มแบบสำรวจ</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body class="bg-gray-900">
+    <div class="text-center h-screen flex justify-center items-center flex-col px-4">
+        <h1 class="text-3xl font-bold text-white mb-4">ยินดีต้อนรับสู่แบบสำรวจ !</h1>
+        
+        <!-- นโยบายและข้อกำหนด -->
+        <div class="bg-gray-800 p-4 rounded-lg text-left mb-6 max-w-lg">
+            <h2 class="text-xl font-semibold text-white mb-2">นโยบายความเป็นส่วนตัว</h2>
+            <p class="text-gray-300 mb-4">
+                เรารวบรวมข้อมูลของคุณเพื่อปรับปรุงคุณภาพของการบริการ ข้อมูลที่คุณให้ในแบบสำรวจจะถูกเก็บรักษาอย่างปลอดภัย และจะไม่ถูกเปิดเผยต่อบุคคลภายนอก ยกเว้นในกรณีที่กฎหมายกำหนด
+            </p>
+            <h2 class="text-xl font-semibold text-white mb-2">ข้อกำหนดการใช้งาน</h2>
+            <p class="text-gray-300 mb-4">
+                ผู้ใช้ต้องปฏิบัติตามกฎระเบียบและเงื่อนไขการใช้งาน ห้ามกระทำการที่ฝ่าฝืนกฎหมาย หรือเป็นอันตรายต่อบุคคลอื่น ข้อมูลที่จัดเก็บจะถูกใช้อย่างเหมาะสมเพื่อประโยชน์ในการวิเคราะห์และพัฒนาบริการต่อไป
+            </p>
+            <h2 class="text-xl font-semibold text-white mb-2">เวลาในการทำแบบสำรวจ หัวข้อ: <%= survey.surveyName %></h2>
+            <p class="text-gray-300 mb-4">
+                แบบสำรวจนี้อาจใช้เวลาประมาณ 10-15 นาทีในการทำให้เสร็จ
+            </p>
+        </div>
+
+        <a href="/survey/<%= surveyid %>?idUser=<%= idUser %>">
+            <button class="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition-all">
+                เริ่มแบบสำรวจ
+            </button>
+        </a>
+    </div>
+
+    <script>
+        function startSurvey(surveyId, firstQuestionId) {
+          window.location.href = `/survey/${surveyId}/${firstQuestionId}`;
+        }
+        </script>
+</body>
+</html>
