@@ -13,7 +13,7 @@
                     <h2 class="text-sm font-semibold text-black line-clamp-2">
                         <%= post.title %>
                     </h2>
-                    <p class="text-xs text-secondary-color" href="/channel/<%= post.creator.username %>" data-link="/editor/<%= post.creator.username %>">
+                    <p class="text-xs text-secondary-color">
                         <%= post.creator.username %>
                         <% if (post.creator.id.role  === 'admin') { %>
                             <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
@@ -69,18 +69,3 @@
             </div>
         <% } %>
 <% } %>
-
-
-                <script>
-                    // Select all elements with data-link attribute
-                    const linkElements = document.querySelectorAll('[data-link]');
-
-                    // Add click event listener to each element
-                    linkElements.forEach(element => {
-                        element.addEventListener('click', () => {
-                            const link = element.dataset.link; // Get the link from data-link attribute
-                            window.location.href = link; // Redirect to the new link
-                        });
-                    });
-
-                </script>

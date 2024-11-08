@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniNight - ผลการค้นหา</title>
+    <meta name="description" content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ อ่านบทความที่น่าสนใจ และอัปเดตตารางอนิเมะได้ที่ AniNight">
+    <meta name="keywords" content="อ่านบทความ, ข่าวอนิเมะ, ตารางอนิเมะ, อนิเมะพากย์ไทย, มังงะ, manga, anime, ออนไลน์, AniNight, อนิเมะไนท์">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="author" content="Nightun">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+    <meta property="og:locale" content="th_TH">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://www.ani-night.online">
+    <meta property="og:url" content="https://www.ani-night.online">
+    <meta property="og:title" content="AniNight - แพลตฟอร์มข่าวสารและบทความเกี่ยวกับอนิเมะ">
+    <meta property="og:description" content="ติดตามข่าวสารอนิเมะ บทความสุดพิเศษ และตารางอนิเมะล่าสุดได้ที่ AniNight! สร้างสรรค์เนื้อหาและสร้างรายได้ผ่านเครื่องมือของเรา">
+    <meta property="og:image" content="https://www.ani-night.online/annight/logo_mini.png">
+    <meta property="og:image:width" content="1280">
+    <meta property="og:image:height" content="800">
+    <meta property="og:site_name" content="AniNight">
+    <meta property="og:image:type" content="image/png">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <!-- Header -->
+    <%- include('./Component/Header') %>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6 mb-10">
+        <h1 class="text-2xl font-semibold mb-4 text-blue-600">ผลการค้นหาสำหรับ "<%= query %>"</h1>
+    
+        <% if (searchResults.length > 0) { %>
+            <ul class="space-y-6">
+                <% searchResults.forEach(post => { %>
+                    <li class="border-b pb-4 flex items-start">
+                        <div class="w-1/4 mr-4">
+                            <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>"
+                                 class="w-full h-24 object-cover rounded-lg shadow-lg">
+                        </div>
+                        <div class="w-3/4">
+                            <h2 class="text-lg font-semibold text-gray-800">
+                                <a href="/read/<%= post.urlslug %>" class="hover:underline text-blue-500"><%= post.title %></a>
+                            </h2>
+                            <p class="text-gray-600 mt-2"><%- post.content.substring(0, 100) %>...</p>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p class="text-gray-700 mt-4">ไม่พบผลลัพธ์ที่ตรงกับ "<%= query %>"</p>
+        <% } %>
+    </main>
+    
+
+    <!-- Footer -->
+    <%- include('./Component/Footer') %>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -24,6 +24,7 @@ const cookieParser = require('cookie-parser');
 require("dotenv").config();
 
 const IndexRouter = require("./routers/indexRouter")
+const SearchRouter = require("./routers/SearchRouter")
 const authRouter = require("./routers/authRouter")
 const TopCoinRouter = require("./routers/topCoinRouter")
 const ReadRouter = require("./routers/ReadRouter")
@@ -184,6 +185,7 @@ app.use(session({
 
 app.use(Router)
 app.use(IndexRouter)
+app.use(SearchRouter)
 app.use(PlayRouter)
 app.use(ReadRouter)
 app.use(recommenRouter)

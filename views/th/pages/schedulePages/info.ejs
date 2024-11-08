@@ -23,12 +23,36 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="canonical" href="https://www.ani-night.online/anime/<%= anime.urlslug %>">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="application/ld+json">
+        <% if (anime.published) { %>
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": "<%- anime.title %>",
+      "image": "<%= anime.poster.startsWith('http') ? anime.poster : 'https://www.ani-night.online/uploads/posters/' + (anime.poster || 'default.png') %>",
+      "datePublished": "<%= moment(anime.createdAt).toISOString() %>",
+      "dateModified": "<%= moment(anime.updatedAt).toISOString() %>",
+      "author": {
+        "@type": "Person",
+        "name": "ทีมงาน Ani Night"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Ani Night",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.ani-night.online/logo/favicon.png"
+        }
+      },
+      "description": "<%- anime.synopsis %>"
+    }
+    <% } %>
+    </script>
 </head>
 <body class="bg-gray-100">
 
@@ -389,7 +413,7 @@
 
     <%- include('../../Component/Footer') %>
 
-    <!-- <script src="/js/script.js"></script> -->
+    <script src="/js/script.js"></script>
     <script src="/js/pages/genColorbg.js" ></script>
     <script src="/js/pages/Animeinfo.js"></script>
 </body>

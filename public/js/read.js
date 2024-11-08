@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fullscreenImage = document.getElementById('fullscreenImage');
     const closeFullscreen = document.getElementById('closeFullscreen');
     const prevImage = document.getElementById('prevImage');
-    const nextImage = document.getElementById('nextImage'); 
+    const nextImage = document.getElementById('nextImage');
     const toggleFullScreen = document.getElementById('toggleFullScreen');
     const toggleFullScreen_Read = document.getElementById('btn-read-fullscreen');
 
@@ -112,7 +112,7 @@ async function saveArticle(articleId) {
         }
 
         const response = await fetch('/api/v2/save/article', {
-            method: 'POST', 
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -301,4 +301,170 @@ document.addEventListener('DOMContentLoaded', function () {
             sharePopup.classList.add('hidden');
         }
     });
+});
+
+
+
+function toggleFollow(channelId) {
+    fetch(`/api/v2/user/follow/${channelId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'ติดตามสำเร็จ',
+                    text: data.message,
+                    confirmButtonText: 'ตกลง'
+                }).then(() => {
+                    location.reload(); // รีเฟรชหน้าเมื่อกดติดตาม
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: data.message
+                });
+            }
+        })
+        .catch(err => console.error(err));
+}
+
+function confirmUnfollow(channelId) {
+    Swal.fire({
+        title: 'ยืนยันการยกเลิกติดตาม?',
+        text: "คุณต้องการยกเลิกการติดตามใช่หรือไม่?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยกเลิกติดตาม!',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/api/v2/user/unfollow/${channelId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    // ตรวจสอบสถานะของการตอบกลับ
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ยกเลิกติดตามสำเร็จ',
+                            text: data.message,
+                            confirmButtonText: 'ตกลง'
+                        }).then(() => {
+                            location.reload(); // รีเฟรชหน้าเมื่อยกเลิกติดตาม
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: data.message
+                        });
+                    }
+                })
+                .catch(err => {
+                    // แสดงข้อผิดพลาดที่เกิดขึ้น
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาดที่ไม่รู้จัก',
+                        text: err.message // แสดงเฉพาะข้อความของข้อผิดพลาด
+                    });
+                });
+        }
+    });
+}
+
+
+
+
+function likeArticle(articleId) {
+    fetch(`/api/v2/like/articles/${articleId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const likeButton = document.getElementById(`like-button-${articleId}`);
+                const likeCount = document.getElementById(`like-count-${articleId}`);
+
+                // อัปเดตจำนวนไลค์
+                likeCount.textContent = `${data.likesCount} ไลค์`;
+
+                // เปลี่ยนสีไอคอน
+                likeButton.querySelector('i').classList.toggle('text-red-500');
+                likeButton.querySelector('i').classList.toggle('text-gray-500');
+
+                // ใช้ SweetAlert แจ้งเตือน
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: 'การกดไลค์สำเร็จ!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถกดไลค์ได้'
+                });
+            }
+        })
+        .catch(err => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'มีข้อผิดพลาดบางอย่าง'
+            });
+        });
+}
+
+
+
+$(document).ready(function () {
+    let currentIndex = 0;
+    const slides = $('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        const offset = -index * 100;
+        $('.slides').css('transform', `translateX(${offset}%)`);
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        showSlide(currentIndex);
+    }
+
+    // เลื่อนสไลด์ทุก 5 วินาที
+    setInterval(nextSlide, 5000);
+
+    // ปุ่มสำหรับเลื่อนสไลด์
+    $('.next').click(function () {
+        nextSlide();
+    });
+
+    $('.prev').click(function () {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        showSlide(currentIndex);
+    });
+
+    // เริ่มต้นการแสดงภาพแรก
+    showSlide(currentIndex);
 });
