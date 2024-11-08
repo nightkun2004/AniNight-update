@@ -141,6 +141,28 @@
                     </div>
                 </div>
             </div>
+            <div class="relative">
+                <!-- ไอคอน Search -->
+                <button id="searchIcon" class="text-black p-2">
+                    <i class="fas fa-search"></i>
+                </button>
+            
+                <!-- Container สำหรับ Input Search -->
+                <div id="searchFormContainer" class="absolute right-0 hidden bg-white shadow-lg rounded-md p-2 flex items-center w-64 z-10">
+                    <form id="searchForm" action="/search" method="GET" class="flex items-center w-full">
+                        <input type="text" name="q" placeholder="ค้นหา..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-400" id="searchInput">
+                        <button type="submit" class="ml-2 text-blue-600">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+            
+                    <!-- ผลลัพธ์การค้นหา -->
+                    <div id="searchResults" class="absolute top-16 h-64 w-full overflow-x-auto right-1 transform hidden group-hover:block p-4 bg-white rounded-lg shadow-lg z-10">
+                        <!-- ผลลัพธ์จะถูกเติมที่นี่ -->
+                    </div>
+                </div>
+            </div>
+            
             <div class="relative group md:hidden">
                 <% if (userID.user.profilePicture) { %>
                     <% if (userID.user.profilePicture.startsWith('http')) { %>
@@ -166,22 +188,29 @@
                     เข้าสู่ระบบ
                 </a>
              </div>
-             <% } %>
+             <% } %> 
              <div class="relative">
                 <!-- ไอคอน Search -->
                 <button id="searchIcon" class="text-black p-2">
                     <i class="fas fa-search"></i>
                 </button>
-        
+            
                 <!-- Container สำหรับ Input Search -->
-                <div id="searchFormContainer" class="absolute right-0 hidden bg-white shadow-lg rounded-md p-2 flex items-center w-64">
-                    <form id="searchForm" action="/search" method="GET" class="flex items-center w-64">
-                        <input type="text" name="q" placeholder="ค้นหา..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-400">
+                <div id="searchFormContainer" class="absolute right-0 hidden bg-white shadow-lg rounded-md p-2 flex items-center w-64 z-10">
+                    <form id="searchForm" action="/search" method="GET" class="flex items-center w-full">
+                        <input type="text" name="q" placeholder="ค้นหา..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-400" id="searchInput">
                         <button type="submit" class="ml-2 text-blue-600">
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
+            
+                    <!-- ผลลัพธ์การค้นหา -->
+                    <div id="searchResults" class="absolute top-16 h-64 w-full overflow-x-auto right-1 transform hidden group-hover:block p-4 bg-white rounded-lg shadow-lg z-10">
+                        <!-- ผลลัพธ์จะถูกเติมที่นี่ -->
+                    </div>
                 </div>
-        </div> 
-    </div>
+            </div>
+            
+            </div>
+       </div>
 </header>

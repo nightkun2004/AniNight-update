@@ -18,6 +18,21 @@ const getSearch = async (req,res) => {
 }
 
 
+const getSearchJson = async (req,res) => {
+    const query = req.query.q;
+    try {
+        const searchResults = await Article.find({
+            title: { $regex: query, $options: 'i' }
+        }).limit(10); // จำกัดผลลัพธ์ 10 รายการ
+
+        res.json({ results: searchResults });
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching search results" });
+    }
+}
+
+
 module.exports = {
-    getSearch
+    getSearch,
+    getSearchJson
 }
