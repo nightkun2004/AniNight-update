@@ -1,4 +1,5 @@
-// เมื่อคลิกที่ไอคอน Search ให้แสดงหรือซ่อนฟอร์มค้นหา
+let debounceTimeout;
+
 document.getElementById('searchIcon').addEventListener('click', function (event) {
     event.stopPropagation(); // หยุดการแพร่กระจายของคลิกไปที่เอกสาร
     const searchFormContainer = document.getElementById('searchFormContainer');
@@ -19,6 +20,7 @@ document.addEventListener('click', function (event) {
 
 // การค้นหาแบบอัตโนมัติ
 document.getElementById("searchInput").addEventListener("input", function () {
+    clearTimeout(debounceTimeout);
     const query = this.value;
     const resultsContainer = document.getElementById("searchResults");
 
@@ -52,4 +54,8 @@ document.getElementById("searchInput").addEventListener("input", function () {
     } else {
         resultsContainer.classList.add("hidden");
     }
+
+    // ไม่มีการเรียกฟังก์ชัน fetchResults ที่นี่อีกแล้ว
+    debounceTimeout = setTimeout(() => {}, 300);
 });
+
