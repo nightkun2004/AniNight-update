@@ -3,6 +3,7 @@ const User = require("../models/UserModel")
 const crypto = require("crypto")
 const path = require("path")
 const fs = require("fs")
+const sharp = require('sharp');
 
 // ==================== CREATE Article POST
 // POST /api/v2/post/article/create
@@ -33,8 +34,9 @@ const CreateArticle = async (req, res, next) => {
     const userID = req.session.userlogin;
 
     try {
-        const { title, tags, content, categories, urlslug, scheduledAt  } = req.body;
+        const { title, tags, content, categories, urlslug, scheduledAt } = req.body;
         const { thumbnail } = req.files;
+        // console.log(thumbnail);
 
         if (!thumbnail) {
             return res.status(400).json({ msg: "ไม่พบรูปภาพ", userID, translations: req.translations, lang });
@@ -44,15 +46,19 @@ const CreateArticle = async (req, res, next) => {
 
         const generateFilename = (file) => {
             let splittedFilename = file.name.split('.');
-            return splittedFilename[0] + crypto.randomUUID() + '.' + splittedFilename[splittedFilename.length - 1];
+            return splittedFilename[0] + crypto.randomUUID() + '.webp'; // เปลี่ยนเป็น .webp
         };
 
         let postId = crypto.randomUUID();
 
-        // อัปโหลดภาพปก
+        // แปลงภาพเป็น WebP ก่อนอัปโหลด
         let thumbnailFilename = generateFilename(thumbnail);
         let thumbnailUploadPath = path.join(__dirname, '..', 'public/uploads/thumbnails', thumbnailFilename);
-        await thumbnail.mv(thumbnailUploadPath);
+
+        // ใช้ sharp แปลงไฟล์เป็น WebP
+        await sharp(thumbnail.data)  // ใช้ .data แทน .tempFilePath
+            .webp({ quality: 80 })
+            .toFile(thumbnailUploadPath);
 
         const useridnew = await User.findById(req.user.id);
         if (!useridnew) {
@@ -78,7 +84,7 @@ const CreateArticle = async (req, res, next) => {
 
         const Articlesave = new Article(postcreate);
         await Articlesave.save();
-        console.log(Articlesave)
+        console.log(Articlesave);
         await User.findByIdAndUpdate(req.user.id, { $push: { articles: Articlesave._id } }, { new: true });
 
         res.json({ status: 'ok', Articlesave, msg: "ทำการสร้างโพสต์สำเร็จ", userID, translations: req.translations, lang });
