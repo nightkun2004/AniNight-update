@@ -1,14 +1,15 @@
 <% if (post.published) { %>
     <a href="/read/<%= post.urlslug %>" class="block">
         <div class="relative aspect-w-16 aspect-h-9">
-            <img src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>"
-                class="w-full object-cover rounded-lg">
-            <!-- <span class="absolute bottom-2 right-2 bg-overlay-dark-color text-white text-sm px-2 py-1 rounded">10:03</span> -->
+            <picture class="lazyload w-full h-auto object-cover rounded-lg">
+                <img class="lazyload rounded-lg" data-src="/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" src="placeholder.jpg" />
+            </picture>
         </div>
+        
         <div class="flex items-center mt-2 p-4">
             <% if (post.creator && post.creator.profilePicture) { %>
                 <% let profilePic = post.creator.profilePicture.startsWith('http') ? post.creator.profilePicture : '/uploads/profiles/' + (post.creator.profilePicture || 'default.png'); %>
-                <img data-popover-target="popover-user-<%= post.creator.username %>" src="<%= profilePic %>" alt="Profile Picture" class="hidden md:block w-10 h-10 rounded-full object-cover">
+                <img src="<%= profilePic %>" alt="Profile Picture" class="hidden md:block w-10 h-10 rounded-full object-cover">
                 <div class="md:ml-3 md:flex-1">
                     <h2 class="text-sm font-semibold text-black line-clamp-1 md:line-clamp-2" title="<%= post.title %>">
                         <%= post.title %>

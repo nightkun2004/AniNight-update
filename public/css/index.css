@@ -71,3 +71,9 @@ body {
     background-color: #888; /* สีของแถบเลื่อน */
     border-radius: 10px;
 }
+
+
+.lazyload {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
