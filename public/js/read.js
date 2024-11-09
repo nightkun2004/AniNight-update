@@ -1,86 +1,86 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const images = document.querySelectorAll('.open-fullscreen');
-    const ReadFullscreen = document.querySelector('.open-windows-read');
-    const fullscreenModal = document.getElementById('fullscreenModal');
-    const fullscreenImage = document.getElementById('fullscreenImage');
-    const closeFullscreen = document.getElementById('closeFullscreen');
-    const prevImage = document.getElementById('prevImage');
-    const nextImage = document.getElementById('nextImage');
-    const toggleFullScreen = document.getElementById('toggleFullScreen');
-    const toggleFullScreen_Read = document.getElementById('btn-read-fullscreen');
+// document.addEventListener('DOMContentLoaded', function () {
+//     const images = document.querySelectorAll('.open-fullscreen');
+//     const ReadFullscreen = document.querySelector('.open-windows-read');
+//     const fullscreenModal = document.getElementById('fullscreenModal');
+//     const fullscreenImage = document.getElementById('fullscreenImage');
+//     const closeFullscreen = document.getElementById('closeFullscreen');
+//     const prevImage = document.getElementById('prevImage');
+//     const nextImage = document.getElementById('nextImage');
+//     const toggleFullScreen = document.getElementById('toggleFullScreen');
+//     const toggleFullScreen_Read = document.getElementById('btn-read-fullscreen');
 
-    let currentIndex = 0;
+//     let currentIndex = 0;
 
-    function openFullscreen(index) {
-        currentIndex = index;
-        fullscreenImage.src = images[currentIndex].src;
-        fullscreenModal.classList.remove('hidden');
-        fullscreenModal.classList.add('flex');
-    }
+//     function openFullscreen(index) {
+//         currentIndex = index;
+//         fullscreenImage.src = images[currentIndex].src;
+//         fullscreenModal.classList.remove('hidden');
+//         fullscreenModal.classList.add('flex');
+//     }
 
-    function closeFullscreenModal() {
-        fullscreenModal.classList.add('hidden');
-        fullscreenModal.classList.remove('flex');
-        exitFullScreen();
-    }
+//     function closeFullscreenModal() {
+//         fullscreenModal.classList.add('hidden');
+//         fullscreenModal.classList.remove('flex');
+//         exitFullScreen();
+//     }
 
-    function showNextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        fullscreenImage.src = images[currentIndex].src;
-    }
+//     function showNextImage() {
+//         currentIndex = (currentIndex + 1) % images.length;
+//         fullscreenImage.src = images[currentIndex].src;
+//     }
 
-    function showPrevImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        fullscreenImage.src = images[currentIndex].src;
-    }
+//     function showPrevImage() {
+//         currentIndex = (currentIndex - 1 + images.length) % images.length;
+//         fullscreenImage.src = images[currentIndex].src;
+//     }
 
-    function toggleFullScreenMode() {
-        if (!document.fullscreenElement) {
-            fullscreenModal.requestFullscreen().then(() => {
-                toggleFullScreen.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i> ออกจากโหมดนี้';
-            }).catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            document.exitFullscreen().then(() => {
-                toggleFullScreen.innerHTML = '<i class="fa-solid fa-expand"></i> ขยาย';
-            });
-        }
-    }
+//     function toggleFullScreenMode() {
+//         if (!document.fullscreenElement) {
+//             fullscreenModal.requestFullscreen().then(() => {
+//                 toggleFullScreen.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i> ออกจากโหมดนี้';
+//             }).catch(err => {
+//                 alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+//             });
+//         } else {
+//             document.exitFullscreen().then(() => {
+//                 toggleFullScreen.innerHTML = '<i class="fa-solid fa-expand"></i> ขยาย';
+//             });
+//         }
+//     }
 
-    function toggleFullScreenRead() {
-        if (!document.fullscreenElement) {
-            ReadFullscreen.requestFullscreen().then(() => {
-                toggleFullScreen_Read.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i> ออกจากโหมดนี้';
-                ReadFullscreen.classList.add('fullscreen-read');
-            }).catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            document.exitFullscreen().then(() => {
-                toggleFullScreen_Read.innerHTML = '<i class="fa-solid fa-expand"></i> ขยาย';
-                ReadFullscreen.classList.remove('fullscreen-read'); // ลบคลาสเมื่อออกจากโหมดเต็มหน้าจอ
-            });
-        }
-    }
+//     function toggleFullScreenRead() {
+//         if (!document.fullscreenElement) {
+//             ReadFullscreen.requestFullscreen().then(() => {
+//                 toggleFullScreen_Read.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i> ออกจากโหมดนี้';
+//                 ReadFullscreen.classList.add('fullscreen-read');
+//             }).catch(err => {
+//                 alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+//             });
+//         } else {
+//             document.exitFullscreen().then(() => {
+//                 toggleFullScreen_Read.innerHTML = '<i class="fa-solid fa-expand"></i> ขยาย';
+//                 ReadFullscreen.classList.remove('fullscreen-read'); // ลบคลาสเมื่อออกจากโหมดเต็มหน้าจอ
+//             });
+//         }
+//     }
 
 
-    function exitFullScreen() {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        }
-    }
+//     function exitFullScreen() {
+//         if (document.fullscreenElement) {
+//             document.exitFullscreen();
+//         }
+//     }
 
-    images.forEach((image, index) => {
-        image.addEventListener('click', () => openFullscreen(index));
-    });
+//     images.forEach((image, index) => {
+//         image.addEventListener('click', () => openFullscreen(index));
+//     });
 
-    closeFullscreen.addEventListener('click', closeFullscreenModal);
-    nextImage.addEventListener('click', showNextImage);
-    prevImage.addEventListener('click', showPrevImage);
-    toggleFullScreen.addEventListener('click', toggleFullScreenMode);
-    toggleFullScreen_Read.addEventListener('click', toggleFullScreenRead);
-});
+//     closeFullscreen.addEventListener('click', closeFullscreenModal);
+//     nextImage.addEventListener('click', showNextImage);
+//     prevImage.addEventListener('click', showPrevImage);
+//     toggleFullScreen.addEventListener('click', toggleFullScreenMode);
+//     toggleFullScreen_Read.addEventListener('click', toggleFullScreenRead);
+// });
 
 // save API to User
 // Function to get the value of a specific cookie

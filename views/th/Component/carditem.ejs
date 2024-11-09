@@ -8,9 +8,9 @@
         <div class="flex items-center mt-2 p-4">
             <% if (post.creator && post.creator.profilePicture) { %>
                 <% let profilePic = post.creator.profilePicture.startsWith('http') ? post.creator.profilePicture : '/uploads/profiles/' + (post.creator.profilePicture || 'default.png'); %>
-                <img data-popover-target="popover-user-<%= post.creator.username %>" src="<%= profilePic %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
-                <div class="ml-3 flex-1">
-                    <h2 class="text-sm font-semibold text-black line-clamp-2">
+                <img data-popover-target="popover-user-<%= post.creator.username %>" src="<%= profilePic %>" alt="Profile Picture" class="hidden md:block w-10 h-10 rounded-full object-cover">
+                <div class="md:ml-3 md:flex-1">
+                    <h2 class="text-sm font-semibold text-black line-clamp-1 md:line-clamp-2" title="<%= post.title %>">
                         <%= post.title %>
                     </h2>
                     <p class="text-xs text-secondary-color">
@@ -29,43 +29,5 @@
             
         </div>
     </a>
-    
 
-    
-        <% if ((index + 1) % 4 === 0) { %>
-            <div class="overflow-hidden ">
-                <div class="grid gap-1 md:gap-4 lg:gap-2">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                    crossorigin="anonymous"></script>
-               <ins class="adsbygoogle"
-                    style="display:block; text-align:center;"
-                    data-ad-layout="in-article"
-                    data-ad-format="fluid"
-                    data-ad-client="ca-pub-6579807593228261"
-                    data-ad-slot="1326857324"></ins>
-               <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-               </script>
-                </div>
-            </div>
-        <% } %>
-
-
-        <% if ((index + 1) % 8 === 0) { %>
-            <div class="overflow-hidden ">
-                <div class="grid gap-1 md:gap-4 lg:gap-2">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                    crossorigin="anonymous"></script>
-               <ins class="adsbygoogle"
-                    style="display:block; text-align:center;"
-                    data-ad-layout="in-article"
-                    data-ad-format="fluid"
-                    data-ad-client="ca-pub-6579807593228261"
-                    data-ad-slot="1326857324"></ins>
-               <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-               </script>
-                </div>
-            </div>
-        <% } %>
 <% } %>

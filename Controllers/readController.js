@@ -75,7 +75,7 @@ const getRead = async (req, res, next) => {
 
 
         if (!post) {
-            return res.status(404).render(`${lang}/read`, {
+            return res.status(404).render(`./th/read`, {
                 post: { title: "ไม่พบข้อมูล" },
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
                 userID,
@@ -86,10 +86,7 @@ const getRead = async (req, res, next) => {
 
         // Save user interaction if logged in
         if (userID) {
-            // console.log("ผู้ใช้เข้าสู่ระบบ", usertoken);
-
-            // Log the interaction with the correct contentId
-            const saveinteraction = await User.findByIdAndUpdate(usertoken, {
+            await User.findByIdAndUpdate(usertoken, {
                 $push: {
                     interactions: {
                         contentId: post._id, // Correctly using post._id
@@ -100,29 +97,18 @@ const getRead = async (req, res, next) => {
                 }
             });
 
-            // console.log("บันทึกสิ่งที่น่าสนใน", saveinteraction.interactions);
 
         }
 
         const lastRead = req.cookies[`lastRead_${post._id}`];
         const now = new Date();
 
-        // if (!lastRead || (now - new Date(lastRead)) >= 10 * 60 * 1000) {
-        //     post.views = (post.views || 0) + 1;
-        //     addViewToArticle(post._id, post.creator.id);
-        //     await post.save("ครีเอตเอร์บทความ", post.creator.id);
-
-        //     res.cookie(`lastRead_${post._id}`, now.toISOString(), { maxAge: 10 * 60 * 1000, httpOnly: true });
-        // }
-
-        if (!lastRead || (now - new Date(lastRead)) >= 2 * 60 * 1000) {
-            // Increment the view count
+        if (!lastRead || (now - new Date(lastRead)) >= 10 * 60 * 1000) {
             post.views = (post.views || 0) + 1;
             addViewToArticle(post._id, post.creator.id);
             await post.save("ครีเอตเอร์บทความ", post.creator.id);
 
-            // Set a cookie for the article read timestamp
-            res.cookie(`lastRead_${post._id}`, now.toISOString(), { maxAge: 2*  60 * 1000, httpOnly: true });
+            res.cookie(`lastRead_${post._id}`, now.toISOString(), { maxAge: 10 * 60 * 1000, httpOnly: true });
         }
 
         // Check if the post is saved by the user

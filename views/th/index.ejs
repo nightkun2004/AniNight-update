@@ -2,27 +2,36 @@
 <html lang="<%= lang %>">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>AniNight</title>
   <meta name="description" content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ อ่านบทความที่น่าสนใจ และอัปเดตตารางอนิเมะได้ที่ AniNight">
   <meta name="keywords" content="อ่านบทความ, ข่าวอนิเมะ, ตารางอนิเมะ, อนิเมะพากย์ไทย, มังงะ, manga, anime, ออนไลน์, AniNight, อนิเมะไนท์">
   <meta name="robots" content="index,follow">
   <meta name="googlebot" content="index,follow">
-  <meta name="author" content="Nightun">
+  <meta name="author" content="ทีมงาน Ani Night">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <meta property="og:locale" content="th_TH">
-  <meta property="og:type" content="website">
+  
+  <!-- Canonical and SEO Meta -->
   <link rel="canonical" href="https://www.ani-night.online">
   <meta property="og:url" content="https://www.ani-night.online">
   <meta property="og:title" content="AniNight - แพลตฟอร์มข่าวสารและบทความเกี่ยวกับอนิเมะ">
   <meta property="og:description" content="ติดตามข่าวสารอนิเมะ บทความสุดพิเศษ และตารางอนิเมะล่าสุดได้ที่ AniNight! สร้างสรรค์เนื้อหาและสร้างรายได้ผ่านเครื่องมือของเรา">
   <meta property="og:image" content="https://www.ani-night.online/annight/home_web.jpg">
-  <meta property="og:image:width" content="1280">
-  <meta property="og:image:height" content="720">
+  <meta property="og:locale" content="th_TH">
+  <meta property="og:type" content="website">
   <meta property="og:site_name" content="AniNight">
   <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+
+  <!-- CSS & JS -->
   <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+  <script src="/css/tailwindcss.css" ></script>
+  <script src="/js/fontawesome.js" defer></script>
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+  crossorigin="anonymous"></script>
+
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -64,69 +73,80 @@
       <% }) %>
       </script>
       <% } %>
-      
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 text-black font-sans">
 
   <!-- Header -->
- <%- include('./Component/Header') %>
+  <%- include('./Component/Header') %>
+
   <!-- Main Content -->
   <main class="container mx-auto px-4 mt-8 mb-10">
-    <div class="flex flex-wrap">
-      <!-- Left Side -->
-      <section class="w-full lg:w-3/4">
+    <div class="bg-white rounded-lg md:mb-12 mb-2 p-4" style="height: auto !important;">
+      <!-- Index_home -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6579807593228261"
+          data-ad-slot="7771171707"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
 
+    <section class="flex flex-wrap">
+      <!-- Left Side Content with Lazy Loading Images -->
+      <div class="w-full lg:w-3/4 bg-white rounded-md p-5">
         <h2 class="text-xl font-semibold mb-4">อัพเดตใหม่</h2>
         <% if (Posts.length> 0 && typeof error === 'undefined') { %>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <% Posts.slice(0, 10).forEach((post, index)=> { %>
-            <%- include('./Component/carditem', {post: post, index: index}) %>
-             <% }) %>
-        </div>
-        <% } else { %>
-            <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
-     <% } %>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <% Posts.slice(0, 10).forEach((post, index)=> { %>
+              <%- include('./Component/carditem', {post: post, index: index}) %>
+               <% }) %>
+          </div>
+          <% } else { %>
+              <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
+       <% } %>
 
-        <div class="flex justify-center items-center">
-            <div
-                class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
-                <% if (page> 1) { %>
-                    <a href="/page/<%= page - 1 %>"
-                        class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+
+       <div class="flex justify-center items-center">
+        <div
+            class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
+            <% if (page> 1) { %>
+                <a href="/page/<%= page - 1 %>"
+                    class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                    ก่อนหน้า
+                </a>
+                <% } else { %>
+                    <span
+                        class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
                         ก่อนหน้า
+                    </span>
+                    <% } %>
+
+          <% for (let i=1; i <=totalPages; i++) { %>
+             <a href="/page/<%= i %>"
+                 class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
+                <%= i %>
                     </a>
-                    <% } else { %>
-                        <span
-                            class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
-                            ก่อนหน้า
-                        </span>
-                        <% } %>
+           <% } %>
 
-              <% for (let i=1; i <=totalPages; i++) { %>
-                 <a href="/page/<%= i %>"
-                     class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
-                    <%= i %>
-                        </a>
-               <% } %>
-
-               <% if (page < totalPages) { %>
-                      <a href="/page/<%= page + 1 %>"
-                             class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
-                             ถัดไป
-                          </a>
-                   <% } else { %>
-                     <span
-                          class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
-                           ถัดไป
-                     </span>
-                 <% } %>
-            </div>
+           <% if (page < totalPages) { %>
+                  <a href="/page/<%= page + 1 %>"
+                         class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                         ถัดไป
+                      </a>
+               <% } else { %>
+                 <span
+                      class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
+                       ถัดไป
+                 </span>
+             <% } %>
         </div>
-      </section>
+    </div>
+      </div>
 
-      <!-- Right Side (Tags, Ads) -->
+      <!-- Right Sidebar with Ads -->
       <aside class="w-full lg:w-1/4 lg:pl-8 mt-8 lg:mt-0">
         <div class="bg-white p-4 rounded-lg shadow-md mb-6">
           <h3 class="text-lg font-semibold mb-3">แท็กยอดนิยม</h3>
@@ -145,44 +165,14 @@
                 <% } %>
             </div>
         <% }) %>        
-        </div> 
-
-        <div>
-          <% if (userID) {%>
-            <% if (recommendedContent.length > 0) { %>
-              <h2 class="text-xl font-semibold mb-4 mt-5">เนื้อหาที่แนะนำสำหรับคุณ</h2>
-              <div class="grid grid-cols-1">
-                  <% recommendedContent.forEach((post, index) => { %>
-                    <%- include('./Component/carditem', {post: post, index: index}) %> 
-                  <% }) %>
-              </div>
-          <% } else { %>
-              <p>ไม่มีเนื้อหาที่แนะนำในขณะนี้</p>
-          <% } %>
-          
-          <% } %>
-  
         </div>
-
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-            crossorigin="anonymous"></script>
-        <ins class="adsbygoogle"
-            style="display:block"
-            data-ad-format="fluid"
-            data-ad-layout-key="-6t+ed+2i-1n-4w"
-            data-ad-client="ca-pub-6579807593228261"
-            data-ad-slot="9906510339"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
       </aside>
-    </div>
+    </section>
   </main>
 
-
   <!-- Footer Section -->
-<%- include('./Component/Footer') %>
+  <%- include('./Component/Footer') %>
 
-<script src="/js/script.js" defer></script>
+  <script src="/js/script.js" defer></script>
 </body>
 </html>
