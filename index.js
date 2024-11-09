@@ -14,6 +14,8 @@ const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const path = require("path")
 const cors = require('cors');
+const terser = require('terser');
+const compression = require('compression');
 const fs = require('fs')
 const Article = require("./models/ArticleModel")
 const Anime = require("./models/AnimeModel")
@@ -167,7 +169,10 @@ app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(express.json({ limit: '1000mb' }));
 app.use(express.urlencoded({ limit: '1000mb', extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1d',
+}));
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(session({
   secret: process.env.ACCESS_TOKEN_SECRET,
@@ -207,6 +212,7 @@ app.use("/api/v2", PlaymentRoute)
 app.use("/api/v2", RewardRoute)
 app.use("/api/v2", AiRoute)
 
+app.use(compression());
 app.use(helmet());
 
 // เพิ่ม rate limiting เพื่อลดการโจมตีแบบ brute force
