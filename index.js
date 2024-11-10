@@ -55,22 +55,6 @@ app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/robots.txt'));
 });
 
-app.get('/sitemap.xml', async (req, res) => {
-  try {
-    const articles = await Article.find().sort({ createdAt: 'desc' });
-    const animes = await Anime.find().sort({ createdAt: 'desc' });
-
-    res.setHeader('Content-Type', 'application/xml');
-    res.render('./th/sitemap', {
-      articles,
-      animes
-    });
-  } catch (err) {
-    res.status(500).send('Error generating sitemap.');
-  }
-});
-
-
 // ตั้งค่า WebSocket
 wss.on('connection', (ws) => {
   console.log('Client connected');

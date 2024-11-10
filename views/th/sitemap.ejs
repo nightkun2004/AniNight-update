@@ -2,62 +2,39 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
                             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <!-- Home Page -->
     <url>
-        <loc><%= `https://ani-night.online` %></loc>
+        <loc>https://ani-night.online</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
-    <url> 
-        <loc>https://ani-night.online/th/schedule/anime</loc>
+    
+    <!-- Anime Schedule Page -->
+    <url>
+        <loc>https://ani-night.online/schedule/anime</loc>
         <changefreq>daily</changefreq>
-        <priority>0.80</priority>
+        <priority>0.85</priority> 
     </url>
+    
+    <!-- For You Page -->
     <url>
-        <loc>https://ani-night.online/en/schedule/anime</loc>
+        <loc>https://ani-night.online/foryou</loc>
         <changefreq>daily</changefreq>
-        <priority>0.80</priority>
-    </url>
-    <url>
-        <loc>https://ani-night.online/jp/schedule/anime</loc>
-        <changefreq>daily</changefreq>
-        <priority>0.80</priority>
-    </url>
-    <url>
-        <loc><%= `https://ani-night.online/foryou` %></loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <% articles.forEach(article => { %>
-        <% if (article.published) { %>
-    <url>
-        <loc><%= `https://ani-night.online/read/${article.urlslug}` %></loc>
-        <lastmod><%= article.updatedAt.toISOString() %></lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <% } %>
-    <% }); %>
-    <% articles.forEach(article => { %>
-        <% if (article.published) { %>
-            <% article.tags.forEach(tag => { %>
-    <url>
-        <loc><%= `https://ani-night.online/tag/${tag}` %></loc>
-        <lastmod><%= article.updatedAt.toISOString() %></lastmod>
-        <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
-            <% }); %>
-    <% } %>
-    <% }); %>
     
-    <% animes.forEach(animeItem => { %>
-        <% if (animeItem.published) { %>
+    <!-- Anime Sitemap -->
     <url>
-        <loc><%= `https://ani-night.online/anime/${animeItem.urlslug}` %></loc>
-        <lastmod><%= animeItem.updatedAt.toISOString() %></lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
+        <loc>https://ani-night.online/animes/sitemap.xml</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
     </url>
-        <% } %>
-    <% }); %>
+    
+    <!-- Articles Sitemap -->
+    <url>
+        <loc>https://ani-night.online/articles/sitemap.xml</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority> 
+    </url>
+
 </urlset>
