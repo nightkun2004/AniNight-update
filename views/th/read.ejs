@@ -74,7 +74,7 @@
       "@context": "https://schema.org",
       "@type": "NewsArticle",
       "headline": "<%= post.title %>",
-      "image": "<%= post.thumbnail.startsWith('http') ? post.thumbnail : 'https://www.ani-night.online/uploads/thumbnails/' + (post.thumbnail || 'default.png') %>",
+      "image": "<%= post.thumbnail.startsWith('http') ? post.thumbnail : 'https://ani-night.online/uploads/thumbnails/' + (post.thumbnail || 'default.png') %>",
       "datePublished": "<%= moment(post.createdAt).toISOString() %>",
       "dateModified": "<%= moment(post.updatedAt).toISOString() %>",
       "author": {
@@ -86,7 +86,7 @@
         "name": "Ani Night",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://www.ani-night.online/logo/favicon.png"
+          "url": "https://ani-night.online/logo/favicon.png"
         }
       },
       "description": "ติดตามข่าวสารล่าสุดของอนิเมะได้ที่ Ani Night ได้ทุกที่ ไม่ว่าคุณจะอยู่พื้นที่ใดของโลก"

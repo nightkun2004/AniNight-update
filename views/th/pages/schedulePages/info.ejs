@@ -34,7 +34,7 @@
       "@context": "https://schema.org",
       "@type": "NewsArticle",
       "headline": "<%- anime.title %>",
-      "image": "<%= anime.poster.startsWith('http') ? anime.poster : 'https://www.ani-night.online/uploads/posters/' + (anime.poster || 'default.png') %>",
+      "image": "<%= anime.poster.startsWith('http') ? anime.poster : 'https://ani-night.online/uploads/posters/' + (anime.poster || 'default.png') %>",
       "datePublished": "<%= moment(anime.createdAt).toISOString() %>",
       "dateModified": "<%= moment(anime.updatedAt).toISOString() %>",
       "author": {
@@ -46,7 +46,7 @@
         "name": "Ani Night",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://www.ani-night.online/logo/favicon.png"
+          "url": "https://ani-night.online/logo/favicon.png"
         }
       },
       "description": "<%- anime.synopsis %>"
