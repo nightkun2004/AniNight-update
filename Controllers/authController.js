@@ -307,24 +307,24 @@ const checkTokenNewPassword = async (req, res) => {
 
 
         // ตรวจสอบ reCAPTCHA
-        const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA;
-        if (!secretKey) {
-            throw new Error('ไม่พบ secretKey ในการตรวจสอบ reCAPTCHA');
-        }
+        // const secretKey = process.env.GOOGLE_SECRET_KEY_CAPTCHA;
+        // if (!secretKey) {
+        //     throw new Error('ไม่พบ secretKey ในการตรวจสอบ reCAPTCHA');
+        // }
 
 
 
         // ตรวจสอบ reCAPTCHA
-        const recaptchaResponseData = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
-            params: {
-                secret: secretKey,
-                response: recaptchaResponse
-            }
-        });
+        // const recaptchaResponseData = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
+        //     params: {
+        //         secret: secretKey,
+        //         response: recaptchaResponse
+        //     }
+        // });
 
-        if (!recaptchaResponseData.data.success) {
-            return res.status(400).json({ message: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตโนมัติ' });
-        }
+        // if (!recaptchaResponseData.data.success) {
+        //     return res.status(400).json({ message: 'การตรวจสอบ reCAPTCHA ล้มเหลว กรุณาเลือกฉันไม่ใช่โปรแกรมอัตโนมัติ' });
+        // }
 
         if (!user) {
             return res.status(400).json({ message: 'Token ไม่ถูกต้องหรือหมดอายุ' });
@@ -404,9 +404,9 @@ const EditProfile = async (req, res) => {
     try {
         const { username, email, currentPassword, bio } = req.body;
 
-        if (!currentPassword) {
-            return res.status(400).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'กรุณากรอกรหัสผ่านปัจจุบัน', userID, translations: req.translations, lang });
-        }
+        // if (!currentPassword) {
+        //     return res.status(400).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'กรุณากรอกรหัสผ่านปัจจุบัน', userID, translations: req.translations, lang });
+        // }
 
         // Get user from database
         const user = await User.findById(req.user.id);

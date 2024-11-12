@@ -51,6 +51,10 @@ const getPosts = async (req, res, next) => {
         const Animelists = await Anime.find()
             .sort({ createdAt: -1 })
             .exec();
+        const Nextseason = await Anime.find({ year: 2025, month: "ตุลาคม", season: "Fall" }).sort({ createdAt: -1 }).exec();
+        if (Nextseason.length === 0) {
+            return res.status(404).json({ message: "No anime found" });
+        }
 
         const template = lang === 'th_TH' ? './th/index' : './th/index';
 
@@ -64,6 +68,7 @@ const getPosts = async (req, res, next) => {
             active: "Home",
             Posts: Posts || [],
             Animelists,
+            Nextseason,
             userID,
             TopViews,
             page,

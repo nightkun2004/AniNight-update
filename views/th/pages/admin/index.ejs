@@ -12,7 +12,7 @@
 <body class="bg-blue-50">
     <div class="flex-1 flex flex-col">
         <%- include('../../Component/Header') %>
-        <main class="flex-grow p-6">
+        <main class="mx-auto max-w-6xl px-4 mt-8 mb-10">
             <div class="mb-6 mt-4 ">
                 <% if (typeof error !== 'undefined') { %>
                     <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
@@ -78,6 +78,7 @@
                         <h2 class="text-xl font-bold text-gray-800">เพิ่มผู้ดูแลระบบใหม่</h2>
                     </div>
                 <% if (users && users.length > 0) { %>
+                    <h2 class="text-xl font-semibold mb-4">ผู้ใช้ทั้งหมด: (<%= users.length %>)</h2>
                     <form action="/admin/update-role" method="POST" class="mt-6 bg-white p-6 rounded-lg shadow-md">
                        <div class="mb-4">
                         <label for="userIdToUpdate" class="block text-gray-700 font-semibold">เลือกผู้ใช้เพื่ออัพเดตบทบาท</label>

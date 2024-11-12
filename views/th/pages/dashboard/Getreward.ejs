@@ -8,8 +8,7 @@
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+    <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
     crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100">
@@ -26,84 +25,70 @@
                        class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" 
                        placeholder="ใส่โค้ดที่นี่">
             </div>
-
-
-            <div>
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                    crossorigin="anonymous"></script>
-                <ins class="adsbygoogle"
-                    style="display:block; text-align:center;"
-                    data-ad-layout="in-article"
-                    data-ad-format="fluid"
-                    data-ad-client="ca-pub-6579807593228261"
-                    data-ad-slot="9453780851"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-            
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block; text-align:center;"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="9453780851"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
             <button type="submit" class="w-full bg-orange-500 text-white p-3 rounded-md hover:bg-orange-700 transition">แลกรับ</button>
         </form>
     </main>
 
     <%- include('../../Component/Footer') %>
 
+    <!-- Custom Popup HTML -->
+    <div id="custom-popup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+            <h2 id="popup-title" class="text-xl font-semibold mb-2">โปรดรอสักครู่ !!</h2>
+            <p id="popup-message" class="text-gray-600 mb-4">กรุณารอ <strong id="countdown">10</strong> วินาทีเพื่อดำเนินการต่อ</p>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+    crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block; text-align:center;"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="3779191461"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            <button id="popup-close" class="bg-blue-500 text-white px-4 py-2 rounded-lg">ตกลง</button>
+        </div>
+    </div>
 
-    <script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
     <script>
         document.getElementById('redeem-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
             let countdown = 10;
-            const adDisplayInterval = setInterval(() => {
+            const countdownElement = document.getElementById('countdown');
+            const popup = document.getElementById('custom-popup');
+            popup.classList.remove('hidden');
+
+            const countdownInterval = setInterval(() => {
                 countdown -= 1;
-                Swal.update({
-                    html: `<p>กรุณารอ <strong>${countdown}</strong> วินาทีเพื่อดำเนินการต่อ</p>` +
-                          `<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-layout="in-article"
-     data-ad-format="fluid"
-     data-ad-client="ca-pub-6579807593228261"
-     data-ad-slot="9453780851"></ins>`
-                });
-                (adsbygoogle = window.adsbygoogle || []).push({});
+                countdownElement.textContent = countdown;
+
                 if (countdown <= 0) {
-                    clearInterval(adDisplayInterval);
-                    Swal.close(); // ปิดการแสดงโฆษณาเมื่อหมดเวลา
-                    handleRedeemCode();
+                    clearInterval(countdownInterval);
+                    popup.classList.add('hidden'); // ปิด popup เมื่อหมดเวลา
+                    handleRedeemCode(); // เรียกฟังก์ชันแลกรับโค้ด
                 }
             }, 1000);
 
-            // แสดง SweetAlert พร้อมนับถอยหลัง
-            Swal.fire({
-                title: 'โปรดรอสักครู่ !!',
-                html: `<p>กรุณารอ <strong>${countdown}</strong> วินาทีเพื่อดำเนินการต่อ</p>` +
-                      `<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-layout="in-article"
-     data-ad-format="fluid"
-     data-ad-client="ca-pub-6579807593228261"
-     data-ad-slot="9453780851"></ins>`,
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                }
+            document.getElementById('popup-close').addEventListener('click', function() {
+                popup.classList.add('hidden');
+                clearInterval(countdownInterval);
             });
         });
 
         function handleRedeemCode() {
-            Swal.fire({
-                title: 'กำลังดำเนินการ...',
-                text: 'กรุณารอสักครู่',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
             const code = document.getElementById('redeem-code').value;
             const xhr = new XMLHttpRequest();
             xhr.open('POST', document.getElementById('redeem-form').action, true);
@@ -111,34 +96,28 @@
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    Swal.close(); 
                     const response = JSON.parse(xhr.responseText);
+                    const popup = document.getElementById('custom-popup');
+                    popup.classList.remove('hidden');
+                    
+                    const title = document.getElementById('popup-title');
+                    const message = document.getElementById('popup-message');
+
                     if (xhr.status === 200 && response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'แลกรับสำเร็จ!',
-                            text: response.message || 'โค้ดของคุณถูกแลกรับเรียบร้อยแล้ว.',
-                            confirmButtonText: 'ตกลง'
-                        });
+                        title.textContent = 'แลกรับสำเร็จ!';
+                        message.textContent = response.message || 'โค้ดของคุณถูกแลกรับเรียบร้อยแล้ว.';
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด!',
-                            text: response.message || 'ไม่สามารถแลกรับโค้ดนี้ได้ กรุณาลองอีกครั้ง.',
-                            confirmButtonText: 'ตกลง'
-                        });
+                        title.textContent = 'เกิดข้อผิดพลาด!';
+                        message.textContent = response.message || 'ไม่สามารถแลกรับโค้ดนี้ได้ กรุณาลองอีกครั้ง.';
                     }
                 }
             };
 
             xhr.onerror = function() {
-                Swal.close(); 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด!',
-                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองอีกครั้ง.',
-                    confirmButtonText: 'ตกลง'
-                });
+                const popup = document.getElementById('custom-popup');
+                popup.classList.remove('hidden');
+                document.getElementById('popup-title').textContent = 'เกิดข้อผิดพลาด!';
+                document.getElementById('popup-message').textContent = 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองอีกครั้ง.';
             };
 
             xhr.send(JSON.stringify({ code }));

@@ -54,7 +54,7 @@ const getAnimeStream = async (req, res) => {
 const getAnimeSesstionNext = async (req, res) => {
     const { year, month, season } = req.query;
     try {
-        const animes = await Anime.find({ year: year, month: month, season: season }).sort({ createdAt: -1 }).exec();
+        const animes = await Anime.find({ year: 2025, month: "ตุลาคม", season: "Fall" }).sort({ createdAt: -1 }).exec();
         if (animes.length === 0) {
             return res.status(404).json({ message: "No anime found" });
         }
