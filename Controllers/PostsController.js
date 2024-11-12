@@ -51,7 +51,7 @@ const getPosts = async (req, res, next) => {
         const Animelists = await Anime.find()
             .sort({ createdAt: -1 })
             .exec();
-        const Nextseason = await Anime.find({ year: 2025, month: "ตุลาคม", season: "Fall" }).sort({ createdAt: -1 }).exec();
+        const Nextseason = await Anime.find({ year: 2024, month: "ตุลาคม", season: "Fall" }).sort({ createdAt: -1 }).exec();
 
         const template = lang === 'th_TH' ? './th/index' : './th/index';
 
