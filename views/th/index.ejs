@@ -10,11 +10,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
   <!-- Canonical and SEO Meta -->
-  <link rel="canonical" href="https://www.ani-night.online">
-  <meta property="og:url" content="https://www.ani-night.online">
+  <link rel="canonical" href="https://ani-night.online">
+  <meta property="og:url" content="https://ani-night.online">
   <meta property="og:title" content="AniNight - แพลตฟอร์มข่าวสารและบทความเกี่ยวกับอนิเมะ">
   <meta property="og:description" content="ติดตามข่าวสารอนิเมะ บทความสุดพิเศษ และตารางอนิเมะล่าสุดได้ที่ AniNight! สร้างสรรค์เนื้อหาและสร้างรายได้ผ่านเครื่องมือของเรา">
-  <meta property="og:image" content="https://www.ani-night.online/annight/home_web.jpg">
+  <meta property="og:image" content="https://ani-night.online/annight/home_web.jpg">
   <meta property="og:locale" content="th_TH">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AniNight">
@@ -48,7 +48,7 @@
   <% if (Posts.length > 0 && typeof error === 'undefined') { %>
     <script type="application/ld+json">
       [
-        <% Posts.slice(0, 1).forEach((post) => { %>
+        <% Posts.slice(0, 5).forEach((post) => { %>
           {
             "@context": "https://schema.org",
             "@type": "NewsArticle",
@@ -183,7 +183,7 @@
               <% if (post && post.tags && post.tags.length > 0) { %>
                 <% post.tags.forEach((tag) => { %>
                   <a class="inline-block rounded-full border-2 mr-2 mt-2 px-2 py-1 text-xs font-semibold text-gray-700 transition-all duration-200"
-                     href="/search?tag=<%= tag %>">
+                     href="/search?q=<%= tag %>">
                     #<%= tag %>
                   </a>
                 <% }) %>
