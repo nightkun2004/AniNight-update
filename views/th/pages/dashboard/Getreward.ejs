@@ -8,8 +8,6 @@
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
-    <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-    crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100">
     <%- include('../../Component/Header') %>
@@ -26,24 +24,26 @@
                        placeholder="ใส่โค้ดที่นี่">
             </div>
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-                crossorigin="anonymous"></script>
-            <ins class="adsbygoogle"
-                style="display:block; text-align:center;"
-                data-ad-layout="in-article"
-                data-ad-format="fluid"
-                data-ad-client="ca-pub-6579807593228261"
-                data-ad-slot="9453780851"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block; text-align:center;"
+            data-ad-layout="in-article"
+            data-ad-format="fluid"
+            data-ad-client="ca-pub-6579807593228261"
+            data-ad-slot="9453780851"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
             <button type="submit" class="w-full bg-orange-500 text-white p-3 rounded-md hover:bg-orange-700 transition">แลกรับ</button>
         </form>
+
+        <p>ตรวจสอบกล่องแจ้งเตือนของคุณที่นี่ <a href="/notifications/<%= userID.user._id %>" class="text-orange-400">การแจ้งเตือน</a></p>
     </main>
 
     <%- include('../../Component/Footer') %>
 
     <!-- Custom Popup HTML -->
-    <div id="custom-popup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <div id="custom-popup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
             <h2 id="popup-title" class="text-xl font-semibold mb-2">โปรดรอสักครู่ !!</h2>
             <p id="popup-message" class="text-gray-600 mb-4">กรุณารอ <strong id="countdown">10</strong> วินาทีเพื่อดำเนินการต่อ</p>
@@ -71,14 +71,14 @@
             const popup = document.getElementById('custom-popup');
             popup.classList.remove('hidden');
 
+            // นับถอยหลัง
             const countdownInterval = setInterval(() => {
                 countdown -= 1;
                 countdownElement.textContent = countdown;
 
                 if (countdown <= 0) {
                     clearInterval(countdownInterval);
-                    popup.classList.add('hidden'); // ปิด popup เมื่อหมดเวลา
-                    handleRedeemCode(); // เรียกฟังก์ชันแลกรับโค้ด
+                    handleRedeemCode(); // เรียกฟังก์ชันแลกรับโค้ดเมื่อหมดเวลา
                 }
             }, 1000);
 
@@ -97,27 +97,24 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     const response = JSON.parse(xhr.responseText);
-                    const popup = document.getElementById('custom-popup');
-                    popup.classList.remove('hidden');
-                    
                     const title = document.getElementById('popup-title');
                     const message = document.getElementById('popup-message');
 
                     if (xhr.status === 200 && response.success) {
                         title.textContent = 'แลกรับสำเร็จ!';
-                        message.textContent = response.message || 'โค้ดของคุณถูกแลกรับเรียบร้อยแล้ว.';
+                        message.textContent = response.message;
                     } else {
                         title.textContent = 'เกิดข้อผิดพลาด!';
-                        message.textContent = response.message || 'ไม่สามารถแลกรับโค้ดนี้ได้ กรุณาลองอีกครั้ง.';
+                        message.textContent = response.message;
                     }
+                    popup.classList.remove('hidden'); // แสดง popup
                 }
             };
 
             xhr.onerror = function() {
-                const popup = document.getElementById('custom-popup');
-                popup.classList.remove('hidden');
                 document.getElementById('popup-title').textContent = 'เกิดข้อผิดพลาด!';
                 document.getElementById('popup-message').textContent = 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองอีกครั้ง.';
+                popup.classList.remove('hidden');
             };
 
             xhr.send(JSON.stringify({ code }));

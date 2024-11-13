@@ -39,11 +39,11 @@ const addViewToArticle = async (articleId, userId) => {
         });
 
 
-        await sendEmail(
-            user.email, 
-            `ถึง ${user.username} แจ้งเตือนรายได้จากผู้ใช้ที่อ่านเรื่อง ${article.title}`, 
-            emailHtmlAddViewsArticle(user.username, user.earnings.toFixed(2), article.urlslug, article.title)
-        );
+        // await sendEmail(
+        //     user.email, 
+        //     `ถึง ${user.username} แจ้งเตือนรายได้จากผู้ใช้ที่อ่านเรื่อง ${article.title}`, 
+        //     emailHtmlAddViewsArticle(user.username, user.earnings.toFixed(2), article.urlslug, article.title)
+        // );
         // console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
 
         // บันทึกการเปลี่ยนแปลง

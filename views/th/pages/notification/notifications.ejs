@@ -21,15 +21,30 @@
         <ul class="space-y-2">
             <% notifications.forEach(notification => { %>
                 <li>
-                    <a href="/notifications/<%= notification._id %>/read" class="<%= notification.isRead ? 'bg-gray-200' : 'bg-white' %> p-4 rounded shadow mb-5 block">
-                        <p><%= notification.message %></p>
+                    <div class="<%= notification.isRead ? 'bg-gray-200' : 'bg-white' %> p-4 rounded shadow mb-5 block">
+                        <div class=" mt-5 mb-5">
+                            <p class="notification-message"><%= notification.message %></p>
                         <p class="text-gray-500 text-sm"> <%= moment(notification.createdAt).locale('th').fromNow() %></p>
-                    </a>
+                        </div>
+                        <a href="/notifications/<%= notification._id %>/read" class="bg-blue-500 text-white rounded-lg p-2">ทำเครื่องหมายว่าอ่านแล้ว</a>
+                    </div>
                 </li>
             <% }); %>
         </ul>        
     </div>
 
     <%- include('../../Component/Footer') %>
+
+    <script>
+        // ฟังก์ชั่นที่จะค้นหา URL ภายในข้อความและแปลงเป็นลิงก์ที่สามารถคลิกได้
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifications = document.querySelectorAll('.notification-message');
+            notifications.forEach(notification => {
+                let message = notification.innerHTML;
+                message = message.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" class="text-blue-500" target="_blank">$1</a>');
+                notification.innerHTML = message;
+            });
+        });
+    </script>
 </body>
 </html>
