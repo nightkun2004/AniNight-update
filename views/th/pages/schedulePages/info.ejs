@@ -343,7 +343,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-white shadow rounded-lg p-4">
                             <!-- Left: Character -->
                             <div class="flex items-center">
-                                <img src="<%- character.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
+                                <img data-src="<%- character.imageUrl %>" src="<%- character.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
                                      alt="<%- character.name %>" 
                                      class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
                                 <div>
@@ -357,7 +357,7 @@
                                 <% if (character.actor && character.actor.length > 0) { %>
                                     <% character.actor.forEach(actor => { %>
                                         <div class="flex items-center">
-                                            <img src="<%- actor.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
+                                            <img data-src="<%- character.imageUrl %>" src="<%- actor.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
                                                  alt="<%- actor.name %>" 
                                                  class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
                                             <div>
