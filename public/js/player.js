@@ -72,7 +72,7 @@ video_players.forEach(video_player => {
                     </div>
                     <div class="header-audio-lists">
                         <h3>เลือกแทร็กเสียง</h3>
-                        <ul id="video-audio-list">
+                        <ul id="audioTrackSelector">
                             <li data-audio="videomain" class="activeaudio">วีดีโอต้นฉบับ</li>
                             <li data-audio="/audios/th/thaiver.mp3">พากย์ไทย</li>
                             <li data-audio="/audios/jp/test.mp3">พากย์ญี่ปุ่น</li>
@@ -111,9 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const sub_btn = document.getElementById("sub_btn");
     const quality_btn = document.getElementById("quality_btn");
     const headerAudio_btn = document.getElementById("headerAudio_btn");
-    const audioList = document.getElementById('video-audio-list');
     const loadingMessage = document.getElementById('loadingMessage');
-    const audioTracks = videoMain.getElementsByTagName('audio');
+    const audioTrackSelector = document.getElementById('audioTrackSelector');
 
     let mouseMoveTimeout;
 
@@ -159,67 +158,82 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function switchAudioTrack(audioSrc) {
-        let foundTrack = false;
-        for (let i = 0; i < audioTracks.length; i++) {
-            if (audioTracks[i].src.includes(audioSrc)) {
-                audioTracks[i].currentTime = videoMain.currentTime;
-                audioTracks[i].volume = videoMain.volume;
-                playVideo();
-                audioTracks[i].play();
-                foundTrack = true;
-            } else {
-                audioTracks[i].pause();
-            }
-        }
-        
-        if (audioSrc === "videomain") {
-            videoMain.muted = false;
-        } else {
-            videoMain.muted = true;
-        }
-    
-        if (!foundTrack && audioSrc !== "videomain") {
-            const selectedAudioTrack = document.querySelector(`audio[src="${audioSrc}"]`);
-            if (selectedAudioTrack) {
-                selectedAudioTrack.currentTime = videoMain.currentTime;
-                selectedAudioTrack.volume = videoMain.volume;
-                selectedAudioTrack.play();
-            }
-        }
-    }
-    
-    audioList.addEventListener('click', function(event) {
-        if (event.target.tagName === 'LI') {
-            const audioSrc = event.target.getAttribute('data-audio');
-            switchAudioTrack(audioSrc);
-    
-            const items = document.querySelectorAll('#video-audio-list li');
-            items.forEach(item => item.classList.remove('activeaudio'));
-            event.target.classList.add('activeaudio');
-        }
+    const audioTracks = [
+        // { language: 'ต้นฉบับ', trackUrl: '/audios/original-track.wav' },
+        // { language: 'แทร็กเสียงไทย', trackUrl: '/audios/audio1.wav' },
+        // { language: 'แทร็กเสียงไทย รอง', trackUrl: '/audios/ฟ/audio2.wav' },
+    ];
+
+    const audioElements = audioTracks.map(track => {
+        const audio = document.createElement('audio');
+        audio.src = track.trackUrl;
+        audio.preload = 'auto';
+        audio.style.display = 'none';
+        document.body.appendChild(audio);
+        return audio;
     });
+
+    // function switchAudioTrack(audioSrc) {
+    //     let foundTrack = false;
+    //     for (let i = 0; i < audioTracks.length; i++) {
+    //         if (audioTracks[i].src.includes(audioSrc)) {
+    //             audioTracks[i].currentTime = videoMain.currentTime;
+    //             audioTracks[i].volume = videoMain.volume;
+    //             playVideo();
+    //             audioTracks[i].play();
+    //             foundTrack = true;
+    //         } else {
+    //             audioTracks[i].pause();
+    //         }
+    //     }
+        
+    //     if (audioSrc === "videomain") {
+    //         videoMain.muted = false;
+    //     } else {
+    //         videoMain.muted = true;
+    //     }
+    
+    //     if (!foundTrack && audioSrc !== "videomain") {
+    //         const selectedAudioTrack = document.querySelector(`audio[src="${audioSrc}"]`);
+    //         if (selectedAudioTrack) {
+    //             selectedAudioTrack.currentTime = videoMain.currentTime;
+    //             selectedAudioTrack.volume = videoMain.volume;
+    //             selectedAudioTrack.play();
+    //         }
+    //     }
+    // }
+    
+    // audioList.addEventListener('click', function(event) {
+    //     if (event.target.tagName === 'LI') {
+    //         const audioSrc = event.target.getAttribute('data-audio');
+    //         switchAudioTrack(audioSrc);
+    
+    //         const items = document.querySelectorAll('#video-audio-list li');
+    //         items.forEach(item => item.classList.remove('activeaudio'));
+    //         event.target.classList.add('activeaudio');
+    //     }
+    // });
     
 
     
-    videoMain.addEventListener('pause', () => {
-        for (let i = 0; i < audioTracks.length; i++) {
-            if (!audioTracks[i].paused) {
-                audioTracks[i].pause();
-            }
-        }
-    });
+    // videoMain.addEventListener('pause', () => {
+    //     for (let i = 0; i < audioTracks.length; i++) {
+    //         if (!audioTracks[i].paused) {
+    //             audioTracks[i].pause();
+    //         }
+    //     }
+    // });
     
-    videoMain.addEventListener('play', () => {
-        for (let i = 0; i < audioTracks.length; i++) {
-            if (!audioTracks[i].paused) {
-                audioTracks[i].play();
-            }
-        }
-    });
+    // videoMain.addEventListener('play', () => {
+    //     for (let i = 0; i < audioTracks.length; i++) {
+    //         if (!audioTracks[i].paused) {
+    //             audioTracks[i].play();
+    //         }
+    //     }
+    // });
     
-    const defaultAudio = document.querySelector('#video-audio-list li.activeaudio').getAttribute('data-audio');
-    switchAudioTrack(defaultAudio);
+    // const defaultAudio = document.querySelector('#video-audio-list li.activeaudio').getAttribute('data-audio');
+    // switchAudioTrack(defaultAudio);
 
     function loadSubtitles(subtitleFilePath) {
         loadingMessage.style.display = 'block';

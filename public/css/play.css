@@ -1,0 +1,41 @@
+.video-container {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+
+  video {
+    width: 100%;
+    height: 100%;
+    background-color: #ddd;
+  }
+
+
+  .controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    background: rgb(0 0 0 / 29%);
+    box-shadow: 0 0 40px 10px rgb(0 0 0 / 25%);
+    z-index: 3;
+    /* transform: translateY(180%); */
+    transition: 0.3s;
+  }
+
+
+  .controls-list {
+    position: absolute;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    margin: 0 auto;
+}
