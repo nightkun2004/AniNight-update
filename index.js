@@ -130,7 +130,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', [
+  path.join(__dirname, '/views'),
+  path.join(__dirname, '/admin/views')
+]);
 app.set('view engine', 'ejs');
 app.use(fileUpload({
   limits: { fileSize: 2 * 1024 * 1024 * 1024 },

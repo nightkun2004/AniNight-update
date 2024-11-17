@@ -20,19 +20,34 @@ const getAdmin = async (req, res) => {
 
         const user = await User.findById(req.user.id).limit(100);
         const users = await User.find(query).limit(100);
+        const userAll = await User.find();
 
         const admins = await User.find({ role: 'admin' });
 
         // console.log("admin", User)
 
-        res.render("./th/pages/admin/index", { users, filters: { adminName, adminEmail, adminRole }, translations: req.translations, lang, admins, userID })
+        res.render("./index", { users, userAll, filters: { adminName, adminEmail, adminRole }, translations: req.translations, lang, admins, userID })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/index', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
+        res.status(500).json({
+            msg: "Server Error",
+            errorMessage
+        })
+    }
+}
+
+const getAdminManageUser = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    try {
+        const userDatas = await User.find();
+        res.render("./manage/user", { translations: req.translations, lang, userID, userDatas })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            msg: "Server Error",
+            errorMessage
+        })
     }
 }
 
@@ -203,18 +218,18 @@ const updateUserRole = async (req, res) => {
 
 
         const users = await User.find(query).limit(100);
+        const userAll = await User.find();
         await User.findByIdAndUpdate(userIdToUpdate, { role: newRole });
         const admins = await User.find({ role: 'admin' });
 
 
-        res.status(200).render("./th/pages/admin/index", { message: `ได้รับการเปลี่ยนแปลงแล้ว : ${newRole}`, admins, translations: req.translations, lang, users, userID })
+        res.status(200).render("./index", { message: `ได้รับการเปลี่ยนแปลงแล้ว : ${newRole}`, admins, translations: req.translations, lang, users, userAll, userID })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/index', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
+        res.status(500).json({
+            msg: "Server Error",
+            errorMessage
+        })
     }
 }
 
@@ -242,6 +257,7 @@ const filterUsers = async (req, res) => {
 
 module.exports = {
     getAdmin,
+    getAdminManageUser,
     getAdminReward,
     getAdminAPIKEY,
     getAdminAddBanner,

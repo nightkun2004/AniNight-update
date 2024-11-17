@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+<body class="bg-gray-100 text-black">
+    <%- include('./Component/Header') %>
+
+    <main class="mx-auto max-w-6xl px-4 mt-8 mb-10">
+        <section class=" bg-white rounded-lg md:mb-12 mb-2 p-4">
+            <div class="mb-6 mt-4 ">
+                <% if (typeof error !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+                <% } %>
+                <% if (typeof message !== 'undefined') { %>
+                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= message %></div>
+                <% } %>
+            </div>
+            <h2 class="text-xl font-semibold mb-4">ผู้ใช้ทั้งหมด: (<%= userAll.length %>)</h2>
+            <% if (userID && userID.user && userID.user.role === 'admin') {%>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">เพิ่มผู้ดูแลระบบใหม่</h2>
+                </div>
+            <% if (users && users.length > 0) { %>
+                <form action="/admin/update-role" method="POST" class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                   <div class="mb-4">
+                    <label for="userIdToUpdate" class="block text-gray-700 font-semibold">เลือกผู้ใช้เพื่ออัพเดตบทบาท</label>
+                    <input type="search" id="searchUser" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ค้นหา..." oninput="filterOptions()">
+                    <select id="userIdToUpdate" name="userIdToUpdate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option disabled selected>เลือก</option>
+                        <% if (users && users.length > 0) { %>
+                            <% users.forEach(user => { %>
+                                <option value="<%= user._id %>" data-username="<%= user.username %>" data-email="<%= user.email %>">
+                                    <%= user.username %> - <%= user.email %>
+                                </option>
+                            <% }) %>
+                        <% } %>
+                    </select>
+                </div>
+                    <div class="mb-4">
+                        <label for="newRole" class="block text-gray-700 font-semibold">บทบาทใหม่</label>
+                        <select id="newRole" name="newRole" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="content_creator">Editor || ครีเอเตอร์</option>
+                            <option value="partners">Partners || พาร์ทเนอร์</option>
+                            <option value="admin">ผู้ดูแลระดับนักพัฒนา</option>
+                            <option value="moderator">ผู้ดูแลพื้นฐาน</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">อัพเดตบทบาท</button>
+                </form>
+                
+            <% } %>
+          <% } %>
+        </section>
+
+        <section>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">รายการผู้ดูแลระบบ</h2>
+            </div>
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr>
+                        <th class="py-2 px-4 border-b">#</th>
+                        <th class="py-2 px-4 border-b">ชื่อ</th>
+                        <th class="py-2 px-4 border-b">อีเมล</th>
+                        <th class="py-2 px-4 border-b">บทบาท</th>
+                        <!-- <th class="py-2 px-4 border-b">การกระทำ</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (admins && admins.length > 0) { %>
+                        <% admins.forEach((admin, index) => { %>
+                            <tr>
+                                <td class="py-2 px-4 border-b text-center"><%= index + 1 %></td>
+                                <td class="py-2 px-4 border-b"><%= admin.username %></td>
+                                <td class="py-2 px-4 border-b"><%= admin.email %></td>
+                                <td class="py-2 px-4 border-b text-center"><%= admin.role.charAt(0).toUpperCase() + admin.role.slice(1) %></td>
+                                <!-- <td class="py-2 px-4 border-b text-center">
+                                    <button class="text-blue-500 hover:text-blue-700">แก้ไข</button>
+                                    <button class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
+                                </td> -->
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" class="py-2 px-4 border-b text-center">ไม่มีผู้ดูแลระบบ</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

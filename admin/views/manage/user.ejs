@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+<body>
+    <%- include('../Component/Header') %>
+
+    <main class="mx-auto max-w-6xl px-4 mt-8 mb-10">
+        <div class="overflow-x-auto rounded-lg">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr class="text-black">
+                        <th class="py-2 px-4 border-b text-sm ">userID</th>
+                        <th class="py-2 px-4 border-b text-sm ">ชื่อผู้ใช้</th>
+                        <th class="py-2 px-4 border-b text-sm ">อีเมล</th>
+                        <th class="py-2 px-4 border-b text-sm ">role</th>
+                        <th class="py-2 px-4 border-b text-sm ">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (userDatas && userDatas.length > 0) { %>
+                        <% userDatas.forEach((user, index) => { %>
+                     <tr class="text-black">
+                        <td class="py-2 px-4 border-b">
+                            <%= user._id %>
+                        </td>  
+                        <td class="py-2 px-4 border-b">
+                            <%= user.username %>
+                        </td>  
+                        <td class="py-2 px-4 border-b">
+                            <%= user.email %>
+                        </td>  
+                        <td class="py-2 px-4 border-b">
+                            <%= user.role %>
+                        </td> 
+                        <td class="py-2 px-4 border-b text-center relative">
+                            <!-- Icon button for opening the menu -->
+                            <button id="button_<%= user._id %>" onclick="event.stopPropagation(); toggleMenu('<%= user._id %>')" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/>
+                                </svg>
+                            </button>
+                        
+                            <!-- Dropdown menu -->
+                            <div id="menu_<%= user._id %>" class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                                <a href="/edit/post/article?articleid=<%= user._id %>" class="block px-4 py-2 text-sm text-blue-500 hover:bg-blue-100">
+                                    แก้ไข
+                                </a>
+                                <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="deletearticle(event, '<%= user._id %>')" type="button">
+                                    ลบ
+                                </a>
+                            </div>
+                        </td> 
+                     </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        function toggleMenu(userID) {
+            // ปิดเมนูอื่นๆ ก่อนเปิดเมนูที่เลือก
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== `menu_${userID}`) {
+                    menu.classList.add('hidden');
+                }
+            });
+    
+            const menu = document.getElementById(`menu_${userID}`);
+            menu.classList.toggle('hidden');
+    
+            // ตรวจสอบการคลิกนอกเมนู
+            document.addEventListener('click', function handleClickOutside(event) {
+                if (!menu.contains(event.target) && event.target.id !== `button_${userID}`) {
+                    menu.classList.add('hidden');
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
