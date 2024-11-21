@@ -45,6 +45,15 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TD38Z8LH');</script>
     <!-- End Google Tag Manager -->
+     <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-X2HYDKP19Y"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-X2HYDKP19Y');
+        </script>
 
     <style>
         .fullscreen-read {
@@ -207,8 +216,8 @@
                                         <div data-popper-arrow></div>
                                     </div>    
                                     <div>
-                                        <a href="/channel/<%= post.creator.username %>" class="flex items-center">
-                                            <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.username %></h1>
+                                        <a href="/channel/<%= post.creator.id.username %>"  class="flex items-center">
+                                            <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.id.username %></h1>
                                             <% if (post.creator.id.role  === 'admin') { %>
                                                 <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
                                             <% } %>

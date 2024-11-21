@@ -1,8 +1,9 @@
 <% if (post.published) { %>
     <a href="/read/<%= post.urlslug %>" class="block">
         <div class="relative aspect-w-16 aspect-h-9">
+            <% let thumbnail = post.thumbnail.startsWith('http') ? post.thumbnail : '/uploads/thumbnails/' + (post.thumbnail  || 'default.png'); %>
             <picture class="lazyload w-full h-auto object-cover rounded-lg">
-                <img class="lazyload rounded-lg" data-src="https://ani-night.online/uploads/thumbnails/<%= post.thumbnail %>" alt="<%= post.title %>" src="placeholder.jpg" />
+                <img class="lazyload rounded-lg" data-src="<%= thumbnail %>" alt="<%= post.title %>" src="placeholder.jpg" loading="lazy" />
             </picture>
         </div>
         
@@ -15,7 +16,7 @@
                         <%= post.title %>
                     </h2>
                     <p class="text-xs text-secondary-color">
-                        <%= post.creator.username %>
+                        <%= post.creator.id.username %>
                         <% if (post.creator.id.role  === 'admin') { %>
                             <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
                         <% } %>

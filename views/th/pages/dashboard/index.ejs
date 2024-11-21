@@ -366,24 +366,6 @@
    
     <!-- <script src="/js/script.js"></script> -->
     <script>
-        function deletearticle(event, postId) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'คุณแน่ใจหรือไม่?',
-                text: "คุณต้องการลบโพสต์นี้หรือไม่?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่, ลบโพสต์!',
-                cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/post/article/delete/${postId}`;
-                }
-            });
-        }
-
         // Function to update the progress bar
         function updateProgressBar(totalArticles, publishedArticles) {
             const progressBar = document.getElementById('progress-bar-article');

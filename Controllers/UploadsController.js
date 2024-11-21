@@ -84,7 +84,7 @@ const CreateArticle = async (req, res, next) => {
 
         const Articlesave = new Article(postcreate);
         await Articlesave.save();
-        console.log(Articlesave);
+        // console.log(Articlesave);
         await User.findByIdAndUpdate(req.user.id, { $push: { articles: Articlesave._id } }, { new: true });
 
         res.json({ status: 'ok', Articlesave, msg: "ทำการสร้างโพสต์สำเร็จ", userID, translations: req.translations, lang });

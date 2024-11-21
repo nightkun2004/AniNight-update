@@ -145,7 +145,8 @@
                             <a class="hover-de" target="_blank" href="/read/<%= item.urlslug %>">
                                 <div class="item-article-user">
                                     <div class="article-pic">
-                                        <img src="/uploads/thumbnails/<%= item.thumbnail %>" alt="">
+                                        <% let thumbnail = item.thumbnail.startsWith('http') ? item.thumbnail : '/uploads/thumbnails/' + (item.thumbnail  || 'default.png'); %>
+                                        <img src="<%= thumbnail %>" alt="" loading="lazy">
                                         <p class="views"><i class="bi bi-eye"></i><%= formatNumber(item.views) %></p>
                                     </div>
                                     <div class="name-article">

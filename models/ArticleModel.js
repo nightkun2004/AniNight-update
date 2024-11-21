@@ -34,7 +34,6 @@ const ArticleSchema = new mongoose.Schema({
     },
     categories: [{
         type: String,
-        enum: ["อาหาร", "การท่องเที่ยว", "ข่าวสาร", "การ์ตูน", "เพลง", "บันเทิง", "อนิเมะ"]
     }],
     creator: {
         id: {

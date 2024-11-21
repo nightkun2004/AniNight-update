@@ -48,8 +48,12 @@
                         <% userDatas.articles.forEach((article, index) => { %>
                         <tr class="text-black">
                             <td class="py-2 px-4 border-b flex justify-center">
-                                <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt="Cover Image" class="w-16 h-28 object-cover rounded-md md:w-[200px] md:h-24">
-                            </td>
+                                <% if (article.thumbnail.startsWith('http')) { %>
+                                    <img src="<%= article.thumbnail %>"  class="w-16 h-28 object-cover rounded-md md:w-[200px] md:h-24" alt="<%= article.title %>">
+                                <% } else { %>
+                                    <img src="/uploads/thumbnails/<%= article.thumbnail %>" alt=" <%= article.title %>" class="w-16 h-28 object-cover rounded-md md:w-[200px] md:h-24">
+                                <% } %>
+                            </td> 
                             <td class="py-2 px-4 border-b">
                                 <%= article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %>
                             </td>                                
@@ -95,6 +99,23 @@
     <%- include('../../../Component/Footer') %>
 
     <script>
+        function deletearticle(event, postId) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณต้องการลบโพสต์นี้หรือไม่?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่, ลบโพสต์!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/post/article/delete/${postId}`;
+                }
+            });
+        }
         function toggleMenu(articleId) {
             // ปิดเมนูอื่นๆ ก่อนเปิดเมนูที่เลือก
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
@@ -114,6 +135,6 @@
                 }
             });
         }
-    </script>
+    </script> 
 </body>
 </html>

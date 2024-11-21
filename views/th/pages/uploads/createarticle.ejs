@@ -20,6 +20,36 @@
            overflow-y: auto;
            overflow-x: hidden;
        }
+
+       input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%; /* ทำให้เป็นวงกลม */
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #BFECFF; /* สีเมื่อเลือก */
+            border-color: #BFECFF;
+        }
+
+        .category-label span {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .category-label span:hover {
+            background-color: #f0f0f0;
+        }
    </style>
 </head>
 <body class="bg-gray-100">
@@ -51,27 +81,127 @@
             
             <!-- Form Content -->
             <form id="AddArticle" action="/api/v2/post/article/create" method="post" enctype="multipart/form-data">
-                <div class="mb-5">
-                    <label for="name_act" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อบทความ</label>
-                    <input type="text" id="title" name="title" class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                </div>
-                <div class="mb-5">
-                    <label for="tags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ใสแท็กเนื้อหาของคุณ</label>
-                    <input type="text" id="tags" name="tags" class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
-                    <p class="text-gray-500 text-sm">Tip: ตัวอย่างแท็กที่สมบูรณ์: #9test #anime #ตัวอย่าง #ทดสอบแท็ก</p>
-                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="mb-5">
+                        <label for="name_act" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อบทความ</label>
+                        <input type="text" id="title" name="title" class="shadow-sm border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
+                    </div>
+                    <div class="mb-5">
+                        <label for="tags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ใสแท็กเนื้อหาของคุณ</label>
+                        <input type="text" id="tags" name="tags" class="shadow-sm border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                        <p class="text-gray-500 text-sm">Tip: ตัวอย่างแท็กที่สมบูรณ์: #9test #anime #ตัวอย่าง #ทดสอบแท็ก</p>
+                    </div>
+                </div> 
+
                 <div class="mb-4">
                    <label for="content" class="block text-sm font-medium text-gray-700">เนื้อหา</label>
                    <textarea id="editor" class="mt-1 block w-full h-[300px] md:h-[500px] shadow-sm sm:text-sm border border-gray-300 rounded-md"></textarea>
-                   <input type="hidden" id="content" name="content">
+                   <textarea class="hidden" id="content" name="content"></textarea>
                </div>
+
+               <div class="grid grid-cols-2 gap-4">
+                <div class="mb-5">
+                    <label for="thumbnail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่มภาพปกของคุณ</label>
+                    <input id="thumbnail"
+                        class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
+                        type="file" name="thumbnail" accept="image/*" required onchange="previewImage(this)">
+                        <p class="text-gray-600 font-light"> ภาพแนะนำให้เป็น 16:9 ( 1280 x 720 ) เพื่อให้สามารถอ่านได้ง่าย</p>
+                </div>  
+                <div class="mb-5">
+                    <div class="flex">
+                        <div class="flex items-center h-5">
+                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" id="published" name="published"
+                             class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ms-2 text-sm">
+                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
+                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้ หากคุณต้องการเผยแพร่เลยให้ติ้งไว้</p>
+                        </div>
+                    </div>
+                </div> 
+                <div class="mb-5">
+                    <label for="scheduledAt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ตั้งเวลาเผยแพร่</label>
+                    <input type="datetime-local" id="scheduledAt" name="scheduledAt" 
+                           class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                    <p class="text-gray-500 text-sm">กำหนดวันที่และเวลาในการเผยแพร่บทความ หากไม่เลือกจะถูกบันทึกเป็นฉบับร่าง</p>
+                </div>
+              </div> 
+              <div class="mb-5">
+                <label for="url_edit">แก้ไข URL</label>
+                <input class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                 type="text" name="urlslug" placeholder="use-hyphens-for-spaces">
+                <p>การแก้ไข URL จะช่วยให้บทความขึ้นคำค้นหาของ Google ได้</p>
+                <ul class="text-sm mt-2">
+                    <li> * ใช้ตัวอักษรภาษาอังกฤษและตัวเลขเท่านั้น</li>
+                    <li> * แทนที่ช่องว่างด้วยเครื่องหมายขีด (-)</li>
+                    <li> * ใช้คำสำคัญที่เกี่ยวข้องกับเนื้อหา</li>
+                    <li> * หลีกเลี่ยงคำซ้ำหรือคำที่ไม่จำเป็น</li>
+                    <li> * ความยาว URL ไม่เกิน 60 ตัวอักษร</li>
+                </ul>
+            </div>
                
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700">หมวดหมู่</label>
-                    <div class="flex flex-wrap gap-2 mt-2">
+                    <div class="grid grid-cols-2  gap-5 mt-2">
                         <label class="category-label">
                             <input type="checkbox" name="categories" value="อนิเมะ">
                             <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">อนิเมะ</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="BL">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">BL</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="GL">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">GL</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="แอ็กชัน">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">แอ็กชัน</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ผจญภัย">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ผจญภัย</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ตลก">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ตลก</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ดราม่า">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ดราม่า</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="แฟนตาซี">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">แฟนตาซี</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="โรแมนติก">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">โรแมนติก</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="สยองขวัญ">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">สยองขวัญ</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ลึกลับ">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ลึกลับ</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ไซไฟ">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ไซไฟ</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ชีวิตประจำวัน">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ชีวิตประจำวัน</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="ต่างโลก">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ต่างโลก</span>
+                        </label>
+                        <label class="category-label">
+                            <input type="checkbox" name="categories" value="หุ่นยนต์">
+                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">หุ่นยนต์</span>
                         </label>
                         <label class="category-label">
                             <input type="checkbox" name="categories" value="บันเทิง">
@@ -99,56 +229,14 @@
                         </label>
                     </div>
                 </div>
-                <div class="mb-5">
-                    <label for="thumbnail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่มภาพปกของคุณ</label>
-                    <input id="thumbnail"
-                        class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
-                        type="file" name="thumbnail" accept="image/*" required onchange="previewImage(this)">
-                        <p class="text-gray-600 font-light"> ภาพแนะนำให้เป็น 16:9 ( 1280 x 720 ) เพื่อให้สามารถอ่านได้ง่าย</p>
-                </div> 
-
-                <hr class="mt-4 mb-6">
-                   <div class="mb-5">
-                       <label for="url_edit">แก้ไข URL</label>
-                       <input class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                        type="text" name="urlslug" placeholder="use-hyphens-for-spaces">
-                       <p>การแก้ไข URL จะช่วยให้บทความขึ้นคำค้นหาของ Google ได้</p>
-                       <ul class="text-sm mt-2">
-                           <li> * ใช้ตัวอักษรภาษาอังกฤษและตัวเลขเท่านั้น</li>
-                           <li> * แทนที่ช่องว่างด้วยเครื่องหมายขีด (-)</li>
-                           <li> * ใช้คำสำคัญที่เกี่ยวข้องกับเนื้อหา</li>
-                           <li> * หลีกเลี่ยงคำซ้ำหรือคำที่ไม่จำเป็น</li>
-                           <li> * ความยาว URL ไม่เกิน 60 ตัวอักษร</li>
-                       </ul>
-                   </div>
-                   <hr class="mt-4 mb-6">
-                
+               
                 <!-- <div class="mb-5">
                     <label for="images" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ภาพประกอบ</label>
                     <input type="file"
                         class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
                         id="images" name="images" multiple accept="image/*" onchange="previewImages(this)">
                 </div>
-     -->
-                <div class="mb-5">
-                    <div class="flex">
-                        <div class="flex items-center h-5">
-                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" id="published" name="published"
-                             class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        </div>
-                        <div class="ms-2 text-sm">
-                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
-                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้ หากคุณต้องการเผยแพร่เลยให้ติ้งไว้</p>
-                        </div>
-                    </div>
-                </div> 
-
-                <div class="mb-5">
-                    <label for="scheduledAt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ตั้งเวลาเผยแพร่</label>
-                    <input type="datetime-local" id="scheduledAt" name="scheduledAt" 
-                           class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
-                    <p class="text-gray-500 text-sm">กำหนดวันที่และเวลาในการเผยแพร่บทความ หากไม่เลือกจะถูกบันทึกเป็นฉบับร่าง</p>
-                </div>
+     --> 
                 
         </div>
     
@@ -185,9 +273,7 @@
                     <p id="statusText" class="text-sm font-bold text-gray-600 mt-1"></p>
               </div>
                 <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    ส่งบทความ</button>
-
-                    <p class="text-yellow-500 font-bold mt-5 mb-7"><i class="fas fa-exclamation-triangle text-yellow-500"></i> การแก้ไขมีบัคบางอย่าง ตอนนี้เรากำลังหาสาเหตุ โปรดเช็คดีๆก่อนเผยแพร่จริง คุณอาจจะแก้ไขไม่ได้ตอนนี้</p>
+                    ส่งบทความ</button> 
             </form>
             </div>
             

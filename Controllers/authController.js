@@ -402,47 +402,41 @@ const EditProfile = async (req, res) => {
     const userID = req.session.userlogin;
     // console.log('Request Body:', req.body);
     try {
-        const { username, email, currentPassword, bio } = req.body;
+        const { username, bio } = req.body;
 
-        // if (!currentPassword) {
-        //     return res.status(400).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'กรุณากรอกรหัสผ่านปัจจุบัน', userID, translations: req.translations, lang });
-        // }
-
-        // Get user from database
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(403).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'ไม่พบผู้ใช้', userID, translations: req.translations, lang });
         }
 
-        // Validate current password
-        // const validateUserPassword = await bcrypt.compare(currentPassword, user.password);
-        // if (!validateUserPassword) {
-        //     return res.status(422).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'รหัสผ่านเดิมไม่ถูกต้อง', userID, translations: req.translations, lang });
-        // }
+         const existingusername = await User.findOne({ username });
+         if (existingusername) {
+             return res.status(400).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, translations: req.translations, lang });
+         }
+
 
         // Update user info in database
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             {
                 username,
-                email,
                 bio
             },
             { new: true }
         );
 
+        req.session.userlogin = { ...req.session.userlogin, username: updatedUser.username, bio: updatedUser.bio };
+
         if (!updatedUser) {
             return res.status(500).render(`./th/pages/authPages/Edits/EditProfile`, { message: 'ไม่สามารถอัปเดตข้อมูลได้.', userID, translations: req.translations, lang });
         }
 
-        res.status(200).render(`./th/pages/authPages/Edits/EditProfile`, { message: 'แก้ไขรายละเอียดโปรไฟลืของคุณแล้วครับ.', userID, translations: req.translations, lang });
+        res.status(200).render(`./th/pages/authPages/Edits/EditProfile`, { message: 'แก้ไขรายละเอียดโปรไฟล์ของคุณแล้วครับ.', userID, translations: req.translations, lang });
     } catch (error) {
         console.log(error.response ? error.response.data : error.message);
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render(`./th/pages/authPages/Edits/EditProfile`, {
-            userID,
-            message: errorMessage,
-            translations: req.translations, lang
+        res.status(500).json({
+            errorMessage
         })
     }
 }
@@ -501,7 +495,7 @@ const EditProfileAvater = async (req, res) => {
 
             // อัปเดตเซสชัน
             req.session.userlogin = { ...req.session.userlogin, user: updateAvatar.toObject() };
-            console.log("ข้อมูลอัพเดต session", req.session.userlogin);
+            // console.log("ข้อมูลอัพเดต session", req.session.userlogin);
 
             res.status(200).render(`./th/pages/authPages/Edits/EditProfile`, { message: 'เปลี่ยนโปรไฟล์เรียบร้อย', translations: req.translations, lang, dataprofile: updateAvatar.profilePicture, userID });
         });

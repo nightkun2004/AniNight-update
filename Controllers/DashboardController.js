@@ -3,6 +3,7 @@ const Article = require("../models/ArticleModel")
 const Payment = require("../models/PaymentModel")
 const Banner = require("../models/bannnerModel")
 const Notification = require("../models/NotificationModel");
+const { oAuth2Client, getAdSenseReport } = require('../adsense');
 const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
@@ -27,14 +28,13 @@ const getDashboard = async (req, res) => {
         const currentDate = new Date();
         const banners = await Banner.find({ expiryDate: { $gt: currentDate } });
 
-
-        res.render("./th/pages/dashboard/index", { userID, userDatas, daysLeft, publishedArticlesCount, Bannerlists: banners, translations: req.translations,lang   });
+        res.render("./th/pages/dashboard/index", { userID, userDatas, daysLeft, publishedArticlesCount, Bannerlists: banners, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/dashboard/index', {
             error: errorMessage,
             userID,
-            translations: req.translations,lang  
+            translations: req.translations, lang
         });
     }
 };
@@ -53,13 +53,13 @@ const getDashboardManageArticle = async (req, res) => {
             options: { sort: { createdAt: -1 } }
         }).exec();
         const publishedArticlesCount = userDatas.articles.filter(article => article.published).length;
-        res.render("./th/pages/dashboard/manage/article", { userID, userDatas, daysLeft, publishedArticlesCount, translations: req.translations,lang   });
+        res.render("./th/pages/dashboard/manage/article", { userID, userDatas, daysLeft, publishedArticlesCount, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/dashboard/manage/article', {
             error: errorMessage,
             userID,
-            translations: req.translations,lang  
+            translations: req.translations, lang
         });
     }
 };
@@ -97,7 +97,7 @@ const getNotificationisRead = async (req, res) => {
 
         // ตรวจสอบว่าการแจ้งเตือนและผู้ใช้มีอยู่จริง
         if (!notification) {
-            return res.status(404).render("th/pages/notification/notifications",{ userID, message: 'Notification not found' });
+            return res.status(404).render("th/pages/notification/notifications", { userID, message: 'Notification not found' });
         }
 
         // ทำเครื่องหมายการแจ้งเตือนว่าอ่านแล้ว
@@ -121,7 +121,7 @@ const Getedit = async (req, res) => {
         return res.status(400).render('./errors/error', {
             error: 'Article ID is required',
             userID,
-            translations: req.translations,lang  
+            translations: req.translations, lang
         });
     }
     try {
@@ -130,17 +130,17 @@ const Getedit = async (req, res) => {
             return res.status(404).render('./errors/error', {
                 error: 'Article not found',
                 userID,
-                translations: req.translations,lang  
+                translations: req.translations, lang
             });
         }
         // console.log(article)
-        res.render("./th/pages/dashboard/edits/article", { userID, article, translations: req.translations,lang   });
+        res.render("./th/pages/dashboard/edits/article", { userID, article, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/dashboard/edits/article', {
             error: errorMessage,
             userID,
-            translations: req.translations,lang  
+            translations: req.translations, lang
         });
     }
 }
@@ -154,10 +154,10 @@ const GetRewardCode = async (req, res) => {
     const { rewardId } = req.query;
     try {
         console.log(rewardId)
-        res.render("./th/pages/dashboard/Getreward", { userID, rewardId, lang   });
+        res.render("./th/pages/dashboard/Getreward", { userID, rewardId, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.json({ message: "Server Error Internal Server Error", errorMessage})
+        res.json({ message: "Server Error Internal Server Error", errorMessage })
     }
 }
 
@@ -170,18 +170,18 @@ const gatManagePlayment = async (req, res) => {
 
     try {
         const rewards = await Payment.find().lean();
-        res.render("./th/pages/admin/manage/manage_playment", { 
-            userID, 
+        res.render("./th/pages/admin/manage/manage_playment", {
+            userID,
             rewards,
             translations: req.translations,
-            lang   
+            lang
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/admin/manage/manage_playment', {
             error: errorMessage,
             userID,
-            translations: req.translations,lang  
+            translations: req.translations, lang
         });
     }
 }
@@ -192,32 +192,32 @@ const gatManagePlayment = async (req, res) => {
 const gatPlaymentEdit = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
-    const rewardId = req.query.rewardId; 
+    const rewardId = req.query.rewardId;
 
     try {
         const reward = await Payment.findById(req.params.id).lean();
-        
+
         console.log(reward)
-        res.render("./th/pages/admin/edit/playment/index", { 
-            userID, 
+        res.render("./th/pages/admin/edit/playment/index", {
+            userID,
             reward,
             rewardId,
             translations: req.translations,
-            lang   
+            lang
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/admin/edit/playment/index', {
             error: errorMessage,
             userID,
-            translations: req.translations,lang  
+            translations: req.translations, lang
         });
     }
 }
 
 // 
 // if (req.files && req.files.thumbnail) {
-           
+
 //     if (thumbnail.size > 5000000) {
 //         return res.status(400).json({ msg: `Image size exceeds 5MB limit`, translations: req.translations, lang, userID, article: searcharticle });
 //     }
@@ -244,13 +244,13 @@ const gatPlaymentEdit = async (req, res) => {
 // }
 
 // POST: /api/v2/edit/post/article/:id
-const EditPostArticle = async (req, res, next) => { 
+const EditPostArticle = async (req, res, next) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     const template = lang === 'th_TH' ? './th/pages/dashboard/edits/article' : './th/pages/dashboard/edits/article';
     try {
         const postId = req.body.update_id;
-        const { title, tags, content, categories, published, urlslug } = req.body; 
+        const { title, tags, content, categories, published, urlslug } = req.body;
         const thumbnail = req.files?.thumbnail; // รูปภาพใหม่ที่อัปโหลด (ถ้ามี)
 
         const tagsArray = tags ? tags.split(' ').map(tag => tag.replace('#', '').trim()).filter(tag => tag) : [];
@@ -265,20 +265,20 @@ const EditPostArticle = async (req, res, next) => {
 
         // เช็คว่ามีไฟล์อัปโหลดใหม่หรือไม่
         if (thumbnail) {
-            // สร้าง FormData สำหรับการอัปโหลดไฟล์
             const formData = new FormData();
             formData.append('file', thumbnail.data, thumbnail.name);
 
-            // อัปโหลดไฟล์ไปยังเซิร์ฟเวอร์
             const response = await axios.post('https://sv7.ani-night.online/api/v2/upload/post/article', formData, {
                 headers: {
                     ...formData.getHeaders(),
                 },
             });
 
+            // console.log("การตอบกลับจาก server",response.data);
+
             // ตรวจสอบการตอบกลับจากการอัปโหลด
             if (response && response.data) {
-                const imageUrl = response.data.url;
+                const imageUrl = response.data.src;
                 if (!imageUrl) {
                     return res.status(400).json({ msg: "Image URL not returned from upload.", userID, translations: req.translations, lang });
                 }
@@ -289,8 +289,8 @@ const EditPostArticle = async (req, res, next) => {
         } else {
             // ถ้าไม่มีการอัปโหลดภาพใหม่ ให้ใช้ภาพเดิม
             const existingPost = await Article.findById(postId);
-            if (!existingPost) {
-                return res.status(400).json({ msg: "Post not found.", userID, translations: req.translations, lang });
+            if (!existingPost || !existingPost.thumbnail) {
+                return res.status(400).json({ msg: "Thumbnail is missing for the existing post.", userID, translations: req.translations, lang });
             }
             updateData.thumbnail = existingPost.thumbnail; // ใช้ภาพเดิม
         }
@@ -311,7 +311,7 @@ const EditPostArticle = async (req, res, next) => {
             userID,
             article: null,
             translations: req.translations,
-            lang  
+            lang
         });
     }
 };
@@ -327,10 +327,10 @@ const deletePostArticle = async (req, res, next) => {
     const deadline = new Date(today);
     deadline.setDate(today.getDate() + 29); // 29 days from today
     const daysLeft = Math.max(Math.ceil((deadline - today) / (1000 * 60 * 60 * 24)), 0); // Calculate days left
-    
+
     try {
         const postId = req.params.id;
-        console.log("Received postId:", postId); 
+        console.log("Received postId:", postId);
 
         const userDatas = await User.findById(req.user.id).populate('articles').exec();
         const publishedArticlesCount = userDatas.articles.filter(article => article.published).length;
@@ -344,7 +344,7 @@ const deletePostArticle = async (req, res, next) => {
                 userDatas,
                 daysLeft,
                 publishedArticlesCount,
-                translations: req.translations,lang  
+                translations: req.translations, lang
             });
         }
 
@@ -382,25 +382,13 @@ const deletePostArticle = async (req, res, next) => {
             { $pull: { articles: postId } }
         );
 
-        res.status(200).render("./th/pages/dashboard/index", {
-            message: `ทำการลบโพสต์ที่มีไอดี ${postId} เสร็จแล้ว`,
-            userID,
-            userDatas,
-            daysLeft,
-            publishedArticlesCount,
-            translations: req.translations,lang  
-        });
+        res.redirect(`/dashboard/manage/articles?msg=ทำการลบโพสต์ที่มีไอดี ${postId} เสร็จแล้ว`)
 
     } catch (error) {
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render("./th/pages/dashboard/index", {
-            userID,
-            error: errorMessage,
-            userDatas,
-            daysLeft,
-            publishedArticlesCount,
-            translations: req.translations,lang  
-        });
+        res.status(500).json({
+            errorMessage
+        })
     }
 };
 
