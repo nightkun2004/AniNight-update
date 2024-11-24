@@ -30,9 +30,9 @@
             </div>
         <% } %> 
         <div class="container mx-auto p-6">
-          <div class="flex items-center space-x-6">
+          <div class="flex flex-col w-full items-center md:flex-row md:space-x-8">
             <!-- Profile Picture -->
-            <div>
+            <div class="mb-5 md:mb-0">
                 <% if (user.profilePicture && user.profilePicture.startsWith('http')) { %>
                     <img src="<%= user.profilePicture %>" alt="Profile Picture"  class="w-36 h-36 rounded-full border-4 border-blue-600">
                 <% } else { %>
@@ -44,10 +44,8 @@
                 <% } %>  
             </div>
             <!-- Profile Info -->
-            <div>
+            <div class="text-center">
               <h2 class="text-2xl font-bold"><%= user.username %></h2>
-              <p class="text-gray-600"><%= user.email %></p>
-              <p class="text-gray-600">"<%= user.bio %>"</p>
               <p class="text-gray-600">วันที่เข้าร่วม <%= new Date(user.createdAt).toLocaleDateString() %></p>
               <form id="logoutForm" action="/api/v2/logout" method="post">
                 <a href="#" class="active flex items-center text-center text-white bg-red-500 rounded-lg md:pl-5 md:w-full md:h-full px-4" onclick="showLogoutPopup(event)">
@@ -91,6 +89,8 @@
         <ul>
             <li><strong>จำนวนบันทึกบทความ:</strong> <%= formatNumber(user.savearticles.length) %></li>
             <li><strong>คะแนน:</strong> <%= user.points %></li>
+            <p class="text-gray-600"><%= user.email %></p>
+            <p class="text-gray-600">"<%= user.bio %>"</p>
             <li><strong>สถานะบัญชี:</strong> <%= user.role === "user" ? "ผู้ใช้" : user.role === "content_creator" ? "ครีเอเตอร์" : user.role === "partners" ? "เป็นครีเอเตอร์แบบชำระเงิน" : user.role %></li>
             <!-- <li><strong>ได้รับการอนุมัติเป็นครีเอเตอร์:</strong> <%= user.isApproved ? "อนุมัติแล้ว" : "ยังไม่อนุมัติ" %></li> -->
         </ul>

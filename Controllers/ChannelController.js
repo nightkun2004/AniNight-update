@@ -21,6 +21,7 @@ const getChannel = async (req, res) => {
         const channelUser = await User.findOne({username: username}).populate('articles').exec()
         res.render("./th/pages/channels/index", {
             userID,
+            page,
             active: "channel",
             channel: channelUser,
             translations: req.translations,lang  
@@ -28,11 +29,9 @@ const getChannel = async (req, res) => {
     } catch (error) {
         console.log(error.response ? error.response.data : error.message);
         const errorMessage = error.response ? error.response.data.message : error.message;
-        res.status(500).render('./th/pages/channels/index', {
-            error: errorMessage,
-            userID,
-            translations: req.translations,lang  
-        });
+        res.status(500).json({
+            msg: errorMessage
+        })
     }
 }; 
 

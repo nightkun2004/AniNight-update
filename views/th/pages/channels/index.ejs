@@ -137,30 +137,45 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
 
-                <section class="home-section" id="home-section">
-                    <h2 class="app-h2">ผลงานของครีเอเตอร์</h2>
-                    <% if (channel.articles.length > 0) { %>
-                        <div class="article-user">
-                        <% channel.articles.forEach(item => { %>
-                            <a class="hover-de" target="_blank" href="/read/<%= item.urlslug %>">
-                                <div class="item-article-user">
-                                    <div class="article-pic">
-                                        <% let thumbnail = item.thumbnail.startsWith('http') ? item.thumbnail : '/uploads/thumbnails/' + (item.thumbnail  || 'default.png'); %>
-                                        <img src="<%= thumbnail %>" alt="" loading="lazy">
-                                        <p class="views"><i class="bi bi-eye"></i><%= formatNumber(item.views) %></p>
-                                    </div>
-                                    <div class="name-article">
-                                        <h2><%= item.title.substring(0, 40) + '...' %></h2>
-                                    </div>
-                                </div>
-                            </a>
-                        <% }); %>
+<section class="home-section" id="home-section">
+    <h2 class="app-h2">ผลงานของครีเอเตอร์</h2>
+
+    <% if (channel.articles.length > 0) { %>
+        <div class="article-user">
+            <% channel.articles.forEach((item, index) => { %>
+                <% if (index < 12 * (page - 1) || index >= 12 * page) { return; } %>
+                <a class="hover-de" target="_blank" href="/read/<%= item.urlslug %>">
+                    <div class="item-article-user">
+                        <div class="article-pic">
+                            <% let thumbnail = item.thumbnail.startsWith('http') ? item.thumbnail : '/uploads/thumbnails/' + (item.thumbnail || 'default.png'); %>
+                            <img src="<%= thumbnail %>" alt="" loading="lazy">
+                            <p class="views"><i class="bi bi-eye"></i><%= formatNumber(item.views) %></p>
                         </div>
-                    <% } else { %>
-                        <p style="text-align: center;">ครีเอเตอร์นี้ยังไม่มีบทความครับ..</p>
-                    <% } %>
-                    
-                </section>
+                        <div class="name-article">
+                            <h2><%= item.title.substring(0, 40) + '...' %></h2>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p style="text-align: center;">ครีเอเตอร์นี้ยังไม่มีบทความครับ..</p>
+    <% } %>
+
+    <!-- Pagination -->
+    <nav style="text-align: center; margin-top: 20px;">
+        <% 
+        const totalPages = Math.ceil(channel.articles.length / 12);
+        for (let i = 1; i <= totalPages; i++) { 
+        %>
+            <a href="?page=<%= i %>" 
+               class="rounded-md p-2 hover:underline <%= i === page ? 'bg-gray-400' : 'bg-gray-100' %>">
+                หน้า <%= i %>
+            </a>
+        <% } %>
+    </nav>
+</section>
+
 
                 <section class="videos-section" id="videos-section" style="display: none;">
                     <h2 class="videos-all app-h2">

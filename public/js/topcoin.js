@@ -40,6 +40,6 @@ async function checkout() {
         window.open(session.url, '_blank');
     } catch (error) {
         console.error('Error during checkout:', error);
-        alert('เกิดข้อผิดพลาดในการชำระเงิน กรุณาลองอีกครั้ง'); // User-friendly error message
+        alert('เกิดข้อผิดพลาดในการชำระเงิน กรุณาลองอีกครั้ง');
     }
 }

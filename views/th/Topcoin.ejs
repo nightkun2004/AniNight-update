@@ -21,13 +21,13 @@
        }
    </style>
 </head>
-<body class="overflow-hidden">
+<body class="bg-gray-100">
 
-    <main class="bg-white flex flex-row w-full h-screen">
-        <%- include('./Component/Sidebar') %>
+    <%- include('./Component/Header') %>
 
-        <section class="flex-1 w-full h-full p-2 md:p-5 overflow-y-scroll">
-            <div class="header__profile z-4 p-5 rounded flex justify-between  mt-10">
+    <main class="bg-white" style="background: linear-gradient(180deg, rgba(198,231,255,1) 7%, rgba(0,212,255,1) 60%);">
+        <section class="p-3 mx-auto max-w-6xl" style="background: linear-gradient(180deg, rgba(198,231,255,1) 7%, rgba(255,204,234,1) 49%);">
+            <div class="header__profile z-4 p-5 rounded flex justify-between mb-5 mt-10">
                 <!-- Left -->
                 <div class="profile flex items-center">
                     <% if ( userID.user.profilePicture &&  userID.user.profilePicture.startsWith('http')) { %>
@@ -50,7 +50,7 @@
 
                 <!-- Right -->
                 <div class="redeem__code">
-                    <p class="text-md text-sky-600 underline-offset-auto cursor-pointer">ใส่รหัสแลก</p>
+                    <!-- <p class="text-md text-sky-600 underline-offset-auto cursor-pointer">ใส่รหัสแลก</p> -->
                 </div>
             </div>
 
@@ -99,6 +99,7 @@
                 
              </main>
         </section>
+       
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.js"></script>
