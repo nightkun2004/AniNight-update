@@ -9,10 +9,25 @@
     <link rel="stylesheet" href="/css/index.css">
     <script src="/css/tailwindcss.css"></script>
     <script src="/js/fontawesome.js" defer></script>
-</head>
-<body class="bg-gray-100 text-black">
-    <%- include('./Component/Header') %>
 
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+        .font-family-karla { font-family: karla; }
+        .bg-sidebar { background: #3d68ff; }
+        .cta-btn { color: #3d68ff; }
+        .upgrade-btn { background: #1947ee; }
+        .upgrade-btn:hover { background: #0038fd; }
+        .active-nav-link { background: #1947ee; }
+        .nav-item:hover { background: #1947ee; }
+        .account-link:hover { background: #3d68ff; }
+    </style>
+</head>
+<body class="bg-gray-100 text-black font-family-karla">
+
+
+    
+    <%- include('./Component/Header') %>
+ 
     <main class="mx-auto max-w-6xl px-4 mt-8 mb-10">
         <section class=" bg-white rounded-lg md:mb-12 mb-2 p-4">
             <div class="mb-6 mt-4 ">

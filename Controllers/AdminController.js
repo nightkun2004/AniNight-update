@@ -18,8 +18,8 @@ const getAdmin = async (req, res) => {
         if (adminRole) query.role = adminRole;
 
 
-        const user = await User.findById(req.user.id).limit(100);
-        const users = await User.find(query).limit(100);
+        const user = await User.findById(req.user.id);
+        const users = await User.find(query);
         const userAll = await User.find();
 
         const admins = await User.find({ role: 'admin' });

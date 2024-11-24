@@ -8,8 +8,8 @@
         </div>
         
         <div class="flex items-center mt-2 p-4">
-            <% if (post.creator && post.creator.profilePicture) { %>
-                <% let profilePic = post.creator.profilePicture.startsWith('http') ? post.creator.profilePicture : '/uploads/profiles/' + (post.creator.profilePicture || 'default.png'); %>
+            <% if (post.creator.id && post.creator.id.profilePicture) { %>
+                <% let profilePic = post.creator.id.profilePicture.startsWith('http') ? post.creator.id.profilePicture : '/uploads/profiles/' + (post.creator.id.profilePicture || 'default.png'); %>
                 <img src="<%= profilePic %>" alt="Profile Picture" class="hidden md:block w-10 h-10 rounded-full object-cover">
                 <div class="md:ml-3 md:flex-1">
                     <h2 class="text-sm font-semibold text-black line-clamp-1 md:line-clamp-2" title="<%= post.title %>">

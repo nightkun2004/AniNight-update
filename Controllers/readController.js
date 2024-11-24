@@ -84,20 +84,17 @@ const getRead = async (req, res, next) => {
             });
         }
 
-        // Save user interaction if logged in
         if (userID) {
             await User.findByIdAndUpdate(usertoken, {
                 $push: {
                     interactions: {
-                        contentId: post._id, // Correctly using post._id
+                        contentId: post._id,
                         viewedAt: new Date(),
-                        liked: post.likes.length > 0, // Checks if there are any likes
+                        liked: post.likes.length > 0,
                         watchedDuration: post.views || 0
                     }
                 }
             });
-
-
         }
 
         const lastRead = req.cookies[`lastRead_${post._id}`];
@@ -111,22 +108,17 @@ const getRead = async (req, res, next) => {
             res.cookie(`lastRead_${post._id}`, now.toISOString(), { maxAge: 10 * 60 * 1000, httpOnly: true });
         }
 
-        // Check if the post is saved by the user
         let isSaved = false;
         if (userID && post.savearticles) {
             isSaved = post.savearticles.includes(userID.toString());
         }
 
-        // Render the read page with the post details
         res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, Bannerlists: banners,  translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render(`./th/read`, {
-            error: errorMessage,
-            userID,
-            translations: req.translations,
-            lang
-        });
+        res.status(500).json({
+            msg: errorMessage
+        })
     }
 };
 
