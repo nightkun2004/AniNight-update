@@ -8,60 +8,124 @@
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        async function sendMessage(event) {
-            event.preventDefault(); // หยุดการส่งฟอร์มแบบปกติ
-            const form = document.getElementById('form');
-            const formData = new FormData(form);
-            const button = document.querySelector('button[type="submit"]');
-
-            // เปลี่ยนปุ่มส่งให้เป็นสถานะกำลังส่ง
-            button.disabled = true;
-            button.innerHTML = 'กำลังส่ง...'; // แสดงข้อความกำลังส่ง
-
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-            });
-
-            // รีเซ็ตปุ่มหลังจากส่งเสร็จ
-            button.disabled = false;
-            button.innerHTML = 'ส่ง'; // เปลี่ยนกลับเป็นข้อความเดิม
-
-            if (response.ok) {
-                const result = await response.json(); // แปลงผลลัพธ์เป็น JSON
-                console.log(result.aiResponse); // แสดงผลใน console
-                // อัปเดต UI หรือแสดงผลการตอบกลับจาก AI Vtuber
-                document.getElementById('responseContainer').innerHTML += `
-                    <div class="p-2 bg-blue-100 rounded-md mb-2">
-                        <strong>AI Vtuber:</strong> ${result.aiResponse}
-                    </div>`;
-                document.querySelector('input[name="usermessage"]').value = ''; // ล้างช่องข้อความหลังส่ง
-            } else {
-                console.error('Error:', response.statusText);
-            }
+    <style>
+        #chat-container {
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
-    </script>
+        #chat-box::-webkit-scrollbar {
+            width: 5px;
+        }
+        #chat-box::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+        .message {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            word-wrap: break-word;
+            margin-bottom: 10px;
+        }
+        .message-user {
+            align-self: flex-end;
+            background: #93c5fd;
+            color: white;
+            border-radius: 12px;
+        }
+        .message-ai {
+            align-self: flex-start;
+            background: #e5e7eb;
+            color: black;
+            border-radius: 12px;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
     <%- include('../Component/Header') %>
-    
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold text-center mb-4">AI Vtuber Chat</h1>
-        
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <form id="form" method="POST" action="/api/v2/user/ai/res/vtuber" onsubmit="sendMessage(event)" class="flex space-x-2">
-                <input type="text" id="usermessage" name="usermessage" class="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="พิมพ์ข้อความที่นี่..." required>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">ส่ง</button>
-            </form>
-            
-            <div id="responseContainer" class="mt-4 max-h-60 overflow-y-auto">
-                <!-- ที่นี่จะใช้สำหรับแสดงข้อความตอบกลับจาก AI -->
+    <div class="bg-gray-50 shadow-lg rounded-xl p-6">
+        <div id="chat-container" class="relative h-96 bg-white border rounded-lg overflow-hidden">
+            <div id="chat-box" class="p-4 space-y-4 overflow-y-auto h-full flex flex-col-reverse">
+               <!-- <div class="message-ai">
+                sd
+               </div>
+               <div class="message-user">
+                sd
+               </div> -->
             </div>
         </div>
+        <form id="chat-form" method="POST" action="/api/v2/user/ai/res/vtuber" class="mt-4 flex space-x-2">
+            <input id="message-input" name="message" type="text" class="flex-grow p-2 border rounded-lg focus:outline-none" placeholder="พิมพ์ข้อความที่นี่..." required>
+            <button id="send-button" type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">ส่ง</button>
+        </form>
+        <p class="text-center text-red-500">เวอร์ชั่นนี้เป็นการทดลอง อาจจะมีคำตอบไม่ตรงกับคำถาม เนื่องจากโทเคนน้อย</p>
     </div>
-
     <%- include('../Component/Footer') %>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        // ใช้ fetch เพื่อส่งข้อความโดยไม่ทำให้หน้ารีเฟรช
+        document.getElementById('chat-form').addEventListener('submit', async (event) => {
+            event.preventDefault();  // ป้องกันการรีเฟรชหน้า
+
+            const user_message = messageInput.value.trim();
+            if (!user_message) return;  // ถ้าไม่พิมพ์ข้อความ จะไม่ทำอะไร
+
+            // แสดงข้อความผู้ใช้ใน UI
+            addMessage('คุณ', user_message, 'message-user');
+            messageInput.value = '';  // ล้างช่องข้อความ
+
+            sendButton.disabled = true;
+            sendButton.textContent = 'กำลังส่ง...';
+
+            try {
+                const response = await fetch('/api/v2/user/ai/res/vtuber', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_message })  // ส่งข้อความไปยัง backend
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    // แสดงข้อความจาก AI
+                    addMessage('เรโอจัง', result.ai_response, 'message-ai');
+                } else {
+                    console.error('Error:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                sendButton.disabled = false;
+                sendButton.textContent = 'ส่ง';
+            }
+        });
+
+        // ฟังก์ชันเพิ่มข้อความลงใน chat box
+        function addMessage(sender, user_message, className,) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message-container ${className} flex ${className === 'message-user' }`;
+    
+    // เพิ่มโปรไฟล์
+    // const profileImg = document.createElement('img');
+    // profileImg.src = profileImage;
+    // profileImg.alt = `${sender} profile`;
+    // profileImg.className = 'w-10 h-10 rounded-full mr-3'; // ขนาดโปรไฟล์ 40x40 px
+
+    // เพิ่มข้อความ
+    const messageText = document.createElement('div');
+    messageText.className = `message ${className}`;
+    messageText.textContent = `${sender}: ${user_message}`;
+
+    // messageDiv.appendChild(profileImg);
+    messageDiv.appendChild(messageText);
+
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;  // เลื่อนลงไปที่ข้อความล่าสุด
+}
+
+    </script>
 </body>
 </html>

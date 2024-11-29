@@ -8,6 +8,7 @@ const wss = new WebSocket.Server({ server });
 const formatNumber = require("./formats/formatNumber")
 
 const { addComment } = require('./Controllers/MemeController')
+// const { handleWebSocketMessage } = require("./Controllers/AiController")
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const fileUpload = require('express-fileupload');
@@ -40,7 +41,7 @@ const AnimeRouter = require("./routers/AnimeRouer")
 const channalRouter = require("./routers/ChannelRouter")
 const SurveyRouter = require("./routers/SurveyRouter")
 const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
-const PlaymentRoute = require("./routers/PlaymentRouter") 
+const PlaymentRoute = require("./routers/PlaymentRouter")
 const RewardRoute = require("./routers/RewardRouter")
 const AiRoute = require("./routers/AiRouter")
 const MemeRouter = require("./routers/MemeRouter")
@@ -53,23 +54,6 @@ app.get('/ads.txt', (req, res) => {
 });
 app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/robots.txt'));
-});
-
-// ตั้งค่า WebSocket
-wss.on('connection', (ws) => {
-  console.log('Client connected');
-
-  ws.on('message', (message) => {
-      const data = JSON.parse(message);
-      // ตรวจสอบข้อมูลและเรียกฟังก์ชันสำหรับเพิ่มคอมเมนต์
-      if (data.action === 'addComment') {
-          addComment(data, ws, wss);
-      }
-  });
-
-  ws.on('close', () => {
-      console.log('Client disconnected');
-  });
 });
 
 // เส้นทาง router สำหรับ lib
@@ -198,6 +182,12 @@ app.use("/api/v2", SurveyRouterCrerate)
 app.use("/api/v2", PlaymentRoute)
 app.use("/api/v2", RewardRoute)
 app.use("/api/v2", AiRoute)
+
+// wss.on('connection', (ws) => {
+//   console.log('New client connected');
+//   ws.on('message', (message) => AiRoute.handleWebSocketMessage(ws, message));
+//   ws.on('close', () => console.log('Client disconnected'));
+// });
 
 app.use(compression());
 app.use(helmet());

@@ -7,5 +7,5 @@ const { aiVtuber} = require("../Controllers/AiController")
 // app.use("/api/v2", AiRoute)
 
 router.post("/user/ai/res/vtuber", authMiddleware, aiVtuber)
-
+ 
 module.exports = router;
