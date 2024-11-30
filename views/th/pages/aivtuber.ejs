@@ -9,6 +9,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
     <style>
+        #chat-box {
+    display: flex;
+    flex-direction: column; /* เรียงข้อความจากบนลงล่าง */
+    height: 56vh;
+    overflow-y: auto; /* เพิ่ม scrollbar */
+    padding: 10px;
+}
+
         #chat-container {
             background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -44,21 +52,42 @@
 <body class="bg-gray-100">
     <%- include('../Component/Header') %>
     <div class="bg-gray-50 shadow-lg rounded-xl p-6">
-        <div id="chat-container" class="relative h-96 bg-white border rounded-lg overflow-hidden">
-            <div id="chat-box" class="p-4 space-y-4 overflow-y-auto h-full flex flex-col-reverse">
-               <!-- <div class="message-ai">
-                sd
-               </div>
-               <div class="message-user">
-                sd
-               </div> -->
+        <div class="flex flex-col md:flex-row p-2 gap-4">
+            <div id="chat-container" class="bg-white border rounded-lg p-5 w-full h-full">
+                <div id="chat-box" class="p-4 space-y-4 h-56 overflow-y-auto flex flex-col-reverse">
+                   <!-- <div class="message-ai">
+                    sd
+                   </div>
+                   <div class="message-user">
+                    sd
+                   </div> -->
+                </div>
+                <div>
+                    <form id="chat-form" method="POST" action="/api/v2/user/ai/res/vtuber" class="mt-4 flex space-x-2">
+                        <input id="message-input" name="message" type="text" class="flex-grow p-2 border rounded-lg focus:outline-none" placeholder="พิมพ์ข้อความที่นี่..." required>
+                        <button id="send-button" type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">ส่ง</button>
+                    </form>
+                    <p class="text-center text-red-500">เวอร์ชั่นนี้เป็นการทดลอง อาจจะมีคำตอบไม่ตรงกับคำถาม เนื่องจากโทเคนน้อย</p>
+                </div>
+            </div>
+            <div class="bg-white border rounded-lg w-full p-5 h-full">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                    crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-format="fluid"
+                    data-ad-layout-key="-ef+6k-30-ac+ty"
+                    data-ad-client="ca-pub-6579807593228261"
+                    data-ad-slot="6551181691"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                <h2>ประวัติแชท</h2>
+                <div class="flex justify-center items-center">
+                    <p>ประวัติแชทยังใช้งานไม่ได้</p>
+                </div>
             </div>
         </div>
-        <form id="chat-form" method="POST" action="/api/v2/user/ai/res/vtuber" class="mt-4 flex space-x-2">
-            <input id="message-input" name="message" type="text" class="flex-grow p-2 border rounded-lg focus:outline-none" placeholder="พิมพ์ข้อความที่นี่..." required>
-            <button id="send-button" type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">ส่ง</button>
-        </form>
-        <p class="text-center text-red-500">เวอร์ชั่นนี้เป็นการทดลอง อาจจะมีคำตอบไม่ตรงกับคำถาม เนื่องจากโทเคนน้อย</p>
     </div>
     <%- include('../Component/Footer') %>
 
@@ -67,9 +96,8 @@
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
 
-        // ใช้ fetch เพื่อส่งข้อความโดยไม่ทำให้หน้ารีเฟรช
         document.getElementById('chat-form').addEventListener('submit', async (event) => {
-            event.preventDefault();  // ป้องกันการรีเฟรชหน้า
+            event.preventDefault();  
 
             const user_message = messageInput.value.trim();
             if (!user_message) return;  // ถ้าไม่พิมพ์ข้อความ จะไม่ทำอะไร
@@ -104,27 +132,22 @@
         });
 
         // ฟังก์ชันเพิ่มข้อความลงใน chat box
-        function addMessage(sender, user_message, className,) {
+function addMessage(sender, user_message, className) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message-container ${className} flex ${className === 'message-user' }`;
-    
-    // เพิ่มโปรไฟล์
-    // const profileImg = document.createElement('img');
-    // profileImg.src = profileImage;
-    // profileImg.alt = `${sender} profile`;
-    // profileImg.className = 'w-10 h-10 rounded-full mr-3'; // ขนาดโปรไฟล์ 40x40 px
+    messageDiv.className = `message-container ${className} flex`;
 
     // เพิ่มข้อความ
     const messageText = document.createElement('div');
     messageText.className = `message ${className}`;
     messageText.textContent = `${sender}: ${user_message}`;
 
-    // messageDiv.appendChild(profileImg);
     messageDiv.appendChild(messageText);
-
     chatBox.appendChild(messageDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;  // เลื่อนลงไปที่ข้อความล่าสุด
+
+    // เลื่อนแชทไปตำแหน่งล่าสุด
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
+
 
     </script>
 </body>
