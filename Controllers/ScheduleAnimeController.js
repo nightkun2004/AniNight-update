@@ -4,59 +4,59 @@ const Anime = require("../models/AnimeModel")
 const moment = require('moment');
 moment.locale('th');
 
-const updateEpisodes = async () => {
-    try {
-        // ค้นหาทุก Anime ที่มีข้อมูลในรูปแบบของ Episodes ที่เป็น Number
-        const animesToUpdate = await Anime.find({ "episodes": { $type: "number" } });
+// const updateEpisodes = async () => {
+//     try {
+//         // ค้นหาทุก Anime ที่มีข้อมูลในรูปแบบของ Episodes ที่เป็น Number
+//         const animesToUpdate = await Anime.find({ "episodes": { $type: "number" } });
 
-        for (let anime of animesToUpdate) {
-            // อัปเดต Episodes ให้เป็น object ที่มี current และ total
-            const updatedEpisodes = {
-                current: anime.episodes, // ใช้ค่าที่มีอยู่ใน Episodes
-                total: 0 // ตั้งค่า total เป็น 0 หรือค่าเริ่มต้นที่คุณต้องการ
-            };
+//         for (let anime of animesToUpdate) {
+//             // อัปเดต Episodes ให้เป็น object ที่มี current และ total
+//             const updatedEpisodes = {
+//                 current: anime.episodes, // ใช้ค่าที่มีอยู่ใน Episodes
+//                 total: 0 // ตั้งค่า total เป็น 0 หรือค่าเริ่มต้นที่คุณต้องการ
+//             };
 
-            // อัปเดตข้อมูลในฐานข้อมูล
-            await Anime.findByIdAndUpdate(anime._id, { episodes: updatedEpisodes });
+//             // อัปเดตข้อมูลในฐานข้อมูล
+//             await Anime.findByIdAndUpdate(anime._id, { episodes: updatedEpisodes });
 
-            console.log(`Updated Anime with ID: ${anime._id}`);
-        }
+//             console.log(`Updated Anime with ID: ${anime._id}`);
+//         }
 
-        console.log("Episodes update complete");
-    } catch (error) {
-        console.error("Error updating Episodes:", error);
-    }
-};
+//         console.log("Episodes update complete");
+//     } catch (error) {
+//         console.error("Error updating Episodes:", error);
+//     }
+// };
 
-updateEpisodes();
+// updateEpisodes();
 
-const converttitleAnime = async () => {
-    const animes = await Anime.find();
-    console.log(`Total records found: ${animes.length}`);
+// const converttitleAnime = async () => {
+//     const animes = await Anime.find();
+//     console.log(`Total records found: ${animes.length}`);
 
-    const bulkOps = animes.map(anime => {
-        // console.log(`Checking title:`, anime.title);
-            console.log(`Updating title: ${anime.title}`);
-            return {
-                updateOne: {
-                    filter: { _id: anime._id },
-                    update: { $set: { title: { en: anime.title, jp: '', th: '' } } }
-                }
-            };
-        return null;
-    }).filter(Boolean); // กรอง null ออก
+//     const bulkOps = animes.map(anime => {
+//         // console.log(`Checking title:`, anime.title);
+//             console.log(`Updating title: ${anime.title}`);
+//             return {
+//                 updateOne: {
+//                     filter: { _id: anime._id },
+//                     update: { $set: { title: { en: anime.title, jp: '', th: '' } } }
+//                 }
+//             };
+//         return null;
+//     }).filter(Boolean); // กรอง null ออก
 
-    if (bulkOps.length > 0) {
-        await Anime.bulkWrite(bulkOps);
-        console.log(`Bulk migration complete. Updated ${bulkOps.length} records.`);
-    } else {
-        console.log('No records to migrate');
-    }
-};
+//     if (bulkOps.length > 0) {
+//         await Anime.bulkWrite(bulkOps);
+//         console.log(`Bulk migration complete. Updated ${bulkOps.length} records.`);
+//     } else {
+//         console.log('No records to migrate');
+//     }
+// };
 
-converttitleAnime().catch(err => {
-    console.error('Error during migration:', err);
-});
+// converttitleAnime().catch(err => {
+//     console.error('Error during migration:', err);
+// });
 
 const getAnimeInfo = async (req, res) => {
     const lang = res.locals.lang;
