@@ -237,11 +237,11 @@
                                     <% if (anime.poster.startsWith('http')) { %>
                                         <!-- External image URL -->
                                         <img src="<%= anime.poster %>"
-                                        alt="<%= anime.title %>" class="w-full rounded-lg">
+                                        alt="<%= anime.title.en %>" class="w-full rounded-lg">
                                     <% } else { %>
                                         <!-- Local server image path -->
                                         <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
-                                        alt="<%= anime.title %>" class="w-full rounded-lg">
+                                        alt="<%= anime.title.en %>" class="w-full rounded-lg">
                                     <% } %>
                                 </a>
                                 <div data-popover id="popover-<%= anime._id %>" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
@@ -286,7 +286,7 @@
                                     <div data-popper-arrow></div>
                                 </div>
                                 <a class="anime-info title" href="/anime/<%= anime.urlslug %>">
-                                    <h2 class="text-sm font-bold"><%= anime.title %></h2>
+                                    <h2 class="text-sm font-bold"><%= anime.title.en %></h2>
                                 </a>
                             </div>
                         <% } %>

@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { checkAuth } = require("../lib/auth")
 const { authMiddleware, ensureAuthenticated } = require("../Middlewares/authMiddleware")
-const { CreateanimeItem,  Createcharacters, AddActorToCharacter, EditActorInCharacter, updateAnimeYoutubeLinks, getScheduleAPI, EditAnimeinfo, deleteAnime, updateAnimeStream, BookmarkSaveAnime, UnbookmarkBookmarkSaveAnime } = require("../Controllers/AnimeController")
+const { CreateanimeItem,  Createcharacters, AddAnimescheduleTimeline,AddActorToCharacter, AddAnimeschedule, EditActorInCharacter, updateAnimeYoutubeLinks, getScheduleAPI, EditAnimeTitle, EditAnimeinfo, deleteAnime, updateAnimeStream, BookmarkSaveAnime, UnbookmarkBookmarkSaveAnime } = require("../Controllers/AnimeController")
 
 router.get("/schedule/anime/lists", getScheduleAPI)
 // ===================================================== Create Anime ======================================
@@ -14,6 +14,9 @@ router.post("/admin/edit/anime/voice/actor/edit/new",checkAuth , authMiddleware,
 router.post("/anime/add/streem/youtube/:id",checkAuth , authMiddleware, updateAnimeYoutubeLinks)
 router.post("/anime/edit/info",checkAuth , authMiddleware, EditAnimeinfo)
 router.post("/anime/update/:id",checkAuth , authMiddleware, updateAnimeStream)
+router.post("/admin/edit/:id/title",checkAuth , authMiddleware, EditAnimeTitle)
+router.post("/admin/edit/:id/schedule/add",checkAuth , authMiddleware, AddAnimeschedule)
+router.post("/admin/schedule/add/timeline",checkAuth, authMiddleware, AddAnimescheduleTimeline)
 
 
 

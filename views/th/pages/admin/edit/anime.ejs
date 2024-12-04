@@ -43,6 +43,12 @@
                                 <a href="/admin/add/anime/streem?id=<%= edit._id %>" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่มแพลตฟอร์มฉาย</a>
                             </li>
                             <li>
+                                <a href="/admin/edit/<%= edit._id %>/title" class="text-gray-200 hover:text-gray-400 transition duration-300">แก้ไขชื่อ</a>
+                            </li>
+                            <li>
+                                <a href="/admin/edit/<%= edit._id %>/schedule/add" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่มวันฉาย</a>
+                            </li>
+                            <li>
                                 <a href="/admin/add/characters?id=<%= edit.id %>" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่มตัวละคร</a>
                             </li>
                             <li>
@@ -57,12 +63,7 @@
                         <label for="update_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID Edit</label>
                         <input type="text" id="update_id" name="update_id" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" readonly value="<%= edit._id %>">
                     </div>
-                    <!-- ชื่ออนิเมะ -->
-                    <div class="mb-5">
-                        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่ออนิเมะ</label>
-                        <input type="text" id="title" name="title" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" value="<%= edit.title %>">
-                    </div>
-                
+                    
                     <!-- เนื้อเรื่อง -->
                     <div class="mb-5">
                         <label for="synopsis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เนื้อเรื่อง</label>
@@ -305,13 +306,7 @@
                             class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
                             value="<%= edit.website %>">
                     </div>
-                     <!-- URL Episodes -->
-                     <div class="mb-5">
-                        <label for="Episodes" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Episodes</label>
-                        <input type="text" id="Episodes" name="Episodes"
-                            class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
-                            value="<%= edit.Episodes %>">
-                    </div>
+                    
                      <!-- URL Duration -->
                      <div class="mb-5">
                         <label for="Duration" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Duration</label>
@@ -445,7 +440,7 @@
                 
                     <!-- ปุ่มส่งบทความ -->
                     <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        เพิ่มอนิเมะ
+                        แก้ไข
                     </button>
                 </form>
                 

@@ -48,12 +48,12 @@
                                 <tr class="hover:bg-gray-100">
                                     <td class="px-6 py-4 border-b border-gray-200">
                                         <% if (anime.poster.startsWith('http')) { %>
-                                            <img src="<%= anime.poster %>" alt="<%= anime.title %>" class="w-12 h-18 object-cover rounded-md">
+                                            <img src="<%= anime.poster %>" alt="<%= anime.title.en %>" class="w-12 h-18 object-cover rounded-md">
                                             <% } else { %>
                                                 <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/50x75' %>" alt="<%= anime.title %>" class="w-12 h-18 object-cover rounded-md">
                                          <% } %>
                                     </td>
-                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.title %></td>
+                                    <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.title.en %></td>
                                     <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.animetype %></td>
                                     <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.year %></td>
                                     <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">

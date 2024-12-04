@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มลงตาราง</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('../../../Component/Header') %>
+    <div class="mx-auto max-w-6xl px-4 mt-8 mb-10">
+
+        <!-- ตรวจสอบว่ามีข้อมูลใน schedule หรือไม่ -->
+        <% if (edit.schedule && edit.schedule.day && edit.schedule.date && edit.schedule.time) { %>
+            <!-- หากมีข้อมูลแล้ว แสดงข้อมูลตารางการออกอากาศ -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">ข้อมูลตารางการออกอากาศ</h3>
+                <form action="/admin/edit/<%= edit._id %>/schedule/add" method="post">
+                    <div class="space-y-4">
+                        <!-- วัน -->
+                        <div>
+                            <label for="schedule-day" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วัน</label>
+                            <input type="text" id="schedule-day" name="schedule[day]"
+                                class="outline-none w-full border-gray-300 border-2 rounded px-2 py-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                placeholder="เช่น จันทร์, อังคาร..." value="<%= edit.schedule.day %>">
+                        </div>
+    
+                        <!-- วันที่ -->
+                        <div>
+                            <label for="schedule-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วันที่</label>
+                            <input type="date" id="schedule-date" name="schedule[date]"
+                                class="outline-none w-full border-gray-300 border-2 rounded px-2 py-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" 
+                                value="<%= new Date(edit.schedule.date).toISOString().split('T')[0] %>">
+                        </div>
+    
+                        <!-- เวลา -->
+                        <div>
+                            <label for="schedule-time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เวลา</label>
+                            <input type="time" id="schedule-time" name="schedule[time]" value="<%= edit.schedule.time %>"
+                                class="outline-none w-full border-gray-300 border-2 rounded px-2 py-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                        </div>
+                    </div>
+    
+                    <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        เพิ่มวันออกอากาศ
+                    </button>
+                </form>
+            </div>
+        <% } else { %>
+            <!-- หากยังไม่มีข้อมูล ให้แสดงฟอร์มเพื่อเพิ่มข้อมูล -->
+            <form action="/admin/edit/<%= edit._id %>/schedule/add" method="post">
+                <div class="space-y-4">
+                    <!-- วัน -->
+                    <div>
+                        <label for="schedule-day" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วัน</label>
+                        <input type="text" id="schedule-day" name="schedule[day]"
+                            class="outline-none w-full border-gray-300 border-2 rounded px-2 py-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                            placeholder="เช่น จันทร์, อังคาร...">
+                    </div>
+
+                    <!-- วันที่ -->
+                    <div>
+                        <label for="schedule-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วันที่</label>
+                        <input type="date" id="schedule-date" name="schedule[date]"
+                            class="outline-none w-full border-gray-300 border-2 rounded px-2 py-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                    </div>
+
+                    <!-- เวลา -->
+                    <div>
+                        <label for="schedule-time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เวลา</label>
+                        <input type="time" id="schedule-time" name="schedule[time]"
+                            class="outline-none w-full border-gray-300 border-2 rounded px-2 py-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                    </div>
+                </div>
+
+                <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    เพิ่มวันออกอากาศ
+                </button>
+            </form>
+        <% } %>
+
+    </div>
+</body>
+</html>

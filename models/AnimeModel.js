@@ -18,18 +18,21 @@ const actorSchema = new mongoose.Schema({
     name: String,
     role: String,
     imageUrl: String
-}, {timestamps: true })
+}, { timestamps: true })
 
 const charactersSchema = new mongoose.Schema({
     name: String,
     role: String,
     imageUrl: String,
     actor: [actorSchema]
-}, {timestamps: true })
+}, { timestamps: true })
 
 const AnimeSchema = new mongoose.Schema({
-    type: String,
-    title: String,
+    title: {
+        en: { type: String, required: false },
+        jp: { type: String, required: false },
+        th: { type: String, required: false }
+    },
     synopsis: {
         type: String
     },
@@ -47,7 +50,15 @@ const AnimeSchema = new mongoose.Schema({
     Source: String,
     Licensors: String,
     website: String,
-    Episodes: Number,
+    episodes: {
+        current: { type: Number, default: 0 }, // จำนวนตอนที่ฉายไปแล้ว
+        total: { type: Number, default: 0 }   // จำนวนตอนทั้งหมด (ถ้าทราบ)
+    },
+    schedule: {
+        day: {type: String,required: false },
+        date: { type: Date, required: false },
+        time: {type: String,required: false }
+    },
     Duration: Number,
     categories: [{
         type: String,

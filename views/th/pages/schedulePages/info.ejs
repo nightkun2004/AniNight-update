@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= anime.title %></title>
+    <title><%= anime.title.th || anime.title.en  %></title>
     <% if (anime.poster.startsWith('http')) { %>
         <meta property="og:image" content="<%= anime.poster %>" />
     <% } else { %>
@@ -16,7 +16,7 @@
          content="<%= anime.synopsis %>" /> 
      <meta property="og:type" content="website" />
      <meta property="og:url" content="https://ani-night.online" />
-     <meta property="og:title" content="<%= anime.title %> | AniNight" />
+     <meta property="og:title" content="<%= anime.title.th || anime.title.en  %> | AniNight" />
      <meta property="og:description"
          content="<%= anime.synopsis %>" />
 
@@ -60,338 +60,228 @@
 
     <section class="mx-auto max-w-6xl md:p-5">
         <!-- Anime Info Section  -->
-        <div class="container-info-header bg-white md:rounded-lg md:shadow-md p-6 ">
-            <!-- Anime Banner Section -->
-            <div class="mb-6 relative">
-                <img title="<%- anime.synopsis %>" src="<%= anime.banner ? anime.banner : 'https://via.placeholder.com/1200x400' %>" alt="Anime Banner"
-                    class="w-full h-64 object-cover rounded-lg shadow-md">
-                <div class="absolute bottom-0 left-0 p-6 bg-gradient-to-t from-black to-transparent w-full rounded-lg">
-                    <h1 class="text-4xl font-bold text-white"><%- anime.title %></h1>
+      <%- include('./Component/Header') %>
+
+        <div class="mx-auto p-4 flex flex-col lg:flex-row gap-4">
+            <aside class="hidden lg:block lg:w-1/4 bg-white shadow-lg p-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-4 text-orange-500">ข้อมูลอนิเมะ</h2>
+            
+                <!-- ข้อมูลอนิเมะ -->
+                <div class="mb-6">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-700">ชื่อเรื่อง:</h3>
+                        <p class="text-gray-600"><strong>โรมันจิ</strong>: <%= anime.title.en || "ไม่พบข้อมูล" %></p>
+                        <p class="text-gray-600"><strong>ญี่ปุ่น</strong> : <%= anime.title.jp || "ไม่พบข้อมูล" %></p>
+                        <p class="text-gray-600"><strong>ไทย</strong>: <%= anime.title.th  || "ไม่พบข้อมูล"%></p>
+                    </div>
+                    <p class="text-gray-600">หมวดหมู่: <%= anime.categories %></p>
+                    <p class="text-gray-600">จำนวนตอน: <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong></p>
+                    <p class="text-gray-600">สถานะ:  <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></p>
                 </div>
-            </div> 
-            <h1 class="text-3xl font-bold text-gray-800 mb-4"><%- anime.title %></h1>
-        
-            <div class="flex flex-col md:flex-row mb-6" >
-                <div class="overflow-hidden">
-                    <% if (anime.poster.startsWith('http')) { %>
-                        <img id="image-bg" title="<%- anime.title %>" src="<%= anime.poster %>" alt="<%= anime.title %>"
-                            class="w-64 h-auto rounded-lg shadow-md mb-4 md:mb-0" crossorigin="anonymous">
-                    <% } else { %>
-                        <img id="image-bg" title="<%- anime.title %>" src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title %>"
-                            class="w-64 h-auto rounded-lg shadow-md mb-4 md:mb-0">
-                    <% } %>
-                </div>
-                <!-- <img src="https://via.placeholder.com/300x450" alt="Anime Cover" > -->
-                <div class="md:ml-6 flex-1">
-                    <% if (userID) { %>
-                        <div class="flex justify-end items-center">
-                            <i class="fa-solid fa-bookmark text-2xl cursor-pointer  hover:rounded-full px-2
-                                    <%= anime.saveanime && anime.saveanime.includes(userID.user._id) ? 'text-yellow-500' : 'text-gray-500' %>"
-                                onclick="toggleBookmark('<%= anime._id %>')" id="bookmark-<%= anime._id %>"
-                                data-animeid="<%= anime._id %>"></i>
-                            <span>บันทึก</span>
-                        </div>
+            
+                <!-- แนวอนิเมะ -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700">แนวอนิเมะ</h3>
+                    <ul class="list-disc pl-5 text-gray-600">
+                        <% if (anime.genres && anime.genres.length > 0) { %>
+                            <% anime.genres.forEach(function(genre) { %>
+                                <li><%= genre %></li>
+                            <% }) %>
                         <% } else { %>
-                            <div class="flex justify-end items-center">
-                                <i class="fa-solid fa-bookmark text-2xl cursor-pointer  hover:rounded-full px-2"
-                                    onclick="toggleBookmark('<%= anime._id %>')" id="bookmark-<%= anime._id %>"
-                                    data-animeid="<%= anime._id %>"></i>
-                                <span>บันทึก</span>
-                            </div>
-                            <% } %>
-                                <!-- Description -->
-                                <article class=" mb-5">
-                                    <%- anime.synopsis %>
-                                </article>
-        
-                                <!-- Details (Genres, Episodes, Status, etc.) -->
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <h2 class="font-semibold">Format</h2>
-                                        <p>
-                                            <%= anime.type || "ไม่พบข้อมูล" %>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h2 class="font-semibold">studio</h2>
-                                        <p>
-                                            <%= anime.studio || "ไม่พบข้อมูล" %>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h2 class="font-semibold">Licensors</h2>
-                                        <p>
-                                            <%= anime.Licensors || "ไม่พบข้อมูล" %>
-                                        </p>
-                                    </div>
-                                    <div class="flex flex-wrap">
-                                        <h2 class="font-semibold">รูปแบบ : </h2>
-                                        <% if (anime.genres && anime.genres.length > 0) { %>
-                                            <% anime.genres.forEach(function(genre) { %>
-                                               <br> <p><%= genre %></p> ,
-                                            <% }) %>
-                                        <% } else { %>
-                                            <p>ไม่พบข้อมูล</p>
-                                        <% } %>
-                                    </div>
-                                    <div>
-                                        <h2 class="font-semibold">Season</h2>
-                                        <p>
-                                            <%= anime.season %>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h2 class="font-semibold">Episodes</h2>
-                                        <p>
-                                            <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h2 class="font-semibold">Duration</h2>
-                                        <p class="text-white t" style="
-                                        color: orange;
-                                        text-shadow: 2px 4px 6px black;">
-                                            <%= anime.Duration || "ไม่พบข้อมูล" %> <strong>นาที</strong>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h2 class="font-semibold">Status</h2>
-                                        <p>
-                                            <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %>
-                                        </p>
-                                    </div>
-                                    <div class="text-white">
-                                        <h2 class="font-semibold">เริ่มฉาย</h2>
-                                        <p>
-                                            <%= anime.month %>
-                                                <%= anime.year %>
-                                        </p>
-                                    </div>
-                                    </p>
-                                </div>
-                </div>
-            </div>
-        </div>
-
-<div class="mx-auto p-4 flex flex-col lg:flex-row gap-4">
-    <aside class="hidden lg:block lg:w-1/4 bg-white shadow-lg p-4 rounded-lg">
-        <h2 class="text-xl font-bold mb-4 text-orange-500">ข้อมูลอนิเมะ</h2>
-      
-        <!-- ข้อมูลอนิเมะ -->
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-700">ชื่อเรื่อง: <%= anime.title %></h3>
-            <p class="text-gray-600">หมวดหมู่: <%= anime.categories %></p>
-            <p class="text-gray-600">จำนวนตอน: <%= anime.Episodes || "ไม่พบข้อมูล" %> <strong>ตอน</strong></p>
-            <p class="text-gray-600">สถานะ:  <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></p>
-        </div>
-    
-        <!-- เรทคะแนน -->
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-700">เรทคะแนน</h3>
-            <div class="flex items-center mb-2">
-                <span class="text-yellow-400 text-2xl">⭐</span>
-                <span class="ml-2 text-gray-800 font-bold text-xl">9.2/10</span>
-            </div>
-            <p class="text-gray-600">จากผู้โหวต: 1,200,000 คน</p>
-        </div>
-    
-        <!-- แนวอนิเมะ -->
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-700">แนวอนิเมะ</h3>
-            <ul class="list-disc pl-5 text-gray-600">
-                <% if (anime.genres && anime.genres.length > 0) { %>
-                    <% anime.genres.forEach(function(genre) { %>
-                        <li><%= genre %></li>
-                    <% }) %>
-                <% } else { %>
-                    <li>ไม่พบข้อมูล</li>
-                <% } %>
-            </ul>            
-        </div>
-    
-        <!-- วันที่ฉาย -->
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-700">วันที่ฉาย:</h3>
-            <p class="text-gray-600">เริ่มฉาย: <%= anime.month %> <%= anime.year %></p>
-            <p class="text-gray-600">จบฉาย: no date</p>
-        </div>
-    
-    </aside>
-    
-
-     <!-- Main Content (Right) -->
-     <main class="w-full lg:w-3/4 bg-white shadow-lg p-6 rounded-lg bg-bottom bg-no-repeat bg-cover"
-     >
-         <!-- สำหรับแสดงช่องทางการฉาย -->
-         <div class="mb-6 bg-white md:rounded-lg p-5 mt-5">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">ช่องทางการฉาย</h2>
-            <div class="bg-white rounded px-4 py-4">
-            
-                <% let hasPlatforms = false; %> <!-- ตัวแปรเพื่อตรวจสอบว่ามีแพลตฟอร์มใด ๆ หรือไม่ -->
-            
-                <!-- ตรวจสอบแพลตฟอร์มทั่วไป -->
-                <% if (anime.streaming && anime.streaming.length > 0) { %>
-                    <h2 class="text-lg font-semibold text-gray-800 mb-2">บนแพลตฟอร์ม OTT</h2>
-                    <% anime.streaming.forEach(stream => { %>
-                        <% if (stream.crunchyroll || stream.iqiyi || stream.bilibili) { %>
-                            <!-- แสดงแพลตฟอร์ม Crunchyroll -->
-                            <% if (stream.crunchyroll) { %>
-                                <div class="crunchyroll bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                    <a href="<%= stream.crunchyroll %>" class="flex items-center gap-3" target="_blank">
-                                        <div class="image">
-                                            <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" width="50px" height="50px" class="rounded-full">
-                                        </div>
-                                        <h2>Crunchyroll</h2>
-                                    </a>
-                                </div>
-                                <% hasPlatforms = true; %>
-                            <% } %>
-            
-                            <!-- แสดงแพลตฟอร์ม IQIYI -->
-                            <% if (stream.iqiyi) { %>
-                                <div class="iqiyi bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                    <a href="<%= stream.iqiyi %>" class="flex items-center gap-3" target="_blank">
-                                        <div class="image">
-                                            <img src="/logo/iqiyi_icon.png" alt="iqiyi" width="50px" height="50px" class="rounded-full">
-                                        </div>
-                                        <h2>IQIYI</h2>
-                                    </a>
-                                </div>
-                                <% hasPlatforms = true; %>
-                            <% } %>
-            
-                            <!-- แสดงแพลตฟอร์ม Bilibili -->
-                            <% if (stream.bilibili) { %>
-                                <div class="bilibili bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                    <a href="<%= stream.bilibili %>" class="flex items-center gap-3" target="_blank">
-                                        <div class="image">
-                                            <img src="/logo/bilibili_icon.png" alt="bilibili" width="50px" height="50px" class="rounded-full">
-                                        </div>
-                                        <h2>Bilibili</h2>
-                                    </a>
-                                </div>
-                                <% hasPlatforms = true; %>
-                            <% } %>
+                            <li>ไม่พบข้อมูล</li>
                         <% } %>
-                    <% }); %>
-                <% } %>
+                    </ul>            
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700">รายละเอียดตอน:</h3>
+                    <p class="text-gray-600"><strong>กำลังฉาย</strong>: <%= anime.episodes.current %></p>
+                    <p class="text-gray-600"><strong>ตอนทั้งหมด</strong>: <%= anime.episodes.total %></p>
+                </div>
             
-                <hr>
-                <!-- ตรวจสอบแพลตฟอร์ม YouTube -->
-                <% if (anime.streaming && anime.streaming.length > 0) { %>
-                    <h2 class="text-lg font-semibold text-gray-800 mb-2">บน YouTube</h2>
-                    <% anime.streaming.forEach(stream => { %>
-                        <% if (stream.youtubes && stream.youtubes.length > 0) { %>
-                            <% stream.youtubes.forEach(youtube => { %>
-                                <!-- ตรวจสอบแต่ละ YouTube -->
-                                <% if (youtube.muse) { %>
-                                    <div class="muse bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                        <a href="<%= youtube.muse %>" class="flex items-center gap-3" target="_blank">
-                                            <div class="image">
-                                                <img src="/logo/muse.png" alt="Muse" width="50px" height="50px" class="rounded">
-                                            </div>
-                                            <h2>Muse</h2>
-                                        </a>
-                                    </div>
-                                    <% hasPlatforms = true; %>
-                                <% } %>
+                <!-- วันที่ฉาย -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700">วันที่ฉาย:</h3>
+                    <p class="text-gray-600">เริ่มฉาย: <%= anime.month %> <%= anime.year %></p>
+                    <p class="text-gray-600">จบฉาย: no date</p>
+                </div>
             
-                                <% if (youtube.anione) { %>
-                                    <div class="anione bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                        <a href="<%= youtube.anione %>" class="flex items-center gap-3" target="_blank">
-                                            <div class="image">
-                                                <img src="/logo/anione.jpg" alt="Ani-One" width="50px" height="50px" class="rounded-full">
-                                            </div>
-                                            <h2>Ani-One</h2>
-                                        </a>
-                                    </div>
-                                    <% hasPlatforms = true; %>
-                                <% } %>
+            </aside>
             
-                                <% if (youtube.pops) { %>
-                                    <div class="pops bg-gray-100 px-3 py-2 rounded-lg mb-5">
-                                        <a href="<%= youtube.pops %>" class="flex items-center gap-3" target="_blank">
-                                            <div class="image">
-                                                <img src="/logo/pops.jpg" alt="Pops" width="50px" height="50px" class="rounded-full">
-                                            </div>
-                                            <h2>Pops</h2>
-                                        </a>
-                                    </div>
-                                    <% hasPlatforms = true; %>
+
+            <!-- Main Content (Right) -->
+            <main class="w-full lg:w-3/4 bg-white shadow-lg p-6 rounded-lg bg-bottom bg-no-repeat bg-cover"
+            >
+                <!-- สำหรับแสดงช่องทางการฉาย -->
+                <div class="mb-6 bg-white md:rounded-lg p-5 mt-5">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">ช่องทางการฉาย</h2>
+                    <div class="bg-white rounded px-4 py-4">
+                    
+                        <% let hasPlatforms = false; %> <!-- ตัวแปรเพื่อตรวจสอบว่ามีแพลตฟอร์มใด ๆ หรือไม่ -->
+                    
+                        <!-- ตรวจสอบแพลตฟอร์มทั่วไป -->
+                        <% if (anime.streaming && anime.streaming.length > 0) { %>
+                            <h2 class="text-lg font-semibold text-gray-800 mb-2">บนแพลตฟอร์ม OTT</h2>
+                            <% anime.streaming.forEach(stream => { %>
+                                <% if (stream.crunchyroll || stream.iqiyi || stream.bilibili) { %>
+                                    <!-- แสดงแพลตฟอร์ม Crunchyroll -->
+                                    <% if (stream.crunchyroll) { %>
+                                        <div class="crunchyroll bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.crunchyroll %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/crunchyroll_icon.png" alt="crunchyroll" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>Crunchyroll</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                    
+                                    <!-- แสดงแพลตฟอร์ม IQIYI -->
+                                    <% if (stream.iqiyi) { %>
+                                        <div class="iqiyi bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.iqiyi %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/iqiyi_icon.png" alt="iqiyi" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>IQIYI</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
+                    
+                                    <!-- แสดงแพลตฟอร์ม Bilibili -->
+                                    <% if (stream.bilibili) { %>
+                                        <div class="bilibili bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                            <a href="<%= stream.bilibili %>" class="flex items-center gap-3" target="_blank">
+                                                <div class="image">
+                                                    <img src="/logo/bilibili_icon.png" alt="bilibili" width="50px" height="50px" class="rounded-full">
+                                                </div>
+                                                <h2>Bilibili</h2>
+                                            </a>
+                                        </div>
+                                        <% hasPlatforms = true; %>
+                                    <% } %>
                                 <% } %>
                             <% }); %>
-                        <% } else { %>
-                            <p>ไม่มีบน YouTube</p>
                         <% } %>
-                    <% }); %>
-                <% } %>
-            
-                <!-- ถ้าไม่มีแพลตฟอร์มแสดงข้อความ -->
-                <% if (!hasPlatforms) { %>
-                    <p class="text-center text-sm text-black">ยังไม่มีแพลตฟอร์มสตีม</p>
-                <% } %>
-            </div>
-            
-        </div>
-
-        <!-- Characters Section -->
-        <div class="mb-6 mt-6 bg-gray-50 p-4 md:rounded-lg">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">ตัวละคร | นักพากย์ </h2>
-            <div class="space-y-4">
-                <% if (anime.characters.length > 0) { %>
-                    <% anime.characters.forEach(character => { %>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-white shadow rounded-lg p-4">
-                            <!-- Left: Character -->
-                            <div class="flex items-center">
-                                <img data-src="<%- character.imageUrl %>" src="<%- character.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
-                                     alt="<%- character.name %>" 
-                                     class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
-                                <div>
-                                    <p class="text-gray-700 text-lg font-semibold"><%- character.name %></p>
-                                    <p class="text-gray-500"><%- character.role %></p>
-                                </div>
-                            </div>
-        
-                            <!-- Right: Voice Actor -->
-                            <div class="flex items-center justify-end">
-                                <% if (character.actor && character.actor.length > 0) { %>
-                                    <% character.actor.forEach(actor => { %>
-                                        <div class="flex items-center">
-                                            <img data-src="<%- character.imageUrl %>" src="<%- actor.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
-                                                 alt="<%- actor.name %>" 
-                                                 class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
-                                            <div>
-                                                <p class="text-gray-700 text-lg font-semibold"><%- actor.name %></p>
-                                                <p class="text-gray-500"><%- actor.role %></p>
+                    
+                        <hr>
+                        <!-- ตรวจสอบแพลตฟอร์ม YouTube -->
+                        <% if (anime.streaming && anime.streaming.length > 0) { %>
+                            <h2 class="text-lg font-semibold text-gray-800 mb-2">บน YouTube</h2>
+                            <% anime.streaming.forEach(stream => { %>
+                                <% if (stream.youtubes && stream.youtubes.length > 0) { %>
+                                    <% stream.youtubes.forEach(youtube => { %>
+                                        <!-- ตรวจสอบแต่ละ YouTube -->
+                                        <% if (youtube.muse) { %>
+                                            <div class="muse bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                                <a href="<%= youtube.muse %>" class="flex items-center gap-3" target="_blank">
+                                                    <div class="image">
+                                                        <img src="/logo/muse.png" alt="Muse" width="50px" height="50px" class="rounded">
+                                                    </div>
+                                                    <h2>Muse</h2>
+                                                </a>
                                             </div>
-                                        </div>
+                                            <% hasPlatforms = true; %>
+                                        <% } %>
+                    
+                                        <% if (youtube.anione) { %>
+                                            <div class="anione bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                                <a href="<%= youtube.anione %>" class="flex items-center gap-3" target="_blank">
+                                                    <div class="image">
+                                                        <img src="/logo/anione.jpg" alt="Ani-One" width="50px" height="50px" class="rounded-full">
+                                                    </div>
+                                                    <h2>Ani-One</h2>
+                                                </a>
+                                            </div>
+                                            <% hasPlatforms = true; %>
+                                        <% } %>
+                    
+                                        <% if (youtube.pops) { %>
+                                            <div class="pops bg-gray-100 px-3 py-2 rounded-lg mb-5">
+                                                <a href="<%= youtube.pops %>" class="flex items-center gap-3" target="_blank">
+                                                    <div class="image">
+                                                        <img src="/logo/pops.jpg" alt="Pops" width="50px" height="50px" class="rounded-full">
+                                                    </div>
+                                                    <h2>Pops</h2>
+                                                </a>
+                                            </div>
+                                            <% hasPlatforms = true; %>
+                                        <% } %>
                                     <% }); %>
                                 <% } else { %>
-                                    <p class="text-gray-500">No voice actor available</p>
+                                    <p>ไม่มีบน YouTube</p>
                                 <% } %>
-                            </div>
-                        </div>
-                    <% }); %>
-                <% } else { %>
-                    <div class="text-center">
-                        <p class="text-gray-700">ยังไม่ได้ใส่ข้อมูล</p>
+                            <% }); %>
+                        <% } %>
+                    
+                        <!-- ถ้าไม่มีแพลตฟอร์มแสดงข้อความ -->
+                        <% if (!hasPlatforms) { %>
+                            <p class="text-center text-sm text-black">ยังไม่มีแพลตฟอร์มสตีม</p>
+                        <% } %>
                     </div>
-                <% } %>
-            </div>
+                    
+                </div>
+
+                <!-- Characters Section -->
+                <div class="mb-6 mt-6 bg-gray-50 p-4 md:rounded-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">ตัวละคร | นักพากย์ </h2>
+                    <div class="space-y-4">
+                        <% if (anime.characters.length > 0) { %>
+                            <% anime.characters.forEach(character => { %>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-white shadow rounded-lg p-4">
+                                    <!-- Left: Character -->
+                                    <div class="flex items-center">
+                                        <img data-src="<%- character.imageUrl %>" src="<%- character.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
+                                            alt="<%- character.name %>" 
+                                            class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
+                                        <div>
+                                            <p class="text-gray-700 text-lg font-semibold"><%- character.name %></p>
+                                            <p class="text-gray-500"><%- character.role %></p>
+                                        </div>
+                                    </div>
+                
+                                    <!-- Right: Voice Actor -->
+                                    <div class="flex items-center justify-end">
+                                        <% if (character.actor && character.actor.length > 0) { %>
+                                            <% character.actor.forEach(actor => { %>
+                                                <div class="flex items-center">
+                                                    <img data-src="<%- character.imageUrl %>" src="<%- actor.imageUrl || 'https://via.placeholder.com/150?text=NO+IMAGE' %>" 
+                                                        alt="<%- actor.name %>" 
+                                                        class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg mr-4 lazyload">
+                                                    <div>
+                                                        <p class="text-gray-700 text-lg font-semibold"><%- actor.name %></p>
+                                                        <p class="text-gray-500"><%- actor.role %></p>
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <p class="text-gray-500">No voice actor available</p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="text-center">
+                                <p class="text-gray-700">ยังไม่ได้ใส่ข้อมูล</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-e5+6n-34-bt+x0"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="1942933440"></ins>
+        <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+            </main>
         </div>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-        crossorigin="anonymous"></script>
-   <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-format="fluid"
-        data-ad-layout-key="-e5+6n-34-bt+x0"
-        data-ad-client="ca-pub-6579807593228261"
-        data-ad-slot="1942933440"></ins>
-   <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-   </script>
-    </main>
-</div>
 
        
 

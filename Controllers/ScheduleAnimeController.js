@@ -1,18 +1,76 @@
 const User = require("../models/UserModel");
+const Schedule = require("../models/SchedulesModel")
 const Anime = require("../models/AnimeModel")
+const moment = require('moment');
+moment.locale('th');
+
+const updateEpisodes = async () => {
+    try {
+        // ค้นหาทุก Anime ที่มีข้อมูลในรูปแบบของ Episodes ที่เป็น Number
+        const animesToUpdate = await Anime.find({ "episodes": { $type: "number" } });
+
+        for (let anime of animesToUpdate) {
+            // อัปเดต Episodes ให้เป็น object ที่มี current และ total
+            const updatedEpisodes = {
+                current: anime.episodes, // ใช้ค่าที่มีอยู่ใน Episodes
+                total: 0 // ตั้งค่า total เป็น 0 หรือค่าเริ่มต้นที่คุณต้องการ
+            };
+
+            // อัปเดตข้อมูลในฐานข้อมูล
+            await Anime.findByIdAndUpdate(anime._id, { episodes: updatedEpisodes });
+
+            console.log(`Updated Anime with ID: ${anime._id}`);
+        }
+
+        console.log("Episodes update complete");
+    } catch (error) {
+        console.error("Error updating Episodes:", error);
+    }
+};
+
+updateEpisodes();
+
+const converttitleAnime = async () => {
+    const animes = await Anime.find();
+    console.log(`Total records found: ${animes.length}`);
+
+    const bulkOps = animes.map(anime => {
+        // console.log(`Checking title:`, anime.title);
+            console.log(`Updating title: ${anime.title}`);
+            return {
+                updateOne: {
+                    filter: { _id: anime._id },
+                    update: { $set: { title: { en: anime.title, jp: '', th: '' } } }
+                }
+            };
+        return null;
+    }).filter(Boolean); // กรอง null ออก
+
+    if (bulkOps.length > 0) {
+        await Anime.bulkWrite(bulkOps);
+        console.log(`Bulk migration complete. Updated ${bulkOps.length} records.`);
+    } else {
+        console.log('No records to migrate');
+    }
+};
+
+converttitleAnime().catch(err => {
+    console.error('Error during migration:', err);
+});
 
 const getAnimeInfo = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     const { urlslug } = req.params;
     try {
-        const anime = await Anime.findOne({ urlslug }).exec(); 
+        const anime = await Anime.findOne({ urlslug }).exec();
         if (!anime) {
             return res.status(404).render(`/th/pages/schedulePages/info`, {
                 error: 'Anime not found',
                 userID
             });
         }
+        // console.log(anime)
         res.render(`./th/pages/schedulePages/info`, { userID, anime, active: "ScheduleAnime", translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
@@ -24,6 +82,37 @@ const getAnimeInfo = async (req, res) => {
         });
     }
 }
+
+const getAnimeScheduleTimeline = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+
+    try {
+        // ดึงข้อมูล Schedule พร้อมกับ populate anime ภายใน animes
+        const schedules = await Schedule.find()
+            .populate({
+                path: 'animes.anime',  // ชี้ไปที่ฟิลด์ anime ภายในอาเรย์ animes
+                model: 'Anime',        // ต้องระบุชื่อโมเดล Anime
+            })
+            .exec();    
+
+        // แสดงผลข้อมูลใน View
+        res.render(`./th/pages/schedulePages/timeline`, {
+            userID,
+            schedule: schedules,
+            currentDate: moment().format('DD/MM'),
+            active: "ScheduleAnime",
+            translations: req.translations,
+            lang,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message || "Internal Server Error" });
+    }
+};
+
+
+
 
 // ============================================== Stream ====================================================
 // ==========================================================================================================
@@ -40,12 +129,12 @@ const getAnimeStream = async (req, res) => {
                 translations: req.translations, lang
             });
         }
-        res.render(`./th/pages/schedulePages/streaming/index`, { userID, anime,active: "ScheduleAnime", translations: req.translations, lang });
+        res.render(`./th/pages/schedulePages/streaming/index`, { userID, anime, active: "ScheduleAnime", translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/pages/schedulePages/streaming/index`, {
             error: errorMessage,
-            userID,active: "ScheduleAnime",
+            userID, active: "ScheduleAnime",
             translations: req.translations, lang
         });
     }
@@ -91,7 +180,7 @@ const getSchedule = async (req, res) => {
 }
 
 
-const getFilterAnime = async (req , res) => {
+const getFilterAnime = async (req, res) => {
     const { year, season, format } = req.query;
 
     try {
@@ -151,9 +240,9 @@ const getScheduleInfo = async (req, res) => {
 // ============================================= GET ANIME Stream ===========================================
 const getAnimeStreamAPI = async (req, res) => {
     const lang = res.locals.lang;
-    const { urlslug } = req.params; 
+    const { urlslug } = req.params;
     try {
-        const anime = await Anime.findOne({ urlslug }).exec(); 
+        const anime = await Anime.findOne({ urlslug }).exec();
         if (!anime) {
             return res.status(404).json({
                 error: 'Anime not found',
@@ -161,7 +250,7 @@ const getAnimeStreamAPI = async (req, res) => {
                 translations: req.translations, lang
             });
         }
-        res.json({ msg: "ดึงข้อมูล Anime Stream แล้ว",userID, anime, translations: req.translations, lang });
+        res.json({ msg: "ดึงข้อมูล Anime Stream แล้ว", userID, anime, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
@@ -174,7 +263,7 @@ const getAnimeStreamAPI = async (req, res) => {
 
 // ============================================= GET ANIME Winter ===========================================
 const getAnimeWinterAPI = async (req, res) => {
-    const { year,season } = req.query;
+    const { year, season } = req.query;
     try {
         const animes = await Anime.find({ year: year, season: season }).sort({ createdAt: -1 }).exec();
         if (animes.length === 0) {
@@ -187,4 +276,4 @@ const getAnimeWinterAPI = async (req, res) => {
     }
 }
 
-module.exports = { getAnimeInfo, getFilterAnime, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }
+module.exports = { getAnimeInfo, getFilterAnime, getAnimeScheduleTimeline, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }

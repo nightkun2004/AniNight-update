@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Anime = require("../models/AnimeModel")
+const Schedule = require("../models/SchedulesModel")
 const path = require("path")
 const FormData = require('form-data');
 const fs = require("fs")
@@ -28,6 +29,22 @@ const getAnime = async (req, res) => {
             userID,
             translations: req.translations, lang
         });
+    }
+}
+
+// ========================== timeline Anime ==========================================
+const getAddAnimeScheduleTimeline = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    try {
+
+        const animes = await Anime.find().exec();
+        res.render(`./th/pages/admin/add/Schedule`, { userID, animes, translations: req.translations, lang })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage
+        })
     }
 }
 
@@ -64,7 +81,7 @@ const getPVAnime = async (req, res) => {
         });
     }
 }
-
+ 
 // ============================================================= ADD Streem =====================================
 // ==============================================================================================================
 const getAnimeStreem = async (req, res) => {
@@ -194,7 +211,7 @@ const getEditAnime = async (req, res) => {
     const { id } = req.query; // แก้ไขการดึง id จาก req.query
     try {
         const edit = await Anime.findById(id).exec();
-        console.log(edit)
+        // console.log(edit)
         if (!edit) {
             return res.status(404).render(`./th/pages/admin/edit/anime`, {
                 error: 'Anime not found',
@@ -210,6 +227,48 @@ const getEditAnime = async (req, res) => {
             userID,
             translations: req.translations, lang
         });
+    }
+}
+
+const getEditAnimeAddSchedule = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const { id } = req.params;
+    try {
+        const edit = await Anime.findById(id).exec();
+        // console.log(edit)
+        if (!edit) {
+            return res.status(404).json({
+                error: `Anime Edit not found ${id}`
+            })
+        }
+        res.render(`./th/pages/admin/edit/Schedule`, { userID, edit, translations: req.translations, lang });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage
+        })
+    }
+}
+
+const getEditAnimeTitle = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    const { id } = req.params;
+    try {
+        const edit = await Anime.findById(id).exec();
+        // console.log(edit)
+        if (!edit) {
+            return res.status(404).json({
+                error: `Anime Edit not found ${id}`
+            })
+        }
+        res.render(`./th/pages/admin/edit/edittitle`, { userID, edit, translations: req.translations, lang });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage
+        })
     }
 }
 
@@ -668,9 +727,8 @@ const EditActorInCharacter = async (req, res) => {
 const EditAnimeinfo = async (req, res) => {
     const userID = req.session.userlogin;
     const id = req.body.update_id;
-    const lang = res.locals.lang;
-    const { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, genres, published, studio, Source, Licensors, website, Episodes, Duration, type } = req.body;
-
+    const lang = res.locals.lang;0
+    const { synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, genres, published, studio, Source, Licensors, website, Duration, type } = req.body;
     try {
         const searchanime = await Anime.findById(id).exec();
         const edit = await Anime.findById(id).exec();
@@ -686,9 +744,13 @@ const EditAnimeinfo = async (req, res) => {
                 lang
             })
         }
+        
 
-        let updateData = { title, synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories, genres, published: isPublished, studio, Source, Licensors, website, Episodes, Duration, type };
-
+        let updateData = {
+            synopsis, animetype, voice, season, price, platforms, year, month, status, 
+            urlslug, categories, genres, published: isPublished, studio, Source, Licensors, 
+            website, Duration, type
+        };
         const generateFilename = (file) => {
             let splittedFilename = file.name.split('.');
             return crypto.randomUUID() + '.' + splittedFilename[splittedFilename.length - 1];
@@ -787,6 +849,105 @@ const EditAnimeinfo = async (req, res) => {
             translations: req.translations,
             lang
         });
+    }
+}
+
+const EditAnimeTitle = async (req, res) => {
+    const userID = req.session.userlogin;
+    const lang = res.locals.lang;
+    try {
+        const { id } = req.params;
+        const { en, jp, th } = req.body.title;
+        const { current, total } = req.body.episodes;
+        // console.log("ข้อมูลตอน: ", current);
+        // console.log("ข้อมูลตอนทั้งหมด: ", total); 
+
+       const edit = await Anime.findByIdAndUpdate(id, {
+            $set: { "title.en": en, "title.jp": jp, "title.th": th,
+            "episodes.current": current, "episodes.total": total }
+        });
+
+        if (!edit) {
+            return res.status(404).json({
+                error: `Anime Edit not found ${id}`
+            })
+        }
+
+        console.log(edit)
+        res.status(200).redirect(`/admin/edit/${id}/title?msg=แก้ไขสำเร็จ&status=true`)
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage
+        })
+    }
+}
+
+const AddAnimeschedule = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { day, date, time } = req.body.schedule;
+        // console.log("ข้อมูล day: ", day);
+        // console.log("ข้อมูล date: ", date); 
+        // console.log("ข้อมูล time: ", time); 
+
+        const updateData = {
+            schedule: {
+                day: day,
+                date: date ? new Date(date) : null,
+                time: time
+            }
+        };
+        if (!updateData) {
+            return res.status(404).json({
+                error: `Anime Edit not found ${id}`
+            })
+        }
+
+        const updatedAnime = await Anime.findByIdAndUpdate(id, updateData, { new: true });
+
+        // console.log("ข้อมูลที่อัพเดต: ", updatedAnime); 
+        res.status(200).redirect(`/admin/edit/${id}/schedule/add?msg=เพิ่มวันแล้ว&status=true`)
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage
+        })
+    }
+}
+
+const AddAnimescheduleTimeline = async (req, res) => {
+    try {
+        const { day, date, time, anime } = req.body;
+        console.log("ข้อมูล day: ", day);
+        console.log("ข้อมูล date: ", date); 
+        console.log("ข้อมูล time: ", time); 
+        console.log("ข้อมูล anime: ", anime); 
+
+        let schedule = await Schedule.findOne({ day, date });
+
+        if (!schedule) {
+            // หากยังไม่มี Schedule สำหรับวันนี้ ให้สร้างใหม่
+            schedule = new Schedule({
+                day,
+                date,
+                animes: [],
+            });
+        }
+
+         // เพิ่มอนิเมะในตารางเวลา
+         schedule.animes.push({ anime, time });
+
+         // บันทึกลงฐานข้อมูล
+         await schedule.save();
+
+        console.log("ข้อมูลที่อัพเดต: ", schedule); 
+        res.status(200).redirect(`/admin/add/anime/schedule/time?msg=เพิ่มวันแล้ว&status=true`)
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage
+        })
     }
 }
 
@@ -1018,10 +1179,12 @@ const getInfiniteScroll = async (req, res) => {
 
 module.exports = {
     getAnime,
+    getAddAnimeScheduleTimeline,
     getCharacters,
     getPVAnime,
     getAnimeStreem,
     getAnimeStreemYoutube,
+    getEditAnimeAddSchedule,
     CreateanimeItem,
     Createcharacters,
     getAddActorToCharacter,
@@ -1032,7 +1195,11 @@ module.exports = {
     getScheduleAPI,
     getInfiniteScroll,
     getEditAnime,
+    getEditAnimeTitle,
     EditAnimeinfo,
+    EditAnimeTitle,
+    AddAnimeschedule,
+    AddAnimescheduleTimeline,
     deleteAnime,
     updateAnimeStream,
     BookmarkSaveAnime,
