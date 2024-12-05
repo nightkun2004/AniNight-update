@@ -2,7 +2,7 @@ const { google } = require('googleapis');
 const fs = require('fs'); // เพิ่มการนำเข้า fs
 require('dotenv').config();
 
-const keyFilePath = './google/nattnight-9e854-221d421b04dc.json'; // ไฟล์ JSON ของ Service Account
+const keyFilePath = ''; // ไฟล์ JSON ของ Service Account
 const viewId = 'ga:208069749'; // ใส่ View ID ของคุณ (ตรวจสอบว่าเป็น Universal Analytics)
 
 async function getAnalyticsData() {
