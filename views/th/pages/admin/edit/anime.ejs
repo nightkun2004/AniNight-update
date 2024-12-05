@@ -32,31 +32,6 @@
                         <div class="mb-4 bg-gray-100 rounded-lg p-2 text-sky-500 text-center"><%= dataprofile %></div>
                     <% } %>
                 </div>
-                <header class="mb-6 bg-blue-500 p-4">
-                    <h1 class="text-2xl font-bold text-white">จัดการผู้ดูแลระบบ</h1>
-                    <nav>
-                        <ul class="flex space-x-4 mt-4">
-                            <li>
-                                <a href="#" class="text-black hover:text-gray-400 transition duration-300">แก้ไขรายละเอียนอนิเมะ</a>
-                            </li>
-                            <li>
-                                <a href="/admin/add/anime/streem?id=<%= edit._id %>" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่มแพลตฟอร์มฉาย</a>
-                            </li>
-                            <li>
-                                <a href="/admin/edit/<%= edit._id %>/title" class="text-gray-200 hover:text-gray-400 transition duration-300">แก้ไขชื่อ</a>
-                            </li>
-                            <li>
-                                <a href="/admin/edit/<%= edit._id %>/schedule/add" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่มวันฉาย</a>
-                            </li>
-                            <li>
-                                <a href="/admin/add/characters?id=<%= edit.id %>" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่มตัวละคร</a>
-                            </li>
-                            <li>
-                                <a href="/admin/add/pv/anime" class="text-gray-200 hover:text-gray-400 transition duration-300">เพิ่ม PV Anime</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </header>
                 <h2 class="text-2xl font-bold text-center">แก้ไขอนิเมะ</h2>
                 <form action="/anime/edit/info" method="post" enctype="multipart/form-data" id="animeForm">
                     <div class="mb-5">

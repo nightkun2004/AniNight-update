@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight text-gray-800 mb-3">แก้ไขอนิเมะ: <%= edit.title.en || "ยังไม่พบชื่อ" %></h1>
+                    </div>
+                    <div class="flex items-center justify-between border-b-2 mb-5">
+                        <a href="/admin/edit/<%= edit._id %>/title" class="flex items-center px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out transform hover:scale-105">
+                            <p>แก้ไขชื่อ</p>
+                        </a>
+                        <a href="/admin/add/anime/streem?id=<%= edit._id %>" class="flex items-center px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out transform hover:scale-105">
+                            <p>เพิ่มแพลตฟอร์มฉาย</p>
+                        </a>
+                        <a href="/admin/add/characters?id=<%= edit.id %>" class="flex items-center px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out transform hover:scale-105">
+                            <p>เพิ่มตัวละคร</p>
+                        </a>
+                        <a href="/admin/add/pv/anime" class="flex items-center px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out transform hover:scale-105">
+                            <p>เพิ่มตัวอย่างอนิเมะ</p>
+                        </a>
+                        <a href="/admin/edit/<%= edit._id %>/schedule/add" class="flex items-center px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out transform hover:scale-105">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/>
+                            </svg>
+                            <p>เพิ่มวันฉาย</p>
+                        </a>
+                    </div>
+                    
+                    <!-- สิ้นสุด HEader ManageAnime -->
+
+                    <div class="mb-5 mt-5">
+                        <form action="/anime/edit/info" method="post" enctype="multipart/form-data" id="animeForm">
+                            <div class="grid grid-cols-2 gap-3">
+                                <!-- ID Anime -->
+                                <div class="mb-5">
+                                    <label for="update_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID Edit</label>
+                                    <input type="text" id="update_id" name="update_id" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" readonly value="<%= edit._id %>">
+                                </div>
+                                <!-- URL Slug -->
+                                <div class="mb-5">
+                                    <label for="urlslug" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL Slug</label>
+                                    <input type="text" id="urlslug" name="urlslug"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.urlslug %>">
+                                </div>
+                            </div>
+                             <!-- เนื้อเรื่อง -->
+                            <div class="mb-5">
+                                <label for="synopsis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เนื้อเรื่อง</label>
+                                <textarea name="synopsis" id="synopsis" class="outline-none w-full h-24 border-gray-100 border-2 rounded px-2 py-4 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"><%= edit.synopsis %></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                 <!-- ประเภทอนิเมะ -->
+                                <div class="mb-4">
+                                    <label for="animetype" class="block text-sm font-medium text-gray-700 dark:text-white">ประเภทอนิเมะ</label>
+                                    <div class="mt-2">
+                                        <label for="anime_jp" class="inline-flex items-center">
+                                            <input type="radio" name="animetype" id="anime_jp" value="ญี่ปุ่น" <% if (edit.animetype === 'ญี่ปุ่น') { %> checked <% } %>
+                                                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600">
+                                            <span class="ml-2 text-gray-900 dark:text-gray-300">อนิเมะญี่ปุ่น</span>
+                                        </label>
+                                        <label for="anime_cn" class="inline-flex items-center ml-4">
+                                            <input type="radio" name="animetype" id="anime_cn" value="จีน" <% if (edit.animetype === 'จีน') { %> checked <% } %>
+                                                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600">
+                                            <span class="ml-2 text-gray-900 dark:text-gray-300">อนิเมะจีน</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- รูปแบบเสียง -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รูปแบบเสียง</label>
+                                    <div class="flex items-center mb-4">
+                                        <input id="voice_th" type="radio" name="voice" value="พากย์ไทย" <% if (edit.voice === 'พากย์ไทย') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="voice_th" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พากย์ไทย</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="voice_jp" type="radio" name="voice" value="พากย์ญี่ปุ่น"<% if (edit.voice === 'พากย์ญี่ปุ่น') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="voice_jp" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พากย์ญี่ปุ่น</label>
+                                    </div>
+                                </div>
+                                <!-- ราคา -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ราคา</label>
+                                    <div class="flex items-center mb-4">
+                                        <input id="price_free" type="radio" name="price" value="free" <% if (edit.price === 'free') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="price_free" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ฟรี</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="price_premium" type="radio" name="price" value="premium" <% if (edit.price === 'premium') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="price_premium" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พรีเมียม</label>
+                                    </div>
+                                </div>
+                                 <!-- แพลตฟอร์ม -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">แพลตฟอร์ม</label>
+                                    <div class="flex items-center mb-4">
+                                        <input id="platform_bilibili" type="checkbox" name="platforms" value="bilibili"  <% if (edit.platforms === 'bilibili') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="platform_bilibili" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Bilibili</label>
+                                    </div>
+                                    <div class="flex items-center mb-4">
+                                        <input id="platform_iqiyi" type="checkbox" name="platforms" value="iqiyi"   <% if (edit.platforms === 'iqiyi') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="platform_iqiyi" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">iQiyi</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="platform_crunchyroll" type="checkbox" name="platforms" value="crunchyroll"  <% if (edit.platforms === 'crunchyroll') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="platform_crunchyroll" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Crunchyroll</label>
+                                    </div>
+                                </div>
+
+                                <!-- season -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ปีที่ออกฉาย</label>
+                                    <div class="flex items-center mb-4">
+                                        <input id="year_2025" type="radio" name="season" value="Spring"  <% if (edit.season === 'Spring') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="year_2025" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Spring</label>
+                                    </div>
+                                    <div class="flex items-center mb-4">
+                                        <input id="year_2024" type="radio" name="season" value="Summer"  <% if (edit.season === 'Summer') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="year_2024" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Summer</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="year_2023" type="radio" name="season" value="Fall"  <% if (edit.season === 'Fall') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="year_2023" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fall</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="year_2023" type="radio" name="season" value="Winter"  <% if (edit.season === 'Winter') { %> checked <% } %>
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="year_2023" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Winter</label>
+                                    </div>
+                                </div>
+                                <!-- ปี -->
+                                <div class="mb-5">
+                                    <label for="year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ปีที่ออก</label>
+                                    <input type="number" id="year" name="year"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.year %>">
+                                </div>
+                                <!-- เดือน -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เดือนที่ออกอากาศ</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="flex items-center">
+                                            <input id="month_january" type="radio" name="month" value="มกราคม"  <% if (edit.month === 'มกราคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_january" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มกราคม</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_february" type="radio" name="month" value="กุมภาพันธ์"  <% if (edit.month === 'กุมภาพันธ์') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_february" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">กุมภาพันธ์</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_march" type="radio" name="month" value="มีนาคม"  <% if (edit.month === 'มีนาคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_march" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มีนาคม</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_april" type="radio" name="month" value="เมษายน" <% if (edit.month === 'เมษายน') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_april" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เมษายน</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_may" type="radio" name="month" value="พฤษภาคม" <% if (edit.month === 'พฤษภาคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_may" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พฤษภาคม</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_june" type="radio" name="month" value="มิถุนายน" <% if (edit.month === 'มิถุนายน') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_june" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มิถุนายน</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_july" type="radio" name="month" value="กรกฎาคม" <% if (edit.month === 'กรกฎาคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_july" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">กรกฎาคม</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_august" type="radio" name="month" value="สิงหาคม" <% if (edit.month === 'สิงหาคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_august" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">สิงหาคม</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_september" type="radio" name="month" value="กันยายน" <% if (edit.month === 'กันยายน') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_september" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">กันยายน</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_october" type="radio" name="month" value="ตุลาคม" <% if (edit.month === 'ตุลาคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_october" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตุลาคม</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_november" type="radio" name="month" value="พฤศจิกายน" <% if (edit.month === 'พฤศจิกายน') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_november" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พฤศจิกายน</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="month_december" type="radio" name="month" value="ธันวาคม" <% if (edit.month === 'ธันวาคม') { %> checked <% } %> 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="month_december" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ธันวาคม</label>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <!-- สถานะ -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+                                    <div class="flex items-center mb-4">
+                                        <input id="status_completed" type="radio" name="status" value="true" 
+                                            <% if (edit.status === true) { %> checked <% } %> 
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+                                        <label for="status_completed" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ฉายแล้ว</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="status_ongoing" type="radio" name="status" value="false" 
+                                            <% if (edit.status === false) { %> checked <% } %> 
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+                                        <label for="status_ongoing" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ยังไม่ฉาย</label>
+                                    </div>
+                                </div>
+                                   <!-- URL Studio -->
+                                <div class="mb-5">
+                                    <label for="studio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">studio</label>
+                                    <input type="text" id="studio" name="studio"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.studio %>">
+                                </div>
+                                <!-- URL Source -->
+                                <div class="mb-5">
+                                    <label for="Source" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Source</label>
+                                    <input type="text" id="Source" name="Source"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.Source %>">
+                                </div>
+                                  <!-- URL Licensors -->
+                                <div class="mb-5">
+                                    <label for="Licensors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Licensors</label>
+                                    <input type="text" id="Licensors" name="Licensors"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.Licensors %>">
+                                </div>
+                                <!-- URL website -->
+                                <div class="mb-5">
+                                    <label for="website" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">website</label>
+                                    <input type="text" id="website" name="website"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.website %>">
+                                </div>
+                                
+                                <!-- URL Duration -->
+                                <div class="mb-5">
+                                    <label for="Duration" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Duration</label>
+                                    <input type="text" id="Duration" name="Duration"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.Duration %>">
+                                </div>
+                                 <!-- type -->
+                                <div class="mb-5">
+                                    <label for="Duration" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รูปแบบอนิเมะ</label>
+                                    <input type="text" id="type" name="type"
+                                        class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                                        value="<%= edit.type %>">
+                                </div>
+
+                            
+                            <!-- หมวดหมู่ -->
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-white">หมวดหมู่</label>
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="อนิเมะ" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('อนิเมะ')) { %> checked <% } %> > 
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-gray-300 <% if (edit.categories.includes('อนิเมะ')) { %> bg-blue-500 text-white <% } %>">อนิเมะ</span>
+                                        </label>
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="มังงะ" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('มังงะ')) { %> checked <% } %>>
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500 <% if (edit.categories.includes('มังงะ')) { %> bg-blue-500 text-white  <% } %>">มังงะ</span>
+                                        </label>
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="ชีวิตประจำวัน" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('ชีวิตประจำวัน')) { %> checked <% } %>>
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500 <% if (edit.categories.includes('ชีวิตประจำวัน')) { %> bg-blue-500 text-white <% } %>">ชีวิตประจำวัน</span>
+                                        </label>
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="sci-fi" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('sci-fi')) { %> checked <% } %>>
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500  <% if (edit.categories.includes('sci-fi')) { %> bg-blue-500 text-white <% } %>">sci-fi</span>
+                                        </label>
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="นิยาย" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('นิยาย')) { %> checked <% } %>>
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500 <% if (edit.categories.includes('นิยาย')) { %> bg-blue-500 text-white <% } %>">นิยาย</span>
+                                        </label>
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="ผจญภัย" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('ผจญภัย')) { %> checked <% } %>>
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500  <% if (edit.categories.includes('ผจญภัย')) { %> bg-blue-500 text-white <% } %>">ผจญภัย</span>
+                                        </label>
+                                        <label class="category-label">
+                                            <input type="checkbox" name="categories" value="โมเอะ" class="hidden" onchange="toggleActive(this)" <% if (edit.categories.includes('โมเอะ')) { %> checked <% } %>>
+                                            <span class="px-3 py-1 rounded-full border border-blue-500 cursor-pointer dark:border-gray-600 dark:text-blue-500  <% if (edit.categories.includes('โมเอะ')) { %> bg-blue-500 text-white  <% } %>">โมเอะ</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Genres -->
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-white">รูปแบบ</label>
+                                    <div class="flex flex-wrap gap-6 space-x-1 mt-2">
+                                        <!-- อนิเมะ -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Anime" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Anime')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-gray-300 <% if (edit.genres.includes('Anime')) { %> bg-sky-500 text-white <% } %>">อนิเมะ</span>
+                                        </label>
+                                        <!-- แอ็คชั่น -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Action" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Action')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Action')) { %> bg-sky-500 text-white <% } %>">แอ็คชั่น</span>
+                                        </label>
+                                        <!-- คอมเมดี้ -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Comedy" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Comedy')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Comedy')) { %> bg-sky-500 text-white <% } %>">คอมเมดี้</span>
+                                        </label>
+                                        <!-- ดราม่า -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Drama" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Drama')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Drama')) { %> bg-sky-500 text-white <% } %>">ดราม่า</span>
+                                        </label>
+                                        <!-- โรแมนซ์ -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Romance" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Romance')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Romance')) { %> bg-sky-500 text-white <% } %>">โรแมนซ์</span>
+                                        </label>
+                                        <!-- ไซไฟ -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Sci-Fi" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Sci-Fi')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Sci-Fi')) { %> bg-sky-500 text-white <% } %>">ไซไฟ</span>
+                                        </label>
+                                        <!-- ผจญภัย -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Adventure" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Adventure')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Adventure')) { %> bg-sky-500 text-white <% } %>">ผจญภัย</span>
+                                        </label>
+                                        <!-- สยองขวัญ -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Horror" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Horror')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Horror')) { %> bg-sky-500 text-white <% } %>">สยองขวัญ</span>
+                                        </label>
+                                        <!-- แฟนตาซี -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Fantasy" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Fantasy')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Fantasy')) { %> bg-sky-500 text-white <% } %>">แฟนตาซี</span>
+                                        </label>
+                                        <!-- ดนตรี -->
+                                        <label class="category-label">
+                                            <input type="checkbox" name="genres" value="Music" class="hidden" onchange="toggleActive(this)" <% if (edit.genres.includes('Music')) { %> checked <% } %> >
+                                            <span class="px-3 py-1 rounded-full border border-sky-500 cursor-pointer dark:border-gray-600 dark:text-sky-500 <% if (edit.genres.includes('Music')) { %> bg-sky-500 text-white <% } %>">ดนตรี</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                 <!-- โปรเตอร์หรือ KV Anime -->
+                                <div class="mb-5">
+                                    <label for="poster" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกโปรเตอร์หรือ KV Anime</label>
+                                    <input id="poster" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400 dark:border-gray-600 dark:placeholder-blue-400" type="file" name="poster" accept="image/*"  onchange="previewImage(this, 'preview', 'cover-text')">
+                                </div>
+
+                                <!-- โปรเตอร์หรือ KV Anime -->
+                                <div class="mb-5">
+                                    <label for="banner" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่ม banner Anime</label>
+                                    <input id="banner" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400 dark:border-gray-600 dark:placeholder-blue-400" type="file" name="banner" accept="image/*"  onchange="previewImage(this, 'preview', 'banner-text')">
+                                </div>
+                            
+                                <!-- เผยแพร่อนิเมะ -->
+                                <div class="mb-5">
+                                    <div class="flex items-center">
+                                        <input id="published" name="published" type="checkbox"  <% if (edit.published) { %> checked <% } %> class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="published" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เผยแพร่อนิเมะ</label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    แก้ไข
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+             
+                </main>
+            </div>
+    </div>
+
+
+<!-- Popup Notification -->
+<div id="notification" class="fixed bottom-5 left-5 z-50 max-w-sm w-full p-4 bg-green-100 text-green-800 rounded-lg shadow-lg hidden" role="alert">
+    <div class="relative flex">
+        <div class="flex-shrink-0">
+            <!-- Icon (Optional) -->
+            <svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="ml-3 flex-1">
+            <p class="text-sm font-medium" id="notification-msg"></p>
+        </div>
+        <button id="close-btn" class="ml-4 text-green-800 hover:text-green-600 focus:outline-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <!-- Status Bar -->
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-green-300 rounded-full" id="progress-bar"></div>
+    </div>
+</div>
+
+    <script src="/js/admin/index.js"></script>
+    <script>
+        function toggleActive(checkbox) {
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.classList.add('bg-blue-500', 'text-white', 'border-transparent');
+            } else {
+                span.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+            }
+        }
+
+    </script>
+</body>
+
+</html>

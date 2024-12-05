@@ -7,110 +7,220 @@
     <!-- CSS & JS -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin.css">
     <script src="/css/tailwindcss.css"></script>
     <script src="/js/fontawesome.js" defer></script>
-
     <style>
-        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
-        .font-family-karla { font-family: karla; }
-        .bg-sidebar { background: #3d68ff; }
-        .cta-btn { color: #3d68ff; }
-        .upgrade-btn { background: #1947ee; }
-        .upgrade-btn:hover { background: #0038fd; }
-        .active-nav-link { background: #1947ee; }
-        .nav-item:hover { background: #1947ee; }
-        .account-link:hover { background: #3d68ff; }
+        aside {
+            transition: transform 0.3s ease;
+        }
+    
+        aside.hidden {
+            transform: translateX(-100%);
+        }
+    
+        main {
+            transition: margin-left 0.3s ease;
+        }
+    
+        main.expanded {
+            margin-left: 0;
+            /* ขยาย content เต็มหน้าจอ */
+        }
+    
+        /* สำหรับมือถือ */
+        @media (max-width: 1024px) {
+            #aside {
+                transition: transform 0.3s ease;
+                transform: translateX(-100%);
+                /* ซ่อนเอาไว้ */
+            }
+    
+            #aside.open {
+                transform: translateX(0);
+                /* แสดงเมื่อเปิด */
+            }
+    
+            main.collapsed {
+                margin-left: 16rem;
+            }
+        }
+    
+        /* สำหรับขนาดหน้าจอที่ใหญ่ (Desktop) */
+        @media (min-width: 1025px) {
+            #aside {
+                transform: translateX(0);
+                /* แสดงตามปกติ */
+            }
+    
+            main.collapsed {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-black font-family-karla">
+<body class="bg-gray-100 text-black w-screen h-screen text-sm overflow-x-hidden">
 
+    <div class="flex flex-col h-screen">
+        <%- include('./Component/Header') %>
 
-    
-    <%- include('./Component/Header') %>
- 
-    <main class="mx-auto max-w-6xl px-4 mt-8 mb-10">
-        <section class=" bg-white rounded-lg md:mb-12 mb-2 p-4">
-            <div class="mb-6 mt-4 ">
-                <% if (typeof error !== 'undefined') { %>
-                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
-                <% } %>
-                <% if (typeof message !== 'undefined') { %>
-                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-emerald-500 text-center"><%= message %></div>
-                <% } %>
-            </div>
-            <h2 class="text-xl font-semibold mb-4">ผู้ใช้ทั้งหมด: (<%= userAll.length %>)</h2>
-            <% if (userID && userID.user && userID.user.role === 'admin') {%>
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-gray-800">เพิ่มผู้ดูแลระบบใหม่</h2>
-                </div>
-            <% if (users && users.length > 0) { %>
-                <form action="/admin/update-role" method="POST" class="mt-6 bg-white p-6 rounded-lg shadow-md">
-                   <div class="mb-4">
-                    <label for="userIdToUpdate" class="block text-gray-700 font-semibold">เลือกผู้ใช้เพื่ออัพเดตบทบาท</label>
-                    <input type="search" id="searchUser" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ค้นหา..." oninput="filterOptions()">
-                    <select id="userIdToUpdate" name="userIdToUpdate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option disabled selected>เลือก</option>
-                        <% if (users && users.length > 0) { %>
-                            <% users.forEach(user => { %>
-                                <option value="<%= user._id %>" data-username="<%= user.username %>" data-email="<%= user.email %>">
-                                    <%= user.username %> - <%= user.email %>
-                                </option>
-                            <% }) %>
-                        <% } %>
-                    </select>
-                </div>
-                    <div class="mb-4">
-                        <label for="newRole" class="block text-gray-700 font-semibold">บทบาทใหม่</label>
-                        <select id="newRole" name="newRole" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="content_creator">Editor || ครีเอเตอร์</option>
-                            <option value="partners">Partners || พาร์ทเนอร์</option>
-                            <option value="admin">ผู้ดูแลระดับนักพัฒนา</option>
-                            <option value="moderator">ผู้ดูแลพื้นฐาน</option>
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="aside" class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                <%- include('./Component/aside') %>
+            </aside>
+
+            <main id="mainContent" class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                <!-- เริมส่วนด้านบน grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="bg-white p-4 shadow rounded-lg">
+                        <span class="flex items-center">
+                            <p class="text-blue-300 text-2xl m-5">
+                                <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                                        stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </p>
+                            <h1 class="text-xl font-bold mb-4">ผู้ใช้ทั้งหมด: (<%= userAll.length %>)</h1>
+                        </span>
+                        <p>จำนวนผู้ใช้ที่สมัครสมาชิกทั้งหมด</p>
+                    </div>
+                    <div class="bg-white p-4 shadow rounded-lg">
+                        <h1 class="text-xl font-bold mb-4">จำนวนบทความ: (<%= Articleall %>)</h1>
+                    </div>
+                    <div class="bg-white p-4 shadow rounded-lg">
+                        <h1 class="text-xl font-bold mb-4">จำนวนอนิเมะ: (<%= Animeall %>)</h1>
+                    </div>
+                </div> 
+                  <!-- จบส่วนด้าานบน grid -->
+
+                  <hr class="mt-4 mb-6">
+                  <div class="">
+                    <h3 class="text-xl font-bold text-gray-800">รายการผู้ดูแลระบบ</h3>
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                        <thead class="bg-gray-100 text-gray-600">
+                            <tr>
+                                <th class="py-2 px-4 border-b">#</th>
+                                <th class="py-2 px-4 border-b">ชื่อ</th>
+                                <th class="py-2 px-4 border-b">อีเมล</th>
+                                <th class="py-2 px-4 border-b">บทบาท</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (admins && admins.length > 0) { %>
+                                <% admins.forEach((admin, index) => { %>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b text-center"><%= index + 1 %></td>
+                                        <td class="py-2 px-4 border-b"><%= admin.username %></td>
+                                        <td class="py-2 px-4 border-b"><%= admin.email %></td>
+                                        <td class="py-2 px-4 border-b text-center">
+                                            <% 
+                                              let role = admin.role.charAt(0).toUpperCase() + admin.role.slice(1);
+                                              if (admin.role === 'admin') {
+                                                role = 'ผู้ดูแลระบบนักพัฒนา';
+                                              } else if (admin.role === 'moderator') {
+                                                role = 'ผู้ช่วยนักพัฒนา';
+                                              }
+                                            %>
+                                            <%= role %>
+                                          </td>                                          
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="5" class="py-2 px-4 border-b text-center">ไม่มีผู้ดูแลระบบ</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                  </div>
+                  <hr class="mt-4 mb-6">
+                  <% if (userID && userID.user && userID.user.role === 'admin') {%>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-gray-800">เพิ่มผู้ดูแลระบบใหม่</h2>
+                    </div>
+                <% if (users && users.length > 0) { %>
+                    <form action="/admin/update-role" method="POST" class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                       <div class="mb-4">
+                        <label for="userIdToUpdate" class="block text-gray-700 font-semibold">เลือกผู้ใช้เพื่ออัพเดตบทบาท</label>
+                        <input type="search" id="searchUser" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ค้นหา..." oninput="filterOptions()">
+                        <select id="userIdToUpdate" name="userIdToUpdate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option disabled selected>เลือก</option>
+                            <% if (users && users.length > 0) { %>
+                                <% users.forEach(user => { %>
+                                    <option value="<%= user._id %>" data-username="<%= user.username %>" data-email="<%= user.email %>">
+                                        <%= user.username %> - <%= user.email %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
                         </select>
                     </div>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">อัพเดตบทบาท</button>
-                </form>
-                
-            <% } %>
-          <% } %>
-        </section>
+                        <div class="mb-4">
+                            <label for="newRole" class="block text-gray-700 font-semibold">บทบาทใหม่</label>
+                            <select id="newRole" name="newRole" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="content_creator">Editor || ครีเอเตอร์</option>
+                                <option value="partners">Partners || พาร์ทเนอร์</option>
+                                <option value="admin">ผู้ดูแลระดับนักพัฒนา</option>
+                                <option value="moderator">ผู้ดูแลพื้นฐาน</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">อัพเดตบทบาท</button>
+                    </form>
+                    
+                <% } %>
+              <% } %>
+            </main>
+        </div>
+    </div>
 
-        <section>
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-gray-800">รายการผู้ดูแลระบบ</h2>
-            </div>
-            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                <thead class="bg-gray-100 text-gray-600">
-                    <tr>
-                        <th class="py-2 px-4 border-b">#</th>
-                        <th class="py-2 px-4 border-b">ชื่อ</th>
-                        <th class="py-2 px-4 border-b">อีเมล</th>
-                        <th class="py-2 px-4 border-b">บทบาท</th>
-                        <!-- <th class="py-2 px-4 border-b">การกระทำ</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (admins && admins.length > 0) { %>
-                        <% admins.forEach((admin, index) => { %>
-                            <tr>
-                                <td class="py-2 px-4 border-b text-center"><%= index + 1 %></td>
-                                <td class="py-2 px-4 border-b"><%= admin.username %></td>
-                                <td class="py-2 px-4 border-b"><%= admin.email %></td>
-                                <td class="py-2 px-4 border-b text-center"><%= admin.role.charAt(0).toUpperCase() + admin.role.slice(1) %></td>
-                                <!-- <td class="py-2 px-4 border-b text-center">
-                                    <button class="text-blue-500 hover:text-blue-700">แก้ไข</button>
-                                    <button class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
-                                </td> -->
-                            </tr>
-                        <% }) %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="5" class="py-2 px-4 border-b text-center">ไม่มีผู้ดูแลระบบ</td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        </section>
-    </main>
+    <div id="popup" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 translate-y-4 transition-all p-4 rounded-lg text-white z-50">
+        <span id="popupMessage"></span>
+        <button id="closePopup" class="ml-4 text-white font-bold">&times;</button>
+    </div>
+
+<script src="/js/admin/index.js"></script>
+<script>
+    // Function to show the popup
+    function showPopup(msg, status) {
+        const popup = document.getElementById('popup');
+        const messageElement = document.getElementById('popupMessage');
+        messageElement.innerText = msg;
+
+        // Add class for success or error based on status
+        if (status === 'true') {
+            popup.classList.add('bg-green-500');
+            popup.classList.remove('bg-red-500');
+        } else {
+            popup.classList.add('bg-red-500');
+            popup.classList.remove('bg-green-500');
+        }
+
+        // Show the popup
+        popup.classList.remove('opacity-0', 'translate-y-4');
+        popup.classList.add('opacity-100', 'translate-y-0');
+
+        // Hide the popup after 3 seconds
+        setTimeout(() => {
+            popup.classList.remove('opacity-100', 'translate-y-0');
+            popup.classList.add('opacity-0', 'translate-y-4');
+        }, 3000);
+    }
+
+    // Get URL parameters and show the popup
+    const urlParams = new URLSearchParams(window.location.search);
+    const msg = urlParams.get('msg');
+    const status = urlParams.get('status');
+
+    if (msg && status !== null) {
+        showPopup(msg, status);
+    }
+
+    // Close popup button functionality
+    const closePopupBtn = document.getElementById('closePopup');
+    closePopupBtn.addEventListener('click', () => {
+        document.getElementById('popup').classList.remove('opacity-100', 'translate-y-0');
+        document.getElementById('popup').classList.add('opacity-0', 'translate-y-4');
+    });
+</script>
 </body>
 </html>

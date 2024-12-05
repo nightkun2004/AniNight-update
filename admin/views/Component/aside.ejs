@@ -1,0 +1,78 @@
+<!-- Sidebar Links -->
+<div class="sidebar- bg-white h-screen overflow-y-auto">
+    <a href="/admin" class="flex items-center px-4 py-2 hover:bg-blue-200 <%= active === 'Admin' ? 'bg-blue-300' : '' %>">
+        <span class="icon hover:text-white">
+            <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5 7C5 5.89543 5.89543 5 7 5H8C9.10457 5 10 5.89543 10 7V8C10 9.10457 9.10457 10 8 10H7C5.89543 10 5 9.10457 5 8V7Z"
+                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M14 7C14 5.89543 14.8954 5 16 5H17C18.1046 5 19 5.89543 19 7V8C19 9.10457 18.1046 10 17 10H16C14.8954 10 14 9.10457 14 8V7Z"
+                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M5 16C5 14.8954 5.89543 14 7 14H8C9.10457 14 10 14.8954 10 16V17C10 18.1046 9.10457 19 8 19H7C5.89543 19 5 18.1046 5 17V16Z"
+                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M14 16C14 14.8954 14.8954 14 16 14H17C18.1046 14 19 14.8954 19 16V17C19 18.1046 18.1046 19 17 19H16C14.8954 19 14 18.1046 14 17V16Z"
+                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </span>
+        <p class="pl-4">Dashboard</p>
+    </a>
+    <a href="/admin/manage/users" class="active flex items-center px-4 py-2 hover:bg-blue-200 <%= active === 'AdminManageUser' ? 'bg-blue-300' : '' %>">
+        <span class="icon">
+            <svg fill="#000000" width="22px" height="22px" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M983.727 5.421 1723.04 353.62c19.765 9.374 32.414 29.252 32.414 51.162v601.525c0 489.6-424.207 719.774-733.779 887.943l-34.899 18.975c-8.47 4.517-17.731 6.889-27.105 6.889-9.262 0-18.523-2.372-26.993-6.89l-34.9-18.974C588.095 1726.08 164 1495.906 164 1006.306V404.78c0-21.91 12.65-41.788 32.414-51.162L935.727 5.42c15.134-7.228 32.866-7.228 48 0ZM757.088 383.322c-176.075 0-319.285 143.323-319.285 319.398 0 176.075 143.21 319.285 319.285 319.285 1.92 0 3.84 0 5.76-.113l58.504 58.503h83.689v116.781h116.781v83.803l91.595 91.482h313.412V1059.05l-350.57-350.682c.114-1.807.114-3.727.114-5.647 0-176.075-143.21-319.398-319.285-319.398Zm0 112.942c113.732 0 206.344 92.724 205.327 216.62l-3.953 37.271 355.426 355.652v153.713h-153.713l-25.412-25.299v-149.986h-116.78v-116.78H868.108l-63.812-63.7-47.209 5.309c-113.732 0-206.344-92.5-206.344-206.344 0-113.732 92.612-206.456 206.344-206.456Zm4.98 124.98c-46.757 0-84.705 37.948-84.705 84.706s37.948 84.706 84.706 84.706c46.757 0 84.706-37.948 84.706-84.706s-37.949-84.706-84.706-84.706Z"
+                    fill-rule="evenodd" />
+            </svg>
+        </span>
+        <p class="pl-4">จัดการผู้ใช้</p>
+    </a>
+
+    <a href="/admin/add/anime" class="flex items-center px-4 py-2 hover:bg-blue-200 <%= active === 'AdminAddAnime' ? 'bg-blue-300' : '' %>">
+        <span class="icon">
+            <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#000000" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </span>
+        <p class="pl-4">เพิ่มอนิเมะ</p>
+    </a>
+
+    <a href="/admin/manage/anime" class="flex items-center px-4 py-2 hover:bg-blue-200 <%= active === 'AdminManageAnime' ? 'bg-blue-300' : '' %>">
+        <span class="icon">
+            <svg width="22px" height="22px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+
+                <rect x="0" fill="none" width="20" height="20" />
+
+                <g>
+
+                    <path d="M6 15V2h10v13H6zm-1 1h8v2H3V5h2v11z" />
+
+                </g>
+
+            </svg>
+        </span>
+        <p class="pl-4">จัดการอนิเมะ</p>
+    </a>
+
+    <a href="/admin/add/anime/schedule/time" class="flex items-center px-4 py-2 hover:bg-blue-200">
+        <span class="icon">
+            <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#000000" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </span>
+        <p class="pl-4">เพิ่มอนิเมะลงตาราง</p>
+    </a>
+
+    <a href="/" target="_blank" class="flex items-center px-4 py-2 hover:bg-blue-200">
+        <span class="icon">
+            <svg width="22px" height="22px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="m 8 1 c -0.207031 0 -0.410156 0.066406 -0.578125 0.1875 l -7 5 c -0.453125 0.320312 -0.554687 0.941406 -0.234375 1.394531 c 0.1875 0.261719 0.488281 0.417969 0.8125 0.417969 v 4 c 0 1.644531 1.355469 3 3 3 h 8 c 1.644531 0 3 -1.320312 3 -3 v -4 c 0.324219 0 0.625 -0.15625 0.816406 -0.417969 c 0.320313 -0.453125 0.214844 -1.074219 -0.234375 -1.394531 l -7 -5 c -0.167969 -0.121094 -0.375 -0.1875 -0.582031 -0.1875 z m 0 2.230469 l 5 3.570312 v 5.199219 c 0 0.5625 -0.4375 1 -1 1 h -3 v -4 c 0 -0.554688 -0.445312 -1 -1 -1 h -1 c -0.554688 0 -1 0.445312 -1 1 v 4 h -2 c -0.5625 0 -1 -0.4375 -1 -1 v -5.199219 z m 0 0" fill="#2e3436"/>
+            </svg>
+        </span>
+        <p class="pl-4">กลับไปยังหน้าแรก</p>
+    </a>
+</div>

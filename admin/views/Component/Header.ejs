@@ -1,72 +1,69 @@
-
-
-<header class="bg-gray-800 text-white shadow-md">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+<header class="bg-white shadow-md px-4 py-3 flex justify-between items-center">
+    <div class="container mx-auto flex justify-between items-center">
         <!-- Logo -->
         <div class="flex items-center space-x-2">
-            <div class="bg-blue-500 p-2 rounded-full">
+            <button id="toggleAside" class="text-xl  focus:outline-none">
+                <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H20M4 12H20M4 18H20" stroke="#000000" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+            <div>
                 <span class="font-bold text-lg">Admin</span>
             </div>
-            <h1 class="text-xl font-semibold">จัดการระบบ</h1>
         </div>
-
-        <!-- Navigation Links -->
-        <nav class="hidden md:flex items-center space-x-6">
-            <a href="/admin" class="text-gray-300 hover:text-white transition">หน้าหลัก</a>
-            <a href="/admin/manage/users" class="text-gray-300 hover:text-white transition">จัดการผู้ใช้</a>
-        </nav>
 
         <!-- Profile and Actions -->
         <div class="flex items-center space-x-4">
-            <!-- Notifications -->
-            <button class="relative">
-                <svg class="h-6 w-6 text-gray-300 hover:text-white transition" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.159V11a6.003 6.003 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <span class="absolute top-0 right-0 block h-2 w-2 bg-red-500 rounded-full"></span>
-            </button>
-
             <!-- User Profile Dropdown -->
             <div class="relative flex items-center">
                 <% if (userID.user.profilePicture) {%>
                     <button class="flex items-center space-x-2 focus:outline-none">
                         <% if (userID.user.profilePicture.startsWith('http')) { %>
                             <img src="<%= userID.user.profilePicture %>" alt=" <%= userID.user.username %>"
-                            class="w-8 h-8 rounded-full border-2 border-gray-400">
-                        <% } else { %>
-                            <img src="/uploads/profiles/<%= userID.user.profilePicture %>" alt=" <%= userID.user.username %>"
-                            class="w-8 h-8 rounded-full border-2 border-gray-400">
-                        <% } %>
-                        <span class="hidden md:block font-medium text-gray-300">Admin</span>
-                        <button onclick="toggleAdminHeader('.open_menu')" class="flex items-center">
-                            <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                        </button>
+                                class="w-8 h-8 rounded-full border-2 border-gray-400">
+                            <% } else { %>
+                                <img src="/uploads/profiles/<%= userID.user.profilePicture %>"
+                                    alt=" <%= userID.user.username %>"
+                                    class="w-8 h-8 rounded-full border-2 border-gray-400">
+                                <% } %>
+                                    <button onclick="toggleAdminHeader('.open_menu')" class="flex pl-5 items-center">
+                                        <svg class="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
                     </button>
-                <% } %>
-                <!-- Dropdown Menu -->
-                <div class="absolute card_menus right-0 top-12 mt-2 w-48 bg-white rounded-md shadow-lg overflow-y-auto h-52  overflow-hidden z-20 hidden">
-                    <a href="/admin/add/anime" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">เพิ่มอนิเมะ</a>
-                    <a href="/admin/manage/anime" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">จัดการอนิเมะ</a>
-                    <a href="/admin/add/anime/schedule/time" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">เพิ่มอนิเมะลงตาราง</a>
-                    <a href="/admin/add/Reward" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">เพิ่มรางวัลสำหรับรหัสแลกรับ</a>
-                    <a href="/admin/mamage/banner" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการแบนเนอร์</a>
-                    <a href="/admin/mamage/rewards" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการรหัสแลกรับ</a>
-                    <a href="/admin/manage/playments"
-                        class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการการชำระเงิน</a>
-                    <a href="/admin/manage/survey" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการแบบสำรวจ</a>
-                    <a href="/admin/create/survey" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">สร้างแบบสำรวจ</a>
-                    <a href="/admin/manage/videos" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการวีดีโอ</a>
-                    <a href="/upload/pv/anime" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">สร้างวีดีโอ</a>
-                    <a href="/admin/generate-api-key" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">สร้าง API KEY</a>
-                    <a href="/admin/manage/apikey" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการ API KEY</a>
-                    <a href="/admin/edit/actor"
-                        class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">แก้ไขตัวละครและนักพากย์</a>
-                </div>
+                    <% } %>
+                        <!-- Dropdown Menu -->
+                        <div
+                            class="absolute card_menus right-0 top-12 mt-2 w-48 bg-white rounded-md shadow-lg overflow-y-auto h-52  overflow-hidden z-20 hidden">
+                            <a href="/admin/add/Reward"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200">เพิ่มรางวัลสำหรับรหัสแลกรับ</a>
+                            <a href="/admin/mamage/banner"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการแบนเนอร์</a>
+                            <a href="/admin/mamage/rewards"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการรหัสแลกรับ</a>
+                            <a href="/admin/manage/playments"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการการชำระเงิน</a>
+                            <a href="/admin/manage/survey"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการแบบสำรวจ</a>
+                            <a href="/admin/create/survey"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">สร้างแบบสำรวจ</a>
+                            <a href="/admin/manage/videos"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการวีดีโอ</a>
+                            <a href="/upload/pv/anime"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">สร้างวีดีโอ</a>
+                            <a href="/admin/generate-api-key"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">สร้าง
+                                API KEY</a>
+                            <a href="/admin/manage/apikey"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">จัดการ
+                                API KEY</a>
+                            <a href="/admin/edit/actor"
+                                class="block px-4 py-2 text-gray-800 hover:bg-gray-200 transition duration-300">แก้ไขตัวละครและนักพากย์</a>
+                        </div>
             </div>
         </div>
     </div>
