@@ -60,6 +60,7 @@
                 </svg>
               </button>
               <div class="text-center text-gray-600">
+                <h4>วันนี้</h4>
                 <p><%= currentDate %></p>
                 <span>ตารางฉายอนิเมะ</span>
               </div>
@@ -80,13 +81,17 @@
               <% schedule.forEach(day => { %>
                 <div class="schedule-day bg-white shadow rounded-lg p-4 min-w-[400px] h-full snap-start"
                 <% 
-                  const isToday = moment(day.date).format('DD/MM') === currentDate; // เปรียบเทียบวันปัจจุบันกับวันในตาราง
-                  const backgroundStyle = isToday ? 'background: linear-gradient(180deg,  rgba(198,231,255,1) 7%, rgba(0,212,255,1) 60%);' : '';
+                  const isToday = moment(day.date).format('DD/MM') === currentDate;
+                  const backgroundStyle = isToday ? 'border: #fff 3px solid; background: linear-gradient(180deg,  rgba(198,231,255,1) 7%, rgb(242 246 247) 60%);' : '';
                 %>
                 style="<%= backgroundStyle %>">
                   <div class="flex flex-col text-center">
                     <h2 class="text-xl font-semibold text-gray-500 mb-4">
-                      <%= moment(day.date).format('DD/MM') %> 
+                      <% if (moment(day.date).isSame(moment(), 'day')) { %>
+                        วันนี้
+                      <% } else { %>
+                        <%= moment(day.date).format('DD/MM') %>
+                      <% } %>
                       <% 
                         const dayMapping = {
                           Monday: 'จันทร์',

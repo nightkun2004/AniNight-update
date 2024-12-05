@@ -1,7 +1,7 @@
 const User = require("../models/UserModel");
 const Schedule = require("../models/SchedulesModel")
 const Anime = require("../models/AnimeModel")
-const moment = require('moment');
+const moment = require('moment-timezone');
 moment.locale('th');
 
 // const updateEpisodes = async () => {
@@ -96,11 +96,12 @@ const getAnimeScheduleTimeline = async (req, res) => {
             })
             .exec();    
 
-        // แสดงผลข้อมูลใน View
+            const currentDate = moment().tz('Asia/Bangkok').format('DD/MM');
+
         res.render(`./th/pages/schedulePages/timeline`, {
             userID,
             schedule: schedules,
-            currentDate: moment().format('DD/MM'),
+            currentDate,
             active: "ScheduleAnime",
             translations: req.translations,
             lang,
