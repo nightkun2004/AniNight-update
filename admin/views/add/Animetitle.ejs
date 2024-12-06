@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto bg-gray-50 transition-all">
+                    <h3 class="text-2xl font-extralight mb-3">
+                        <a href="/admin/edit/<%= edit._id %>/anime">
+                            <i class="fa-solid fa-arrow-left"></i> กลับ |
+                        </a>
+                        เพิ่มชื่ออนิเมะ
+                    </h3>
+                    <hr>
+                    <div class="overflow-x-auto rounded-lg">
+                    <form action="/admin/edit/<%= edit._id %>/title" method="post">
+                        <div class="grid grid-cols-2 gap-2 mt-5">
+                            <div class="mb-5">
+                                <label for="title-en" class="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
+                                    โรมันจิ หรือ อังกฤษ
+                                </label>
+                                <input type="text" id="title-en" name="title[en]"
+                                    class="block w-full p-3 border border-gray-300 rounded-lg text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                    value="<%= edit.title.en %>" placeholder="Enter English Title">
+                            </div>
+                            <div class="mb-5">
+                                <label for="title-jp" class="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
+                                    ชื่อภาษาญี่ปุ่น
+                                </label>
+                                <input type="text" id="title-jp" name="title[jp]"
+                                    class="block w-full p-3 border border-gray-300 rounded-lg text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                    value="<%= edit.title.jp %>" placeholder="入力してください (ภาษาญี่ปุ่น)">
+                            </div>
+                            <!-- Thai Title -->
+                            <div class="mb-4">
+                                <label for="title-th" class="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
+                                    ชื่อภาษาไทย
+                                </label>
+                                <input type="text" id="title-th" name="title[th]"
+                                    class="block w-full p-3 border border-gray-300 rounded-lg text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                    value="<%= edit.title.th %>" placeholder="กรอกชื่อภาษาไทย">
+                            </div>
+                        
+                            <!-- URL Episodes -->
+                            <div class="mb-5">
+                                <label for="episodes-current">จำนวนตอนที่ฉายแล้ว</label>
+                                <input type="number" id="episodes-current" name="episodes[current]" value="<%= edit.episodes.current %>"
+                                    class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                        
+                                <label for="episodes-total">จำนวนตอนทั้งหมด</label>
+                                <input type="number" id="episodes-total" name="episodes[total]" value="<%= edit.episodes.total %>"
+                                    class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                            </div>
+                        
+                        </div>
+                        <button type="submit"
+                        class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        แก้ไขชื่อ/แก้ไขตอน
+                    </button>
+                    </form>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+    <!-- Notification Popup -->
+<div id="notification" class="fixed bottom-5 left-5 z-50 max-w-sm w-full p-4 bg-green-100 text-green-800 rounded-lg shadow-lg hidden" role="alert">
+    <div class="relative flex items-center">
+        <div class="flex-shrink-0">
+            <!-- Icon -->
+            <svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="ml-3 flex-1">
+            <p class="text-sm font-medium" id="notification-msg"></p>
+        </div>
+        <button id="close-btn" class="ml-4 text-green-800 hover:text-green-600 focus:outline-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <!-- Status Bar -->
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-green-300 rounded-full" id="progress-bar"></div>
+    </div>
+</div>
+
+    <script src="/js/admin/index.js"></script>
+    <script>
+        function showNotification(msg, type = "success", duration = 3000) {
+            const notification = document.getElementById("notification");
+            const notificationMsg = document.getElementById("notification-msg");
+            const closeButton = document.getElementById("close-btn");
+            const progressBar = document.getElementById("progress-bar");
+
+            // ตั้งค่าข้อความ
+            notificationMsg.textContent = msg;
+
+            // ตั้งค่าประเภทการแจ้งเตือน
+            if (type === "success") {
+                notification.classList.remove("bg-red-100", "text-red-800");
+                notification.classList.add("bg-green-100", "text-green-800");
+                progressBar.classList.add("bg-green-300");
+                progressBar.classList.remove("bg-red-300");
+            } else if (type === "error") {
+                notification.classList.remove("bg-green-100", "text-green-800");
+                notification.classList.add("bg-red-100", "text-red-800");
+                progressBar.classList.add("bg-red-300");
+                progressBar.classList.remove("bg-green-300");
+            }
+
+            // แสดงการแจ้งเตือน
+            notification.classList.remove("hidden");
+
+            // แถบ Status Bar
+            progressBar.style.transition = `width ${duration}ms linear`;
+            progressBar.style.width = "100%";
+
+            // ซ่อนการแจ้งเตือนเมื่อเวลาหมด
+            const timeoutId = setTimeout(() => {
+                hideNotification();
+            }, duration);
+
+            // ฟังก์ชันปิดการแจ้งเตือน
+            closeButton.onclick = () => {
+                clearTimeout(timeoutId);
+                hideNotification();
+            };
+
+            function hideNotification() {
+                notification.classList.add("hidden");
+                progressBar.style.width = "0%";
+                progressBar.style.transition = "none"; // รีเซ็ตการเลื่อน
+            }
+        }
+
+        // อ่าน Query String จาก URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const msg = urlParams.get("msg");
+        const status = urlParams.get("status");
+
+        // ตรวจสอบว่ามี msg และ status หรือไม่
+        if (msg && status) {
+            const type = status === "true" ? "success" : "error";
+            showNotification(msg, type, 5000);
+        }
+
+    </script>
+</body>
+
+</html>

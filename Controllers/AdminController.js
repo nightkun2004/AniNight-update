@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Play = require("../models/PlayModel")
+const Payment = require("../models/PaymentModel")
 const ApiKey = require("../models/ApiKeyModel")
 const Article = require("../models/ArticleModel")
 const Anime = require("../models/AnimeModel")
@@ -141,7 +142,12 @@ const ManageBanner = async (req, res) => {
     try {
         const Bannerlists = await Banner.find().sort({ createdAt: -1 }).exec();
 
-        res.render("./th/pages/admin/manage/manage_banner", { userID, Bannerlists, lang })
+        res.render("./manage/manage_banner", { 
+            userID, 
+            Bannerlists, 
+            lang,
+            active: "Managebanner"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({ message: "Server Error", errorMessage })
@@ -174,7 +180,12 @@ const getAdminRewardManage = async (req, res) => {
     const userID = req.session.userlogin;
     try {
         const datarewards = await Reward.find().sort({ createdAt: -1 }).exec();
-        res.render("./th/pages/admin/manage/manage_codereward", { userID, datarewards, lang })
+        res.render("./manage/manage_codereward", { 
+            userID, 
+            datarewards, 
+            lang,
+            active: "AdminRewardManage"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({ message: "Server Error", errorMessage })
@@ -204,23 +215,57 @@ const ManageActPIKey = async (req, res) => {
     try {
         const ApiKeylists = await ApiKey.find().exec();
         // console.log(animelists)
-        res.render("./th/pages/admin/manage/manage_aptkey", { userID, ApiKeylists, translations: req.translations, lang })
+        res.render("./manage/manage_aptkey", { 
+            userID, 
+            ApiKeylists, 
+            translations: req.translations,
+             lang,
+             active: "Manageapi"
+            })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/manage/manage_aptkey', {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
+        })
     }
 }
+
+// =========================================================== Router Playment manage =====================================
+// ========================================================================================================================
+const gatManagePlayment = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+
+    try {
+        const rewards = await Payment.find().lean();
+        res.render("./manage/manage_playment", {
+            userID,
+            rewards,
+            translations: req.translations,
+            lang,
+            active: "ManagePayment"
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+        })
+    }
+}
+
 
 const ManageVideos = async (req, res) => {
     const lang = req.params.lang || 'th';
     const userID = req.session.userlogin;
     try {
         const videolists = await Play.find().exec();
-        res.render("./th/pages/admin/manage/mana_video", { userID, videolists, translations: req.translations, lang })
+        res.render("./manage/manage_videos", { 
+            userID, 
+            videolists, 
+            translations: req.translations, 
+            lang,
+            active: "ManageVideos"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render('./th/pages/admin/manage/mana_video', {
@@ -281,6 +326,7 @@ module.exports = {
     generateAPIKEY,
     ManageBanner,
     ManageAnimes,
+    gatManagePlayment,
     ManageActor,
     ManageActPIKey,
     getAdminRewardManage,

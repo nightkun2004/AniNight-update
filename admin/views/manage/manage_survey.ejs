@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight mb-3">จัดการแบบสำรวจ</h1>
+                        <a href="/admin/create/survey" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-plus-circle"></i> สร้างแบบสำรวจใหม่
+                        </a>
+                    </div>
+        
+                    <div class="overflow-x-auto overflow-hidden">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <tr>
+                                    <th class="py-3 px-6 text-left">ชื่อแบบสำรวจ</th>
+                                    <th class="py-3 px-6 text-center">จำนวนคำถาม</th>
+                                    <th class="py-3 px-6 text-center">คะแนน</th>
+                                    <th class="py-3 px-6 text-center">สถานะ</th>
+                                    <th class="py-3 px-6 text-center">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 text-sm font-light">
+                                <% surveys.forEach((survey) => { %>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                        <td class="py-3 px-6 text-left whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <span class="font-medium"><%= survey.surveyName %></span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-6 text-center"><%= survey.questions.length %></td>
+                                        <td class="py-3 px-6 text-center"><%= survey.score %></td>
+                                        <td class="py-3 px-6 text-center">
+                                            <% if (survey.published) { %>
+                                                <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">เผยแพร่แล้ว</span>
+                                            <% } else { %>
+                                                <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">รอเผยแพร่</span>
+                                            <% } %>
+                                        </td>
+                                        <td class="py-3 px-6 text-center">
+                                            <div class="flex item-center justify-center space-x-4">
+                                                <a href="/admin/edit/survey/<%= survey._id %>" class="text-blue-600 hover:underline">
+                                                    <i class="fas fa-edit"></i> แก้ไข
+                                                </a>
+                                                <form action="/api/v2/admin/delete/survey/<%= survey._id %>" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแบบสำรวจนี้?');">
+                                                    <button type="submit" class="text-red-600 hover:underline">
+                                                        <i class="fas fa-trash-alt"></i> ลบ
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+    <script src="/js/admin/index.js"></script>
+</body>
+
+</html>

@@ -162,29 +162,6 @@ const GetRewardCode = async (req, res) => {
 }
 
 
-// =========================================================== Router Playment manage =====================================
-// ========================================================================================================================
-const gatManagePlayment = async (req, res) => {
-    const lang = res.locals.lang;
-    const userID = req.session.userlogin;
-
-    try {
-        const rewards = await Payment.find().lean();
-        res.render("./th/pages/admin/manage/manage_playment", {
-            userID,
-            rewards,
-            translations: req.translations,
-            lang
-        });
-    } catch (error) {
-        const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/manage/manage_playment', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
-    }
-}
 
 
 // =========================================================== Router Playment manage =====================================
@@ -400,7 +377,6 @@ module.exports = {
     getNotificationisRead,
     Getedit,
     GetRewardCode,
-    gatManagePlayment,
     gatPlaymentEdit,
     EditPostArticle,
     deletePostArticle

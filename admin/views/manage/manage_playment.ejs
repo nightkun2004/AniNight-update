@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight mb-3">จัดการรางวัล</h1>
+                        <a href="/admin/create/reward" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-plus-circle"></i> เพิ่มของรางวัล
+                        </a>
+                    </div>
+        
+                    <div class="overflow-x-auto overflow-hidden">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">ประเภทของรางวัล</th>
+                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">คะแนน</th>
+                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">แลกได้ (บาท)</th>
+                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">สถานะ</th>
+                                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm font-semibold text-gray-600">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="anime-list">
+                                <% rewards.forEach(reward => { %>
+                                    <% reward.playmentrequire.forEach(item => { %>
+                                        <% if (item.published) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= item.type %></td>
+                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= item.points %></td>
+                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= item.wallet %></td>
+                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">
+                                                <% if (item.published) { %>
+                                                    <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">รางวัลพร้อมใช้</span>
+                                                <% } else { %>
+                                                    <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">รอเผยแพร่ราวัล</span>
+                                                <% } %>
+                                            </td>
+                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">
+                                                <div class="flex item-center justify-center space-x-4">
+                                                    <a href="/admin/edit/reward/<%= reward._id %>?rewardId=<%= reward.playmentrequire._id %>" class="text-blue-600 hover:underline">
+                                                        <i class="fas fa-edit"></i> แก้ไข
+                                                    </a>
+                                                    <form action="/admin/delete/reward/<%= reward._id %>" method="POST" onsubmit="return confirm('ลบของรางวัลนี้?');">
+                                                        <button type="submit" class="text-red-600 hover:underline">
+                                                            <i class="fas fa-trash-alt"></i> ลบ
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    <% }); %>
+                                <% }); %>
+        
+                                <% if (rewards.length === 0) { %>
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-4 border-b border-gray-200 text-center text-sm text-gray-700">ยังไม่พบข้อมูล !!</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+    <script src="/js/admin/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight mb-3">จัดการวีดีโอ</h1>
+                        <a href="/upload/pv/anime" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-plus-circle"></i> เพิ่มตอนของวีดีโอ
+                        </a>
+                    </div>
+
+                    <div class="mb-6">
+                        <input type="search" class="outline-none border-2 px-4 py-3 rounded" name="searchid" id="searchid" placeholder="ค้นหา ID VIDEO">
+                    </div>
+        
+                    <div class="overflow-x-auto overflow-hidden">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <tr>
+                                    <th class="py-3 px-6 text-left">ID</th>
+                                    <th class="py-3 px-6 text-center">ชื่อวีดีโอ</th>
+                                    <th class="py-3 px-6 text-center">คอมเม้น</th>
+                                    <th class="py-3 px-6 text-center">สถานะ</th>
+                                    <th class="py-3 px-6 text-center">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="videoTable" class="text-gray-600 text-sm font-light">
+                                <% if (videolists && videolists.length > 0) { %>
+                                    <% videolists.forEach(video => { %>
+                                        <tr class="video-row border-b border-gray-200 hover:bg-gray-100">
+                                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <span class="font-medium video-id"><%= video._id %></span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-6 text-center video-name"><%= video.namepv %></td>
+                                            <td class="py-3 px-6 text-center"></td>
+                                            <td class="py-3 px-6 text-center">
+                                                <% if (video.published) { %>
+                                                    <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">เผยแพร่แล้ว</span>
+                                                <% } else { %>
+                                                    <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">รอเผยแพร่</span>
+                                                <% } %>
+                                            </td>
+                                            <td class="py-3 px-6 text-center">
+                                                <div class="flex item-center justify-center space-x-4">
+                                                    <a href="/admin/edit/video/anime/<%= video._id  %>" class="text-blue-600 hover:underline">
+                                                        <i class="fas fa-edit"></i> แก้ไข
+                                                    </a>
+                                                    <a href="/add/episodes/anime/<%= video._id  %>" class="text-sky-600 hover:underline">
+                                                        <i class="fas fa-edit"></i> เพิ่มตอน
+                                                    </a>
+                                                    <form action="/api/v2/admin/delete/survey/" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแบบสำรวจนี้?');">
+                                                        <button type="submit" class="text-red-600 hover:underline">
+                                                            <i class="fas fa-trash-alt"></i> ลบ
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p>ไม่มีวีดีโอ</p>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+    <script src="/js/admin/index.js"></script>
+    <script>
+        document.getElementById('searchid').addEventListener('input', function() {
+            const searchQuery = this.value.toLowerCase();
+            const videoRows = document.querySelectorAll('.video-row');
+            
+            videoRows.forEach(row => {
+                const videoId = row.querySelector('.video-id').textContent.toLowerCase();
+                const videoName = row.querySelector('.video-name').textContent.toLowerCase();
+    
+                // ตรวจสอบว่า id หรือชื่อวิดีโอตรงกับการค้นหาไหม
+                if (videoId.includes(searchQuery) || videoName.includes(searchQuery)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

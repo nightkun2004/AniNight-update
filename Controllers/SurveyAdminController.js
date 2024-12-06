@@ -11,21 +11,19 @@ const getListsSurvey = async (req, res) => {
         const surveys = await SurveyAdmin.find().lean();
 
         // เรนเดอร์หน้าจัดการแบบสำรวจพร้อมส่งข้อมูลแบบสำรวจไปยังหน้าเว็บ
-        res.render("./th/pages/admin/manage/mana_survey", { 
+        res.render("./manage/manage_survey", { 
             active: "tags", 
             userID, 
             translations: req.translations,
             lang,
-            surveys // ส่งรายการแบบสำรวจไปยังหน้าเว็บ
+            surveys,
+            active: "getListsSurvey"
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/manage/mana_survey', {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            translations: req.translations,
-            lang  
-        });
+        })
     }
 }
 
@@ -38,6 +36,7 @@ const getAdminSurveyCreate = async (req,res) => {
             userID, 
             translations: req.translations,
             lang, 
+            active: "AdminSurveyCreate"
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
