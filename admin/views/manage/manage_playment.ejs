@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการผู้ใช้</title>
+    <title>จัดการลิงค์ชำระงเงิน</title>
     <!-- CSS & JS -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/index.css">
     <script src="/css/tailwindcss.css"></script>
     <script src="/js/fontawesome.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <body>
@@ -61,11 +62,9 @@
                                                     <a href="/admin/edit/reward/<%= reward._id %>?rewardId=<%= reward.playmentrequire._id %>" class="text-blue-600 hover:underline">
                                                         <i class="fas fa-edit"></i> แก้ไข
                                                     </a>
-                                                    <form action="/admin/delete/reward/<%= reward._id %>" method="POST" onsubmit="return confirm('ลบของรางวัลนี้?');">
-                                                        <button type="submit" class="text-red-600 hover:underline">
+                                                        <button onclick="deleteitem(event, '<%= reward._id %>')" type="button" class="text-red-600 hover:underline">
                                                             <i class="fas fa-trash-alt"></i> ลบ
                                                         </button>
-                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -86,6 +85,54 @@
     </div>
 
     <script src="/js/admin/index.js"></script>
+
+    <script>
+        function deleteitem(event, itemid) {
+            event.stopPropagation();
+
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณจะไม่สามารถกู้คืนรายการนี้ได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบมัน!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/v2/admin/delete/reward/playment/${itemid}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                Swal.fire(
+                                    'ลบแล้ว!',
+                                    'รายการถูกลบเรียบร้อยแล้ว.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                throw new Error('Error deleting item');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                'ไม่สามารถลบรายการได้, กรุณาลองใหม่.',
+                                'error'
+                            );
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        }
+
+    </script>
 </body>
 
 </html>

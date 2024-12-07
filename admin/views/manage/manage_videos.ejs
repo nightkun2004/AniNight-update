@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการผู้ใช้</title>
+    <title>จัดการวีดีโอ</title>
     <!-- CSS & JS -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/index.css">
     <script src="/css/tailwindcss.css"></script>
     <script src="/js/fontawesome.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <body>
@@ -24,9 +25,9 @@
 
                 <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
                     <div class="flex justify-between items-center mb-4 border-b-2 py-2">
-                        <h1 class="text-2xl font-extralight mb-3">จัดการวีดีโอ</h1>
-                        <a href="/upload/pv/anime" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            <i class="fas fa-plus-circle"></i> เพิ่มตอนของวีดีโอ
+                        <h1 class="text-2xl font-extralight mb-3">จัดการซีรีย์</h1>
+                        <a href="/create/Series/media" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-plus-circle"></i> สร้างซีรีย์
                         </a>
                     </div>
 
@@ -71,11 +72,9 @@
                                                     <a href="/add/episodes/anime/<%= video._id  %>" class="text-sky-600 hover:underline">
                                                         <i class="fas fa-edit"></i> เพิ่มตอน
                                                     </a>
-                                                    <form action="/api/v2/admin/delete/survey/" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแบบสำรวจนี้?');">
-                                                        <button type="submit" class="text-red-600 hover:underline">
-                                                            <i class="fas fa-trash-alt"></i> ลบ
-                                                        </button>
-                                                    </form>
+                                                    <a class="block text-red-500 cursor-pointer" onclick="deleteitem(event, '<%= video._id  %>')" type="button">
+                                                        <i class="fas fa-trash-alt"></i> ลบ
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -92,14 +91,14 @@
 
     <script src="/js/admin/index.js"></script>
     <script>
-        document.getElementById('searchid').addEventListener('input', function() {
+        document.getElementById('searchid').addEventListener('input', function () {
             const searchQuery = this.value.toLowerCase();
             const videoRows = document.querySelectorAll('.video-row');
-            
+
             videoRows.forEach(row => {
                 const videoId = row.querySelector('.video-id').textContent.toLowerCase();
                 const videoName = row.querySelector('.video-name').textContent.toLowerCase();
-    
+
                 // ตรวจสอบว่า id หรือชื่อวิดีโอตรงกับการค้นหาไหม
                 if (videoId.includes(searchQuery) || videoName.includes(searchQuery)) {
                     row.style.display = '';
@@ -108,6 +107,56 @@
                 }
             });
         });
+
+
+        function deleteitem(event, itemid) {
+            event.stopPropagation();
+
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณจะไม่สามารถกู้คืนรายการนี้ได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบมัน!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/v2/delete/series/${itemid}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error(`HTTP status ${response.status}`);
+                            }
+                        })
+                        .then(() => {
+                            Swal.fire(
+                                'ลบแล้ว!',
+                                'รายการถูกลบเรียบร้อยแล้ว.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                'ไม่สามารถลบรายการได้, กรุณาลองใหม่.',
+                                'error'
+                            );
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        }
+
     </script>
 </body>
 

@@ -13,45 +13,45 @@ const getAdmin = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session?.userlogin; // ใช้ Optional Chaining เพื่อหลีกเลี่ยง Error
     const { adminName, adminEmail, adminRole } = req.body;
-  
+
     try {
-      // Dynamic Query
-      const query = {};
-      if (adminName) query.username = { $regex: adminName, $options: 'i' };
-      if (adminEmail) query.email = { $regex: adminEmail, $options: 'i' };
-      if (adminRole) query.role = adminRole;
-  
-      // ใช้ Promise.all เพื่อรันหลายคำสั่งพร้อมกัน
-      const [user, users, userAll, Animeall, Articleall, admins] = await Promise.all([
-        req.user ? User.findById(req.user.id) : null, // ตรวจสอบ req.user
-        User.find(query),
-        User.find(),
-        Anime.countDocuments(),
-        Article.countDocuments(),
-        User.find({ role: { $in: ['admin', 'moderator'] } }),
-      ]);
-  
-      // Render ข้อมูล
-      res.render("./index", {
-        users,
-        userAll,
-        Animeall,
-        Articleall,
-        filters: { adminName, adminEmail, adminRole },
-        translations: req.translations,
-        lang,
-        admins,
-        userID,
-        active: "Admin"
-      });
+        // Dynamic Query
+        const query = {};
+        if (adminName) query.username = { $regex: adminName, $options: 'i' };
+        if (adminEmail) query.email = { $regex: adminEmail, $options: 'i' };
+        if (adminRole) query.role = adminRole;
+
+        // ใช้ Promise.all เพื่อรันหลายคำสั่งพร้อมกัน
+        const [user, users, userAll, Animeall, Articleall, admins] = await Promise.all([
+            req.user ? User.findById(req.user.id) : null, // ตรวจสอบ req.user
+            User.find(query),
+            User.find(),
+            Anime.countDocuments(),
+            Article.countDocuments(),
+            User.find({ role: { $in: ['admin', 'moderator'] } }),
+        ]);
+
+        // Render ข้อมูล
+        res.render("./index", {
+            users,
+            userAll,
+            Animeall,
+            Articleall,
+            filters: { adminName, adminEmail, adminRole },
+            translations: req.translations,
+            lang,
+            admins,
+            userID,
+            active: "Admin"
+        });
     } catch (error) {
-      console.error('Error in getAdmin:', error); // Logging
-      res.status(500).json({
-        msg: "Server Error",
-        errorMessage: error.message || 'Internal Server Error'
-      });
+        console.error('Error in getAdmin:', error); // Logging
+        res.status(500).json({
+            msg: "Server Error",
+            errorMessage: error.message || 'Internal Server Error'
+        });
     }
-  };
+};
 
 const getAdminManageUser = async (req, res) => {
     const lang = res.locals.lang;
@@ -78,7 +78,11 @@ const getAdminReward = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
-        res.render("./th/pages/admin/add/Reward", { userID, lang })
+        res.render("./add/rewards/addReward", {
+            userID,
+            lang,
+            active: "getAdminReward"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({ message: "Server Error", errorMessage })
@@ -91,14 +95,16 @@ const getAdminAPIKEY = async (req, res) => {
     try {
 
 
-        res.render("./th/pages/admin/add/generate-api-key", { userID, lang })
+        res.render("./add/generate-api-key", {
+            userID,
+            lang,
+            active: "getAdminAPIKEY"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/add/generate-api-key', {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            lang
-        });
+        })
     }
 }
 const getAdminAddBanner = async (req, res) => {
@@ -106,7 +112,11 @@ const getAdminAddBanner = async (req, res) => {
     const userID = req.session.userlogin;
     try {
 
-        res.render("./th/pages/admin/add/banner", { userID, lang })
+        res.render("./add/banner.ejs", {
+            userID,
+            lang,
+            active: "Addbanner"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({ message: "Server Error", errorMessage })
@@ -124,14 +134,10 @@ const generateAPIKEY = async (req, res) => {
         const newKey = new ApiKey({ key: apiKey, owner });
         await newKey.save();
 
-        res.render("./th/pages/admin/add/generate-api-key", { message: 'API key generated', apiKey, userID, lang })
+        res.status(200).redirect(`/admin/create/reward?msg=สร้าง API key สำเร็จ&status=true&key=${apiKey}`)
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/add/generate-api-key', {
-            error: errorMessage,
-            userID,
-            lang
-        });
+        res.status(500).redirect(`/admin/create/reward?msg=${errorMessage}&status=false`)
     }
 }
 
@@ -142,9 +148,9 @@ const ManageBanner = async (req, res) => {
     try {
         const Bannerlists = await Banner.find().sort({ createdAt: -1 }).exec();
 
-        res.render("./manage/manage_banner", { 
-            userID, 
-            Bannerlists, 
+        res.render("./manage/manage_banner", {
+            userID,
+            Bannerlists,
             lang,
             active: "Managebanner"
         })
@@ -160,13 +166,13 @@ const ManageAnimes = async (req, res) => {
     try {
         const animelists = await Anime.find().sort({ createdAt: -1 }).exec();
         // console.log(animelists)
-        res.render("./manage/manage_anime", { 
-            userID, 
-            animelists, 
-            translations: req.translations, 
+        res.render("./manage/manage_anime", {
+            userID,
+            animelists,
+            translations: req.translations,
             lang,
             active: "AdminManageAnime"
-         })
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
@@ -180,9 +186,9 @@ const getAdminRewardManage = async (req, res) => {
     const userID = req.session.userlogin;
     try {
         const datarewards = await Reward.find().sort({ createdAt: -1 }).exec();
-        res.render("./manage/manage_codereward", { 
-            userID, 
-            datarewards, 
+        res.render("./manage/manage_codereward", {
+            userID,
+            datarewards,
             lang,
             active: "AdminRewardManage"
         })
@@ -215,13 +221,13 @@ const ManageActPIKey = async (req, res) => {
     try {
         const ApiKeylists = await ApiKey.find().exec();
         // console.log(animelists)
-        res.render("./manage/manage_aptkey", { 
-            userID, 
-            ApiKeylists, 
+        res.render("./manage/manage_aptkey", {
+            userID,
+            ApiKeylists,
             translations: req.translations,
-             lang,
-             active: "Manageapi"
-            })
+            lang,
+            active: "Manageapi"
+        })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
@@ -259,10 +265,10 @@ const ManageVideos = async (req, res) => {
     const userID = req.session.userlogin;
     try {
         const videolists = await Play.find().exec();
-        res.render("./manage/manage_videos", { 
-            userID, 
-            videolists, 
-            translations: req.translations, 
+        res.render("./manage/manage_videos", {
+            userID,
+            videolists,
+            translations: req.translations,
             lang,
             active: "ManageVideos"
         })

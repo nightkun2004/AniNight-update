@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มรางวัลใหม่</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+<body class="bg-gray-100 text-black w-screen h-screen text-sm overflow-x-hidden">
+
+    <div class="flex flex-col h-screen">
+        <%- include('../../Component/Header') %>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="aside" class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                <%- include('../../Component/aside') %>
+            </aside>
+
+            <main id="mainContent" class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                    <h1 class="text-2xl font-extralight mb-3">
+                        <a href="/admin/mamage/rewards">
+                            <i class="fa-solid fa-arrow-left"></i> กลับ |
+                        </a>
+                        เพิ่มรางวัลใหม่</h1>
+                </div>
+
+                <div id="messageBox" class="hidden bg-gray-300 rounded-lg mb-4 p-4" role="alert">sa</div>
+
+                <div class="overflow-x-auto">
+                    <form id="adminRewardForm" class="space-y-4" method="POST">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="mb-4">
+                                <label for="message" class="block text-gray-700 font-semibold">ข้อความ:</label>
+                                <input type="text" id="message" name="message" required
+                                    class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none"
+                                    placeholder="กรอกข้อความที่จะแสดง">
+                            </div>
+                            <div class="mb-4">
+                                <label for="linkreward" class="block text-gray-700 font-semibold">ลิงก์รางวัล:</label>
+                                <input type="text" id="linkreward" name="linkreward" required
+                                    class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" placeholder="กรอกลิงก์รางวัล">
+                            </div>
+                            <div class="mb-4">
+                                <label for="reward" class="block text-gray-700 font-semibold">ชื่อรางวัล:</label>
+                                <input type="text" id="reward" name="reward" required
+                                    class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" placeholder="กรอกชื่อรางวัล">
+                            </div>
+                            <div class="mb-4">
+                                <label for="code" class="block text-gray-700 font-semibold">สร้างโค้ดรางวัล:</label>
+                                <input type="text" id="code" name="code" required
+                                    class="mt-1 block w-full p-3 border border-gray-300 rounded-md outline-none" placeholder="สร้างโค้ดรางวัล">
+                            </div>
+                        </div><hr class="mt-5 mb-6">
+                        <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition">เพิ่มรางวัล</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<script src="/js/admin/index.js"></script>
+
+<script>
+    // ดึง rewardId จาก URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const rewardId = urlParams.get('rewardId');
+
+    document.getElementById('adminRewardForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        
+        console.log(rewardId)
+
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch(`/api/v2/admin/add/reward?rewardId=${rewardId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            const result = await response.json();
+
+            const messageBox = document.getElementById('messageBox');
+            messageBox.classList.remove('hidden'); // แสดงกล่องข้อความ
+
+            if (result.success) {
+                messageBox.classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+                messageBox.innerText = "สร้างรางวัลแล้ว"; // แสดงข้อความสำเร็จ
+            } else {
+                messageBox.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+                messageBox.innerText = result.reward.message; // แสดงข้อความข้อผิดพลาด
+            }
+            
+            console.log(result);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มของรางวัล TrueMoney Wallet</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+<body class="bg-gray-100 text-black w-screen h-screen text-sm overflow-x-hidden">
+
+    <div class="flex flex-col h-screen">
+        <%- include('../../Component/Header') %>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="aside" class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                <%- include('../../Component/aside') %>
+            </aside>
+
+            <main id="mainContent" class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                    <h1 class="text-2xl font-extralight mb-3">
+                        <a href="/admin/manage/playments">
+                            <i class="fa-solid fa-arrow-left"></i> กลับ |
+                        </a>
+                        เพิ่มของรางวัล TrueMoney Wallet</h1>
+                </div>
+
+                <div id="messageBox" class="hidden bg-gray-300 rounded-lg mb-4 p-4" role="alert">sa</div>
+
+                <div class="overflow-x-auto">
+                <form action="/api/v2/admin/create/reward" method="POST">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="mb-4">
+                            <label for="points" class="block text-gray-700 font-semibold mb-2">คะแนน</label>
+                            <input type="number" name="points" id="points" class="w-full p-2 border rounded-lg" required>
+                        </div>
+        
+                        <div class="mb-4">
+                            <label for="wallet" class="block text-gray-700 font-semibold mb-2">จำนวนเงิน (บาท)</label>
+                            <input type="number" name="wallet" id="wallet" class="w-full p-2 border rounded-lg" required>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                            เพิ่มของรางวัล
+                        </button>
+                    </div>
+                </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="notification" class="fixed bottom-5 left-5 z-50 max-w-sm w-full p-4 bg-green-100 text-green-800 rounded-lg shadow-lg hidden" role="alert">
+        <div class="relative flex">
+            <div class="flex-shrink-0">
+                <!-- Icon (Optional) -->
+                <svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3 flex-1">
+                <p class="text-sm font-medium" id="notification-msg"></p>
+            </div>
+            <button id="close-btn" class="ml-4 text-green-800 hover:text-green-600 focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <!-- Status Bar -->
+            <div class="absolute bottom-0 left-0 w-full h-1 bg-green-300 rounded-full" id="progress-bar"></div>
+        </div>
+    </div>
+
+<script src="/js/admin/index.js"></script>
+<script>
+    // Function to show the popup with a message from query parameters
+    function showPopup() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const msg = urlParams.get('msg');
+        const status = urlParams.get('status');
+        const error = urlParams.get('error'); // Get the error message if any
+
+        if (msg || error) {
+            const notification = document.getElementById('notification');
+            const notificationMsg = document.getElementById('notification-msg');
+            const progressBar = document.getElementById('progress-bar');
+            
+            // Check if there's an error message
+            if (error) {
+                notificationMsg.textContent = `Error: ${error}`; // Show error message
+                notification.classList.replace('bg-green-100', 'bg-red-100');
+                notification.classList.replace('text-green-800', 'text-red-800');
+            } else {
+                // Set message based on status
+                if (status === 'true') {
+                    notificationMsg.textContent = msg || 'Success!';
+                    notification.classList.replace('bg-red-100', 'bg-green-100');
+                    notification.classList.replace('text-red-800', 'text-green-800');
+                } else {
+                    notificationMsg.textContent = msg || 'Error occurred!';
+                    notification.classList.replace('bg-green-100', 'bg-red-100');
+                    notification.classList.replace('text-green-800', 'text-red-800');
+                }
+            }
+
+            // Show the notification
+            notification.classList.remove('hidden');
+
+            // Close button functionality
+            document.getElementById('close-btn').onclick = () => {
+                notification.classList.add('hidden');
+            };
+
+            // Status bar animation (progress bar)
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 1;
+                progressBar.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    notification.classList.add('hidden'); // Hide after the bar is full
+                }
+            }, 50);
+
+            setTimeout(() => {
+                notification.classList.add('hidden');
+                clearInterval(interval);
+            }, 10000);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', showPopup);
+</script>
+</body>
+</html>

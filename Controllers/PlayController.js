@@ -93,18 +93,20 @@ const getPV = async (req, res) => {
 };
 
 
-const getUploadPv = async (req, res) => {
+const getCreateSeries = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
-        res.render(`./th/pages/admin/add/PvUpload`, { userID, lang });
+        res.render(`./add/uploads/CreateSeries`, { 
+            userID, 
+            lang ,
+            active: "getCreateSeries"
+        });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render(`./th/pages/admin/add/PvUpload`, {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
+        })
     }
 }
 
@@ -333,6 +335,19 @@ const likeVideo = async (req, res) => {
     }
 };
 
+const DeteleSeriesMedia = async (req, res) => {
+    const { id: SeriesID } = req.params;
+    try {
+        await Play.findByIdAndDelete(SeriesID);
+        res.json({ message: "ลบ SeriesID สำเร็จ" });
+    } catch (error) {
+        const errorMessage = error.message || "Internal Server Error";
+        res.status(500).json({
+            error: errorMessage
+        });
+    }
+}; 
+
 
 module.exports = {
     getPlay,
@@ -340,9 +355,10 @@ module.exports = {
     getepisodes,
     getPV,
     getEditPv,
-    getUploadPv,
+    getCreateSeries,
     uploadPV,
     postEditPV,
     addEpisode,
-    likeVideo
+    likeVideo,
+    DeteleSeriesMedia
 }

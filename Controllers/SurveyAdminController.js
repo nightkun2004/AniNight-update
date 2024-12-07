@@ -31,7 +31,7 @@ const getAdminSurveyCreate = async (req,res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
     try {
-        res.render("./th/pages/admin/add/survey/add", { 
+        res.render("./add/survey/creratesurvey", { 
             active: "tags",
             userID, 
             translations: req.translations,
@@ -40,11 +40,9 @@ const getAdminSurveyCreate = async (req,res) => {
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/add/survey/add', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang  
-        });
+        res.status(500).json({
+            error: errorMessage
+        })
     }
 }
 
@@ -52,7 +50,7 @@ const getAdminSurveyCreate = async (req,res) => {
 const EditSurvey = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
-    const surveyId = req.params.id; // รับ ID ของแบบสำรวจจากพารามิเตอร์ URL
+    const surveyId = req.params.id; 
 
     try {
         // ดึงข้อมูลแบบสำรวจจากฐานข้อมูลโดยใช้ surveyId
@@ -62,20 +60,18 @@ const EditSurvey = async (req, res) => {
         }
 
         // ส่งข้อมูลแบบสำรวจไปยังฟอร์มแก้ไข
-        res.render('./th/pages/admin/edit/survey/edit', {
+        res.render('./edit/survey/editsurvey', {
             survey,
             userID,
             translations: req.translations,
             lang,
+            active: "Editsurvey"
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/edit/survey/edit', {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            translations: req.translations,
-            lang,
-        });
+        })
     }
 };
 
@@ -138,15 +134,17 @@ const UpdateSurvey = async (req, res) => {
         // อัพเดตคำถามในแบบสำรวจ
         survey.questions = questions.map((question, index) => {
             const existingQuestion = survey.questions[index] || {};
-
+        
             return {
                 questionText: question.questionText || existingQuestion.questionText,
                 inputType: question.inputType || existingQuestion.inputType,
-                options: Array.isArray(question.options) 
-                    ? question.options.flat().map(option => String(option).trim()) 
-                    : existingQuestion.options || []
+                options: question.options && Array.isArray(question.options) 
+                    ? question.options.map(option => String(option).trim()) 
+                    : []  // หากไม่มี options หรือไม่ได้เป็นอาร์เรย์ ให้เป็นอาร์เรย์ว่าง
             };
         });
+        
+        
 
         await survey.save();
         console.log("edit" ,survey )
@@ -154,12 +152,9 @@ const UpdateSurvey = async (req, res) => {
     } catch (error) {
         console.error(error);
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/edit/survey/edit', {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            translations: req.translations,
-            lang,
-        });
+        })
     }
 }
 

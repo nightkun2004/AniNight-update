@@ -42,7 +42,7 @@ const getWithdrawTrueMoneyWallet = async (req, res) => {
         res.status(500).render('./th/pages/playments/Withdraw/requires/trueMoneyWallet', {
             error: errorMessage,
             userID,
-            translations: req.translations, lang
+            translations: req.translations, lang,
         });
     }
 }
@@ -56,18 +56,17 @@ const getWithdrawTrueMoneyWalletCreate = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
-        res.render('./th/pages/admin/add/truemoney/createReward', {
+        res.render('./add/rewards/createRewardTrueMoney', {
             userID,
             translations: req.translations,
-            lang
+            lang,
+            active: "createRewardTrueMoney"
         })
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/add/truemoney/createReward', {
+        res.status(500).json({
             error: errorMessage,
-            userID,
-            translations: req.translations, lang
-        });
+        })
     }
 }
 
@@ -98,20 +97,29 @@ const postWithdrawTrueMoneyWalletCreate = async (req, res) => {
         });
 
         await payment.save();
-        console.log("payment",payment)
-        console.log("newReward",newReward)
-        res.render('./th/pages/admin/add/truemoney/createReward', {
-            userID,
-            message: "เพิ่มสำเร็จ",
-            translations: req.translations, lang
-        })
+        // console.log("payment",payment)
+        // console.log("newReward",newReward)
+        res.status(200).redirect(`/admin/create/reward?msg=เพิ่มของรางวัลสำเร็จ&status=true`)
 
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render('./th/pages/admin/add/truemoney/createReward', {
-            error: errorMessage,
-            userID,
-            translations: req.translations, lang
+        res.status(500).redirect(`/admin/create/reward?msg=${errorMessage}&status=false`)
+    }
+}
+
+const DeletePayment = async (req, res) => {
+    const { id: rewardId } = req.params;
+    try {
+        const payment = await Payment.findByIdAndDelete(rewardId);
+        if (!payment) {
+            return res.status(404).json({ error: "Reward not found" });
+        }
+
+        res.json({ message: "ลบ rewardId สำเร็จ" });
+    } catch (error) {
+        const errorMessage = error.message || "Internal Server Error";
+        res.status(500).json({
+            error: errorMessage
         });
     }
 }
@@ -120,5 +128,6 @@ module.exports = {
     getWithdraw,
     getWithdrawTrueMoneyWallet,
     getWithdrawTrueMoneyWalletCreate,
-    postWithdrawTrueMoneyWalletCreate
+    postWithdrawTrueMoneyWalletCreate,
+    DeletePayment
 }
