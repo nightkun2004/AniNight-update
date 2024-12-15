@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการวีดีโอ</title>
+    <title>จัดการตอน</title>
     <!-- CSS & JS -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/index.css">
@@ -25,14 +25,10 @@
 
                 <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
                     <div class="flex justify-between items-center mb-4 border-b-2 py-2">
-                        <h1 class="text-2xl font-extralight mb-3">จัดการซีรีย์</h1>
-                        <a href="/create/Series/media" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            <i class="fas fa-plus-circle"></i> สร้างซีรีย์
+                        <h1 class="text-2xl font-extralight mb-3">จัดการตอนของ <%= series.title %></h1>
+                        <a href="/admin/manage/videos" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <h1>ย้อนกลับ</h1>
                         </a>
-                    </div>
-
-                    <div class="mb-6">
-                        <input type="search" class="outline-none border-2 px-4 py-3 rounded" name="searchid" id="searchid" placeholder="ค้นหา ID VIDEO">
                     </div>
         
                     <div class="overflow-x-auto overflow-hidden">
@@ -41,49 +37,35 @@
                                 <tr>
                                     <th class="py-3 px-6 text-left">VideoID</th>
                                     <th class="py-3 px-6 text-center">ชื่อวีดีโอ</th>
-                                    <th class="py-3 px-6 text-center">สถานะ</th>
+                                    <th class="py-3 px-6 text-center">ตอนที่</th>
+                                    <th class="py-3 px-6 text-center">เปิดวีดีโอ</th>
                                     <th class="py-3 px-6 text-center">การจัดการ</th>
                                 </tr>
                             </thead>
                             <tbody id="videoTable" class="text-gray-600 text-sm font-light">
-                                <% if (videolists && videolists.length > 0) { %>
-                                    <% videolists.forEach(video => { %>
-                                        <tr class="video-row border-b border-gray-200 hover:bg-gray-100">
-                                            <td class="py-3 px-6 text-left whitespace-nowrap">
-                                                <div class="flex items-center">
-                                                    <span class="font-medium video-id"><%= video.videoid %></span>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 px-6 text-center video-name"><%= video.title %></td>
-                                            <td class="py-3 px-6 text-center">
-                                                <% if (video.published) { %>
-                                                    <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">เผยแพร่แล้ว</span>
-                                                <% } else { %>
-                                                    <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">รอเผยแพร่</span>
-                                                <% } %>
-                                            </td>
-                                            <td class="py-3 px-6 text-center">
-                                                <div class="flex item-center justify-center space-x-4">
-                                                    <a href="/admin/edit/Series/media/<%= video.videoid  %>" class="text-blue-600 hover:underline">
-                                                        <i class="fas fa-edit"></i> แก้ไข
-                                                    </a> 
-                                                    <a href="/admin/manage/series/Episode/<%= video.videoid  %>" class="text-blue-600 hover:underline">
-                                                        <i class="fas fa-edit"></i> แก้ไขตอน
-                                                    </a> 
-                                                    <a href="/add/episodes/<%= video._id  %>/Series" class="text-sky-600 hover:underline">
-                                                        <i class="fas fa-edit"></i> เพิ่มตอน
-                                                    </a>
-                                                    <a class="block text-red-500 cursor-pointer" onclick="deleteitem(event, '<%= video._id  %>')" type="button">
-                                                        <i class="fas fa-trash-alt"></i> ลบ
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                <% if (series && series.episodes && series.episodes.length > 0) { %>
+                                    <% series.episodes.forEach(episode => { %>
+                                    <tr class="video-row border-b border-gray-200 hover:bg-gray-100">
+                                        <td class="px-2 py-2"><%= episode.videoid %></td>
+                                        <td class="px-2 py-2"><%= episode.title || 'ไม่ระบุชื่อ' %></td>
+                                        <td class="px-2 py-2"><%= episode.episodenumber || 'ไม่มีหมายเลขตอน' %></td>
+                                        <td class="px-2 py-2">
+                                            <a href="<%= episode.videoUrl %>" target="_blank">ดูวิดีโอ</a>
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            <a href="/admin/add/epsode/sub/<%= episode.videoid  %>" class="text-blue-600 hover:underline">
+                                                <i class="fas fa-edit"></i> แก้ไขตอน
+                                            </a>
+                                        </td>
+                                    </tr>
                                     <% }) %>
                                 <% } else { %>
-                                    <p>ไม่มีวีดีโอ</p>
+                                    <tr>
+                                        <td class="text-center px-2 py-2" colspan="3">ไม่พบตอน</td>
+                                    </tr>
                                 <% } %>
                             </tbody>
+                            
                         </table>
                     </div>
                 </main>

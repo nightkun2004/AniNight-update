@@ -282,6 +282,37 @@ const ManageVideos = async (req, res) => {
     }
 }
 
+const getListseriesEP = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const videoid = req.params;
+    try {
+        const series = await Play.findOne(videoid).exec(); // ค้นหาตาม videoid
+        if (!series) {
+            return res.json ({
+                userID,
+                series: null,
+                lang,
+                active: "getListseriesEP",
+                message: "ไม่พบซีรีส์ที่ร้องขอ", // เพิ่มข้อความแจ้งเตือน
+            });
+        }
+        // console.log(series)
+        res.render(`./manage/manage_episodes`, {
+            userID,
+            series,
+            lang,
+            active: "getListseriesEP"
+        });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+        })
+    }
+}
+
+
 const updateUserRole = async (req, res) => {
     const { userIdToUpdate, newRole } = req.body;
     const { adminName, adminEmail, adminRole } = req.body;
@@ -327,6 +358,7 @@ module.exports = {
     getAdmin,
     getAdminManageUser,
     getAdminReward,
+    getListseriesEP,
     getAdminAPIKEY,
     getAdminAddBanner,
     generateAPIKEY,

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= series.title %>
+    </title>
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/medias/play.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                    <div class="video-play">
+                        <!-- Video Player Section -->
+                        <div class="video-play__player">
+                            <div class="video_player-controller video_player">
+                                <canvas id="subtitleCanvas"></canvas>
+                                <div class="info_video">
+                                    <h3>Video ID <span id="videoid_info"></span></h3>
+                                </div>
+                                <div class="thumbnail"></div>
+                                <div id="subtitles" class="subtitles"></div>
+
+                                <div class="controls" id="controls">
+                                    <div class="progress-area" id="progress-area">
+                                        <canvas class="bufferedBar"></canvas>
+                                        <div class="thunnaillBar"></div>
+                                        <div class="progress-bar">
+                                            <span></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="left-controls">
+                                        <p class="icon" id="play-pause">
+                                            <i class="fas fa-play"></i>
+                                        </p>
+                                        <div class="duration">
+                                            <p id="current-time">00:00</p> /
+                                            <p id="total-time">00:00</p>
+                                        </div>
+                                    </div>
+                                    <div class="right-controls">
+                                        <p class="Subtitles icon" id="sub_btn">
+                                            <i class="fas fa-closed-captioning"></i>
+                                        </p>
+                                        <p class="fullscreen icon" id="fullscreen">
+                                            <i class="fa-solid fa-expand"></i>
+                                        </p>
+                                    </div>
+                                </div> 
+
+                                <div class="selectsubtitle" id="selectSubtitle">
+                                    <div class="header_title border-b-2 border-gray-100">
+                                        <h3 class="text-base font-semibold text-white text-center">เลือกคำบรรยาย</h3>
+                                    </div>
+                                </div>
+
+                                <video id="Mainvideo"></video>
+                            </div>
+                        </div>
+
+                        <!-- Metadata Section -->
+                        <div class="video-player__right">
+                            <div class="">
+                                <div>
+                                    <h1 id="VideoID" class="text-lg font-bold" data-videoid="<%= series.videoid %>">
+                                        <%= series.title %>
+                                    </h1>
+                                    <p id="EpisodeID" class="text-sm text-gray-600" data-episodeid="<%= episode.videoid %>">
+                                        <%= series.episode %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap">
+                                <% series.episodes.forEach(function(episode) { %>
+                                    <div
+                                        class="flex cursor-pointer flex-col items-center border rounded-lg p-3 shadow hover:shadow-lg transition-shadow">
+                                        <a href="/play/<%= series.videoid %>/<%= episode.videoid %>">
+                                            <% if (episode.episodenumber) {%>
+                                                <h5 class="text-sm md:text-base font-medium text-gray-800">
+                                                    ตอนที่ <%= episode.episodenumber %>
+                                                </h5>
+                                                <% } %>
+                                                    <p class="text-xs md:text-sm text-gray-600">
+                                                        <%= episode.title %>
+                                                    </p>
+                                        </a>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </main>
+            </div>
+    </div>
+
+    <script src="/js/admin/index.js"></script>
+    <script src="/js/media/play.js"></script>
+</body>
+
+</html>

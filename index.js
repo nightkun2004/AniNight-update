@@ -66,11 +66,8 @@ const allowedOrigins = [
   'https://ani-night.online',
   'https://studio.ani-night.online',
   'https://anime.ani-night.online',
-  'https://read.ani-night.online',
   'http://localhost:5050',
   'http://localhost:7000',
-  'https://anime-lists.ani-night.online',
-  'https://play.ani-night.online',
 ];
 
 app.use((req, res, next) => {
@@ -116,7 +113,8 @@ app.use((req, res, next) => {
 
 app.set('views', [
   path.join(__dirname, '/views'),
-  path.join(__dirname, '/admin/views')
+  path.join(__dirname, '/admin/views'),
+  path.join(__dirname, '/media/views')
 ]);
 app.set('view engine', 'ejs');
 app.use(fileUpload({

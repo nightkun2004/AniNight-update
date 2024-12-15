@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มคำบรรยาย</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body class="bg-gray-100 text-black w-screen h-screen text-sm overflow-x-hidden">
+
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight mb-3">
+                            <a href="/admin/manage/series/Episode/<%= item.videoid %>">
+                                <i class="fa-solid fa-arrow-left"></i> กลับ
+                            </a>
+                        </h1>
+                    </div>
+
+
+                    <div class="overflow-x-auto">
+                        <form action="/api/v2/add/subtitle/episode/<%= episode.videoid %>" method="POST"
+                            enctype="multipart/form-data" class="space-y-4">
+                            <div class="flex flex-col space-y-2">
+                                <label for="subtitleFile" class="font-medium">เลือกไฟล์คำบรรยาย</label>
+                                <input type="file" id="subtitleFile" name="subtitlefile" accept=".srt,.ass"
+                                    class="border border-gray-300 rounded-lg px-4 py-2">
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <label for="language" class="font-medium">เลือกภาษา</label>
+                                <select id="language" name="language"
+                                    class="border border-gray-300 rounded-lg px-4 py-2">
+                                    <option value="th">ไทย</option>
+                                    <option value="en">อังกฤษ</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <label for="label" class="font-medium">ชื่อคำบรรยาย</label>
+                                <input type="text" id="label" name="label" placeholder="เช่น TH, EN"
+                                    class="border border-gray-300 rounded-lg px-4 py-2">
+                            </div>
+                            <div class="relative pt-2">
+                                <progress id="uploadProgress" value="0" max="100"
+                                    class="w-full h-4 bg-gray-200 rounded-lg"></progress>
+                                <span id="progressText" class="absolute right-0 text-sm">0%</span>
+                            </div>
+                            <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">อัพโหลด</button>
+                        </form>
+                    </div>
+                    <div class="ml-3 flex-1">
+                        <p class="text-sm font-medium" id="notification-msg"></p>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+    <script>
+        const form = document.querySelector('form');
+        const progress = document.getElementById('uploadProgress');
+        const progressText = document.getElementById('progressText');
+        const notificationMsg = document.getElementById('notification-msg');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action, true);
+
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percentComplete = Math.round((e.loaded / e.total) * 100);
+                    progress.value = percentComplete;
+                    progressText.textContent = `${percentComplete}%`;
+                }
+            });
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    try {
+                        // แปลง JSON ที่ได้รับจากเซิร์ฟเวอร์
+                        const response = JSON.parse(xhr.responseText);
+
+                        // อัปเดตข้อความแจ้งเตือน
+                        notificationMsg.textContent = `${response.message}`; // ใช้ข้อความ error หรือ success ที่ได้รับจากเซิร์ฟเวอร์
+                        alert('อัพโหลดสำเร็จ!');
+                    } catch (error) {
+                        // กรณีที่ JSON มีปัญหา
+                        notificationMsg.textContent = `เกิดข้อผิดพลาดในการประมวลผลข้อมูลที่ส่งกลับ: ${error.message}`;
+                    }
+                } else {
+                    // เมื่อเกิดข้อผิดพลาดจากเซิร์ฟเวอร์ เช่น 400, 500
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        notificationMsg.textContent = `ข้อผิดพลาด: ${errorResponse.message || 'ไม่ทราบข้อผิดพลาด'}`;
+                    } catch (e) {
+                        notificationMsg.textContent = 'เกิดข้อผิดพลาดระหว่างการอัพโหลด';
+                    }
+                }
+            };
+
+            xhr.onerror = () => {
+    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+    notificationMsg.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+};
+            xhr.send(formData);
+        });
+    </script>
+    <script src="/js/admin/index.js"></script>
+</body>
+
+</html>

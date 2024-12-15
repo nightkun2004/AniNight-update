@@ -1,0 +1,227 @@
+.video-play {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.video-play__player {
+    flex: 2;
+    /* Main video player takes 2 parts of the space */
+    background-color: #000;
+    overflow: hidden;
+}
+
+.video-play__player video {
+    display: block;
+    max-width: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+}
+
+.subtitles {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.subtitles span {
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 1px 1px rgb(0, 0, 0);
+}
+
+
+.selectsubtitle {
+    position: absolute;
+    bottom: 70px;
+    right: 10px;
+    width: 100px;
+    height: auto;
+    border-radius: 10px;
+    background-color: #000;
+    z-index: 100;
+}
+
+body {
+    box-sizing: border-box;
+}
+
+/* Metadata Section */
+.video-player__right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #fff;
+    padding: 10px 10px;
+    border-radius: 7px;
+}
+
+@media screen and (min-width: 620px) {
+    .video-play__player {
+        height: 350px;
+        border-radius: 0.5rem;
+    }
+
+    .video_player-controller {
+        height: 100%;
+    }
+
+    .video-play__player video {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 620px) {
+    .video-play {
+        flex-direction: column;
+    }
+
+    .video-play__player {
+        height: 200px;
+    }
+
+    .video_player-controller {
+        height: 250px;
+    }
+}
+
+.video_player-controller {
+    position: relative;
+}
+
+.info_video {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #8a8a8ac0;
+    border-radius: 10px;
+    padding: 10px;
+    width: 200px;
+    height: 100px;
+    color: #fff;
+    display: none;
+}
+
+/* สำหรับควบคุมตัวเล่นวีดีโอ */
+canvas {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.controls .thunnaillBar {
+    width: 100%;
+    height: 2px;
+    margin: auto;
+    background: #f0f0f063;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+}
+
+.thumbnail{
+    position: absolute;
+    bottom: 80px;
+    left: calc(var(--x) + 11px);
+    transform: translateX(-50%);
+    width: 165px;
+    height: 90px;
+    background: #fff;
+    border: none;
+    border-radius: 3px;
+    z-index: 100;
+    display: none;
+  }
+
+.controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 10px;
+    width: 100%;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    z-index: 20;
+    opacity: 1;
+    transition: opacity 0.5s, height 0.5s;
+}
+
+.progress-area {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+
+.controls .progress-area .progress-bar {
+    position: relative;
+    width: 0%;
+    background: rgb(35, 174, 255);
+    height: inherit;
+    border-radius: inherit;
+    cursor: pointer;
+}
+
+.controls .progress-area .progress-bar::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgb(73, 188, 255);
+}
+
+.controls .progress-area .bufferedBar {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    width: 100%;
+    height: inherit;
+}
+
+.controls .left-controls .icon,
+.controls .right-controls .Subtitles,
+.controls .right-controls .quality,
+.controls .right-controls .icon {
+    margin: 7px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.controls .left-controls,
+.right-controls,
+.center-controls,
+.right-controls,
+.duration,
+.volume {
+    display: flex;
+    align-items: center;
+}

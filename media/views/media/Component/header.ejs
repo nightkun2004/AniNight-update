@@ -1,0 +1,23 @@
+<header class="bg-white shadow-md px-4 py-3">
+    <div class="flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+            <button id="toggleAside" class="text-xl  focus:outline-none">
+                <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H20M4 12H20M4 18H20" stroke="#000000" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+            <a href="/" class="flex items-center">
+                <p class="border-2 rounded-lg border-red-400 pl-2 pr-2">Beta</p>
+                <span class="font-bold text-lg pl-2">AniNight</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<script>
+    function toggleAdminHeader(menuClass) {
+        document.querySelector('.card_menus').classList.toggle("hidden");
+    }
+</script>

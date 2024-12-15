@@ -75,13 +75,10 @@ const getRead = async (req, res, next) => {
 
 
         if (!post) {
-            return res.status(404).render(`./th/read`, {
-                post: { title: "ไม่พบข้อมูล" },
+            return res.status(404).json({
+                status: 404,
                 error: 'ไม่พบบทความหรือบทความอาจจะถูกลบแล้ว',
-                userID,
-                translations: req.translations,
-                lang
-            });
+            })
         }
 
         if (userID) {

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการซีรีย์</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight mb-3">ย้อนกลับ</h1>
+                        <a href="/admin/manage/videos" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                            <i class="fas fa-plus"></i> จัดการซีรีย์
+                        </a>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b-2 mb-5">
+                        <a href="/admin/add/epsode/sub/<%= series.episodes.videoid %>" class="flex items-center px-4 py-2 rounded-md text-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out transform hover:scale-105">
+                            <p>เพิ่มซับ</p>
+                        </a>
+                    </div>
+
+                    <div class="overflow-x-auto overflow-hidden">
+                       <form action="" method="post">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="mb-4">
+                                <label for="title" class="block text-sm font-medium text-gray-700">ชื่อเนื้อหา</label>
+                                <input type="text" name="title" id="title" value="<%= series.title %>" class="mt-1 block outline-none w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4">
+                            </div>
+                            <div class="mb-4">
+                                <label for="description" class="block text-sm font-medium text-gray-700">คำอธิบาย</label>
+                              <textarea name="description" id="description" class="w-full h-[250px] outline-none px-2 py-2"><%= series.description %></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <div class="mb-4">
+                                    <label for="category" class="block text-gray-700 font-bold mb-2">หมวดหมู่</label>
+                                    <select id="category" name="categories" value="<%= series.categories %>"
+                                        class="w-full p-3 border rounded-lg shadow-sm outline-none" required>
+                                        <option value="" disabled selected>เลือกหมวดหมู่</option>
+                                        <option value="action">แอคชั่น</option>
+                                        <option value="drama">ดราม่า</option>
+                                        <option value="comedy">คอมเมดี้</option>
+                                        <option value="horror">สยองขวัญ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <input id="published" name="published" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" <% if (series.published) { %> checked <% } %>>
+                                <label for="published" class="ml-2 text-sm font-medium text-gray-900">เผยแพร่ตอนนี้</label>
+                            </div>
+                           
+                        </div>
+                        <button type="submit" class="bg-blue-500 p-2 text-white rounded-lg">แก้ไข</button>
+                       </form>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+
+    <script src="/js/admin/index.js"></script> 
+</body>
+
+</html>
