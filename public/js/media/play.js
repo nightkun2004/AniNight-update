@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // console.log("Episode ID:", episodeId);
 
     async function fetchVideoData() {
-        const apiUrl = `http://localhost:5000/api/v2/Series/medias/${videoId}/${episodeId}`;
+        const apiUrl = `/api/v2/Series/medias/${videoId}/${episodeId}`;
 
         try {
             const response = await fetch(apiUrl);
