@@ -1,6 +1,6 @@
 const SurveyAdmin = require("../models/SurveyAddModel")
 const User = require("../models/UserModel")
-
+const uploadFile = require("../Middlewares/upload")
 
 const getListsSurvey = async (req, res) => {
     const lang = res.locals.lang;
@@ -75,42 +75,97 @@ const EditSurvey = async (req, res) => {
     }
 };
 
+// ============================================================= API Upload image ============================================
+const UploadimageSurver = async (req,res) => {
+    try {
+        if (!req.files || !req.files.image) {
+            return res.status(400).send('No file uploaded');
+        }
+
+        const file = req.files.image; // ชื่อฟิลด์ที่ถูกส่งมาในฟอร์ม
+        const uploadedUrl = await uploadFile(file);
+
+        res.json({
+            message: 'File uploaded successfully!',
+            imageUrl: uploadedUrl
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error uploading file' });
+
+    }
+}
+
 // ============================================================ CreateSurvey =================================================
-const CreateSurvey = async (req,res) => {
+
+function parseQuestions(body) {
+    const questions = [];
+    const questionKeys = Object.keys(body).filter(key => key.startsWith('questions['));
+
+    questionKeys.forEach(key => {
+        const match = key.match(/questions\[(\d+)]\[(\w+)]/);
+        if (match) {
+            const index = parseInt(match[1], 10);
+            const field = match[2];
+            questions[index] = questions[index] || {};
+            questions[index][field] = body[key];
+        }
+    });
+
+    // Convert options to arrays
+    questions.forEach((question, index) => {
+        if (question.options) {
+            const optionsKeys = Object.keys(body).filter(key =>
+                key.startsWith(`questions[${index}][options]`)
+            );
+            question.options = optionsKeys.map(key => body[key]).filter(Boolean);
+        }
+    });
+
+    return questions;
+}
+
+
+const CreateSurvey = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin || null;
-    const { surveyName, questions, score, published } = req.body;
+    const { surveyName, score, published } = req.body;
 
     try {
-        // ตรวจสอบและสร้างโครงสร้างคำถามจาก req.body
+        // แปลง questions จาก req.body
+        const questions = parseQuestions(req.body);
+        // console.log("Parsed Questions:", questions);
+
         const formattedQuestions = questions.map(q => ({
-            questionText: q.questionText,
-            inputType: q.inputType,
-            options: Array.isArray(q.options) ? q.options : [],  // ตรวจสอบว่า options เป็น array หรือไม่
-            answers: q.answers?.map(ans => ({
-                text: ans.text,
-                isCorrect: ans.isCorrect || false
-            })) || []  // ตรวจสอบ answers
+            questionText: q.questionText || '',
+            questionImage: q.questionImage || null,
+            inputType: q.inputType || 'text',
+            options: Array.isArray(q.options) ? q.options : [],
+            answers: Array.isArray(q.answers)
+                ? q.answers.map(ans => ({
+                    text: ans.text || '',
+                    isCorrect: ans.isCorrect || false
+                }))
+                : []
         }));
 
         const survey = new SurveyAdmin({
             surveyName,
             questions: formattedQuestions,
-            score,
-            published: published === 'on'  // เปลี่ยน published เป็น Boolean
+            score: parseInt(score, 10) || 0,
+            published: published === 'on'
         });
 
-        // บันทึกแบบสำรวจลงในฐานข้อมูล
         await survey.save();
         console.log("Survey Created:", survey);
-        // เปลี่ยนเส้นทางเมื่อสำเร็จ
+
         res.redirect('/admin/create/survey?success=true');
     } catch (error) {
         console.error("Error creating survey:", error);
         const errorMessage = error.message || 'Internal Server Error';
         res.redirect(`/admin/create/survey?success=error&msg=${encodeURIComponent(errorMessage)}`);
     }
-}
+};
 
 // ============================================================ UpdateSurvey =================================================
 const UpdateSurvey = async (req, res) => {
@@ -183,6 +238,7 @@ const deleteSurvey = async (req, res) => {
 module.exports = {
     getListsSurvey,
     getAdminSurveyCreate,
+    UploadimageSurver,
     CreateSurvey,
     UpdateSurvey,
     EditSurvey,

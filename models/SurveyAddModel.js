@@ -7,6 +7,7 @@ const answerSchema = new mongoose.Schema({
 
 const questionSchema = new mongoose.Schema({
   questionText: { type: String, required: true },
+  questionImage: { type: String, required: false },
   inputType: { type: String, enum: ['text', 'single-choice', 'multiple-choice'], required: true },
   options: [{ type: String }],  // ตัวเลือกในคำถาม (ใช้ในกรณี single-choice หรือ multiple-choice)
   answers: [answerSchema]  // คำตอบที่ถูกต้อง

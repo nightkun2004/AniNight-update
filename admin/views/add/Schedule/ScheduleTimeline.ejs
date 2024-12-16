@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มช่องทางการฉายลง Timeline</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <h1 class="text-2xl font-extralight mb-3">
+                            <a href="/admin/manage/anime">
+                                <i class="fa-solid fa-arrow-left"></i> กลับ |
+                            </a>
+                        </h1>
+                    </div>
+            
+                    <section class="mb-5 mt-7 mx-auto max-w-6xl px-4 z-10">
+                        <form action="/admin/add/anime/<%= animeid %>/schedule" method="POST" class="space-y-6 bg-white p-6 rounded-lg shadow-lg">
+                            <!-- วัน -->
+                            <div>
+                                <label for="day" class="block mb-2 text-sm font-medium text-gray-700">วัน</label>
+                                <select id="day" name="day" class="w-full border-gray-300 rounded-lg shadow-sm">
+                                    <option value="Monday">วันจันทร์</option>
+                                    <option value="Tuesday">วันอังคาร</option>
+                                    <option value="Wednesday">วันพุธ</option>
+                                    <option value="Thursday">วันพฤหัสบดี</option>
+                                    <option value="Friday">วันศุกร์</option>
+                                    <option value="Saturday">วันเสาร์</option>
+                                    <option value="Sunday">วันอาทิตย์</option>
+                                </select>
+                            </div>
+                
+                            <!-- วันที่ -->
+                            <div>
+                                <label for="date" class="block mb-2 text-sm font-medium text-gray-700">วันที่</label>
+                                <input type="date" id="date" name="date" required class="w-full border-gray-300 rounded-lg shadow-sm">
+                            </div>
+
+                         <!-- จำนวนตอน -->
+                            <div>
+                                <label for="current" class="block mb-2 text-sm font-medium text-gray-700">จำนวนตอน</label>
+                                <input type="number" id="current" name="episodes[current]" min="0" placeholder="Episodes watched (optional)" class="w-full border-gray-300 rounded-lg shadow-sm">
+                            </div>
+                            <div>
+                                <label for="total">จำนวนตอนทั้งหมด</label>
+                                <input type="number" id="total" name="episodes[total]" min="0" placeholder="Total episodes (optional)" class="w-full border-gray-300 rounded-lg shadow-sm">
+                            </div>
+                
+                            <!-- เวลา -->
+                            <div>
+                                <label for="time" class="block mb-2 text-sm font-medium text-gray-700">เวลา</label>
+                                <input type="time" id="time" name="time" required class="w-full border-gray-300 rounded-lg shadow-sm">
+                            </div>
+                            
+                
+                            <!-- ปุ่มเพิ่ม -->
+                            <div>
+                                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                                    เพิ่มลงใน Schedule
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                </main>
+            </div>
+    </div>
+
+    <!-- Notification Popup -->
+<div id="notification" class="fixed bottom-5 left-5 z-50 max-w-sm w-full p-4 bg-green-100 text-green-800 rounded-lg shadow-lg hidden" role="alert">
+    <div class="relative flex items-center">
+        <div class="flex-shrink-0">
+            <!-- Icon -->
+            <svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="ml-3 flex-1">
+            <p class="text-sm font-medium" id="notification-msg"></p>
+        </div>
+        <button id="close-btn" class="ml-4 text-green-800 hover:text-green-600 focus:outline-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <!-- Status Bar -->
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-green-300 rounded-full" id="progress-bar"></div>
+    </div>
+</div>
+
+    <script src="/js/admin/index.js"></script>
+    <script>
+        function showNotification(msg, type = "success", duration = 3000) {
+            const notification = document.getElementById("notification");
+            const notificationMsg = document.getElementById("notification-msg");
+            const closeButton = document.getElementById("close-btn");
+            const progressBar = document.getElementById("progress-bar");
+
+            // ตั้งค่าข้อความ
+            notificationMsg.textContent = msg;
+
+            // ตั้งค่าประเภทการแจ้งเตือน
+            if (type === "success") {
+                notification.classList.remove("bg-red-100", "text-red-800");
+                notification.classList.add("bg-green-100", "text-green-800");
+                progressBar.classList.add("bg-green-300");
+                progressBar.classList.remove("bg-red-300");
+            } else if (type === "error") {
+                notification.classList.remove("bg-green-100", "text-green-800");
+                notification.classList.add("bg-red-100", "text-red-800");
+                progressBar.classList.add("bg-red-300");
+                progressBar.classList.remove("bg-green-300");
+            }
+
+            // แสดงการแจ้งเตือน
+            notification.classList.remove("hidden");
+
+            // แถบ Status Bar
+            progressBar.style.transition = `width ${duration}ms linear`;
+            progressBar.style.width = "100%";
+
+            // ซ่อนการแจ้งเตือนเมื่อเวลาหมด
+            const timeoutId = setTimeout(() => {
+                hideNotification();
+            }, duration);
+
+            // ฟังก์ชันปิดการแจ้งเตือน
+            closeButton.onclick = () => {
+                clearTimeout(timeoutId);
+                hideNotification();
+            };
+
+            function hideNotification() {
+                notification.classList.add("hidden");
+                progressBar.style.width = "0%";
+                progressBar.style.transition = "none"; // รีเซ็ตการเลื่อน
+            }
+        }
+
+        // อ่าน Query String จาก URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const msg = urlParams.get("msg");
+        const status = urlParams.get("status");
+
+        // ตรวจสอบว่ามี msg และ status หรือไม่
+        if (msg && status) {
+            const type = status === "true" ? "success" : "error";
+            showNotification(msg, type, 5000);
+        }
+
+    </script>
+</body>
+</html>

@@ -51,6 +51,13 @@
             <% survey.questions.forEach((question, index) => { %>
                 <div class="question mb-8" style="display: none;">
                     <h2 class="text-xl font-semibold text-gray-700 mb-2"><%= question.questionText %></h2>
+
+                    <div class="flex justify-center mb-5 mt-5">
+                        <% if (question.questionImage) { %>
+                            <img src="<%= question.questionImage %>" alt="รูปภาพคำถาม" class="max-w-full h-[200px]">
+                        <% } %>
+                    </div>
+                    
                     <input type="hidden" name="answers[<%= index %>][questionId]" value="<%= question._id %>" class="outline-none">
         
                     <% if (question.inputType === 'single-choice') { %>

@@ -16,246 +16,195 @@
     <div class="flex flex-col h-screen">
         <%- include('../../Component/Header') %>
 
-            <div class="flex flex-1 overflow-hidden">
-                <aside id="aside"
-                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
-                    <%- include('../../Component/aside') %>
-                </aside>
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="aside" class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                <%- include('../../Component/aside') %>
+            </aside>
 
-                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
-                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
-                        <h1 class="text-2xl font-extralight mb-3">
-                            <a href="/admin/manage/survey">
-                                <i class="fa-solid fa-arrow-left"></i> กลับ |
-                            </a>
-                            สร้างแบบสำรวจ
-                        </h1>
-                    </div>
-                    <!-- สิ้นสุด HEader ManageAnime -->
+            <main id="mainContent" class="flex-1 p-4 overflow-y-auto bg-gray-50 transition-all">
+                <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                    <h1 class="text-2xl font-extralight">
+                        <a href="/admin/manage/survey" class="text-blue-500 hover:underline">
+                            <i class="fa-solid fa-arrow-left"></i> กลับ |
+                        </a>
+                        สร้างแบบสำรวจ
+                    </h1>
+                </div>
 
-                    <% if (typeof success !== 'undefined' || typeof error !== 'undefined') { %>
-                        <% if (success) { %>
-                            <p>สร้างแบบสำรวจใหม่สำเร็จ</p>
-                        <% } else if (error) { %>
-                            <p>There was an error creating the survey: <%= errorMessage || 'Please try again.' %></p>
-                        <% } %>
+                <% if (typeof success !== 'undefined' || typeof error !== 'undefined') { %>
+                    <% if (success) { %>
+                        <p class="text-green-600">สร้างแบบสำรวจใหม่สำเร็จ</p>
+                    <% } else if (error) { %>
+                        <p class="text-red-600">There was an error creating the survey: <%= errorMessage || 'Please try again.' %></p>
                     <% } %>
+                <% } %>
 
-                    <div class="overflow-x-auto">
-                        <form action="/api/v2/admin/create-survey" method="POST">
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="mb-4">
-                                    <label for="surveyName"
-                                        class="block text-gray-700 font-medium mb-2">ชื่อแบบสำรวจ</label>
-                                    <input type="text" id="surveyName" name="surveyName" required
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="score" class="block text-gray-700 font-medium mb-2">คะแนน</label>
-                                    <input type="number" id="score" name="score" required
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
-                                </div>
-                                <div class="mb-4">
-                                    <div class="flex">
-                                        <div class="flex items-center h-5">
-                                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text"
-                                                type="checkbox" id="published" name="published"
-                                                class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        </div>
-                                        <div class="ms-2 text-sm">
-                                            <label for="helper-checkbox"
-                                                class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่แบบสำรวจตอนนี้</label>
-                                            <p id="helper-checkbox-text"
-                                                class="text-xs font-normal text-gray-500 dark:text-gray-300">
-                                                หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้
-                                                หากคุณต้องการเผยแพร่เลยให้ติ้งไว้</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4 sticky bottom-0 right-1 z-20">
-                                    <button type="submit"
-                                        class="w-full bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition duration-300 mt-4">เผยแพร่</button>
+                <div class="overflow-x-auto">
+                    <form action="/api/v2/admin/create-survey" method="POST" enctype="multipart/form-data">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="mb-4">
+                                <label for="surveyName" class="block text-gray-700 font-medium mb-2">ชื่อแบบสำรวจ</label>
+                                <input type="text" id="surveyName" name="surveyName" required class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="score" class="block text-gray-700 font-medium mb-2">คะแนน</label>
+                                <input type="number" id="score" name="score" required class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="flex items-start">
+                                    <input type="checkbox" id="published" name="published" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
+                                    <label for="published" class="ml-2 text-sm font-medium text-gray-700">เผยแพร่แบบสำรวจตอนนี้</label>
                                 </div>
                             </div>
 
-                            <div class="mb-4 ">
-                                <div class="grid grid-cols-2 gap-2" id="questions">
-                                    <div class="question bg-white rounded-lg p-3">
-                                        <label for="questionText"
-                                            class="block text-gray-700 font-medium mb-2">คำถาม</label>
-                                        <input type="text" name="questions[0][questionText]" required
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
+                            <div class="col-span-2 mb-4">
+                                <button type="submit" class="w-full bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition">เผยแพร่</button>
+                            </div>
+                        </div>
 
-                                        <!-- สำหรับประเทคคำตอบ -->
-                                        <label for="inputType"
-                                            class="block text-gray-700 font-medium mb-2 mt-4">ประเภทคำตอบ</label>
-                                        <select name="questions[0][inputType]" onchange="handleInputTypeChange(this, 0)"
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
-                                            <option value="text">ตอบ</option>
-                                            <option value="single-choice">เลือกได้คำตอบเดี่ยว</option>
-                                            <option value="multiple-choice">เลือกได้หลายคำตอบ</option>
-                                        </select>
+                        <div class="mt-4">
+                        <div id="questions" class="grid grid-cols-2 gap-4">
+                            <div class="question bg-white rounded-lg p-4 border">
+                                <label class="block text-gray-700 font-medium mb-2">คำถาม</label>
+                                <input type="text"  name="questions[0][questionText]" required class="w-full px-4 py-2 border border-gray-300 rounded-md">
 
-                                        <!-- สำหรับตัวเลือก -->
-                                        <div class="options mt-4" id="optionsContainer0" style="display: none;">
-                                            <label for="options" class="block text-gray-700 font-medium mb-2">ตัวเลือก</label>
-                                            <input type="text" name="questions[0][options]"
-                                                class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
-                                            <button type="button" onclick="addOption(0)" class="text-blue-500 hover:text-blue-700 mt-2">เพิ่มตัวเลือก</button>
-                                        </div>
+                                <label class="block text-gray-700 font-medium mt-4">ประเภทคำตอบ</label>
+                                <select name="questions[0][inputType]" onchange="handleInputTypeChange(this, 0)" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    <option value="text">ตอบ</option>
+                                    <option value="single-choice">เลือกได้คำตอบเดี่ยว</option>
+                                    <option value="multiple-choice">เลือกได้หลายคำตอบ</option>
+                                </select>
+
+                                <label class="block text-gray-700 font-medium mt-4">อัปโหลดรูปภาพ (ถ้ามี)</label>
+                                <input type="file" accept="image/*" id="questionImage0" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                <input type="url" name="questions[0][questionImage]" id="imageUrl0" class="w-full px-4 py-2 border border-gray-300 rounded-md mt-2" placeholder="URL ของรูปภาพ">
+
+                                <div id="optionsContainer0" class="mt-4 hidden">
+                                    <label class="block text-gray-700 font-medium mb-2">ตัวเลือก</label>
+                                    <div class="option-container">
+                                        <input type="text" name="questions[0][options][0]" class="w-full px-4 py-2 border border-gray-300 rounded-md">
                                     </div>
-                                </div>
-                                <div class="mb-4 fixed right-5 m-1 bottom-4">
-                                    <button type="button" onclick="addQuestion()"
-                                        class="w-full bg-blue-500 text-white font-semibold p-2 py-2 rounded-md hover:bg-blue-600 transition duration-300">เพิ่มคำถาม</button>
+                                    <button type="button" onclick="addOption(0)" class="text-blue-500 hover:underline mt-2">เพิ่มตัวเลือก</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>      
                     </div>
-                </main>
-            </div>
-    </div>
 
-    <!-- Notification Popup -->
-    <div id="notification"
-        class="fixed bottom-5 left-5 z-50 max-w-sm w-full p-4 bg-green-100 text-green-800 rounded-lg shadow-lg hidden"
-        role="alert">
-        <div class="relative flex items-center">
-            <div class="flex-shrink-0">
-                <!-- Icon -->
-                <svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    aria-hidden="true">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
-                        clip-rule="evenodd" />
-                </svg>
-            </div>
-            <div class="ml-3 flex-1">
-                <p class="text-sm font-medium" id="notification-msg"></p>
-            </div>
-            <button id="close-btn" class="ml-4 text-green-800 hover:text-green-600 focus:outline-none">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <!-- Status Bar -->
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-green-300 rounded-full" id="progress-bar"></div>
+                        <div class="mt-4">
+                            <button type="button" onclick="addQuestion()" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition">เพิ่มคำถาม</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
         </div>
     </div>
 
-    <script src="/js/admin/index.js"></script>
     <script>
-     function handleInputTypeChange(select, questionIndex) {
-        const optionsDiv = document.getElementById(`optionsContainer${questionIndex}`);
-        optionsDiv.style.display = select.value !== 'text' ? 'block' : 'none';
-    }
+        function handleInputTypeChange(select, questionIndex) {
+            const optionsDiv = document.getElementById(`optionsContainer${questionIndex}`);
+            optionsDiv.style.display = select.value !== 'text' ? 'block' : 'none';
+        }
 
-    function addOption(questionIndex) {
-        const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
-        const optionCount = optionsContainer.getElementsByClassName('option').length;
+        function addOption(questionIndex) {
+    const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
+    const optionCount = optionsContainer.querySelectorAll('.option-container').length;
 
-        const newOption = document.createElement('div');
-        newOption.className = 'option mb-2';
-        newOption.innerHTML = `
-            <input type="text" name="questions[${questionIndex}][options][${optionCount}]" 
-                class="w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-inner">
-            <button type="button" onclick="this.parentElement.remove()" 
-                class="text-red-500 hover:text-red-700 ml-2">ลบ</button>
-        `;
+    const newOption = document.createElement('div');
+    newOption.className = 'option-container mt-2';
+    newOption.innerHTML = `
+        <input type="text" name="questions[${questionIndex}][options][${optionCount}]" 
+               class="w-full px-4 py-2 border border-gray-300 rounded-md">
+        <button type="button" class="text-red-500 ml-2 hover:underline" onclick="this.parentElement.remove()">ลบ</button>
+    `;
+    optionsContainer.appendChild(newOption);
+}
 
-        optionsContainer.appendChild(newOption);
-    }
 
-    function addQuestion() {
-        const questionsDiv = document.getElementById('questions');
-        const questionCount = questionsDiv.getElementsByClassName('question').length;
+        function previewImage(input, previewId, urlInputId) {
+            const file = input.files[0];
+            const preview = document.getElementById(previewId);
+            const urlInput = document.getElementById(urlInputId);
 
-        const newQuestion = document.createElement('div');
-        newQuestion.className = 'question p-4 bg-white rounded-md border border-gray-200';
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
 
-        newQuestion.innerHTML = `
-            <label for="questionText" class="block text-gray-700 font-medium mb-2">คำถาม</label>
-            <input type="text" name="questions[${questionCount}][questionText]" required
-                class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
-            
-            <label for="inputType" class="block text-gray-700 font-medium mb-2 mt-4">ประเภทคำตอบ</label>
-            <select name="questions[${questionCount}][inputType]" onchange="handleInputTypeChange(this, ${questionCount})"
-                class="w-full px-4 py-2 border border-gray-300 rounded-md outline-none">
-                <option value="text">ตอบ</option>
-                <option value="single-choice">เลือกได้คำตอบเดี่ยว</option>
-                <option value="multiple-choice">เลือกได้หลายคำตอบ</option>
-            </select>
+                // Upload image to the API
+                const formData = new FormData();
+                formData.append('image', file);
 
-            <div class="options mt-4" id="optionsContainer${questionCount}" style="display: none;">
-                <label for="options" class="block text-gray-700 font-medium mb-2">ตัวเลือก</label>
-                <button type="button" onclick="addOption(${questionCount})" 
-                    class="text-blue-500 hover:text-blue-700 mt-2">เพิ่มตัวเลือก</button>
-            </div>
-        `;
+                fetch('/api/v2/upload/image/surver', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            // Handle non-OK responses
+                            return response.json().then(errorData => {
+                                throw new Error(errorData.error || 'Error uploading image');
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.imageUrl) {
+                            urlInput.value = data.imageUrl; // Set the returned URL to the input field
+                            console.log('Image uploaded:', data.imageUrl);
+                        } else {
+                            alert('Failed to upload image.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error uploading image:', error);
+                        alert('Error uploading image: ' + error.message);
+                    });
 
-        questionsDiv.appendChild(newQuestion);
-    }
-    </script>
-    <script>
-        function showNotification(msg, type = "success", duration = 3000) {
-            const notification = document.getElementById("notification");
-            const notificationMsg = document.getElementById("notification-msg");
-            const closeButton = document.getElementById("close-btn");
-            const progressBar = document.getElementById("progress-bar");
-
-            // ตั้งค่าข้อความ
-            notificationMsg.textContent = msg;
-
-            // ตั้งค่าประเภทการแจ้งเตือน
-            if (type === "success") {
-                notification.classList.remove("bg-red-100", "text-red-800");
-                notification.classList.add("bg-green-100", "text-green-800");
-                progressBar.classList.add("bg-green-300");
-                progressBar.classList.remove("bg-red-300");
-            } else if (type === "error") {
-                notification.classList.remove("bg-green-100", "text-green-800");
-                notification.classList.add("bg-red-100", "text-red-800");
-                progressBar.classList.add("bg-red-300");
-                progressBar.classList.remove("bg-green-300");
-            }
-
-            // แสดงการแจ้งเตือน
-            notification.classList.remove("hidden");
-
-            // แถบ Status Bar
-            progressBar.style.transition = `width ${duration}ms linear`;
-            progressBar.style.width = "100%";
-
-            // ซ่อนการแจ้งเตือนเมื่อเวลาหมด
-            const timeoutId = setTimeout(() => {
-                hideNotification();
-            }, duration);
-
-            // ฟังก์ชันปิดการแจ้งเตือน
-            closeButton.onclick = () => {
-                clearTimeout(timeoutId);
-                hideNotification();
-            };
-
-            function hideNotification() {
-                notification.classList.add("hidden");
-                progressBar.style.width = "0%";
-                progressBar.style.transition = "none"; // รีเซ็ตการเลื่อน
+            } else {
+                preview.src = "";
+                preview.style.display = "none";
             }
         }
 
-        // อ่าน Query String จาก URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const msg = urlParams.get("msg");
-        const status = urlParams.get("status");
+        function addQuestion() {
+            const questionsDiv = document.getElementById('questions');
+            const questionCount = questionsDiv.getElementsByClassName('question').length;
 
-        // ตรวจสอบว่ามี msg และ status หรือไม่
-        if (msg && status) {
-            const type = status === "true" ? "success" : "error";
-            showNotification(msg, type, 5000);
+            const newQuestion = document.createElement('div');
+            newQuestion.className = 'question bg-white rounded-lg p-4 border';
+
+            newQuestion.innerHTML = `
+                <label class="block text-gray-700 font-medium mb-2">คำถาม</label>
+                <input type="text" name="questions[${questionCount}][questionText]" required class="w-full px-4 py-2 border border-gray-300 rounded-md">
+    
+                <label class="block text-gray-700 font-medium mt-4">ประเภทคำตอบ</label>
+                <select name="questions[${questionCount}][inputType]" onchange="handleInputTypeChange(this, ${questionCount})" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    <option value="text">ตอบ</option>
+                    <option value="single-choice">เลือกได้คำตอบเดี่ยว</option>
+                    <option value="multiple-choice">เลือกได้หลายคำตอบ</option>
+                </select>
+    
+                <label class="block text-gray-700 font-medium mt-4">อัปโหลดรูปภาพ (ถ้ามี)</label>
+                <input type="file" name="questions[${questionCount}][questionImage]" accept="image/*" id="questionImage${questionCount}" onchange="previewImage(this, 'preview${questionCount}', 'imageUrl${questionCount}')" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                <img id="preview${questionCount}" style="display:none; margin-top: 10px; max-height: 150px;" alt="ตัวอย่างรูปภาพ">
+                <input type="url" name="questions[${questionCount}][questionImage]" id="imageUrl${questionCount}" class="w-full px-4 py-2 border border-gray-300 rounded-md mt-2" placeholder="URL ของรูปภาพ">
+    
+                <div id="optionsContainer${questionCount}" class="mt-4 hidden">
+                    <label class="block text-gray-700 font-medium mb-2">ตัวเลือก</label>
+                    <div class="option-container">
+                        <input type="text" name="questions[${questionCount}][options][0]" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <button type="button" onclick="addOption(${questionCount})" class="text-blue-500 hover:underline mt-2">เพิ่มตัวเลือก</button>
+                </div>
+            `;
+
+            questionsDiv.appendChild(newQuestion);
         }
-
     </script>
 </body>
 

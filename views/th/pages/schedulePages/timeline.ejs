@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>AniNight</title>
+  <title>ตารางฉายอนิเมะ</title>
   <meta name="description"
     content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ อ่านบทความที่น่าสนใจ และอัปเดตตารางอนิเมะได้ที่ AniNight">
   <meta name="keywords"
-    content="อ่านบทความ, ข่าวอนิเมะ, ตารางอนิเมะ, อนิเมะพากย์ไทย, มังงะ, manga, anime, ออนไลน์, AniNight, อนิเมะไนท์">
+    content="อ่านบทความ, ข่าวอนิเมะ, ตารางอนิเมะ, อนิเมะพากย์ไทย, มังงะ, manga, anime, ออนไลน์, AniNight, อนิเมะไนท์, ตารางฉายอนิเมะ">
   <meta name="author" content="ทีมงาน Ani Night">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- Canonical and SEO Meta -->
-  <link rel="canonical" href="https://ani-night.online">
-  <meta property="og:url" content="https://ani-night.online">
+  <link rel="canonical" href="https://ani-night.online/schedule/timeline">
+  <meta property="og:url" content="https://ani-night.online/schedule/timeline">
   <meta property="og:title" content="AniNight - แพลตฟอร์มข่าวสารและบทความเกี่ยวกับอนิเมะ">
   <meta property="og:description"
     content="ติดตามข่าวสารอนิเมะ บทความสุดพิเศษ และตารางอนิเมะล่าสุดได้ที่ AniNight! สร้างสรรค์เนื้อหาและสร้างรายได้ผ่านเครื่องมือของเรา">
@@ -131,8 +131,28 @@
                           </a>
                         </h3>
                         <p class="text-sm text-gray-600">
-                          <%= animeItem.anime.episodes.current %> ตอนล่าสุด
-                        </p>
+                          <% if (animeItem.anime.episodes) { %>
+                              <strong
+                                  class="<%= animeItem.anime.episodes.current !== 0 ? 'text-blue-500 font-medium' : '' %>">
+                                  ตอนที่ <%= animeItem.anime.episodes.current %>
+                                  <% 
+                                      // ตรวจสอบเวลาปัจจุบันและเวลาของอนิเมะ
+                                      const animeTime = moment(animeItem.time, 'HH:mm');
+                                      const now = moment().tz('Asia/Bangkok');
+                                      const isUpdating = now.isSameOrAfter(animeTime);
+                      
+                                      if (isUpdating) { %>
+                                      กำลังอัปเดต
+                                  <% } else { %>
+                                      กำลังจะอัปเดต
+                                  <% } %>
+                              </strong>
+                              <span>จากตอนทั้งหมด <%= animeItem.anime.episodes.total %></span>
+                          <% } else { %>
+                              <span>ไม่มีข้อมูลตอน</span>
+                          <% } %>
+                      </p>
+                      
                         <span class="time text-blue-500 font-medium">
                           <%= animeItem.time || 'ไม่ระบุเวลา' %>
                         </span>

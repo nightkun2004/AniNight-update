@@ -40,11 +40,13 @@ const getAddAnimeScheduleTimeline = async (req, res) => {
     const userID = req.session.userlogin;
     const lang = res.locals.lang;
     try {
-
+        const { id: animeid } =  req.params;
+        // console.log(animeid)
         const animes = await Anime.find().exec();
-        res.render(`./th/pages/admin/add/Schedule`, { 
+        res.render(`./add/Schedule/ScheduleTimeline`, { 
             userID, 
             animes, 
+            animeid,
             translations: req.translations, 
             lang,
             active: "getAddAnimeScheduleTimeline"
@@ -905,11 +907,13 @@ const AddAnimeschedule = async (req, res) => {
 
 const AddAnimescheduleTimeline = async (req, res) => {
     try {
-        const { day, date, time, anime } = req.body;
-        // console.log("ข้อมูล day: ", day);
+        const { day, date, time, episodes } = req.body;
+        const { id: anime } =  req.params;
+        // console.log("ข้อมูล day: ", day); 
         // console.log("ข้อมูล date: ", date); 
         // console.log("ข้อมูล time: ", time); 
         // console.log("ข้อมูล anime: ", anime); 
+        // console.log("ข้อมูล episodes: ", episodes); 
 
         let schedule = await Schedule.findOne({ day, date });
 
@@ -918,23 +922,33 @@ const AddAnimescheduleTimeline = async (req, res) => {
             schedule = new Schedule({
                 day,
                 date,
+                episodes: {
+                    current: episodes?.current || 0,
+                    total: episodes?.total || 0,
+                },
                 animes: [],
             });
+        } else {
+            // อัปเดต episodes หากมีการส่งค่าใหม่มา
+            if (episodes) {
+                schedule.episodes.current = episodes.current ?? schedule.episodes.current;
+                schedule.episodes.total = episodes.total ?? schedule.episodes.total;
+            }
         }
 
-         // เพิ่มอนิเมะในตารางเวลา
-         schedule.animes.push({ anime, time });
+        // เพิ่มอนิเมะในตารางเวลา
+        schedule.animes.push({ anime, time });
 
-         // บันทึกลงฐานข้อมูล
-         await schedule.save();
+        // บันทึกลงฐานข้อมูล
+        await schedule.save();
 
         // console.log("ข้อมูลที่อัพเดต: ", schedule); 
-        res.status(200).redirect(`/admin/add/anime/schedule/time?msg=เพิ่มวันแล้ว&status=true`)
+        res.status(200).redirect(`/admin/add/anime/${anime}/schedule/time?msg=เพิ่มวันแล้ว&status=true`);
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
             error: errorMessage
-        })
+        });
     }
 }
 
@@ -1192,4 +1206,4 @@ module.exports = {
     BookmarkSaveAnime,
     UnbookmarkBookmarkSaveAnime,
     updateAnimeYoutubeLinks
-}
+}  

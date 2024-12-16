@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการผู้ใช้</title>
+    <title>จัดการอนิเมะ</title>
     <!-- CSS & JS -->
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/index.css">
@@ -61,7 +61,7 @@
                                                         <img src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/50x75' %>" alt="<%= anime.title %>" class="w-12 h-18 object-cover rounded-md">
                                                  <% } %>
                                             </td>
-                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.title.en %></td>
+                                            <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.title.th || anime.title.en %></td>
                                             <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700"><%= anime.year %></td>
                                             <td class="px-6 py-4 border-b border-gray-200 text-sm text-gray-700">
                                                 <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs"><%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %></span>
@@ -72,6 +72,9 @@
                                             <td class="px-6 py-4  flex flex-col items-centerborder-b border-gray-200 text-sm text-right">
                                                 <a class="text-blue-500 hover:underline mr-2" href="/admin/edit/<%= anime._id %>/anime">
                                                     แก้ไข
+                                                </a>
+                                                <a class="text-blue-500 hover:underline mr-2" href="/admin/add/anime/<%= anime._id %>/schedule/time">
+                                                    เพิ่มลงตารางฉาย
                                                 </a>
                                                 <form action="/delete/anime" method="post" onsubmit="return confirm('คุณแน่ใจหรือว่าต้องการลบอนิเมะนี้?');">
                                                     <input type="hidden" name="anime_id" value="<%= anime._id %>">

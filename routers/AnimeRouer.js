@@ -16,7 +16,7 @@ router.post("/anime/edit/info",checkAuth , authMiddleware, EditAnimeinfo)
 router.post("/anime/update/:id",checkAuth , authMiddleware, updateAnimeStream)
 router.post("/admin/edit/:id/title",checkAuth , authMiddleware, EditAnimeTitle)
 router.post("/admin/edit/:id/schedule/add",checkAuth , authMiddleware, AddAnimeschedule)
-router.post("/admin/schedule/add/timeline",checkAuth, authMiddleware, AddAnimescheduleTimeline)
+router.post("/admin/add/anime/:id/schedule",checkAuth, authMiddleware, AddAnimescheduleTimeline)
 
 
 

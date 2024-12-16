@@ -82,21 +82,22 @@ const getAnimeInfo = async (req, res) => {
         });
     }
 }
-
 const getAnimeScheduleTimeline = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
 
     try {
-        // ดึงข้อมูล Schedule พร้อมกับ populate anime ภายใน animes
         const schedules = await Schedule.find()
             .populate({
-                path: 'animes.anime',  // ชี้ไปที่ฟิลด์ anime ภายในอาเรย์ animes
-                model: 'Anime',        // ต้องระบุชื่อโมเดล Anime
+                path: 'animes.anime',
+                model: 'Anime',
             })
-            .exec();    
+            .exec();
 
-            const currentDate = moment().tz('Asia/Bangkok').format('DD/MM');
+        // ตรวจสอบข้อมูลที่ได้จากฐานข้อมูล
+        // console.log('Schedules:', JSON.stringify(schedules, null, 2));
+
+        const currentDate = moment().tz('Asia/Bangkok').format('DD/MM');
 
         res.render(`./th/pages/schedulePages/timeline`, {
             userID,
@@ -111,6 +112,7 @@ const getAnimeScheduleTimeline = async (req, res) => {
         res.status(500).json({ error: error.message || "Internal Server Error" });
     }
 };
+
 
 
 
