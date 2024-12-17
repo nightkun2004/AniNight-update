@@ -100,17 +100,27 @@
                             <% day.animes.forEach(animeItem=> { %>
                             <div class="anime-item flex items-center space-x-4 mb-4">
                                 <div class="anime-image flex-shrink-0">
-                                    <% if (animeItem.anime.poster || animeItem.anime.thumbnail && animeItem.anime.poster.startsWith('http') || animeItem.anime.thumbnail.startsWith('http')) { %>
-                                      <a href="/anime/<%= animeItem.anime.urlslug %>" target="_blank" rel="noopener noreferrer">
-                                        <img src="<%= animeItem.anime.poster || animeItem.anime.thumbnail %>" alt="<%= animeItem.anime.title.en %>"
-                                        class="w-24 h-24 object-cover rounded-lg">
-                                      </a>
+                                    <% 
+                                    const posterUrl = animeItem.anime.poster && animeItem.anime.poster.startsWith('http') 
+                                      ? animeItem.anime.poster 
+                                      : (animeItem.anime.thumbnail && animeItem.anime.thumbnail.startsWith('http') 
+                                          ? animeItem.anime.thumbnail 
+                                          : null); 
+                                  %>
+                                  
+                                  <a href="/anime/<%= animeItem.anime.urlslug %>" target="_blank" rel="noopener noreferrer">
+                                      <% if (posterUrl) { %>
+                                          <!-- หาก poster หรือ thumbnail เป็นลิงก์ภายนอก -->
+                                          <img src="<%= posterUrl %>" 
+                                               alt="<%= animeItem.anime.title.en %>" 
+                                               class="w-24 h-24 object-cover rounded-lg">
                                       <% } else { %>
-                                        <a href="/anime/<%= animeItem.anime.urlslug %>" target="_blank" rel="noopener noreferrer">
-                                            <img src="/uploads/posters/<%= animeItem.anime.poster || animeItem.anime.thumbnail %>"
-                                          alt="<%= animeItem.anime.title.en %>" class="w-24 h-24 object-contain rounded-lg">
-                                        </a>
+                                          <!-- กรณีไม่มี poster และ thumbnail -->
+                                          <img src="/uploads/posters/<%= animeItem.anime.poster || animeItem.anime.thumbnail || 'placeholder.jpg' %>" 
+                                               alt="<%= animeItem.anime.title.en %>" 
+                                               class="w-24 h-24 object-contain rounded-lg">
                                       <% } %>
+                                  </a>                                  
                                   </div>
 
                                   <div class="anime-details">
