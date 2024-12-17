@@ -136,23 +136,24 @@
                                         <% if (animeItem.anime.episodes) { %>
                                             <strong class="<%= animeItem.anime.episodes.current !== 0 ? 'text-blue-500 font-medium' : '' %>">
                                                 ตอนที่ <%= animeItem.anime.episodes.current %>
-                                                <% 
-                                                    // ตรวจสอบเวลาปัจจุบันและเวลาของอนิเมะ
-                                                    const animeTime = moment(animeItem.time, 'HH:mm');
-                                                    const now = moment().tz('Asia/Bangkok');
-                                                    const isUpdating = now.isSameOrAfter(animeTime);
-                                                
-                                                    if (isUpdating) { %>
-                                                    <p>อัปเดตแล้ว</p>
-                                                <% } else { %>
-                                                    <p>กำลังอัปเดต </p>
-                                                <% } %>
                                             </strong> 
+                                            <% 
+                                                // ตรวจสอบเวลาปัจจุบันและเวลาของอนิเมะ
+                                                const animeTime = moment(animeItem.time, 'HH:mm');
+                                                const now = moment().tz('Asia/Bangkok');
+                                                const isUpdating = now.isSameOrAfter(animeTime);
+                                            %>
+                                            <% if (isUpdating) { %>
+                                                <span class="text-green-500">อัปเดตแล้ว</span>
+                                            <% } else { %>
+                                                <span class="text-orange-500">กำลังอัปเดต</span>
+                                            <% } %>
                                             <span>จากตอนทั้งหมด <%= animeItem.anime.episodes.total %></span>
                                         <% } else { %>
                                             <span>ไม่มีข้อมูลตอน</span>
                                         <% } %>
                                     </p>
+                                    
                                     
                                     <span class="time text-blue-500 font-medium">
                                         <%= animeItem.time || 'ไม่ระบุเวลา' %>
