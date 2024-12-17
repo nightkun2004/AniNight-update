@@ -99,11 +99,11 @@ const getAnimeScheduleTimeline = async (req, res) => {
 
         const currentDate = moment().tz('Asia/Bangkok').format('DD/MM');
 
-        res.render(`./th/pages/schedulePages/timeline`, {
+        res.render(`./anime/timeline`, {
             userID,
             schedule: schedules,
             currentDate,
-            active: "ScheduleAnime",
+            active: "ScheduleAnimeTimeline",
             translations: req.translations,
             lang,
         });

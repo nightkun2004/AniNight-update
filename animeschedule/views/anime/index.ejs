@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางอนิเมะสำหรับซีซัน Fall 2024</title>
+    <meta name="description" content="ที่นำเสนอข่าวสาร, รีวิว, ตารางออกอากาศ, และบทความที่เกี่ยวกับอนิเมะ">
+    <meta name="keywords"
+        content="อนิเมะ, ดันดาดัน, อนิเมะ, ข่าวอนิเมะ, รีวิวอนิเมะ, ตารางอนิเมะ, อนิเมะใหม่, อนิเมะยอดนิยม, นายโดดเดี่ยวพิชิตต่างโลก, รักรักรักรักรักเธอหมดหัวใจจากแฟนสาว 100 คน, [2024], [Fall]">
+    <meta name="author" content="Night">
+
+    <meta property="og:title" content="เว็บไซต์อนิเมะ | ข่าวสารและข้อมูลเกี่ยวกับอนิเมะ">
+    <meta property="og:description"
+        content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ, รีวิวอนิเมะ, และตารางออกอากาศได้ที่นี่!">
+    <meta property="og:image" content="https://ani-night.online/logo/Aninight.png">
+    <meta property="og:url" content="https://ani-night.online/schedule/anime">
+    <meta property="og:type" content="website">
+
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 text-black">
+
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('./Component/header') %>
+
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Aside Section -->
+            <aside id="aside" class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                <%- include('./Component/adside') %>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+
+                <section class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-lg mb-5">
+                    <div class=" mx-auto px-4 py-16 flex flex-col md:flex-row items-center">
+                      <!-- Text Section -->
+                      <div class="flex-1 text-center md:text-left">
+                        <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">
+                          รวบรวมทุกสิ่งเกี่ยวกับ <span class="text-yellow-300">อนิเมะ</span> ไว้ที่นี่
+                        </h1>
+                        <p class="text-lg md:text-xl mb-6">
+                          ติดตามข่าวสาร ตารางออกอากาศ รีวิว และบทความที่เกี่ยวกับอนิเมะทุกซีซันได้ในที่เดียว
+                        </p>
+                        <div class="flex justify-center md:justify-start space-x-4">
+                          <a href="#scheduleAnime" class="px-6 py-3 bg-yellow-300 text-indigo-800 rounded-lg font-medium hover:bg-yellow-400">
+                            ดูตารางอนิเมะ 👇
+                          </a>
+                          <a href="#news" class="px-6 py-3 bg-white text-indigo-800 rounded-lg font-medium hover:bg-gray-100">
+                            อ่านข่าวล่าสุด
+                          </a>
+                        </div>
+                      </div>
+                  
+                      <!-- Image Section -->
+                      <div class="flex-1 mt-10 md:mt-0 flex justify-center">
+                        <img src="" 
+                             alt="Anime Hero" 
+                             class="rounded-lg max-w-xs h-[300px] object-cover md:max-w-md lg:max-w-lg">
+                      </div>
+                    </div>
+                </section>
+                  
+                <!-- Content goes here -->
+                 <div class="flex justify-between" id="scheduleAnime">
+                    <div>
+                        <h2 class="text-base md:text-2xl font-light">อนิเมะทั้งหมด</h2>
+                    </div>
+                 </div>
+                 <div id="anime-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 lg:gap-10 mt-5 mb-5">
+                    <!-- อนิเมะจะแสดงใน container นี้ -->
+                </div>
+
+                <div id="pagination-controls" class="flex justify-center mt-4">
+                    <button id="load-more" class="px-4 py-2 bg-indigo-500 text-white rounded-lg">โหลดเพิ่มเติม</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        const BTN_MENU_TOGGLE = document.getElementById("menuButton");
+        const ASIDE_BAR = document.getElementById("aside");
+
+        BTN_MENU_TOGGLE?.addEventListener("click", () => {
+            ASIDE_BAR.classList.toggle("-translate-x-full");
+        });
+
+        let currentPage = 1;
+        const container = document.getElementById('anime-container');
+        const loadMoreButton = document.getElementById('load-more');
+
+        const loadAnime = async (page) => {
+            try {
+                const response = await fetch(`/api/v2/schedule/anime?page=${page}`);
+                const data = await response.json();
+
+                // เพิ่มข้อมูลอนิเมะใหม่ใน container
+                data.Animelists.forEach(anime => {
+                    const animeCard = `
+                        <div class="anime-card overflow-hidden">
+                            <a href="/anime/${anime.urlslug}" class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                                <img src="${anime.poster.startsWith('http') ? anime.poster : (anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200')}" 
+                                    alt="${anime.title.en}" class="w-full rounded-lg" loading="lazy">
+                            </a>
+                            <a class="anime-info title" href="/anime/${anime.urlslug}">
+                                <h2 class="text-sm font-bold">${anime.title.th || anime.title.en}</h2>
+                            </a>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', animeCard);
+                });
+
+                // ซ่อนปุ่มโหลดเพิ่มเติมถ้าไม่มีหน้าถัดไป
+                if (!data.hasNext) {
+                    loadMoreButton.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error loading anime:', error);
+            }
+        };
+
+        // โหลดข้อมูลครั้งแรก
+        loadAnime(currentPage);
+
+        loadMoreButton.addEventListener('click', () => {
+            currentPage++;
+            loadAnime(currentPage);
+        });
+    </script>
+</body>
+</html>

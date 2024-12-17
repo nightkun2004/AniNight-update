@@ -114,7 +114,8 @@ app.use((req, res, next) => {
 app.set('views', [
   path.join(__dirname, '/views'),
   path.join(__dirname, '/admin/views'),
-  path.join(__dirname, '/media/views')
+  path.join(__dirname, '/media/views'),
+  path.join(__dirname, '/animeschedule/views')
 ]);
 app.set('view engine', 'ejs');
 app.use(fileUpload({
@@ -173,7 +174,7 @@ app.use("/api/v2", MemeRouter)
 app.use("/api/v2", UploadsRouter)
 app.use("/api/v2", PostsRouter)
 app.use("/api/v2", DashboardRouter)
-app.use("/api/v2", ApiService)
+app.use("/api/v2",  ApiService)
 app.use("/api/v2", channalRouter)
 app.use("/api/v2", SurveyRouter)
 app.use("/api/v2", SurveyRouterCrerate)
@@ -189,6 +190,14 @@ app.use("/api/v2", AiRoute)
 
 app.use(compression());
 app.use(helmet());
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 นาที
+  max: 100, // จำกัดคำขอ 100 ครั้งต่อ IP
+  message: 'Too many requests from this IP, please try again later.',
+});
+
+app.use('/api/v2/schedule/anime', apiLimiter);
+
 
 // เพิ่ม rate limiting เพื่อลดการโจมตีแบบ brute force
 const limiter = rateLimit({

@@ -1010,12 +1010,13 @@ const getSchedule = async (req, res) => {
     try {
         const Animelists = await Anime.find().sort({ createdAt: -1 }).exec();
 
-        res.render(`./th/pages/schedulePages/index`, {
+        res.render("./anime/index", {
             userID,
             Animelists,
             active: "ScheduleAnime",
             lang
         })
+
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).render(`./th/pages/schedulePages/index`, {
@@ -1030,23 +1031,27 @@ const getSchedule = async (req, res) => {
 // ===================================================================================================
 const getScheduleAPI = async (req, res) => {
     const userID = req.session.userlogin;
-    const lang = req.params.lang || 'th';
-    try {
-        const Animelists = await Anime.find().sort({ createdAt: -1 }).exec();
+    const lang = res.locals.lang;
 
-        res.json({
-            userID,
-            Animelists,
-            translations: req.translations,
-            lang
-        })
+    const page = parseInt(req.query.page) || 1; // หน้าปัจจุบัน (ค่าเริ่มต้น: 1)
+    const limit = 10; // จำนวนอนิเมะต่อหน้า
+    const skip = (page - 1) * limit; // คำนวณ offset
+
+    try {
+        const total = await Anime.countDocuments(); // นับจำนวนอนิเมะทั้งหมด
+        const Animelists = await Anime.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .exec();
+
+        res.json({ 
+            Animelists, 
+            total, 
+            hasNext: skip + limit < total 
+        });
     } catch (error) {
-        const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).json({
-            error: errorMessage,
-            userID,
-            lang
-        })
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 }
 
