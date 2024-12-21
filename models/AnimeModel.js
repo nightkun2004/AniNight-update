@@ -28,13 +28,18 @@ const charactersSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const AnimeSchema = new mongoose.Schema({
+    format: {
+        type: String,
+        enum: ["TV", "OVA", "Movie", "Special", "ONA", "Music", "Unknown"]
+    },
     title: {
         en: { type: String, required: false },
         jp: { type: String, required: false },
         th: { type: String, required: false }
     },
     synopsis: {
-        type: String
+        type: String,
+        required: false
     },
     animetype: {
         type: String,
@@ -43,6 +48,9 @@ const AnimeSchema = new mongoose.Schema({
     season: {
         type: String,
         enum: ["Spring", "Summer", "Fall", "Winter"]
+    },
+    startDate: {
+        type: String,
     },
     poster: String,
     banner: String,
@@ -93,6 +101,16 @@ const AnimeSchema = new mongoose.Schema({
     published: {
         type: Boolean,
         required: false
+    },
+    animenew: {
+        type: Boolean,
+        default: false,
+    },
+    expiresAt: {
+        type: Date,
+        default: function () {
+            return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 1 เดือนจากวันที่สร้าง
+        },
     },
     streaming: [StreamSchema],
     characters: [charactersSchema],

@@ -113,6 +113,11 @@ const authRegister = async (req, res, next) => {
         //     return res.status(400).json({ message: 'รหัสผ่านต้องมีตัวอักษรตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษอย่างน้อยหนึ่งตัว' });
         // }
 
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).render(`./th/pages/authPages/register`, { error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร ประกอบด้วยตัวอักษรพิมพ์ใหญ่ พิมพ์เล็ก และตัวเลข', active: "register", userID, siteKey, translations: req.translations, lang });
+        }
+
         // ตรวจสอบอีเมลที่ซ้ำ
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -123,6 +128,8 @@ const authRegister = async (req, res, next) => {
         if (existingUsername) {
             return res.status(400).render(`./th/pages/authPages/register`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', active: "register", userID, siteKey, translations: req.translations, lang });
         }
+
+        
 
         // เข้ารหัสรหัสผ่าน
         const hashedPassword = await bcrypt.hash(password, 12);

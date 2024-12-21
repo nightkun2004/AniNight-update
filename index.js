@@ -1,4 +1,5 @@
 const express = require("express")
+const scheduleJobs = require("./jobs")
 const PORT = process.env.PORT || 5000;
 const http = require('http');
 const WebSocket = require('ws');
@@ -121,6 +122,8 @@ app.set('view engine', 'ejs');
 app.use(fileUpload({
   limits: { fileSize: 2 * 1024 * 1024 * 1024 },
 }));
+
+scheduleJobs();
 
 const formatDate = (date) => {
   return moment(date).fromNow();

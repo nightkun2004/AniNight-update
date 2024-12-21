@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - หน้าไม่พบ | AniNight</title>
+    <meta name="description" content="ขออภัย หน้าที่คุณค้นหาไม่สามารถใช้งานได้ หรืออาจถูกลบออก">
+    <meta property="og:title" content="404 - หน้าไม่พบ | AniNight">
+    <meta property="og:description" content="ขออภัย หน้าที่คุณค้นหาไม่สามารถใช้งานได้ หรืออาจถูกลบออก">
+
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('../Component/header') %>
+
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Aside Section -->
+            <aside id="aside" class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                <%- include('../Component/adside') %>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                <div class="text-center">
+                    <img src="https://static-00.iconduck.com/assets.00/9-404-error-illustration-2048x908-vp03fkyu.png" alt="404 Error" class="mx-auto w-64 mb-6">
+                    <h1 class="text-4xl font-bold mb-4">404 - ไม่พบหน้านี้</h1>
+                    <p>สำหรับ <%= urlslug %></p>
+                    <p class="text-lg mb-6">ขออภัย! เนื้อหาที่คุณค้นหาอาจถูกลบ หรือไม่มีอยู่ในระบบของเราอีกต่อไป</p>
+                    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full shadow-md">
+                        กลับหน้าแรก
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    <script>
+        const BTN_MENU_TOGGLE = document.getElementById("menuButton");
+        const ASIDE_BAR = document.getElementById("aside");
+
+        BTN_MENU_TOGGLE?.addEventListener("click", () => {
+            ASIDE_BAR.classList.toggle("-translate-x-full");
+        });
+    </script>
+</body>
+</html>

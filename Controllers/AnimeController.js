@@ -1,9 +1,11 @@
 const User = require("../models/UserModel");
 const Anime = require("../models/AnimeModel")
 const Schedule = require("../models/SchedulesModel")
+const cron = require('node-cron');
 const path = require("path")
 const FormData = require('form-data');
 const fs = require("fs")
+const { v4: uuidv4 } = require('uuid');
 const crypto = require("crypto")
 const cloudinary = require('cloudinary').v2;
 const axios = require('axios');
@@ -282,7 +284,7 @@ const getEditAnimeTitle = async (req, res) => {
 const CreateanimeItem = async (req, res) => {
     const userID = req.session.userlogin;
     const lang = res.locals.lang;
-    const { synopsis, animetype, voice, season, price, platforms, year, month, status, urlslug, categories } = req.body;
+    const { format, synopsis, animetype, startDate, voice, season, price, platforms, year, month, status, urlslug, categories, animenew } = req.body;
     const en = req.body.title ? req.body.title.en : '';
     const poster = req.files.poster;
 
@@ -378,6 +380,7 @@ const CreateanimeItem = async (req, res) => {
         }
 
         const postcreate = new Anime({
+            format,
             title: en,
             synopsis,
             animetype,
@@ -388,6 +391,9 @@ const CreateanimeItem = async (req, res) => {
             year,
             month,
             status,
+            startDate,
+            animenew: animenew === 'on',
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             published: req.body.published === 'on',
             urlslug,
             poster: posterFilename,
@@ -395,7 +401,7 @@ const CreateanimeItem = async (req, res) => {
         });
 
         await postcreate.save();
-        console.log(postcreate);
+        // console.log(postcreate);
         await User.findByIdAndUpdate(req.user.id, { $push: { animelists: postcreate._id } }, { new: true });
         res.status(200).redirect(`/admin/add/anime?msg=สร้างรายการอนิเมะสำเร็จ&status=true&lang=${lang}`)
     } catch (error) {
@@ -758,36 +764,69 @@ const EditAnimeinfo = async (req, res) => {
         // cก้ไข poster
         if (req.files && req.files.poster) {
             const poster = req.files.poster;
+        
+            // ตรวจสอบขนาดไฟล์
             if (poster.size > 5000000) {
-                return res.status(400).json({ error: `ขนาดรูปภาพเกินขีดจำกัด 5MB`, edit, lang})
-            }
-
-            let posterFilename = generateFilename(poster);
-
-            try {
-                const formData = new FormData();
-                formData.append('poster', poster.data, poster.name);
-
-                // ส่ง formData แทนที่จะส่ง poster.data
-                const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/posters/sv7', formData, {
-                    headers: {
-                        ...formData.getHeaders()
-                    }
+                return res.status(400).json({ 
+                    error: `ขนาดรูปภาพเกินขีดจำกัด 5MB`, 
+                    edit, 
+                    lang 
                 });
-
-                 // ตรวจสอบว่ามี URL กลับมาหรือไม่
-                 const bannerUrl = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
-                 if (!bannerUrl) {
-                     throw new Error('Failed to get banner URL from external server');
-                 }
-
-                updateData.poster = bannerUrl;
-                console.log('Uploaded to external server:', posterFilename);
-
-            } catch (err) {
-                return res.status(400).json({ error: `เกิดข้อผิดพลาดในการอัปโหลดโปสเตอร์ใหม่: ${err}`, edit, lang})
+            }
+        
+            // สร้าง ID สำหรับ Cloudinary
+            const subID = uuidv4();
+        
+            try {
+                // ใช้ cloudinary.uploader.upload_stream สำหรับอัปโหลดไฟล์
+                const uploadResponse = await new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream(
+                        {
+                            resource_type: 'image', 
+                            public_id: `poster/edit/${subID}`,
+                        },
+                        (error, result) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(result.secure_url); // ส่งกลับ URL ของไฟล์ที่อัปโหลด
+                            }
+                        }
+                    ).end(poster.data); // ใช้ `poster.data` แทน `file.data`
+                });
+        
+                // อัปเดตข้อมูลไฟล์ที่อัปโหลด
+                updateData.poster = uploadResponse;
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                return res.status(500).json({ error: 'การอัปโหลดไฟล์ล้มเหลว' });
             }
         }
+        
+
+        // try {
+            //     const formData = new FormData();
+            //     formData.append('poster', poster.data, poster.name);
+
+            //     // ส่ง formData แทนที่จะส่ง poster.data
+            //     const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/posters/sv7', formData, {
+            //         headers: {
+            //             ...formData.getHeaders()
+            //         }
+            //     });
+
+            //      // ตรวจสอบว่ามี URL กลับมาหรือไม่
+            //      const bannerUrl = uploadResponse.data.url; // เก็บ URL ของไฟล์ที่ server อื่น
+            //      if (!bannerUrl) {
+            //          throw new Error('Failed to get banner URL from external server');
+            //      }
+
+            //     updateData.poster = bannerUrl;
+            //     console.log('Uploaded to external server:', posterFilename);
+
+            // } catch (err) {
+            //     return res.status(400).json({ error: `เกิดข้อผิดพลาดในการอัปโหลดโปสเตอร์ใหม่: ${err}`, edit, lang})
+            // }
 
         // แก้ไขหรือเพิ่ม banner
         if (req.files && req.files.banner) {

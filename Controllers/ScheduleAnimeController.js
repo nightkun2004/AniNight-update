@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const Schedule = require("../models/SchedulesModel")
 const Anime = require("../models/AnimeModel")
+const axios = require('axios');
 const moment = require('moment-timezone');
 moment.locale('th');
 
@@ -65,16 +66,18 @@ const getAnimeInfo = async (req, res) => {
     try {
         const anime = await Anime.findOne({ urlslug }).exec();
         if (!anime) {
-            return res.status(404).render(`/th/pages/schedulePages/info`, {
+            return res.status(404).render(`./anime/error/404`, {
                 error: 'Anime not found',
+                urlslug,
+                active: "error",
                 userID
             });
         }
         // console.log(anime)
-        res.render(`./th/pages/schedulePages/info`, { userID, anime, active: "ScheduleAnime", translations: req.translations, lang });
+        res.render(`./anime/info`, { userID, anime, active: "getAnimeInfo", translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
-        res.status(500).render(`./th/pages/schedulePages/info`, {
+        res.status(500).json({
             error: errorMessage,
             userID,
             translations: req.translations, lang,
@@ -82,6 +85,36 @@ const getAnimeInfo = async (req, res) => {
         });
     }
 }
+
+const getAnimeAnilist = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    try {
+        res.render(`./anime/Anilist/Animess`, { userID,  active: "getAnimeAnilist", translations: req.translations, lang });
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang,
+            active: "ScheduleAnime",
+        });
+    }
+}
+
+const getAnilistAPI = async (req, res) => {
+    try {
+        const response = await axios.post('https://graphql.anilist.co/', req.body, {
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        });
+
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
+
 const getAnimeScheduleTimeline = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
@@ -150,6 +183,7 @@ const getAnimeSesstionNext = async (req, res) => {
         if (animes.length === 0) {
             return res.status(404).json({ message: "No anime found" });
         }
+        
         res.status(200).json({ animes });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
@@ -279,4 +313,4 @@ const getAnimeWinterAPI = async (req, res) => {
     }
 }
 
-module.exports = { getAnimeInfo, getFilterAnime, getAnimeScheduleTimeline, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }
+module.exports = { getAnimeInfo, getFilterAnime, getAnimeAnilist, getAnilistAPI, getAnimeScheduleTimeline, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }

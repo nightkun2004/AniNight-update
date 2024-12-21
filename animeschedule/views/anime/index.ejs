@@ -9,7 +9,7 @@
         content="อนิเมะ, ดันดาดัน, อนิเมะ, ข่าวอนิเมะ, รีวิวอนิเมะ, ตารางอนิเมะ, อนิเมะใหม่, อนิเมะยอดนิยม, นายโดดเดี่ยวพิชิตต่างโลก, รักรักรักรักรักเธอหมดหัวใจจากแฟนสาว 100 คน, [2024], [Fall]">
     <meta name="author" content="Night">
 
-    <meta property="og:title" content="เว็บไซต์อนิเมะ | ข่าวสารและข้อมูลเกี่ยวกับอนิเมะ">
+    <meta property="og:title" content="อนิเมะใหม่ ข่าวสารอนิเมะ ข้อมูลอนิเมะ">
     <meta property="og:description"
         content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ, รีวิวอนิเมะ, และตารางออกอากาศได้ที่นี่!">
     <meta property="og:image" content="https://ani-night.online/logo/Aninight.png">
@@ -37,7 +37,7 @@
             </aside>
 
             <!-- Main Content -->
-            <main class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+            <main class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all" id="MainContent">
 
                 <section class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-lg mb-5">
                     <div class=" mx-auto px-4 py-16 flex flex-col md:flex-row items-center">
@@ -93,8 +93,8 @@
                     <!-- อนิเมะจะแสดงใน container นี้ -->
                 </div>
 
-                <div id="pagination-controls" class="flex justify-center mt-4">
-                    <button id="load-more" class="px-4 py-2 bg-indigo-500 text-white rounded-lg">โหลดเพิ่มเติม</button>
+                <div id="loading" class="text-center py-4">
+                    <p>กำลังโหลดค้าบบ...</p>
                 </div>
             </main>
         </div>
@@ -110,46 +110,63 @@
         });
 
         let currentPage = 1;
+        let isLoading = false; // ป้องกันการโหลดซ้ำ
         const container = document.getElementById('anime-container');
-        const loadMoreButton = document.getElementById('load-more');
 
         const loadAnime = async (page) => {
+            if (isLoading) return; // หยุดถ้ากำลังโหลดอยู่
+            isLoading = true;
             try {
                 const response = await fetch(`/api/v2/schedule/anime?page=${page}`);
                 const data = await response.json();
 
                 // เพิ่มข้อมูลอนิเมะใหม่ใน container
                 data.Animelists.forEach(anime => {
+                    const isNew = anime.animenew ? `<span class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-bl-lg">เรื่องใหม่</span>` : '';
                     const animeCard = `
-                        <div class="anime-card overflow-hidden">
-                            <a href="/anime/${anime.urlslug}" class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
-                                <img src="${anime.poster.startsWith('http') ? anime.poster : (anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200')}" 
-                                    alt="${anime.title.en}" class="w-full rounded-lg" loading="lazy">
-                            </a>
-                            <a class="anime-info title" href="/anime/${anime.urlslug}">
-                                <h2 class="text-sm font-bold">${anime.title.th || anime.title.en}</h2>
-                            </a>
-                        </div>
-                    `;
+                        <div class="anime-card overflow-hidden relative">
+                    <a href="/anime/${anime.urlslug}" class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                        <img src="${anime.poster.startsWith('http') ? anime.poster : (anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200')}" 
+                            alt="${anime.title.en}" class="w-full rounded-lg" loading="lazy">
+                        ${isNew} <!-- แสดงป้าย "มาใหม่" ถ้า animenew เป็น true -->
+                    </a>
+                    <a class="anime-info title" href="/anime/${anime.urlslug}">
+                        <h2 class="text-sm font-bold">${anime.title.th || anime.title.en}</h2>
+                    </a>
+                </div>
+            `;
                     container.insertAdjacentHTML('beforeend', animeCard);
                 });
 
                 // ซ่อนปุ่มโหลดเพิ่มเติมถ้าไม่มีหน้าถัดไป
                 if (!data.hasNext) {
-                    loadMoreButton.style.display = 'none';
+                    document.getElementById('loading').classList.add('hidden');
+                    // หยุดการโหลดถ้าหมดหน้า
+                    document.getElementById('MainContent').removeEventListener('scroll', handleScroll);
+                } else {
+                    currentPage += 1; // เพิ่มหน้าถัดไป
                 }
             } catch (error) {
                 console.error('Error loading anime:', error);
+            } finally {
+                isLoading = false; // รีเซ็ตสถานะการโหลด
             }
         };
+
+        const handleScroll = () => {
+            const mainContent = document.getElementById('MainContent');
+            const { scrollTop, scrollHeight, clientHeight } = mainContent;
+            if (scrollTop + clientHeight >= scrollHeight - 5) {
+                loadAnime(currentPage);
+            }
+        };
+
+        // เพิ่มตัวจัดการการเลื่อน
+        document.getElementById('MainContent').addEventListener('scroll', handleScroll);
 
         // โหลดข้อมูลครั้งแรก
         loadAnime(currentPage);
 
-        loadMoreButton.addEventListener('click', () => {
-            currentPage++;
-            loadAnime(currentPage);
-        });
     </script>
-</body>
+    </body>
 </html>

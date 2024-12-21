@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="<%= lang %>">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>AniNight</title>
+  <title>เว็บรวมบรวมข่าวสารอนิเมะ ตารางอนิเมะ ช่องทางการฉาย แต่ล่ะซีซันของปี | AniNight</title>
   <meta name="description"
     content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ อ่านบทความที่น่าสนใจ และอัปเดตตารางอนิเมะได้ที่ AniNight ไม่ว่าจะเป็นอนิเมะพากย์ไทย ซับไทย คุณสามารถลเลือกดูได้เลย">
   <meta name="keywords"
@@ -15,7 +15,7 @@
   <!-- Canonical and SEO Meta -->
   <link rel="canonical" href="https://ani-night.online">
   <meta property="og:url" content="https://ani-night.online">
-  <meta property="og:title" content="AniNight - แพลตฟอร์มข่าวสารและบทความเกี่ยวกับอนิเมะ">
+  <meta property="og:title" content="เว็บรวมบรวมข่าวสารอนิเมะ ตารางอนิเมะ ช่องทางการฉาย แต่ล่ะซีซันของปี | AniNight">
   <meta property="og:description"
     content="ติดตามข่าวสารอนิเมะ บทความสุดพิเศษ และตารางอนิเมะล่าสุดได้ที่ AniNight! สร้างสรรค์เนื้อหาและสร้างรายได้ผ่านเครื่องมือของเรา">
   <meta property="og:image" content="https://ani-night.online/annight/home_web.jpg">
@@ -50,6 +50,8 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Ani Night",
+      "author": "Night เองครับ",
+      "image": "https://ani-night.online/annight/home_web.jpg",
       "url": "https://ani-night.online/",
       "description": "Ani Night แหล่งข่าวอนิเมะและบทความเกี่ยวกับอนิเมะญี่ปุ่นที่ครบถ้วนที่สุด พร้อมอัปเดตตารางอนิเมะตอนใหม่และลิงก์อนิเมะที่ได้รับลิขสิทธิ์",
       "potentialAction": {
@@ -59,36 +61,6 @@
       }
     }
   </script>
-
-  <% if (Posts.length> 0 && typeof error === 'undefined') { %>
-    <script type="application/ld+json">
-      [
-        <% Posts.slice(0, 5).forEach((post) => { %>
-          {
-            "@context": "https://schema.org",
-            "@type": "NewsArticle",
-            "headline": "<%= post.title %>",
-            "image": "<%= post.thumbnail.startsWith('http') ? post.thumbnail : 'https://ani-night.online/uploads/thumbnails/' + (post.thumbnail || 'default.png') %>",
-            "datePublished": "<%= moment(post.createdAt).toISOString() %>",
-            "dateModified": "<%= moment(post.updatedAt).toISOString() %>",
-            "author": {
-              "@type": "Person",
-              "name": "ทีมงาน Ani Night"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Ani Night",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://ani-night.online/logo/favicon.png"
-              }
-            },
-            "description": "ติดตามข่าวสารล่าสุดของอนิเมะได้ที่ Ani Night ได้ทุกที่ ไม่ว่าคุณจะอยู่พื้นที่ใดของโลก"
-          }
-        <% }) %>
-      ]
-    </script>
-    <% } %>
 </head>
 
 <body class="bg-gray-100 text-black font-sans">

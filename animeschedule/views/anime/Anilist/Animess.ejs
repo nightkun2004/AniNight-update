@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางอนิเมะสำหรับซีซัน Winter 2025</title>
+    <meta name="description" content="ที่นำเสนอข่าวสาร, รีวิว, ตารางออกอากาศ, และบทความที่เกี่ยวกับอนิเมะ">
+    <meta name="keywords"
+        content="อนิเมะ, ดันดาดัน, อนิเมะ, ข่าวอนิเมะ, รีวิวอนิเมะ, ตารางอนิเมะ, อนิเมะใหม่, อนิเมะยอดนิยม, นายโดดเดี่ยวพิชิตต่างโลก, รักรักรักรักรักเธอหมดหัวใจจากแฟนสาว 100 คน, [2024], [Fall]">
+    <meta name="author" content="Night">
+
+    <meta property="og:title" content="อนิเมะใหม่ ข่าวสารอนิเมะ ข้อมูลอนิเมะ">
+    <meta property="og:description"
+        content="ติดตามข่าวสารล่าสุดเกี่ยวกับอนิเมะ, รีวิวอนิเมะ, และตารางออกอากาศได้ที่นี่!">
+    <meta property="og:image" content="https://ani-night.online/logo/Aninight.png">
+    <meta property="og:url" content="https://ani-night.online/schedule/anime">
+    <meta property="og:type" content="website">
+
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Custom scroll bar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #a0aec0;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('../Component/header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Aside Section -->
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/adside') %>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all" id="MainContent">
+                    <!-- Filters Section -->
+                    <section class="mb-6">
+                        <h2 class="text-xl font-semibold mb-4">ตัวกรอง</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Year Filter -->
+                            <div>
+                                <label for="year" class="block text-sm font-medium">ปี</label>
+                                <select id="year" class="w-full mt-2 p-2 border rounded bg-white">
+                                    <option value="">ทั้งหมด</option>
+                                    <!-- <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option> -->
+                                    <!-- Add more years as needed -->
+                                </select>
+                            </div>
+                            <!-- Season Filter -->
+                            <div>
+                                <label for="season" class="block text-sm font-medium">Season</label>
+                                <select id="season" class="w-full mt-2 p-2 border rounded bg-white">
+                                    <option value="">ทั้งหมด</option>
+                                    <option value="WINTER">Winter</option>
+                                    <option value="SPRING">Spring</option>
+                                    <option value="SUMMER">Summer</option>
+                                    <option value="FALL">Fall</option>
+                                </select>
+                            </div>
+                            <!-- Genre Filter -->
+                            <div>
+                                <label for="genre" class="block text-sm font-medium">ประเภท</label>
+                                <select id="genre" class="w-full mt-2 p-2 border rounded bg-white">
+                                    <option value="">All</option>
+                                    <option value="Action">Action</option>
+                                    <option value="Adventure">Adventure</option>
+                                    <option value="Comedy">Comedy</option>
+                                    <option value="Drama">Drama</option>
+                                    <!-- Add more genres as needed -->
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <h2 class="text-xl font-semibold mb-4">ข้อมูลอนิเมะ</h2>
+                    <div id="anime-list"
+                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 lg:gap-10 mt-5 mb-5">
+                        <!-- อนิเมะจะแสดงใน container นี้ -->
+                    </div>
+
+
+                    <!-- Loading Indicator -->
+                    <div id="loading" class="text-center py-4">
+                        <p>Loading...</p>
+                    </div>
+                </main>
+            </div>
+    </div>
+
+
+    <script>
+        const BTN_MENU_TOGGLE = document.getElementById("menuButton");
+        const ASIDE_BAR = document.getElementById("aside");
+
+        BTN_MENU_TOGGLE?.addEventListener("click", () => {
+            ASIDE_BAR.classList.toggle("-translate-x-full");
+        });
+
+        function populateYears(start, end) {
+            const yearSelect = document.getElementById('year');
+            for (let year = end; year >= start; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // Call the function to populate the years
+        populateYears(1940, 2025);
+
+        const query = `
+            query ($page: Int, $perPage: Int, $season: MediaSeason, $seasonYear: Int, $genre: String) {
+                Page(page: $page, perPage: $perPage) {
+                    pageInfo {
+                        total
+                        currentPage
+                        lastPage
+                        hasNextPage
+                        perPage
+                    }
+                    media(type: ANIME, season: $season, seasonYear: $seasonYear, genre: $genre) {
+                        id
+                        title {
+                            romaji
+                            english
+                        }
+                        coverImage {
+                            large
+                        }
+                        episodes
+                        genres
+                        season
+                        seasonYear
+                    }
+                }
+            }
+        `;
+
+        const url = '/api/load/graphql/anime/lists';
+        let currentPage = 1;
+        const variables = { page: currentPage, perPage: 10, season: null, seasonYear: null, genre: null };
+        let isLoading = false;
+
+        const renderAnimeList = (animeList) => {
+            const container = document.getElementById('anime-list');
+            animeList.forEach(anime => {
+                const animeCard = document.createElement('div');
+                animeCard.className = 'bg-white shadow rounded overflow-hidden';
+                animeCard.innerHTML = `
+                    <img src="${anime.coverImage.large}" alt="${anime.title.romaji}" class="w-full rounded-lg" loading="lazy">
+                    <div class="p-2">
+                        <h3 class="font-semibold text-sm">${anime.title.romaji}</h3>
+                        <p class="text-xs text-gray-600">Episodes: ${anime.episodes || 'N/A'}</p>
+                        <p class="text-xs text-gray-600">${anime.genres.join(', ')}</p>
+                    </div>
+                `;
+                container.appendChild(animeCard);
+            });
+        };
+
+
+        const fetchAnimeList = () => {
+            if (isLoading) return;
+            isLoading = true;
+            document.getElementById('loading').classList.remove('hidden');
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ query, variables })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    renderAnimeList(data.data.Page.media);
+                    const hasNextPage = data.data.Page.pageInfo.hasNextPage;
+                    if (!hasNextPage) {
+                        window.removeEventListener('scroll', handleScroll);
+                    }
+                    currentPage++;
+                    variables.page = currentPage;
+                    isLoading = false;
+                    document.getElementById('loading').classList.add('hidden');
+                })
+                .catch(error => {
+                    console.error(error);
+                    isLoading = false;
+                });
+        };
+
+        const handleScroll = () => {
+            const mainContent = document.getElementById('MainContent');
+            const { scrollTop, scrollHeight, clientHeight } = mainContent;
+            if (scrollTop + clientHeight >= scrollHeight - 5) {
+                fetchAnimeList();
+            }
+        };
+        
+        document.getElementById('MainContent').addEventListener('scroll', handleScroll);
+
+        const applyFilters = () => {
+            const year = document.getElementById('year').value;
+            const season = document.getElementById('season').value;
+            const genre = document.getElementById('genre').value;
+
+            variables.page = 1;
+            currentPage = 1;
+            variables.seasonYear = year ? parseInt(year) : null;
+            variables.season = season || null;
+            variables.genre = genre || null;
+
+            document.getElementById('anime-list').innerHTML = '';
+            fetchAnimeList();
+        };
+
+        document.getElementById('year').addEventListener('change', applyFilters);
+        document.getElementById('season').addEventListener('change', applyFilters);
+        document.getElementById('genre').addEventListener('change', applyFilters);
+        window.addEventListener('scroll', handleScroll);
+
+        fetchAnimeList();
+    </script>
+</body>
+
+</html>

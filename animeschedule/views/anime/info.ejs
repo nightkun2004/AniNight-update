@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= anime.title.th || anime.title.en %> | AniNight
+    </title>
+    <meta name="description" content="<%= anime.synopsis.slice(0, 150) %>">
+    <meta property="og:title" content="<%= anime.title.th || anime.title.en %> | AniNight">
+    <meta property="og:description" content="<%= anime.synopsis.slice(0, 150) %>">
+    <meta property="og:image" content="<%= anime.coverImage %>">
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('./Component/header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Aside Section -->
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('./Component/adside') %>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="flex-1 p-4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+
+                    <div
+                        class="bg-gray-800 text-white flex justify-between shadow-md mt-2 mb-5 rounded-lg overflow-hidden">
+                        <a href="/anime/<%= anime.urlslug %>" class="block px-4 py-2 hover:bg-gray-700">ข้อมูลอนิเมะ</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-700">จำนวนตอน</a>
+                        <a href="/anime/<%= anime.urlslug %>/stream"
+                            class="block px-4 py-2 hover:bg-gray-700">แพลตฟอร์ม</a>
+                    </div>
+
+                    <!-- Anime Top Card -->
+                    <div class="flex gap-4 mb-4">
+                        <div class="shrink-0">
+                            <% if (anime.poster.startsWith('http')) { %>
+                                <img id="image-bg" width="175" height="250" title="<%- anime.title %>"
+                                    src="<%= anime.poster %>" alt="<%= anime.title %>"
+                                    class="rounded-lg shadow-md mb-4 md:mb-0" crossorigin="anonymous">
+                                <% } else { %>
+                                    <img id="image-bg" width="175" height="250" title="<%- anime.title %>"
+                                        src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title %>"
+                                        class="rounded-lg shadow-md mb-4 md:mb-0">
+                                    <% } %>
+                        </div>
+                        <div class="grow">
+                            <div class="text-sm text-base-content/75">
+                                <div class="whitespace-nowrap text-ellipsis">
+                                    <%= anime.month %>
+                                        <%= anime.year %> ( <a class="link link-hover" href="">
+                                                <%= anime.season %>
+                                                    <%= anime.year %>
+                                            </a> )
+                                </div>
+                            </div>
+                            <div class="text-lg font-medium line-clamp-3 text-base-content/50 cursor-pointer">
+                                <span class="text-base-content"><%- anime.title.th || anime.title.en %></span>
+                            </div>
+                            <div class="line-clamp-1 text-base-content/50 cursor-pointer">
+                                <span class="text-base-content"><%- anime.synopsis || 'ไม่พบเรื่องย่อ' %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="lc-anime-card shadow-md p-2 md:p-4 overflow-hidden md:flex-row flex-wrap bg-white rounded-lg">
+                        <div class="flex w-full gap-2 col-span-4 items-center justify-center">
+                            <a href="#" class="line-clamp-1 text-sm text-base-content/75 link-hover">
+                                <span class="font-medium">EP <%= anime.episodes.current %></span>
+                            </a>
+                        </div>
+                        <div class="grow basis-0 text-center self-center">
+                            <div
+                                class="lc-anime-countdown-grid -lc-placeholder gap-x-4 text-center justify-center -lc-without-label">
+                                <div class="lc-anime-countdown-grid--placeholder">
+                                    <time datetime="">
+                                        <%= anime.month %>
+                                            <%= anime.year %>
+                                    </time>
+
+                                </div>
+                            </div>
+                            <div
+                                class="lc-anime-countdown-grid -lc-placeholder gap-x-4 text-center justify-center -lc-without-label">
+                                <div class="lc-anime-countdown-grid--placeholder">
+                                    สถานะ: <%= anime.status ? 'ฉายแล้ว' : 'ยังไม่ฉาย' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white rounded-lg shadow-md p-4 mt-4 cuttom_font">
+                        <div class="grid grid-flow-col auto-cols-fr w-full text-center mb-8 gap-2">
+                            <div>
+                                <div class="text-xs text-base-content/75 whitespace-nowrap">
+                                    Format
+                                </div>
+                                <%= anime.format || 'เกิดข้อผิดพลาดในระบบ' %>
+                            </div>
+                            <div>
+                                <div class="text-xs text-base-content/75 whitespace-nowrap">
+                                    Source
+                                </div>
+                                <%= anime.Source %>
+                            </div>
+                            <div>
+                                <div class="text-xs text-base-content/75 whitespace-nowrap">
+                                    studio
+                                </div>
+                                <%= anime.studio %>
+                            </div>
+                            <div>
+                                <div class="text-xs text-base-content/75 whitespace-nowrap">
+                                    จำนวนนาที
+                                </div>
+                                <%= anime.Duration || 'ไม่ทราบ' %>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-flow-col auto-cols-fr w-full text-center mb-8 gap-2 cuttom_font">
+                            <div>
+                                <div class="text-xs text-base-content/75 whitespace-nowrap">
+                                    จำนวนตอนทั้งหมด
+                                </div>
+                                <%= anime.episodes.total || 'เกิดข้อผิดพลาดในระบบ' %>
+                            </div>
+                        </div>
+
+                        <div class="title_nv text-sm mt-4 cuttom_font">
+                            <div class="font-medium cuttom_font">
+                                ชื่อต้นฉบบ JP
+                            </div>
+                            <%= anime.title.jp || 'ยังไม่เพิ่มข้อมูล' %>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-700">รายละเอียดตอน:</h3>
+                            <p class="text-gray-600"><strong>กำลังฉาย</strong>: <%= anime.episodes.current %>
+                            </p>
+                            <p class="text-gray-600"><strong>ตอนทั้งหมด</strong>: <%= anime.episodes.total %>
+                            </p>
+                        </div>
+
+                        <div class="mt-4 mb-2 text-sm font-medium">
+                            หมวดหมู่
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <% anime.categories.forEach(function(category) { %>
+                                <p class="lc-chip-button bg-gray-400 px-4 py-2 rounded-full text-white text-sm">
+                                    <%= category %>
+                                </p>
+                                <% }); %>
+                                    <% if (anime.genres && anime.genres.length> 0) { %>
+                                        <% anime.genres.forEach(function(genre) { %>
+                                            <p
+                                                class="lc-chip-button bg-gray-400 px-4 py-2 rounded-full text-white text-sm">
+                                                <%= genre %>
+                                            </p>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <p>ไม่พบข้อมูล</p>
+                                                    <% } %>
+                        </div>
+
+
+                    </div>
+
+                </main>
+            </div>
+    </div>
+
+
+    <script>
+        const BTN_MENU_TOGGLE = document.getElementById("menuButton");
+        const ASIDE_BAR = document.getElementById("aside");
+
+        BTN_MENU_TOGGLE?.addEventListener("click", () => {
+            ASIDE_BAR.classList.toggle("-translate-x-full");
+        });
+//         var query = `
+//     query ($page: Int, $perPage: Int) {
+//         Page(page: $page, perPage: $perPage) {
+//             pageInfo {
+//                 total
+//                 currentPage
+//                 lastPage
+//                 hasNextPage
+//                 perPage
+//             }
+//             media(type: ANIME) {
+//                 id
+//                 title {
+//                     romaji
+//                     english
+//                     native
+//                 }
+//                 coverImage {
+//                     large
+//                 }
+//                 episodes
+//                 genres
+//             }
+//         }
+//     }
+// `;
+
+// var variables = {
+//     page: 1000,       // เริ่มที่หน้าแรก
+//     perPage: 10    // จำนวนรายการต่อหน้า (สูงสุด 50)
+// };
+
+// var url = 'https://graphql.anilist.co';
+// var option = {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json'
+//     },
+//     body: JSON.stringify({
+//         query: query,
+//         variables: variables
+//     })
+// };
+
+// fetch(url, option)
+//     .then(handleResponse)
+//     .then(handleData)
+//     .catch(handleError);
+
+// function handleResponse(response) {
+//     return response.json().then(function (json) {
+//         return response.ok ? json : Promise.reject(json);
+//     });
+// }
+
+// function handleData(data) {
+//     const pageInfo = data.data.Page.pageInfo;
+//     const animeList = data.data.Page.media;
+
+//     console.log(`Total Animes: ${pageInfo.total}`);
+//     console.log(`Current Page: ${pageInfo.currentPage} / ${pageInfo.lastPage}`);
+//     console.log(`Has Next Page: ${pageInfo.hasNextPage}`);
+
+//     animeList.forEach(anime => {
+//         console.log(`ID: ${anime.id}`);
+//         console.log(`Title (Romaji): ${anime.title.romaji}`);
+//         console.log(`Title (English): ${anime.title.english || 'N/A'}`);
+//         console.log(`Genres: ${anime.genres.join(', ')}`);
+//         console.log(`Episodes: ${anime.episodes || 'Unknown'}`);
+//         console.log(`Poster: ${anime.coverImage.large}`);
+//         console.log('---');
+//     });
+
+//     // Example: Dynamically display the first 10 anime on a webpage
+//     animeList.forEach(anime => {
+//         const img = document.createElement('img');
+//         img.src = anime.coverImage.large;
+//         img.alt = anime.title.romaji;
+//         img.style.width = '150px'; // Adjust thumbnail size
+//         document.body.appendChild(img);
+
+//         const title = document.createElement('p');
+//         title.textContent = anime.title.romaji;
+//         document.body.appendChild(title);
+//     });
+// }
+
+// function handleError(error) {
+//     console.error(error);
+// }
+
+    </script>
+</body>
+
+</html>

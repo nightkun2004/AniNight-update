@@ -144,6 +144,18 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ปีที่ออกฉาย</label>
                                     <input type="number" name="year" id="year" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
                                 </div>
+                                 <!-- วันที่ฉาย -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วันที่ฉาย</label>
+                                    <input type="text" name="startDate" id="startDate" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                                    <p class="text-gray-500 font-light">*ตัวอย่างเช่น วันจันทร์ ที่ 23 ม.ค 2024</p>
+                                </div>
+                                 <!-- Famat -->
+                                <div class="mb-5">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รูป</label>
+                                    <input type="text" name="format" id="format" class="outline-none w-full border-gray-100 border-2 rounded px-2 p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400">
+                                    <p class="text-gray-500 font-light">*ตัวอย่างเช่น ["TV", "OVA", "Movie", "Special", "ONA", "Music", "Unknown"]</p>
+                                </div>
                                 <!-- เดือน -->
                                 <div class="mb-5">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เดือนที่ออกอากาศ</label>
@@ -269,6 +281,13 @@
                                         <div class="flex items-center">
                                             <input id="published" name="published" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="published" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เผยแพร่อนิเมะ</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-5">
+                                        <div class="flex items-center">
+                                            <input id="animenew" name="animenew" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="animenew" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">มาใหม่</label>
                                         </div>
                                     </div>
 
