@@ -8,12 +8,12 @@
     <div class="w-full md:w-[150px] md:h-[200px] flex justify-center items-center">
         <% if (anime.poster.startsWith('http')) { %>
             <img id="image-bg" width="175" height="250" title="<%- anime.title %>" src="<%= anime.poster %>"
-                alt="<%= anime.title %>" class="rounded-lg shadow-md mb-4 md:mb-0" crossorigin="anonymous">
+                alt="<%= anime.title %>" class="rounded-lg shadow-md mb-4 md:mb-0">
             <% } else { %>
                 <img id="image-bg" width="175" height="250" title="<%- anime.title %>"
                     src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title %>"
                     class="rounded-lg shadow-md mb-4 md:mb-0">
-                <% } %>
+      <% } %>
     </div>
     <div class="grow">
         <div class="text-sm text-base-content/75">
@@ -25,10 +25,10 @@
                         </a> )
             </div>
         </div>
-        <div class="text-lg font-medium line-clamp-3 text-base-content/50 cursor-pointer">
+        <div class="text-lg font-medium line-clamp-3 cursor-pointer">
             <span class="text-base-content"><%- anime.title.th || anime.title.en %></span>
         </div>
-        <div class="line-clamp-1 cursor-pointer">
+        <div class="cursor-pointer">
             <span class="text-base-content"><%- anime.synopsis || 'ไม่พบเรื่องย่อ' %></span>
         </div>
     </div>
