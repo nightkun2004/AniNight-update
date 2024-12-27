@@ -1133,6 +1133,74 @@ const BookmarkSaveAnime = async (req, res) => {
     }
 }
 
+
+// ========================================================== rating anime ======================================
+const ratingAnime = async (req, res) => {
+    try {
+        const { animeId } = req.params;
+
+        // Find the anime by ID
+        const anime = await Anime.findById(animeId);
+        if (!anime) {
+            return res.status(404).json({ error: 'Anime not found' });
+        }
+
+        const { rating } = req.body;
+
+        // Validate the rating value
+        if (!rating || rating < 1 || rating > 5) {
+            return res.status(400).json({ error: 'Invalid rating value' });
+        }
+
+        // Push the new rating into the ratings array
+        anime.ratings.push(rating);
+
+        // Calculate the updated average rating
+        const totalRatings = anime.ratings.reduce((acc, cur) => acc + cur, 0);
+        anime.averageRating = (totalRatings / anime.ratings.length).toFixed(2);
+
+        // Save the updated anime document
+        await anime.save();
+
+        res.redirect(`/anime/${anime.urlslug}?msg=Rating added successfully&status=true`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+// ======================================================== add comment ==========================================================
+const addCommentAnime = async (req, res) => {
+    try {
+        const { animeId } = req.params;
+        const { content } = req.body;
+
+        if (!content || content.trim() === '') {
+            return res.status(400).json({ error: 'Comment content is required' });
+        }
+        
+        const anime = await Anime.findById(animeId);
+        if (!anime) {
+            return res.status(404).json({ error: 'Anime not found' });
+        }
+
+        const newComment = {
+            content,
+            createdAt: new Date()
+        };
+
+        
+
+        anime.comments.push(newComment);
+        await anime.save();
+
+       res.redirect(`/anime/${anime.urlslug}?msg=เพิ่มคอมเม้นแล้ว&status=true`);
+        
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error', error: error.message });
+    }
+}
+
 // =========================================================== UnbookmarkBookmarkSaveAnime ======================================
 // ===================================================================================================
 const UnbookmarkBookmarkSaveAnime = async (req, res) => {
@@ -1248,6 +1316,8 @@ module.exports = {
     deleteAnime,
     updateAnimeStream,
     BookmarkSaveAnime,
+    ratingAnime,
+    addCommentAnime,
     UnbookmarkBookmarkSaveAnime,
     updateAnimeYoutubeLinks
 }  

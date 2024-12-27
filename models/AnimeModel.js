@@ -94,6 +94,15 @@ const AnimeSchema = new mongoose.Schema({
         enum: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
     },
     year: Number,
+    ratings: { type: [Number], default: [] },
+    averageRating: { type: Number, default: 0 },
+    comments: [
+        {
+            username: { type: String, required: true, default: "Anonymous" },
+            content: { type: String, required: true },
+            createdAt: { type: Date, default: Date.now },
+        },
+    ],
     status: {
         type: Boolean,
         required: true

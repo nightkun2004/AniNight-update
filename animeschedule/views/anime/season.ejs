@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Season <%= season %>
+            <%= year %>
+    </title>
+    <meta name="description" content="AniNight is a website that provides information about anime, manga, and more.">
+    <meta property="og:title" content="">
+    <meta property="og:description" content=" ">
+    <meta property="og:image" content="">
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('./Component/header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Aside Section -->
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('./Component/adside') %>
+                </aside>
+
+                <main class="flex-1 p-1 md:4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                    <div class="container mx-auto px-4">
+                        <h1 class="text-2xl font-bold mb-4">Anime Season <%= season %> <%= year %></h1>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 lg:gap-10 mt-5 mb-54">
+                            <% animes.forEach(function(anime) { %>
+                                <div class="anime-card overflow-hidden relative">
+                                   <a href="/anime/<%= anime.urlslug %>">
+                                    <% if (anime.poster.startsWith('http')) { %>
+                                        <img id="image-bg" width="175" height="250" title="<%- anime.title.th || anime.title.en %>" src="<%= anime.poster %>"
+                                            alt="<%= anime.title.th || anime.title.en %>" class="w-full rounded-lg" crossorigin="anonymous">
+                                        <% } else { %>
+                                            <img id="image-bg" width="175" height="250" title="<%- anime.title.th || anime.title.en %>"
+                                                src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title.th || anime.title.en %>"
+                                                class="w-full rounded-lg">
+                                  <% } %>
+                                    <div class="p-4">
+                                        <h2 class="text-xl font-semibold mb-2"><%= anime.title.th || anime.title.en %></h2>
+                                    </div>
+                                   </a>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+    </div>
+
+    <script>
+        const BTN_MENU_TOGGLE = document.getElementById("menuButton");
+        const ASIDE_BAR = document.getElementById("aside");
+
+        BTN_MENU_TOGGLE?.addEventListener("click", () => {
+            ASIDE_BAR.classList.toggle("-translate-x-full");
+        });
+    </script>
+</body>
+
+</html>

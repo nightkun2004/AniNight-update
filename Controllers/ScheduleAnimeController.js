@@ -64,7 +64,7 @@ const getAnimeInfo = async (req, res) => {
     const userID = req.session.userlogin;
     const { urlslug } = req.params;
     try {
-        const anime = await Anime.findOne({ urlslug }).exec();
+        const anime = await Anime.findOne({ urlslug }).populate('comments.username').exec();
         if (!anime) {
             return res.status(404).render(`./anime/error/404`, {
                 error: 'Anime not found',
@@ -86,11 +86,42 @@ const getAnimeInfo = async (req, res) => {
     }
 }
 
+
+const getAnimeSeason = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const { year, season } = req.params;
+    try {
+        const animes = await Anime.find({ year, season }).sort({ createdAt: -1 }).exec();
+
+        if (animes.length === 0) {
+            return res.status(404).render(`./anime/error/404`, {
+                error: 'Anime not found',
+                year,
+                season,
+                active: "error",
+                userID
+            });
+        }
+
+        res.render(`./anime/season`, { userID, animes, year, season, active: "getAnimeSeason", translations: req.translations, lang });
+
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            error: errorMessage,
+            userID,
+            translations: req.translations, lang,
+            active: "ScheduleAnime",
+        });
+    };
+};
+
 const getAnimeAnilist = async (req, res) => {
     const lang = res.locals.lang;
     const userID = req.session.userlogin;
     try {
-        res.render(`./anime/Anilist/Animess`, { userID,  active: "getAnimeAnilist", translations: req.translations, lang });
+        res.render(`./anime/Anilist/Animess`, { userID, active: "getAnimeAnilist", translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
@@ -183,7 +214,7 @@ const getAnimeSesstionNext = async (req, res) => {
         if (animes.length === 0) {
             return res.status(404).json({ message: "No anime found" });
         }
-        
+
         res.status(200).json({ animes });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
@@ -313,4 +344,4 @@ const getAnimeWinterAPI = async (req, res) => {
     }
 }
 
-module.exports = { getAnimeInfo, getFilterAnime, getAnimeAnilist, getAnilistAPI, getAnimeScheduleTimeline, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }
+module.exports = { getAnimeInfo, getFilterAnime, getAnimeAnilist, getAnimeSeason, getAnilistAPI, getAnimeScheduleTimeline, getAnimeStream, getAnimeSesstionNext, getSchedule, getScheduleInfo, getAnimeStreamAPI, getAnimeWinterAPI }

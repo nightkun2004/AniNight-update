@@ -1,0 +1,35 @@
+<div class="bg-gray-800 text-white flex justify-between shadow-md mt-2 mb-5 rounded-lg overflow-hidden">
+    <a href="/anime/<%= anime.urlslug %>" class="block px-4 py-2 hover:bg-gray-700">ข้อมูลอนิเมะ</a>
+    <a href="#" class="block px-4 py-2 hover:bg-gray-700">จำนวนตอน</a>
+    <a href="/anime/<%= anime.urlslug %>/stream" class="block px-4 py-2 hover:bg-gray-700">แพลตฟอร์ม</a>
+</div>
+
+<div class="flex flex-col md:flex-row gap-4 mb-4">
+    <div class="w-full md:w-[150px] md:h-[200px] flex justify-center items-center">
+        <% if (anime.poster.startsWith('http')) { %>
+            <img id="image-bg" width="175" height="250" title="<%- anime.title %>" src="<%= anime.poster %>"
+                alt="<%= anime.title %>" class="rounded-lg shadow-md mb-4 md:mb-0" crossorigin="anonymous">
+            <% } else { %>
+                <img id="image-bg" width="175" height="250" title="<%- anime.title %>"
+                    src="/uploads/posters/<%= anime.poster %>" alt="<%= anime.title %>"
+                    class="rounded-lg shadow-md mb-4 md:mb-0">
+                <% } %>
+    </div>
+    <div class="grow">
+        <div class="text-sm text-base-content/75">
+            <div class="whitespace-nowrap text-ellipsis">
+                <%= anime.month %>
+                    <%= anime.year %> ( <a class="link link-hover" href="/anime/search/<%= anime.season %>/<%= anime.year %>">
+                            <%= anime.season %>
+                                <%= anime.year %>
+                        </a> )
+            </div>
+        </div>
+        <div class="text-lg font-medium line-clamp-3 text-base-content/50 cursor-pointer">
+            <span class="text-base-content"><%- anime.title.th || anime.title.en %></span>
+        </div>
+        <div class="line-clamp-1 cursor-pointer">
+            <span class="text-base-content"><%- anime.synopsis || 'ไม่พบเรื่องย่อ' %></span>
+        </div>
+    </div>
+</div>
