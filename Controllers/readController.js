@@ -8,14 +8,17 @@ require("dotenv").config();
 
 const addViewToArticle = async (articleId, userId) => {
     try {
-        const article = await Article.findById(articleId);
+        const article = await Article.findByIdAndUpdate(
+            articleId,
+            { $inc: { views: 1 } }, // เพิ่มยอดวิว
+            { new: true } // ให้คืนค่าบทความที่ถูกอัปเดตใหม่
+        );
         const user = await User.findById(userId);
 
         if (!article || !user) return;
 
         const pointsPerView = 1;
         const ratePerPoint = 0.10;
-        article.views += 1; // เพิ่มยอดวิวของบทความ
         user.earnings += pointsPerView * ratePerPoint;
 
         // Update interactions
@@ -38,24 +41,23 @@ const addViewToArticle = async (articleId, userId) => {
             articleId: article._id,
         });
 
+        // Save user interaction
+        await user.save();
 
-        // await sendEmail(
-        //     user.email, 
-        //     `ถึง ${user.username} แจ้งเตือนรายได้จากผู้ใช้ที่อ่านเรื่อง ${article.title}`, 
-        //     emailHtmlAddViewsArticle(user.username, user.earnings.toFixed(2), article.urlslug, article.title)
-        // );
-        // console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
-
-        // บันทึกการเปลี่ยนแปลง
-        await Promise.all([article.save(), user.save()]);
-        // console.log("ผู้ใช้ได้ทั้งหมด", user.earnings);
-        console.log(notificationMessage);
+        // console.log(notificationMessage);
         // console.log("Notification create", lognotification);
     } catch (error) {
         console.error("Error adding view to article:", error);
     }
 };
 
+
+       // await sendEmail(
+        //     user.email, 
+        //     `ถึง ${user.username} แจ้งเตือนรายได้จากผู้ใช้ที่อ่านเรื่อง ${article.title}`, 
+        //     emailHtmlAddViewsArticle(user.username, user.earnings.toFixed(2), article.urlslug, article.title)
+        // );
+        // console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
 
 // ============================= get SINGLE POST
 // GET : /api/posts
@@ -110,7 +112,7 @@ const getRead = async (req, res, next) => {
             isSaved = post.savearticles.includes(userID.toString());
         }
 
-        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, Bannerlists: banners,  translations: req.translations, lang });
+        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, Bannerlists: banners, translations: req.translations, lang });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({
@@ -291,11 +293,35 @@ const updateAdsDisplayed = async (articleId) => {
     }
 };
 
+// อัปเดตเวลาการอ่านบทความ
+const updateReadTime = async (req, res) => {
+    const { id } = req.params; // รับ id จาก URL
+    const { readAt } = req.body; // รับ readAt จาก body
+
+    try {
+        const article = await Article.findById(id);
+        if (!article) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        // เพิ่มประวัติการอ่าน
+        article.readHistory.push({ userId: req.user?.id || 'guest', readAt });
+        await article.save();
+
+        res.status(200).json({ message: 'Read time updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
 
 module.exports = {
     getRead,
     saveArticle,
     LikeArticle,
     updateAdsDisplayed,
-    getReadAPI
+    getReadAPI,
+    updateReadTime
 }

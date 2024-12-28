@@ -100,7 +100,7 @@
     <% } %>
     </script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100" data-articleid="<%= post._id %>">
      <!-- Google Tag Manager (noscript) -->
      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TD38Z8LH" height="0" width="0"
         style="display:none;visibility:hidden"></iframe></noscript>
@@ -417,5 +417,94 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script> 
     <script src="/js/read.js" defer></script>
     <script src="/js/loadImage.js" defer></script>
+
+
+    <script defer type="text/javascript">
+        // ฟังก์ชันในการบันทึกเวลาอ่าน
+        function saveReadTime(articleId) {
+            const readArticles = JSON.parse(localStorage.getItem('readArticles')) || {};
+            const currentTime = new Date().toISOString();
+    
+            // เก็บเวลาอ่านพร้อมวันที่หมดอายุ (1 วัน)
+            readArticles[articleId] = {
+                readAt: currentTime,
+                expireAt: new Date().getTime() + 24 * 60 * 60 * 1000 // เพิ่มเวลา 1 วัน
+            };
+            localStorage.setItem('readArticles', JSON.stringify(readArticles));
+    
+            // อัปเดตไปยังเซิร์ฟเวอร์
+            fetch(`/api/v2/${articleId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ readAt: currentTime }),
+            }).catch((err) => console.error('Error updating read time:', err));
+        }
+    
+        // ฟังก์ชันตรวจสอบและลบข้อมูลที่หมดอายุ
+        function checkExpiredArticles() {
+            const readArticles = JSON.parse(localStorage.getItem('readArticles')) || {};
+            const currentTime = new Date().getTime();
+    
+            Object.keys(readArticles).forEach(articleId => {
+                const article = readArticles[articleId];
+                if (article.expireAt && currentTime > article.expireAt) {
+                    // ลบข้อมูลที่หมดอายุ
+                    delete readArticles[articleId];
+                }
+            });
+    
+            // บันทึกข้อมูลที่ยังไม่หมดอายุกลับไปใน localStorage
+            localStorage.setItem('readArticles', JSON.stringify(readArticles));
+        }
+    
+        // เรียกใช้ฟังก์ชันเมื่อเริ่มโหลดหน้า
+        document.addEventListener('DOMContentLoaded', () => {
+            // เช็คว่ามีบทความที่หมดอายุหรือยัง
+            checkExpiredArticles();
+    
+            const articleId = document.body.getAttribute('data-articleid');
+            saveReadTime(articleId);
+            console.log('Article ID:', articleId);
+        });
+    </script>
+    <script defer type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+          const readArticles = JSON.parse(localStorage.getItem('readArticles')) || {};
+          const articles = document.querySelectorAll('article');
+        
+          articles.forEach(article => {
+            const articleId = article.getAttribute('data-articleid');
+            const readArticle = readArticles[articleId];
+            const readTimeElement = article.querySelector('#read-time');
+        
+            if (readTimeElement) {
+              if (readArticle && readArticle.readAt) {
+                const timeAgo = getTimeAgo(new Date(readArticle.readAt));
+                readTimeElement.textContent = `อ่านเมื่อ ${timeAgo}`;
+              } else {
+                readTimeElement.textContent = 'ยังไม่ได้อ่าน';
+              }
+            }
+          });
+        
+          // ฟังก์ชันสำหรับคำนวณเวลาแบบ Relative Time ภาษาไทย
+          function getTimeAgo(readTime) {
+            const now = new Date();
+            const diffMs = now - readTime;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMinutes / 60);
+            const diffDays = Math.floor(diffHours / 24);
+        
+            if (diffSeconds < 60) return `${diffSeconds} วินาทีที่แล้ว`;
+            if (diffMinutes < 60) return `${diffMinutes} นาทีที่แล้ว`;
+            if (diffHours < 24) return `${diffHours} ชั่วโมงที่แล้ว`;
+            return `${diffDays} วันที่แล้ว`;
+          }
+        });
+      </script>
+      
 </body>
 </html>

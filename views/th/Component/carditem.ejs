@@ -1,35 +1,47 @@
 <% if (post.published) { %>
-    <a href="/read/<%= post.urlslug %>" class="block">
-        <div class="relative aspect-w-16 aspect-h-9">
-            <% let thumbnail = post.thumbnail.startsWith('http') ? post.thumbnail : '/uploads/thumbnails/' + (post.thumbnail  || 'default.png'); %>
-            <picture class="lazyload w-full h-auto object-cover rounded-lg">
-                <img class="lazyload rounded-lg" data-src="<%= thumbnail %>" alt="<%= post.title %>" src="placeholder.jpg" loading="lazy" />
-            </picture>
-        </div>
-        
-        <div class="flex items-center mt-2 p-4">
+    <article data-articleid="<%= post._id %>" class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
+        <% let thumbnail = post.thumbnail.startsWith('http') ? post.thumbnail : '/uploads/thumbnails/' + (post.thumbnail  || 'default.png'); %>
+        <picture class="lazyload">
+            <a href="/read/<%= post.urlslug %>">
+                <img class="lazyload w-full h-48 object-cover" data-src="<%= thumbnail %>" alt="<%= post.title %>" src="https://via.placeholder.com/1270x720" loading="lazy" />
+            </a>
+        </picture>
+
+        <div class="p-6">
+            <div class="flex items-center space-x-2 mb-2">
+                <% const maxTags = 3; %>
+                <% post.tags.slice(0, 3).forEach(tag => { %>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm line-clamp-1">
+                       <a href="/search?q=<%= tag %>" class="hover:text-blue-500">
+                        <%= tag %>
+                       </a>
+                    </span>
+                <% }) %>
+                <% if (post.tags.length > maxTags) { %>
+                    <span class="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-sm">
+                        +<%= post.tags.length - maxTags %>
+                    </span>
+                <% } %>
+            </div>
+            <h2 class="text-xl font-bold mb-2 line-clamp-2">
+                <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500">
+                    <%= post.title %>
+                </a>
+            </h2>
+
             <% if (post.creator.id && post.creator.id.profilePicture) { %>
                 <% let profilePic = post.creator.id.profilePicture.startsWith('http') ? post.creator.id.profilePicture : '/uploads/profiles/' + (post.creator.id.profilePicture || 'default.png'); %>
-                <img src="<%= profilePic %>" alt="Profile Picture" class="hidden md:block w-10 h-10 rounded-full object-cover">
-                <div class="md:ml-3 md:flex-1">
-                    <h2 class="text-sm font-semibold text-black line-clamp-1 md:line-clamp-2" title="<%= post.title %>">
-                        <%= post.title %>
-                    </h2>
-                    <p class="text-xs text-secondary-color">
-                        <%= post.creator.id.username %>
-                        <% if (post.creator.id.role  === 'admin') { %>
-                            <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
-                        <% } %>
-                    </p>
-                    <p class="text-xs text-secondary-color">การดู <%= formatNumber(post.views) %> วิว •
-                        <%= moment(post.createdAt).locale('th').fromNow() %>
-                    </p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <img src="<%= profilePic %>" alt="<%= post.creator.id.username %>" class="w-8 h-8 rounded-full">
+                        <span class="text-sm text-gray-600"><%= post.creator.id.username %></span>
+                    </div>
+                    <span id="read-time" class="text-sm text-gray-500"></span> 
                 </div>
             <% } else { %>
                 <p class="text-gray-600 text-sm">โพสต์นี้ไม่มีผู้สร้าง</p>
             <% } %>
-            
         </div>
-    </a>
+    </article>
 
 <% } %>

@@ -26,7 +26,7 @@ setInterval(checkScheduledArticles, 60000); // ตั้งเวลาให้
 
 // ============================= get SINGLE POST
 // HOME PAGE MAIN
-const getPosts = async (req, res, next) => {
+const getPosts =  async (req, res, next) => {
     const userID = req.session.userlogin; 
     const usertoken = userID?.user?._id; 
     const lang = res.locals.lang; 
@@ -51,7 +51,7 @@ const getPosts = async (req, res, next) => {
         const Animelists = await Anime.find()
             .sort({ createdAt: -1 })
             .exec();
-        const Nextseason = await Anime.find({ year: 2024, season: "Fall" }).sort({ createdAt: -1 }).exec();
+        const Nextseason = await Anime.find({ year: 2025, season: "Winter" }).sort({ createdAt: -1 }).exec(); 
 
         const template = lang === 'th_TH' ? './th/index' : './th/index';
 

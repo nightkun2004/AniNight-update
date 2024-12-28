@@ -63,6 +63,14 @@ const ArticleSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    readTime: { type: Number, default: 0 },
+    readHistory: [
+        {
+          userId: String,
+          readAt: { type: Date, default: Date.now },
+          
+        },
+      ],
     createdAt: {
         type: Date,
         default: Date.now

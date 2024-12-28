@@ -1,8 +1,9 @@
 const express = require("express")
 const router = express.Router()
-const { getRead } = require("../Controllers/readController")
+const { getRead, updateReadTime } = require("../Controllers/readController")
+const cacheMiddleware = require("../Middlewares/CacheMiddleware")
 
 router.get("/read/:urlslug", getRead)
-// router.get("/content/:urlslug", getRead)
+router.post("/api/v2/:id/read", updateReadTime)
 
 module.exports = router;

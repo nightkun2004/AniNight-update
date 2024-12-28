@@ -63,7 +63,7 @@
   </script>
 </head>
 
-<body class="bg-gray-100 text-black font-sans">
+<body class="bg-gray-100 text-black font-sans" >
 
   <!-- Header -->
   <%- include('./Component/Header') %>
@@ -77,25 +77,21 @@
           <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
           </script>
-        </div>
-
-        <div class="bg-white rounded-full mb-5 p-2 z-10">
-          <a href="/schedule/timeline">ตารางฉายอนิเมะ</a>
-        </div>
+        </div> 
 
         <section class="flex flex-wrap">
           <!-- Left Side Content with Lazy Loading Images -->
           <div class="w-full lg:w-3/4 p-5 bg-white rounded-lg">
             <h2 class="text-xl font-semibold mb-4"> 🎄 อัพเดตใหม่ 🎄</h2>
             <% if (Posts.length> 0 && typeof error === 'undefined') { %>
-              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <% Posts.slice(0, 10).forEach((post, index)=> { %>
                   <%- include('./Component/carditem', { post: post, index: index }) %>
-                    <% }) %>
-              </div>
+              <% }) %>
+              </section>
               <% } else { %>
                 <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
-                <% } %>
+             <% } %>
 
                   <div class="flex justify-center items-center">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
@@ -152,7 +148,7 @@
                                     <!-- Local server image path -->
                                     <img loading="lazy"
                                       data-src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
-                                      src="https://via.placeholder.com/400x200" alt="<%= anime.title.th || anime.en %>"
+                                      src="https://via.placeholder.com/400x300" alt="<%= anime.title.th || anime.en %>"
                                       class="lazyload w-full rounded-lg">
                                     <% } %>
                               </a>
@@ -174,18 +170,13 @@
           <!-- Right Sidebar with Ads -->
           <aside class="w-full lg:w-1/4 lg:pl-8 mt-8 lg:mt-0">
             <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-              <h3 class="text-lg font-semibold mb-3">แท็กยอดนิยม</h3>
-              <div class="flex flex-wrap gap-2">
-                <% Posts.slice(0, 10).forEach((post)=> { %>
-                  <% if (post && post.tags && post.tags.length> 0) { %>
-                    <% post.tags.forEach((tag)=> { %>
-                      <a class="inline-block rounded-full border-2 mr-2 mt-2 px-2 py-1 text-xs font-semibold text-gray-700 transition-all duration-200"
-                        href="/search?q=<%= tag %>">
-                        #<%= tag %>
-                      </a>
-                      <% }) %>
-                        <% } %>
-                          <% }) %>
+              <h3 class="text-lg font-semibold mb-3">สมัคร/เข้าสู่ระบบ</h3>
+              <p class="text-sm text-gray-600">สมัครสมาชิกเพื่อเข้าถึงบทความที่น่าสนใจและอัปเดตข้อมูลล่าสุด</p>
+              <div class="flex justify-between mt-4">
+                <a href="/auth/login"
+                  class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">เข้าสู่ระบบ</a>
+                <a href="/auth/register"
+                  class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition-all duration-200 text-center">สมัครสมาชิก</a>
               </div>
             </div>
           </aside>
@@ -197,6 +188,46 @@
 
       <script src="/js/script.js" defer></script>
       <script src="/js/loadImage.js" defer></script>
-</body>
+
+      <script defer type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+          const readArticles = JSON.parse(localStorage.getItem('readArticles')) || {};
+          const articles = document.querySelectorAll('article');
+        
+          articles.forEach(article => {
+            const articleId = article.getAttribute('data-articleid');
+            const readArticle = readArticles[articleId];
+            const readTimeElement = article.querySelector('#read-time');
+        
+            if (readTimeElement) {
+              if (readArticle && readArticle.readAt) {
+                const timeAgo = getTimeAgo(new Date(readArticle.readAt));
+                readTimeElement.textContent = `อ่านเมื่อ ${timeAgo}`;
+              } else {
+                readTimeElement.textContent = 'ยังไม่ได้อ่าน';
+              }
+            }
+          });
+        
+          // ฟังก์ชันสำหรับคำนวณเวลาแบบ Relative Time ภาษาไทย
+          function getTimeAgo(readTime) {
+            const now = new Date();
+            const diffMs = now - readTime;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMinutes / 60);
+            const diffDays = Math.floor(diffHours / 24);
+        
+            if (diffSeconds < 60) return `${diffSeconds} วินาทีที่แล้ว`;
+            if (diffMinutes < 60) return `${diffMinutes} นาทีที่แล้ว`;
+            if (diffHours < 24) return `${diffHours} ชั่วโมงที่แล้ว`;
+            return `${diffDays} วันที่แล้ว`;
+          }
+        });
+      </script>
+      
+      
+      
+      </body>
 
 </html>
