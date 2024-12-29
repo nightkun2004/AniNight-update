@@ -366,13 +366,11 @@ const authArticleUser = async (req, res) => {
     try {
         const user = await User.findById(userid).populate('articles').exec();
 
-        // ตรวจสอบว่าพบ user หรือไม่
         if (!user) {
             return res.status(404).json({ message: 'User not found', status: 404 });
         }
 
-        // แบ่งรายการบทความเป็นหลายหน้า
-        const page = parseInt(req.query.page) || 1;
+        const page = parseInt(req.body.page) || 1; // ใช้ req.body แทน req.query ในกรณีนี้
         const limit = 10;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
@@ -380,12 +378,21 @@ const authArticleUser = async (req, res) => {
 
         const articles = user.articles.slice(startIndex, endIndex);
 
-        res.status(200).json({ articles, page, totalPages: Math.ceil(total / limit) });
+        // ตรวจสอบว่ามีหน้าถัดไปหรือไม่
+        const hasNext = endIndex < total;
+        
+        res.status(200).json({
+            articles, 
+            page, 
+            totalPages: Math.ceil(total / limit),
+            hasNext // ส่งค่า hasNext เพื่อให้ front-end ใช้ในการตรวจสอบ
+        });
 
-    } catch (error) { // กำหนดตัวแปร error ให้ชัดเจน
+    } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message, status: 500 });
     }
 };
+
 
 // =============================================== Profile Save Anime =========================================
 // ============================================================================================================
