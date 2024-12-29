@@ -203,16 +203,19 @@ const fetchArticles = async (page) => {
         const data = await response.json();
 
         const checkImageUrl = (url) => {
-            if (url.startsWith('http')) {
-                return url;
-            }
-            return `${url}`;
-        };
+        // เช็คว่า URL เริ่มต้นด้วย http:// หรือ https:// หรือไม่
+        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+            return url;
+        }
+        // ถ้าไม่ใช่ URL ที่เริ่มต้นด้วย http หรือ https ให้ใช้ URL ภายใน
+        return `https://ani-night.online/uploads/thumbnails/${url}`; 
+    };
+
 
         data.articles.forEach(article => {
 
             console.log(article)
-            const thumbnailUrl = checkImageUrl(article.thumbnail || 'https://ani-night.online/uploads/thumbnails/');
+            const thumbnailUrl = checkImageUrl(article.thumbnail || '/uploads/thumbnails/default.png');
             
             const articleCard = `
                 <article class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
