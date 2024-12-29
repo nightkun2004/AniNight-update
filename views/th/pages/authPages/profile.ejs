@@ -203,14 +203,16 @@ const fetchArticles = async (page) => {
         const data = await response.json();
 
         const checkImageUrl = (url) => {
-            if (url.startsWith('http://') || url.startsWith('https://')) {
+            if (url.startsWith('http')) {
                 return url;
             }
             return `${url}`;
         };
 
         data.articles.forEach(article => {
-            const thumbnailUrl = checkImageUrl(article.thumbnail || '/uploads/thumbnails/');
+
+            console.log(article)
+            const thumbnailUrl = checkImageUrl(article.thumbnail || 'https://ani-night.online/uploads/thumbnails/');
             
             const articleCard = `
                 <article class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
