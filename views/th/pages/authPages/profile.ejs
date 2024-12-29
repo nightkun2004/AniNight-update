@@ -238,7 +238,8 @@ const fetchArticles = async (page) => {
         // ซ่อนปุ่มโหลดเพิ่มเติมถ้าไม่มีหน้าถัดไป
         if (!data.hasNext) {
     document.getElementById('loading').classList.add('hidden');
-    document.body.removeEventListener('scroll', handleScroll);
+    // หยุดการติดตามการเลื่อนใน window เมื่อไม่มีข้อมูลให้โหลดอีก
+    window.removeEventListener('scroll', handleScroll);
 } else {
     currentPage += 1; // เพิ่มหน้าถัดไป
 }
@@ -252,7 +253,7 @@ const fetchArticles = async (page) => {
 };
 
 const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.body; // ใช้ document.body แทน
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
     if (scrollTop + clientHeight >= scrollHeight - 5 && !isLoading) {
         fetchArticles(currentPage);
     }
@@ -260,7 +261,8 @@ const handleScroll = () => {
 
 // รอให้หน้าเว็บโหลดเสร็จแล้วเริ่มโหลดข้อมูล
 window.onload = () => {
-    document.getElementById('MainContent').addEventListener('scroll', handleScroll);
+    // เพิ่มตัวจัดการการเลื่อนใน window (ทั้งหน้าเว็บ)
+    window.addEventListener('scroll', handleScroll);
     fetchArticles(currentPage); // โหลดข้อมูลครั้งแรก
 };
 
