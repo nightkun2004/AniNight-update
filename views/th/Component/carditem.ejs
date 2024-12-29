@@ -5,6 +5,11 @@
             <a href="/read/<%= post.urlslug %>">
                 <img class="lazyload w-full h-48 object-cover" data-src="<%= thumbnail %>" alt="<%= post.title %>" src="https://via.placeholder.com/1270x720" loading="lazy" />
             </a>
+
+            <!-- view left -->
+            <div class="absolute top-0 left-0 p-2 bg-blue-500 text-white rounded-br-lg">
+                <i class="far fa-eye"></i> <%= formatNumber(post.views) %>
+            </div>
         </picture>
 
         <div class="p-6">
@@ -38,6 +43,7 @@
                     </div>
                     <span id="read-time" class="text-sm text-gray-500"></span> 
                 </div>
+                <span id="datae-time" class="text-sm text-gray-500"> <%= moment(post.createdAt).locale('th').fromNow() %></span> 
             <% } else { %>
                 <p class="text-gray-600 text-sm">โพสต์นี้ไม่มีผู้สร้าง</p>
             <% } %>

@@ -48,6 +48,8 @@ const getPosts =  async (req, res, next) => {
             .limit(10)
             .exec();
 
+
+        const LatestPosts = await Article.find().sort({ createdAt: -1 }).limit(2).exec();
         const Animelists = await Anime.find()
             .sort({ createdAt: -1 })
             .exec();
@@ -65,6 +67,7 @@ const getPosts =  async (req, res, next) => {
             active: "Home",
             Posts: Posts || [],
             Animelists,
+            LatestPosts,
             Nextseason,
             userID,
             TopViews,

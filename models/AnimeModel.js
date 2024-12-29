@@ -58,6 +58,10 @@ const AnimeSchema = new mongoose.Schema({
     Source: String,
     Licensors: String,
     website: String,
+    views: {
+        type: Number,
+        default: 0
+    },
     episodes: {
         current: { type: Number, default: 0 }, // จำนวนตอนที่ฉายไปแล้ว
         total: { type: Number, default: 0 }   // จำนวนตอนทั้งหมด (ถ้าทราบ)

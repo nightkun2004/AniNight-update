@@ -59,6 +59,11 @@ const authLogin = async (req, res, next) => {
         // console.log("session daras", req.session.userlogin)
         // console.log("token", token)
 
+        // หาก session มีค่า role และเป็น admin ให้ไปหน้า /admin
+        if (req.session.userlogin.user.role === 'admin') {
+            return res.status(200).redirect('/admin');
+        }
+
         const returnTo = req.session.returnTo || `/@${username}`;
         delete req.session.returnTo;
         res.redirect(303, returnTo);
@@ -354,6 +359,33 @@ const checkTokenNewPassword = async (req, res) => {
     }
 }
 
+// ======================================= API Article User ================================================
+// =========================================================================================================
+const authArticleUser = async (req, res) => {
+    const { userid } = req.params;
+    try {
+        const user = await User.findById(userid).populate('articles').exec();
+
+        // ตรวจสอบว่าพบ user หรือไม่
+        if (!user) {
+            return res.status(404).json({ message: 'User not found', status: 404 });
+        }
+
+        // แบ่งรายการบทความเป็นหลายหน้า
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const total = user.articles.length;
+
+        const articles = user.articles.slice(startIndex, endIndex);
+
+        res.status(200).json({ articles, page, totalPages: Math.ceil(total / limit) });
+
+    } catch (error) { // กำหนดตัวแปร error ให้ชัดเจน
+        res.status(500).json({ message: 'Server Error', error: error.message, status: 500 });
+    }
+};
 
 // =============================================== Profile Save Anime =========================================
 // ============================================================================================================
@@ -696,9 +728,11 @@ const logout = (req, res) => {
 
         // ลบ Cookie ที่เกี่ยวข้อง
         res.clearCookie('token');
+        res.clearCookie('tksave');
+
 
         // Redirect ไปยังหน้าแรกหรือหน้า Login
-        res.redirect('/auth/login');
+        res.redirect('/');
     });
 };
 
@@ -712,6 +746,7 @@ module.exports = {
     getResetPassword,
     checkTokenNewPassword,
     authProfileSaveAnime,
+    authArticleUser,
     EditProfile,
     EditProfileAvater,
     EditBanner,

@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { checkAuth } = require("../lib/auth")
 const { authMiddleware } = require("../Middlewares/authMiddleware")
-const {authLogin, getEditProfile, authRegister, authProfile, ResetPassword , checkTokenNewPassword,  EditProfileAvater, EditBannerPost, EditProfile, logout} = require("../Controllers/authController")
+const {authLogin, getEditProfile, authRegister, authProfile, authArticleUser, ResetPassword , checkTokenNewPassword,  EditProfileAvater, EditBannerPost, EditProfile, logout} = require("../Controllers/authController")
 const { getFollow, getUnfollow } = require("../Controllers/ChannelController")
 
 router.get("/auth/login", (req,res)=>{
@@ -35,6 +35,7 @@ const { APIauthLogin, APIauthProfile } = require("../Controllers/apiAuthControll
 // Routers API v.3
 router.post("/auth/login/studio", APIauthLogin)
 router.post("/auth/profile", authMiddleware, APIauthProfile)
+router.post("/article/:userid/datas", authArticleUser)
 
 
 module.exports = router;
