@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to 2025 || เคาน์ดาวน์ปีใหม่ 2025</title>
+
+
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+      crossorigin="anonymous"></script>
+
+      <style>
+        body {
+          background: radial-gradient(circle, rgba(34,34,34,1) 0%, rgba(17,17,17,1) 100%);
+        }
+        .celebration {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          color: white;
+          z-index: 9999;
+        }
+        .firework {
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          background: radial-gradient(circle, #ff0, rgba(255,0,0,0) 70%);
+          animation: explode 1s ease-out infinite;
+        }
+        @keyframes explode {
+          from { transform: scale(1); opacity: 1; }
+          to { transform: scale(5); opacity: 0; }
+        }
+      </style>
+</head>
+<body class="bg-gray-400 text-white">
+     <%- include('./Component/Header') %>
+
+     <main class="mx-auto max-w-6xl px-4 p-5">
+        <h1 class="text-4xl md:text-6xl font-bold mb-8 text-center">Countdown to 2025 || เคาน์ดาวน์ปีใหม่ 2025</h1>
+
+        <div id="countdown" class="flex justify-center space-x-4 text-center text-2xl md:text-4xl">
+            <div class="text-center">
+              <p id="days" class="font-bold text-4xl text-pink-500">00</p>
+              <p class="text-white">วัน</p>
+            </div>
+            <div class="text-center">
+              <p id="hours" class="font-bold text-4xl text-purple-500">00</p>
+              <p class="text-white">ชั่วโมง</p>
+            </div>
+            <div class="text-center">
+              <p id="minutes" class="font-bold text-4xl text-blue-500">00</p>
+              <p class="text-white">นาที</p>
+            </div>
+            <div class="text-center">
+              <p id="seconds" class="font-bold text-4xl text-green-500">00</p>
+              <p class="text-white">วินาที</p>
+            </div>
+          </div>
+
+          <p class="mt-8 text-gray-400 text-center">Let&#39;s celebrate together! 🎉</p>
+     </main>
+
+     <div id="celebration" class="hidden celebration">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4">Happy New Year 2025! 🎉</h1>
+        <p class="text-xl md:text-2xl">Wishing you a wonderful year ahead!</p>
+        <div id="fireworks-container"></div>
+     </div>
+
+     <script>
+       const countdownElement = {
+         days: document.getElementById('days'),
+         hours: document.getElementById('hours'),
+         minutes: document.getElementById('minutes'),
+         seconds: document.getElementById('seconds')
+       };
+
+       const celebrationElement = document.getElementById('celebration');
+       const fireworksContainer = document.getElementById('fireworks-container');
+
+       function updateCountdown() {
+         const now = new Date();
+         const newYear = new Date('January 1, 2025 00:00:00');
+         const timeLeft = newYear - now;
+
+         if (timeLeft <= 0) {
+           document.querySelector('main').classList.add('hidden');
+           celebrationElement.classList.remove('hidden');
+           launchFireworks();
+           return;
+         }
+
+         const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+         const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+         countdownElement.days.textContent = days.toString().padStart(2, '0');
+         countdownElement.hours.textContent = hours.toString().padStart(2, '0');
+         countdownElement.minutes.textContent = minutes.toString().padStart(2, '0');
+         countdownElement.seconds.textContent = seconds.toString().padStart(2, '0');
+       }
+
+       function launchFireworks() {
+         for (let i = 0; i < 50; i++) {
+           const firework = document.createElement('div');
+           firework.classList.add('firework');
+           firework.style.left = Math.random() * 100 + '%';
+           firework.style.top = Math.random() * 100 + '%';
+           fireworksContainer.appendChild(firework);
+           setTimeout(() => firework.remove(), 1000);
+         }
+         setTimeout(launchFireworks, 1000);
+       }
+
+       setInterval(updateCountdown, 1000);
+     </script>
+</body>
+</html>
