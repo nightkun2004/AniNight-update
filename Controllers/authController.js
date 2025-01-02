@@ -448,30 +448,29 @@ const EditProfile = async (req, res) => {
     const userID = req.session.userlogin;
     // console.log('Request Body:', req.body);
     try {
-        const { username, bio } = req.body;
+        const { bio } = req.body;
 
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(403).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'ไม่พบผู้ใช้', userID, translations: req.translations, lang });
         }
 
-         const existingusername = await User.findOne({ username });
-         if (existingusername) {
-             return res.status(400).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, translations: req.translations, lang });
-         }
+        //  const existingusername = await User.findOne({ username });
+        //  if (existingusername) {
+        //      return res.status(400).render(`./th/pages/authPages/Edits/EditProfile`, { error: 'ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว', userID, translations: req.translations, lang });
+        //  }
 
 
         // Update user info in database
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             {
-                username,
                 bio
             },
             { new: true }
         );
 
-        req.session.userlogin = { ...req.session.userlogin, username: updatedUser.username, bio: updatedUser.bio };
+        req.session.userlogin = { ...req.session.userlogin,bio: updatedUser.bio };
 
         if (!updatedUser) {
             return res.status(500).render(`./th/pages/authPages/Edits/EditProfile`, { message: 'ไม่สามารถอัปเดตข้อมูลได้.', userID, translations: req.translations, lang });

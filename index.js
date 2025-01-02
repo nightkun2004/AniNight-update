@@ -113,6 +113,7 @@ app.use((req, res, next) => {
 });
 
 app.set('views', [
+  path.join(__dirname, '/client/web/views/th'),
   path.join(__dirname, '/views'),
   path.join(__dirname, '/admin/views'),
   path.join(__dirname, '/media/views'),

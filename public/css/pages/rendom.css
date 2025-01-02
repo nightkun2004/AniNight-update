@@ -1,0 +1,171 @@
+.easyWheel,
+.easyWheel * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.eWheel .eWheel-bg-layer {
+    transform: rotate(-90deg);
+}
+
+.eWheel .eWheel-txt-wrap {
+    transform: rotate(-90deg);
+}
+
+.eWheel-wrapper,
+.easyWheel {
+    position: relative;
+}
+
+.eWheel-wrapper {
+    position: relative;
+}
+
+.easyWheel {
+    max-width: 100%;
+    margin: 4em auto 1em;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.easyWheel .eWheel-inner {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.easyWheel .eWheel,
+.easyWheel .eWheel>.eWheel-bg-layer,
+.easyWheel .eWheel>.eWheel-txt-wrap,
+.easyWheel .eWheel>.eWheel-txt-wrap>.eWheel-txt{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.easyWheel .eWheel>.eWheel-bg-layer,
+.easyWheel .eWheel>.eWheel-txt-wrap {
+    transform: rotate(-90deg);
+}
+
+.eWheel .eWheel-txt-wrap .eWheel-txt,
+.easyWheel .eWheel>.eWheel-txt-wrap>.eWheel-txt {
+    margin: 0 auto;
+    border-radius: 100%;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+    color: #ecf0f1;
+}
+
+.eWheel-txt div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    line-height: 1.2em;
+    max-height: 23.4em;
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    transform-origin: 0 1px;
+    width: 50%;
+    padding-right: 6%;
+    font-weight: 700;
+    font-size: 100%;
+    cursor: default;
+    color: #fff;
+    text-align: right;
+}
+
+.easyWheel .eWheel-center {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    text-align: center;
+}
+
+
+.easyWheel .eWheel-center>img {
+    max-width: 100%;
+    width: 200px;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.eWheel .eWheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.easyWheel .eWheel-marker {
+    border-spacing: 90px;
+    width: 16%;
+    height: 16%;
+    position: absolute;
+    left: 50%;
+    top: -18%;
+    margin-top: 7%;
+    margin-left: -8%;
+    transition: .2 rotate linear;
+    z-index: 3;
+    display: block;
+    transform: rotate(0);
+    transform-origin: 50% 35%;
+}
+
+.easyWheel .eWheel-marker>svg {
+    height: 100%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.eWheel>.eWheel-bg-layer>svg {
+    margin: 0 auto;
+    border-radius: 50%;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: rotate(0);
+}
+
+.spinner {
+    position: relative;
+    transform-origin: center; /* ตั้งจุดหมุนไว้ที่กลางวงล้อ */
+}
+
+.eWheel-marker,
+.eWheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* จัดให้อยู่กลางวงล้อ */
+    z-index: 10; /* ให้อยู่เหนือวงล้อ */
+}
+
+.eWheel-marker {
+    pointer-events: none; /* ป้องกันการคลิก */
+}
+
+.eWheel-center button {
+    pointer-events: auto; /* ให้สามารถคลิกปุ่มได้ */
+}

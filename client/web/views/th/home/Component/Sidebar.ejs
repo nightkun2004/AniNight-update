@@ -1,0 +1,49 @@
+<aside class="fixed top-0 -left-64 w-64 h-full bg-white z-50 shadow-md transition-all duration-300" id="sidebar">
+    <div class="sidebar">
+        <div class="sidebar_top flex items-center w-full h-16 px-4">
+            <button class="btn_menus cursor-pointer" id="toggle-sidebar-1">
+                <svg width="26px" height="26px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H20M4 12H20M4 18H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <div class="sidebar-logo flex items-center px-10">
+                <a href="" class="logo">
+                    <h3 class="text-2xl">AniNight</h3>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-menus">
+            <a href="/" class="sidebar-menu flex items-center px-4 py-2 hover:bg-blue-200 <%= active === 'Home' ? 'bg-blue-300' : '' %>">
+                <span class="icon">
+                    <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M15 18H9" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                </span>
+                <p class="pl-4">หน้าหลัก</p>
+            </a>
+            <div class="sidebar-menu flex items-center px-4 py-2 hover:bg-blue-200">
+                <a href="/manga" class="nav-item hover:text-blue-400 translate-x-1">ตารางอนิเมะ</a>
+            </div>
+            <div class="sidebar-menu flex items-center px-4 py-2 hover:bg-blue-200">
+                <a href="/news" class="nav-item hover:text-blue-400 translate-x-1">โพสต์ภาพ&มีม</a>
+            </div>
+            <div class="sidebar-menu flex items-center px-4 py-2 hover:bg-blue-200">
+                <a href="/forum" class="nav-item hover:text-blue-400 translate-x-1">ข้อความเสียง</a>
+            </div>
+        </div>
+
+        <% if (!userID) {%>
+            <div class="sidebar-user mt-5 flex flex-wrap items-center justify-center gap-3">
+                <div class="sidebar-menu flex items-center px-4 py-2 bg-blue-500 rounded-lg text-white hover:bg-blue-200">
+                    <a href="/auth/login" class="nav-item ">เข้าสู่ระบบ</a>
+                </div>
+                <div class="sidebar-menu flex items-center px-4 py-2 hover:bg-blue-200 rounded-lg border border-blue-500">
+                    <a href="/auth/register" class="nav-item ">สมัครสมาชิก</a>
+                </div>
+            </div>
+        <% } %>
+        
+    </div>
+</aside>

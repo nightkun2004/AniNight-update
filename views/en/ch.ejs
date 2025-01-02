@@ -262,3 +262,283 @@
                         </div>
         </section>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+ 
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const contentItems = document.querySelectorAll('.content-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                filterButtons.forEach(btn => {
+                    if (btn === button) {
+                        btn.classList.remove('bg-gray-200', 'text-gray-700');
+                        btn.classList.add('bg-blue-600', 'text-white');
+                    } else {
+                        btn.classList.remove('bg-blue-600', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    }
+                });
+
+                contentItems.forEach(item => {
+                    if (filter === 'all' || item.classList.contains(filter)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
+
+</script> 
+
+   <!-- Content Wrapper -->
+                    <!-- <div class="flex-1 overflow-auto p-4 content-layout md:ml-[270px] lg:ml-[250px]">
+                        <section class="container mx-auto px-4 py-8 bg-white rounded-lg shadow">
+                            <% if (channel.bannerImagePath) {%>
+                                <div class="banner relative w-full h-40 sm:h-64">
+                                    <img style="user-select: none;" src="/uploads/banners/<%= channel.bannerImagePath %>" alt="banner" class="w-full rounded-lg h-full object-cover">
+                                </div>
+                            <% } %>
+                            <div class="flex flex-col md:flex-row items-center mt-5">
+                                <img src="/uploads/profiles/<%= channel.profilePicture %>" alt="Profile Picture"
+                                    class="w-32 h-32 rounded-full object-cover">
+                                <div class="md:ml-6 mt-4 md:mt-0 text-center md:text-left">
+                                    <h2 class="text-2xl font-semibold"><%= channel.username %></h2>
+                                    <p class="text-gray-600 mt-2"><%= channel.bio %></p>
+                                    <div class="mt-4 flex justify-center sm:justify-start space-x-4">
+                                        <span class="text-sm text-gray-600"><strong> <%= formatNumber(channel.followers.length) %></strong> : ผู้ติดตาม</span>
+                                        <span class="text-sm text-gray-600"><strong><%= formatNumber(channel.following.length) %></strong> : กำลังติดตาม</span>
+                                    </div>
+                                    <ul class="items-center">
+                                        <li class="text-sm text-gray-400"><strong class="font-medium">วันที่เข้าร่วม:</strong> <%= new Date(channel.createdAt).toLocaleDateString() %></li>
+                                    </ul>
+                                    <div class="mt-4 flex justify-center md:justify-start">
+                                        <% if (userID) { %>
+                                            <% if (channel.followers.includes(userID.user._id)) { %>
+                                                <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
+                                                    onclick="confirmUnfollow('<%= channel._id %>')">
+                                                    <i class="fa-solid fa-user-minus"></i> ยกเลิกติดตาม
+                                                </button>
+                                            <% } else { %>
+    
+                                                <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
+                                                        onclick="toggleFollow('<%= channel._id %>')">
+                                                    <i class="fa-solid fa-user-plus"></i> ติดตาม
+                                                </button>
+                                            <% } %>
+                                        <% } else { %>
+                                          <a href="/auth/login" class="bg-pink-600 px-4 py-2 hover:bg-pink-800 rounded-lg text-white">ติดตาม</a>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+                        <section class="container mx-auto px-4 py-8">
+                            <h3 class="text-xl font-semibold mb-6">ผลงานล่าสุด</h3>
+                    
+                            <div class="flex mb-6">
+                                <button class="filter-btn bg-blue-600 text-white px-4 py-2 rounded mr-2" data-filter="all">ทั้งหมด</button>
+                                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded mr-2"
+                                    data-filter="video">วิดีโอ</button>
+                                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded mr-2"
+                                    data-filter="article">บทความ</button>
+                                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded" data-filter="image">รูปภาพ</button>
+                            </div>
+                            <div>
+                                <% if (channel.role === 'content_creator') { %>
+                                  <% if (channel.articles.length > 0) { %>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                      <% channel.articles.forEach(article => { %>
+                                        <div class="content-item bg-white rounded-lg shadow overflow-hidden video">
+                                          <img src="https://via.placeholder.com/400x300" alt="Video Thumbnail" class="w-full h-48 object-cover">
+                                          <div class="p-4">
+                                            <h4 class="font-semibold text-lg"><%= article.title %></h4>
+                                            <p class="text-gray-600 mt-2"><%= article.description %></p>
+                                          </div>
+                                        </div>
+                                      <% }); %>
+                                    </div>
+                                  <% } else { %>
+                                    <p class="text-gray-600">ยังไม่ได้เขียนบทความ</p>
+                                  <% } %>
+                                <% } %>
+                              </div>
+                              
+                        </section>
+                     </div> -->
+
+                     <script>
+                        function showSection(sectionId, tabElement) {
+                           const sections = ['home-section','videos-section', 'posts-section'];
+                           const tabs = ['home-tab','videos-tab', 'posts-tab'];
+                   
+                           sections.forEach((section, index) => {
+                               const sectionElement = document.getElementById(section);
+                               const tabElement = document.getElementById(tabs[index]);
+                   
+                               if (section === sectionId) {
+                                   sectionElement.style.display = 'block';
+                                   tabElement.classList.add('active');
+                               } else {
+                                   sectionElement.style.display = 'none';
+                                   tabElement.classList.remove('active');
+                               }
+                           });
+                       }
+                   </script>
+                
+                    <script>
+                        const menuButtons = document.querySelectorAll(".menu-button");
+                        const screenOverlay = document.getElementById("overlay");
+                        const themeButton = document.getElementById("theme-toggle");
+                        const htmlElement = document.documentElement;
+                        const sidebar = document.getElementById("sidebar");
+                        const closeSidebarButton = document.getElementById("close-sidebar");
+                
+                        // Toggle sidebar visibility when menu buttons are clicked
+                        menuButtons.forEach(button => {
+                            button.addEventListener("click", () => {
+                                document.body.classList.toggle("sidebar-hidden");
+                                sidebar.classList.toggle("translate-x-0");
+                                sidebar.classList.toggle("-translate-x-full");
+                                screenOverlay.classList.toggle("opacity-0");
+                                screenOverlay.classList.toggle("pointer-events-none");
+                            });
+                        });
+                
+                        // Toggle sidebar visibility when screen overlay is clicked
+                        screenOverlay.addEventListener("click", () => {
+                            document.body.classList.toggle("sidebar-hidden");
+                            sidebar.classList.toggle("translate-x-0");
+                            sidebar.classList.toggle("-translate-x-full");
+                            screenOverlay.classList.toggle("opacity-0");
+                            screenOverlay.classList.toggle("pointer-events-none");
+                        });
+                
+                        // Initialize dark mode based on localStorage
+                        if (localStorage.getItem("darkMode") === "enabled") {
+                            htmlElement.classList.add("dark");
+                            themeButton.querySelector("i").classList.replace("uil-moon", "uil-sun");
+                        } else {
+                            themeButton.querySelector("i").classList.replace("uil-sun", "uil-moon");
+                        }
+                
+                        // Toggle dark mode when theme button is clicked
+                        themeButton.addEventListener("click", () => {
+                            const isDarkMode = htmlElement.classList.toggle("dark");
+                            localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+                            const icon = themeButton.querySelector("i");
+                            if (isDarkMode) {
+                                icon.classList.replace("uil-moon", "uil-sun");
+                            } else {
+                                icon.classList.replace("uil-sun", "uil-moon");
+                            }
+                        });
+                
+                        // Show sidebar on large screens by default
+                        if (window.innerWidth >= 768) {
+                            document.body.classList.remove("sidebar-hidden");
+                            sidebar.classList.remove("-translate-x-full");
+                            sidebar.classList.add("translate-x-0");
+                            screenOverlay.classList.add("opacity-0", "pointer-events-none");
+                        }
+                
+                        // ปรับการแสดงผลเมื่อขนาดหน้าจอเปลี่ยน
+                        window.addEventListener("resize", () => {
+                            if (window.innerWidth >= 768) {
+                                document.body.classList.remove("sidebar-hidden");
+                                sidebar.classList.remove("-translate-x-full");
+                                sidebar.classList.add("translate-x-0");
+                                screenOverlay.classList.add("opacity-0", "pointer-events-none");
+                            } else {
+                                sidebar.classList.add("-translate-x-full");
+                                sidebar.classList.remove("translate-x-0");
+                            }
+                        });
+                    </script>
+                </body>
+
+
+
+
+
+
+
+
+
+
+                <section class="videos-section" id="videos-section" style="display: none;">
+                    <h2 class="videos-all app-h2">
+                        มีมผู้สร้าง
+                    </h2>
+    
+    
+                    <% if (channel.Mememes.length > 0) { %>
+                        <div class="videos article-user">
+                            <% channel.Mememes.forEach(item => { %>
+                                <a class="hover-de" target="_blank" href="/play/<%= item.videoid %>">
+                                    <div class="item-article-user">
+                                        <div class="article-pic">
+                                            <video src="<%= item.memeimageUrl %>" controls loop muted></video>
+                                        </div>
+                                        <div class="name-article">
+                                            <h2><%= item.description %></h2>
+                                        </div>
+                                    </div>
+                                </a>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p style="text-align: center; color: #000;">ยังไม่มีเนื้อหาวีดีโอที่สร้างครับ.</p>
+                    <% } %>
+                    
+                   </section>
+
+
+
+
+
+
+
+
+                   <section class="home-section" id="home-section">
+                    <h2 class="app-h2">ผลงานของครีเอเตอร์</h2>
+                
+                    <% if (channel.articles.length > 0) { %>
+                        <div class="article-user">
+                            <% channel.articles.forEach((item, index) => { %>
+                                <% if (index < 12 * (page - 1) || index >= 12 * page) { return; } %>
+                                <a class="hover-de" target="_blank" href="/read/<%= item.urlslug %>">
+                                    <div class="item-article-user">
+                                        <div class="article-pic">
+                                            <% let thumbnail = item.thumbnail.startsWith('http') ? item.thumbnail : '/uploads/thumbnails/' + (item.thumbnail || 'default.png'); %>
+                                            <img src="<%= thumbnail %>" alt="" loading="lazy">
+                                            <p class="views"><i class="bi bi-eye"></i><%= formatNumber(item.views) %></p>
+                                        </div>
+                                        <div class="name-article">
+                                            <h2><%= item.title.substring(0, 40) + '...' %></h2>
+                                        </div>
+                                    </div>
+                                </a>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p style="text-align: center;">ครีเอเตอร์นี้ยังไม่มีบทความครับ..</p>
+                    <% } %>
+                
+                </section>
+                <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-fb+5w+4e-db+86"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="7071553309"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>                

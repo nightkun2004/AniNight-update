@@ -63,14 +63,14 @@
                         </div>
 
                         <div class="relative flex justify-end">
-                            <button id="menu-button" class="text-black px-4 py-2 rounded-md">
+                            <button id="menu-button" class="text-black px-4 py-2 bg-white shadow-md rounded-full">
                                 <i class="fa-solid fa-ellipsis-vertical text-2xl"></i>
                             </button>
-                            <div id="menu-content" class="absolute top right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden hidden">
+                            <div id="menu-content" class="absolute top-12 right-0  w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden hidden">
                                 <a href="/uploads/create/article" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">เขียนบทความ</a>
                                 <a href="/dashboard" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">จัดการเนื้อหา</a>
                                 <a href="/@<%= user.username %>/saveanime" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">รายการอนิเมะที่บันทึก</a>
-                                <a href="/channel/<%= user.username %>" target="_blank" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">ดูโปรไฟล์ <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                <a href="/editor/<%= user.username %>" target="_blank" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">ดูโปรไฟล์ <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 <a href="/profile/<%= user.username %>/editprofile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">แก้ไขโปรไฟล์</a>
                                 <a href="/profile/<%= user.username %>/editbanner/add" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">แก้ไขแบนเนอร์</a>
                             </div>
@@ -181,90 +181,90 @@
         }
 
         let currentPage = 1; // กำหนดหน้าเริ่มต้น
-let isLoading = false; // กำหนดตัวแปรเพื่อตรวจสอบว่ากำลังโหลดหรือไม่
-const container = document.querySelector('.MainContent');
-const userID = document.querySelector('body').dataset.userid;
+        let isLoading = false; // กำหนดตัวแปรเพื่อตรวจสอบว่ากำลังโหลดหรือไม่
+        const container = document.querySelector('.MainContent');
+        const userID = document.querySelector('body').dataset.userid;
 
-const fetchArticles = async (page) => {
-    if (isLoading) return;
-    isLoading = true;
+        const fetchArticles = async (page) => {
+            if (isLoading) return;
+            isLoading = true;
 
-    const url = `/api/v2/article/${userID}/datas`;
+            const url = `/api/v2/article/${userID}/datas`;
 
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ page }), // ส่งข้อมูล page ในรูปแบบ JSON
-        });
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ page }), // ส่งข้อมูล page ในรูปแบบ JSON
+                });
 
-        const data = await response.json();
+                const data = await response.json();
 
-        const checkImageUrl = (url) => {
-        // เช็คว่า URL เริ่มต้นด้วย http:// หรือ https:// หรือไม่
-        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-            return url;
-        }
-        // ถ้าไม่ใช่ URL ที่เริ่มต้นด้วย http หรือ https ให้ใช้ URL ภายใน
-        return `https://ani-night.online/uploads/thumbnails/${url}`; 
-    };
-
-
-        data.articles.forEach(article => {
-
-            console.log(article)
-            const thumbnailUrl = checkImageUrl(article.thumbnail || '/uploads/thumbnails/default.png');
-            
-            const articleCard = `
-                <article class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
-                    <picture class="lazyload-article">
-                        <a href="/read/${article.urlslug}">
-                            <img class="lazyload-article w-full h-48 object-cover" src="${thumbnailUrl}" alt="${article.title}" loading="lazy" />
-                        </a>
-                    </picture>
-
-                    <div class="p-6">
-                        <h2 class="text-xl font-bold mb-2 line-clamp-2">
-                            <a href="/read/${article.urlslug}" class="hover:text-blue-500">${article.title}</a>
-                        </h2>
-                    </div>
-                </article>
-            `;
-            container.insertAdjacentHTML('beforeend', articleCard);
-        });
-
-        // ซ่อนปุ่มโหลดเพิ่มเติมถ้าไม่มีหน้าถัดไป
-        if (!data.hasNext) {
-    document.getElementById('loading').classList.add('hidden');
-    // หยุดการติดตามการเลื่อนใน window เมื่อไม่มีข้อมูลให้โหลดอีก
-    window.removeEventListener('scroll', handleScroll);
-} else {
-    currentPage += 1; // เพิ่มหน้าถัดไป
-}
+                const checkImageUrl = (url) => {
+                    // เช็คว่า URL เริ่มต้นด้วย http:// หรือ https:// หรือไม่
+                    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                        return url;
+                    }
+                    // ถ้าไม่ใช่ URL ที่เริ่มต้นด้วย http หรือ https ให้ใช้ URL ภายใน
+                    return `https://ani-night.online/uploads/thumbnails/${url}`;
+                };
 
 
-    } catch (error) {
-        console.error(error);
-    } finally {
-        isLoading = false;
-    }
-};
+                data.articles.forEach(article => {
 
-const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 5 && !isLoading) {
-        fetchArticles(currentPage);
-    }
-};
+                    console.log(article)
+                    const thumbnailUrl = checkImageUrl(article.thumbnail || '/uploads/thumbnails/default.png');
 
-// รอให้หน้าเว็บโหลดเสร็จแล้วเริ่มโหลดข้อมูล
-window.onload = () => {
-    // เพิ่มตัวจัดการการเลื่อนใน window (ทั้งหน้าเว็บ)
-    window.addEventListener('scroll', handleScroll);
-    fetchArticles(currentPage); // โหลดข้อมูลครั้งแรก
-};
+                    const articleCard = `
+                    <article class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
+                        <picture class="lazyload-article">
+                            <a href="/read/${article.urlslug}">
+                                <img class="lazyload-article w-full h-48 object-cover" src="${thumbnailUrl}" alt="${article.title}" loading="lazy" />
+                            </a>
+                        </picture>
+    
+                        <div class="p-6">
+                            <h2 class="text-xl font-bold mb-2 line-clamp-2">
+                                <a href="/read/${article.urlslug}" class="hover:text-blue-500">${article.title}</a>
+                            </h2>
+                        </div>
+                    </article>
+                `;
+                    container.insertAdjacentHTML('beforeend', articleCard);
+                });
+
+                // ซ่อนปุ่มโหลดเพิ่มเติมถ้าไม่มีหน้าถัดไป
+                if (!data.hasNext) {
+                    document.getElementById('loading').classList.add('hidden');
+                    // หยุดการติดตามการเลื่อนใน window เมื่อไม่มีข้อมูลให้โหลดอีก
+                    window.removeEventListener('scroll', handleScroll);
+                } else {
+                    currentPage += 1; // เพิ่มหน้าถัดไป
+                }
+
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                isLoading = false;
+            }
+        };
+
+        const handleScroll = () => {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 5 && !isLoading) {
+                fetchArticles(currentPage);
+            }
+        };
+
+        // รอให้หน้าเว็บโหลดเสร็จแล้วเริ่มโหลดข้อมูล
+        window.onload = () => {
+            // เพิ่มตัวจัดการการเลื่อนใน window (ทั้งหน้าเว็บ)
+            window.addEventListener('scroll', handleScroll);
+            fetchArticles(currentPage); // โหลดข้อมูลครั้งแรก
+        };
 
     </script>
 </body>

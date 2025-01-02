@@ -38,15 +38,10 @@
                 <% let profilePic = post.creator.id.profilePicture.startsWith('http') ? post.creator.id.profilePicture : '/uploads/profiles/' + (post.creator.id.profilePicture || 'default.png'); %>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-2">
-                        <a href="/editor/<%= post.creator.id.username %>">
-                            <img src="<%= profilePic %>" alt="<%= post.creator.id.username %>" class="w-8 h-8 rounded-full">
-                        </a>
-                        <span class="text-sm text-gray-600">
-                            <a href="/editor/<%= post.creator.id.username %>"><%= post.creator.id.username %></a>
-                        </span>
+                        <img src="<%= profilePic %>" alt="<%= post.creator.id.username %>" class="w-8 h-8 rounded-full">
+                        <span class="text-sm text-gray-600"><%= post.creator.id.username %></span>
                     </div>
                     <span id="datae-time" class="text-sm text-gray-500"> <%= moment(post.createdAt).locale('th').fromNow() %></span> 
-                 
                 </div>
                 <span id="read-time" class="text-sm text-gray-500"></span> 
             <% } else { %>

@@ -47,7 +47,7 @@
             <form action="/api/v2/editprofile" method="POST" class="flex flex-col">
                 <div class="mb-4">
                     <label for="username" class="block text-gray-700 text-sm font-medium mb-2">ชื่อผู้ใช้</label>
-                    <input type="text" id="username" name="username" value="<%= userID.user.username %>" class="mt-2 p-2 w-full border rounded-md outline-none">
+                    <input type="text" id="username" name="username" value="<%= userID.user.username %>" readonly class="mt-2 p-2 w-full border bg-gray-100 rounded-md outline-none">
                 </div>
             
                 <div class="mb-4">

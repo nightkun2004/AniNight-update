@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เลือกอนิเมะ season ที่ต้องการสุ่ม</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+  
+</head>
+<body>
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('../../Component/header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Aside Section -->
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../../Component/adside') %>
+                </aside>
+
+                <main class="flex-1 p-1 md:4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                    <div class="container mx-auto px-4">
+                        <h1 class="text-2xl font-bold mb-4">เลือกอนิเมะซีซันที่ต้องการสุ่ม</h1>
+                        <div class="lists">
+                            <div class="mb-4 p-4 bg-white shadow-lg rounded-lg">
+                                <h3>นโยบายเว็บไซต์ AniNightRandom</h3>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li class="font-semibold">สนับสนุนการดูอนิเมะถูกลิขสิทธิ์
+                                        <span class="block font-light">เว็บไซต์ของเราแสดงลิงก์ไปยังแพลตฟอร์มที่ถูกลิขสิทธิ์เท่านั้น เช่น Netflix, Crunchyroll และ bilibili เมื่อคุณสุ่มเจออนิเมะที่จะดูแล้ว</span>
+                                    </li>
+                                    <li class="font-semibold">ไม่มีการเก็บข้อมูลส่วนตัวโดยไม่จำเป็น
+                                        <span class="block font-light">ข้อมูลการใช้งาน เช่น ประวัติการสุ่ม จะถูกเก็บไว้ในเครื่องของคุณผ่าน Local Storage</span>
+                                    </li>
+                                    <li class="font-semibold">การใช้งานเว็บไซต์ฟรี 100%
+                                        <span class="block font-light">ผู้ใช้สามารถสุ่มอนิเมะและเข้าถึงลิงก์ได้โดยไม่มีค่าใช้จ่าย</span>
+                                    </li>
+                                    <li class="font-semibold">อนิเมะทั้งหมดบนเว็บคัดสรรจากแหล่งข้อมูลที่เราป้อนข้อมูลลงเท่านั้น 
+                                        <span class="block font-light">หากไม่พบอนิเมะที่ต้องการสุ่ม กรุณาติดต่อเรา จะทำการเพิ่มเข้าไปในระบบให้ ข้อมูลทั้งหมดมาจาก MAL Anilist livechart </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <% for (let i = 0; i < 10; i++) { %>
+                                    <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                                        <a href="/random/anime/list/winter/2025" class="block">
+                                            <div class="relative">
+                                                <img src="https://via.placeholder.com/300" alt="anime" class="w-full h-48 object-cover">
+                                                <div class="absolute top-0 right-0 bg-blue-500 text-white px-2 py-1 rounded-bl-lg">ซีซัน 1</div>
+                                            </div>
+                                            <div class="p-4">
+                                                <h2 class="text-xl font-bold">อนิเมะซีซัน 1</h2>
+                                                <p class="text-gray-500">จำนวนตอน: 12 ตอน</p> 
+                                            </div>
+                                        </a>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+    </div>
+    <script src="/js/pages/anime.js"></script>
+</body>
+</html>

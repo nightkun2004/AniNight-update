@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สุ่มอนเมะดูใน Senson 2025</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/pages/rendom.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <link rel="stylesheet" href="/css/pages/schedule.css">
+    <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <!-- Header Section -->
+        <%- include('../../../Component/header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Aside Section -->
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../../../Component/adside') %>
+                </aside>
+
+                <main class="flex-1 p-1 md:4 bg-gray-50 overflow-hidden overflow-y-auto transition-all">
+                    <div class="container mx-auto px-4">
+                        <h1 class="text-2xl font-bold mb-4">เลือกอนิเมะซีซันที่ต้องการสุ่ม</h1>
+                        <div class="lists">
+                            <div class="mb-4 p-4 bg-white shadow-lg rounded-lg">
+                                <h3>นโยบายเว็บไซต์ AniNightRandom</h3>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li class="font-semibold">สนับสนุนการดูอนิเมะถูกลิขสิทธิ์
+                                        <span
+                                            class="block font-light">เว็บไซต์ของเราแสดงลิงก์ไปยังแพลตฟอร์มที่ถูกลิขสิทธิ์เท่านั้น
+                                            เช่น Netflix, Crunchyroll และ bilibili
+                                            เมื่อคุณสุ่มเจออนิเมะที่จะดูแล้ว</span>
+                                    </li>
+                                    <li class="font-semibold">ไม่มีการเก็บข้อมูลส่วนตัวโดยไม่จำเป็น
+                                        <span class="block font-light">ข้อมูลการใช้งาน เช่น ประวัติการสุ่ม
+                                            จะถูกเก็บไว้ในเครื่องของคุณผ่าน Local Storage</span>
+                                    </li>
+                                    <li class="font-semibold">การใช้งานเว็บไซต์ฟรี 100%
+                                        <span
+                                            class="block font-light">ผู้ใช้สามารถสุ่มอนิเมะและเข้าถึงลิงก์ได้โดยไม่มีค่าใช้จ่าย</span>
+                                    </li>
+                                    <li class="font-semibold">
+                                        อนิเมะทั้งหมดบนเว็บคัดสรรจากแหล่งข้อมูลที่เราป้อนข้อมูลลงเท่านั้น
+                                        <span class="block font-light">หากไม่พบอนิเมะที่ต้องการสุ่ม กรุณาติดต่อเรา
+                                            จะทำการเพิ่มเข้าไปในระบบให้ ข้อมูลทั้งหมดมาจาก MAL Anilist livechart </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div
+                                class="content-wheel bg-white shadow-lg rounded-lg max-w-full mt-10 mb-10 p-10">
+                                <div style="position: relative;" class="flex justify-center">
+                                    <div class="spinner easyWheel ewaOQuLUkO " style="font-size: 13px; font-size: 13px;
+                                width: 600px;
+                                height: 600px;">
+                                        <div class="eWheel-wrapper"
+                                            style="width: 600px; height: 600px; font-size: 100%;">
+                                            <div class="eWheel-inner">
+                                                <div class="eWheel">
+                                                    <div class="eWheel-bg-layer">
+                                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                            viewBox="0 0 200 200" xml:space="preserve"
+                                                            style="enable-background:new 0 0 200 200;">
+                                                            <g class="ew-slicesGroup">
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M195.49909090883014,100.4166960366933 A95.5,95.5,0,0,1,167.82270337202374,167.233406185545 L128.77359201354605,127.78633481835989 A40,40,0,0,0,139.99390780625566,100.69809625749134 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M167.233406185545,167.82270337202374 A95.5,95.5,0,0,1,100.41669603669332,195.49909090883014 L100.69809625749133,139.99390780625566 A40,40,0,0,0,127.78633481835989,128.77359201354605 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M99.58330396330672,195.49909090883014 A95.5,95.5,0,0,1,32.76659381445501,167.82270337202374 L72.21366518164012,128.77359201354605 A40,40,0,0,0,99.30190374250866,139.99390780625566 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M32.17729662797625,167.23340618554496 A95.5,95.5,0,0,1,4.500909091169859,100.41669603669328 L60.00609219374435,100.69809625749134 A40,40,0,0,0,71.22640798645395,127.78633481835989 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M4.500909091169859,99.58330396330675 A95.5,95.5,0,0,1,32.17729662797625,32.76659381445501 L71.22640798645395,72.21366518164011 A40,40,0,0,0,60.00609219374435,99.30190374250867 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M32.76659381445499,32.177296627976276 A95.5,95.5,0,0,1,99.5833039633067,4.500909091169859 L99.30190374250866,60.00609219374435 A40,40,0,0,0,72.2136651816401,71.22640798645396 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M100.41669603669334,4.500909091169859 A95.5,95.5,0,0,1,167.233406185545,32.17729662797625 L127.78633481835986,71.22640798645392 A40,40,0,0,0,100.69809625749133,60.00609219374435 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#44b0d4"
+                                                                    data-fill="#44b0d4"
+                                                                    d="M167.82270337202374,32.76659381445499 A95.5,95.5,0,0,1,195.49909090883014,99.58330396330662 L139.99390780625566,99.30190374250863 A40,40,0,0,0,128.77359201354602,72.2136651816401 z">
+                                                                </path>
+                                                            </g>
+                                                            <radialGradient id="SVGID_1_" cx="50%" cy="50%" r="50%"
+                                                                gradientUnits="userSpaceOnUse">
+                                                                <stop offset="0.1676"
+                                                                    style="stop-color:#000;stop-opacity:1"></stop>
+                                                                <stop offset="0.5551"
+                                                                    style="stop-color:#000;stop-opacity:1"></stop>
+                                                                <stop offset="0.6189"
+                                                                    style="stop-color:#000;stop-opacity:1"></stop>
+                                                                <stop offset="1" style="stop-color:#000;stop-opacity:0">
+                                                                </stop>
+                                                            </radialGradient>
+                                                            <circle cx="50%" cy="50%" r="50%" stroke-width="0"
+                                                                fill-opacity="0.0" fill="url(#SVGID_1_)"></circle>
+                                                            <g>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M166.99625116111673,168.05697855735713 A95.5,95.5,0,0,1,168.05697855735713,166.99625116111673 L128.87040912393448,127.68572695481626 A40,40,0,0,0,127.68572695481627,128.87040912393448 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M99.24995246512808,195.4970545550774 A95.5,95.5,0,0,1,100.75004753487194,195.4970545550774 L100.83769679533428,139.99122733899384 A40,40,0,0,0,99.16230320466572,139.99122733899384 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M31.943021442642888,166.99625116111673 A95.5,95.5,0,0,1,33.00374883888328,168.05697855735713 L72.31427304518374,128.87040912393448 A40,40,0,0,0,71.12959087606552,127.68572695481629 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M4.502945444922588,99.24995246512809 A95.5,95.5,0,0,1,4.502945444922588,100.7500475348719 L60.00877266100618,100.83769679533427 A40,40,0,0,0,60.00877266100618,99.16230320466572 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M33.00374883888324,31.94302144264293 A95.5,95.5,0,0,1,31.943021442642873,33.00374883888328 L71.1295908760655,72.31427304518374 A40,40,0,0,0,72.31427304518371,71.12959087606552 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M100.75004753487187,4.502945444922588 A95.5,95.5,0,0,1,99.2499524651281,4.502945444922588 L99.16230320466573,60.00877266100618 A40,40,0,0,0,100.83769679533425,60.00877266100618 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M168.05697855735713,33.0037488388833 A95.5,95.5,0,0,1,166.99625116111667,31.943021442642845 L127.68572695481627,71.12959087606552 A40,40,0,0,0,128.8704091239345,72.31427304518374 z">
+                                                                </path>
+                                                                <path stroke-width="0" fill="#006b8e"
+                                                                    d="M195.4970545550774,100.75004753487187 A95.5,95.5,0,0,1,195.4970545550774,99.249952465128 L139.99122733899384,99.16230320466569 A40,40,0,0,0,139.99122733899384,100.83769679533425 z">
+                                                                </path>
+                                                            </g>
+                                                            <circle class="centerCircle" cx="100" cy="100" r="41"
+                                                                stroke="#00bfff" stroke-width="3" fill="transparent">
+                                                            </circle>
+                                                            <circle cx="100" cy="100" r="97.5" stroke="#00bfff"
+                                                                stroke-width="5" fill-opacity="0" fill="#fff0"></circle>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="eWheel-txt-wrap">
+                                                        <div class="eWheel-txt overflow-hidden" style="transform: rotate(22.5deg);">
+                                                            <div class="eWheel-title" data-anime="1"
+                                                                style=" transform: rotate(1deg) translate(34%, -50%); color: rgb(255, 255, 255);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1735538132/posters/8f2685d0-4ad3-4be3-9efb-beaa6938dd2d.jpg.jpg"
+                                                                    class="show-spin h-[130px] object-cover  w-[100px] rounded-xl" style="transform: rotate(-272deg) translate(3px, -37%);">
+                                                                <div></div>
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="2"
+                                                                style="transform: rotate(44deg) translate(35%, -50%);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1735125174/posters/4749755a-b3bf-4448-9dfb-f6c6fc9caee6.jpg.jpg"
+                                                                    class="show-spin h-[130px] object-cover  w-[100px] rounded-lg "
+                                                                    style="transform: rotate(-272deg) translate(3px, -37%);">
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="3"
+                                                                style="transform: rotate(76deg) translate(29%, -50%);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1735049718/posters/6870ac49-977f-4b99-bfe4-111e61e03920.webp.webp"
+                                                                    class="show-spin h-[130px] object-cover w-[100px] rounded-lg "
+                                                                    style="transform:  rotate(90deg) translate(34%, -50%);">
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="4"
+                                                                style="transform: rotate(126deg) translate(29%, -50%);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1734863897/posters/4d28d576-5e4b-4ef9-9f6d-e26b148298f9.jpg.jpg"
+                                                                    class="show-spin h-[130px] object-cover w-[100px] rounded-lg "
+                                                                    style="transform:  rotate(90deg) translate(34%, -50%);">
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="5"
+                                                                style="transform: rotate(171deg) translate(25%, -55%);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1734779428/posters/1a51bcc0-b883-4f71-be92-990dfd9e0892.jpg.jpg"
+                                                                    class="show-spin h-[130px] object-cover w-[100px] rounded-lg "
+                                                                    style="transform:  rotate(90deg) translate(34%, -50%);">
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="6"
+                                                                style="transform: rotate(216deg) translate(28%, -55%);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1734404988/posters/d83855b1-badd-42db-838f-1f2ceb80e7b4.png.png"
+                                                                    class="show-spin h-[130px] object-cover w-[100px] rounded-lg "
+                                                                    style="transform:  rotate(90deg) translate(34%, -50%);">
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="7"
+                                                                style="transform: rotate(262deg) translate(28%, -55%);">
+                                                                <img src="https://res.cloudinary.com/dvkilsoot/image/upload/v1733449447/posters/d94225fc-0049-4c50-8ead-1a3d5ad9fbda.jpg.jpg"
+                                                                    class="show-spin h-[130px] object-cover w-[100px] rounded-lg "
+                                                                    style="transform:  rotate(90deg) translate(34%, -50%);">
+                                                            </div>
+                                                            <div class="eWheel-title" data-anime="8"
+                                                                style="    transform: rotate(306deg) translate(28%, -55%);">
+                                                                <img src="https://sv7.ani-night.online/posters/fe4776512b4e3ac7b07a2c546be4a7c9.webp"
+                                                                    class="show-spin h-[130px] object-cover w-[100px] rounded-lg "
+                                                                    style="transform:  rotate(90deg) translate(34%, -50%);">
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="eWheel-center">
+                                                        <button class="bg-blue-200 p-5 rounded-full">เริ่มสุ่ม</button>
+                                                    </div> -->
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="eWheel-marker">
+                                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                            viewBox="0 0 80 115" style="enable-background:new 0 0 80 115;"
+                                            xml:space="preserve">
+                                            <g>
+                                                <path fill="rgb(231, 76, 60)"
+                                                    d="M40,0C17.9,0,0,17.7,0,39.4S40,115,40,115s40-53.9,40-75.6S62.1,0,40,0z M40,52.5c-7,0-12.6-5.6-12.6-12.4 S33,27.7,40,27.7s12.6,5.6,12.6,12.4C52.6,46.9,47,52.5,40,52.5z">
+                                                </path>
+                                                <path fill="rgba(0, 0, 0, 0.3)"
+                                                    d="M40,19.2c-11.7,0-21.2,9.3-21.2,20.8S28.3,60.8,40,60.8S61.2,51.5,61.2,40S51.7,19.2,40,19.2z M40,52.5 c-7,0-12.6-5.6-12.6-12.4S33,27.7,40,27.7s12.6,5.6,12.6,12.4C52.6,46.9,47,52.5,40,52.5z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-center">
+                                    <div class="eWheel-bootom">
+                                        <button class="bg-blue-200 p-5 rounded-lg w-[200px]">เริ่มสุ่ม</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+    </div>
+    <script src="/js/pages/anime.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const startButton = document.querySelector(".eWheel-bootom button");
+            const spinner = document.querySelector(".spinner");
+            const items = document.querySelectorAll(".eWheel-title");
+
+            // ฟังก์ชันดึงข้อมูลที่สุ่มได้
+            function getSelectedAnime(spinnerElement, finalAngle) {
+                const titles = spinnerElement.querySelectorAll(".eWheel-title");
+                const normalizedAngle = (finalAngle % 360 + 360) % 360; // ปรับมุมให้อยู่ในช่วง 0-360 องศา
+                const anglePerItem = 360 / titles.length;
+
+
+                titles.forEach((title) => {
+                    const transform = title.style.transform;
+                    const match = transform.match(/rotate\\(([-\\d.]+)deg\\)/);
+                    if (match) {
+                        const rotate = parseFloat(match[1]);
+
+                        // ตรวจสอบตำแหน่งหยุดหมุน (ใกล้เคียง 0 องศา)
+                        if (Math.abs((rotate % 360) - 0) < 5) {
+                            selectedAnime = title.getAttribute("data-anime") || "ไม่มีข้อมูล";
+                        }
+                    }
+                });
+
+                // หาค่าดัชนีของไอเท็มที่หยุด
+                const selectedIndex = Math.floor(normalizedAngle / anglePerItem) % titles.length;
+                const selectedAnime = titles[selectedIndex]?.getAttribute("data-anime") || "ไม่มีข้อมูล";
+                return selectedAnime;
+            }
+
+            startButton.addEventListener("click", () => {
+                const spinDuration = 5000; // เวลาในการหมุน (5 วินาที)
+                const totalRotations = Math.random() * 3600 + 720; // หมุนสุ่ม 2-10 รอบ
+                const selectedIndex = Math.floor(Math.random() * items.length);
+                const anglePerItem = 360 / items.length;
+                const selectedAngle = 360 - selectedIndex * anglePerItem;
+
+                // กำหนดค่า finalAngle ที่นี่
+                const finalAngle = totalRotations + selectedAngle;
+
+                spinner.style.transition = `transform ${spinDuration / 1000}s cubic-bezier(0.25, 1, 0.5, 1)`;
+                spinner.style.transform = `rotate(${finalAngle}deg)`;
+
+                setTimeout(() => {
+                    spinner.style.transition = "none";
+                    spinner.style.transform = `rotate(${selectedAngle}deg)`;
+
+                    // ใช้ฟังก์ชัน getSelectedAnime เพื่อดึงข้อมูล
+                    const selectedAnime = getSelectedAnime(spinner, finalAngle);
+                    alert(`คุณสุ่มได้: ${selectedAnime}`);
+                }, spinDuration);
+            });
+
+        });
+    </script>
+
+
+</body>
+
+</html>

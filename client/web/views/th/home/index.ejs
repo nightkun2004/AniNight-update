@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniNight</title>
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+    <script src="/js/index.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="app">
+        <div class="layout_app">
+            <%- include('./Component/Header') %>
+
+                <section class="layout_body">
+                    <%- include('./Component/Sidebar') %>
+                        <main class="main-content mx-auto max-w-7xl p-1 mt-20">
+
+                            <!-- Action Buttons -->
+                            <div class="flex justify-center mb-3 px-4 flex-wrap gap-1">
+                                <!-- เขียนบทความ -->
+                                <button
+                                    class="flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-600 text-sm font-medium hover:bg-blue-200">
+                                    <i class="fa-solid fa-pen"></i>
+                                    <a href="/uploads/create/article">เขียนบทความ</a>
+                                </button>
+
+                                <!-- โพสต์ภาพ -->
+                                <button id="post-image"
+                                    class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full text-green-600 text-sm font-medium hover:bg-green-200">
+                                    <i class="fa-solid fa-image"></i>
+                                    โพสต์ภาพ
+                                </button>
+
+                                <!-- โพสต์มีม -->
+                                <button id="post-meme"
+                                    class="flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-full text-yellow-600 text-sm font-medium hover:bg-yellow-200">
+                                    <i class="fa-solid fa-face-laugh"></i>
+                                    โพสต์มีม
+                                </button>
+
+                                <!-- สร้างข้อความเสียง -->
+                                <button id="create-audio"
+                                    class="flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full text-purple-600 text-sm font-medium hover:bg-purple-200">
+                                    <i class="fa-solid fa-microphone"></i>
+                                    สร้างข้อความเสียง
+                                </button>
+                            </div>
+                            <div class="bg-white rounded-lg md:mb-12 mb-1 p-4" style="height: auto !important;">
+                                <!-- Index_home -->
+                                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
+                                    data-ad-slot="7771171707" data-ad-format="auto"
+                                    data-full-width-responsive="true"></ins>
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                            </div>
+
+                            <div class="flex flex-wrap  gap-6">
+                                <!-- Left Column: โพสต์เสียง -->
+                                <aside class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/4 hidden md:block">
+                                    <h2 class="text-lg font-bold text-gray-800 mb-4">🎙️ โพสต์เสียง</h2>
+                                    <p class="text-sm text-orange-300">ไม่มีบริการในพื้นที่ของคุณ</p>
+                                    <!-- โพสต์หลายโพสต์ -->
+                                    <div class="audio-player w-full">
+                                        <div class="audio-item bg-gray-200 px-4 py-2 rounded-lg flex items-center gap-2 mb-5">
+                                            <div class="profile flex flex-col items-center gap-2">
+                                                <img src="https://via.placeholder.com/50" alt="Audio"
+                                                    class="w-12 h-12 rounded-full">
+                                                    <h2>Username</h2>
+                                            </div>
+                                            <div class="audio-icon" id="play-btn">
+                                                <i class="fa-solid fa-play text-gray-600"></i>
+                                                <audio id="audio-1" src="/uploads/audios/ausio1.mp3"></audio>
+                                            </div>
+
+                                            <div id="waveform-1" class="flex justify-start items-center w-full h-16">
+                                                <svg id="wave-svg-1" viewBox="0 0 500 100" preserveAspectRatio="none"
+                                                    class="w-full h-full">
+                                                    <g id="wave-bars-1"></g> 
+                                                </svg>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="audio-item bg-gray-200 rounded-lg flex items-center gap-2 mb-5">
+                                            <div class="audio-icon  px-4" id="play-btn">
+                                                <i class="fa-solid fa-play text-gray-600"></i>
+                                                <audio id="audio-2" src="/uploads/audios/audio2.mp3"></audio>
+                                                <!-- ลิงก์ไฟล์เสียงที่ต้องการเล่น -->
+                                            </div>
+
+                                            <!-- คลื่นเสียง SVG -->
+                                            <div id="waveform-2" class="flex justify-start items-center w-full h-16">
+                                                <svg id="wave-svg-2" viewBox="0 0 500 100" preserveAspectRatio="none"
+                                                    class="w-full h-full">
+                                                    <g id="wave-bars-2"></g> <!-- ที่จะใช้สำหรับแท่งคลื่น -->
+                                                </svg>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                    <!-- <ul class="space-y-4">
+                                        <li class="flex items-center gap-4">
+                                            <img src="https://via.placeholder.com/50" alt="Audio"
+                                                class="w-12 h-12 rounded-full">
+                                            <div>
+                                                <h3 class="text-sm font-medium">เสียง: พอดแคสต์สนุก ๆ</h3>
+                                                <p class="text-xs text-gray-500">ผู้โพสต์: คุณ A</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-center gap-4">
+                                            <img src="https://via.placeholder.com/50" alt="Audio"
+                                                class="w-12 h-12 rounded-full">
+                                            <div>
+                                                <h3 class="text-sm font-medium">เสียง: บรรยายชีวิต</h3>
+                                                <p class="text-xs text-gray-500">ผู้โพสต์: คุณ B</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-center gap-4">
+                                            <img src="https://via.placeholder.com/50" alt="Audio"
+                                                class="w-12 h-12 rounded-full">
+                                            <div>
+                                                <h3 class="text-sm font-medium">เสียง: ทำนองใหม่</h3>
+                                                <p class="text-xs text-gray-500">ผู้โพสต์: คุณ C</p>
+                                            </div>
+                                        </li>
+                                    </ul> -->
+                                </aside>
+
+                                <!-- Middle Column: บทความ -->
+                                <div
+                                    class="bg-white p-4 rounded-lg shadow-md flex-grow max-w-full lg:w-2/4 mx-auto mt-5 md:mt-0">
+                                    <h2 class="text-lg font-bold text-gray-800 mb-4">📖 บทความมาใหม่</h2>
+                                    <div class="space-y-6">
+                                        <% if (Posts.length> 0 && typeof error === 'undefined') { %>
+                                            <section class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                <% Posts.slice(0, 10).forEach((post, index)=> { %>
+                                                    <%- include('./Component/CardArticle', { post: post, index: index })
+                                                        %>
+                                                        <% }) %>
+                                            </section>
+                                            <% } else { %>
+                                                <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
+                                                <% } %>
+                                    </div>
+                                    <div class="flex justify-center items-center">
+                                        <div
+                                            class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
+                                            <% if (page> 1) { %>
+                                                <a href="/page/<%= page - 1 %>" rel="nofollow"
+                                                    class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                                                    ก่อนหน้า
+                                                </a>
+                                                <% } else { %>
+                                                    <span
+                                                        class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
+                                                        ก่อนหน้า
+                                                    </span>
+                                                    <% } %>
+
+                                                        <% for (let i=1; i <=totalPages; i++) { %>
+                                                            <a href="/page/<%= i %>" rel="nofollow"
+                                                                class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
+                                                                <%= i %>
+                                                            </a>
+                                                            <% } %>
+
+                                                                <% if (page < totalPages) { %>
+                                                                    <a href="/page/<%= page + 1 %>" rel="nofollow"
+                                                                        class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                                                                        ถัดไป
+                                                                    </a>
+                                                                    <% } else { %>
+                                                                        <span
+                                                                            class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
+                                                                            ถัดไป
+                                                                        </span>
+                                                                        <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="bg-white p-4 rounded-lg shadow-md flex-grow max-w-full lg:w-2/4 mx-auto mt-5 md:mt-0">
+                                    <h2 class="text-lg flex items-center font-bold text-gray-800 mb-4">
+                                        <div class="icon">
+                                            <svg width="22px" height="22px" viewBox="0 0 48 48"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <defs>
+                                                    <style>
+                                                        .a {
+                                                            fill: none;
+                                                            stroke: #000000;
+                                                            stroke-linecap: round;
+                                                            stroke-linejoin: round;
+                                                        }
+                                                    </style>
+                                                </defs>
+                                                <path class="a" d="M20.3748,18.1671V28.2062l7.25-5.02Z" />
+                                                <path class="a"
+                                                    d="M5.9376,43.5l14.3437-39,7.4375,0,14.3437,39h-8.5l-2.6566-7.9054H17.0938L14.4376,43.5Z" />
+                                            </svg>
+                                        </div>
+                                        <span class="pl-4">อนิเมะซีซั่นนี้</span>
+                                    </h2>
+
+                                    <div
+                                        class="result-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-10">
+                                        <% if (Nextseason && Nextseason.length> 0) { %>
+                                            <% Nextseason.forEach(anime=> { %>
+                                                <% if (anime.published) { %>
+                                                    <div class="anime-card overflow-hidden">
+                                                        <a href="/anime/<%= anime.urlslug %>"
+                                                            class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                                                            <% if (anime.poster.startsWith('http')) { %>
+                                                                <!-- External image URL -->
+                                                                <img data-src="<%= anime.poster %>"
+                                                                    src="https://via.placeholder.com/400x200"
+                                                                    alt="<%= anime.title.th || anime.en %>"
+                                                                    class="lazyload w-full rounded-lg" loading="lazy">
+                                                                <% } else { %>
+                                                                    <!-- Local server image path -->
+                                                                    <img loading="lazy"
+                                                                        data-src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                                                                        src="https://via.placeholder.com/400x300"
+                                                                        alt="<%= anime.title.th || anime.en %>"
+                                                                        class="lazyload w-full rounded-lg">
+                                                                    <% } %>
+                                                        </a>
+                                                        <a class="anime-info title" href="/anime/<%= anime.urlslug %>">
+                                                            <h2 class="text-sm font-bold">
+                                                                <%= anime.title.th || anime.en %>
+                                                            </h2>
+                                                        </a>
+                                                    </div>
+                                                    <% } %>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <p>ยังไม่มีอนิเมะ</p>
+                                                                <% } %>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column: โพสต์ภาพ & มีม -->
+                                <aside class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/4">
+                                    <h2 class="text-lg font-bold text-gray-800 mb-4">🖼️ โพสต์ภาพ & มีม</h2>
+                                    <p class="text-sm text-orange-300">ไม่มีบริการในพื้นที่ของคุณ</p>
+                                    <!-- <div class="grid grid-cols-2 gap-4">
+                                        <img src="https://via.placeholder.com/100" alt="Image 1"
+                                            class="w-full h-auto rounded-lg">
+                                        <img src="https://via.placeholder.com/100" alt="Image 2"
+                                            class="w-full h-auto rounded-lg">
+                                        <img src="https://via.placeholder.com/100" alt="Meme 1"
+                                            class="w-full h-auto rounded-lg">
+                                        <img src="https://via.placeholder.com/100" alt="Meme 2"
+                                            class="w-full h-auto rounded-lg">
+                                    </div> -->
+                                </aside>
+                            </div>
+                        </main>
+
+
+                </section>
+
+                <%- include('./Component/Footer') %>
+        </div>
+    </div>
+
+    <!-- POPUP -->
+    <!-- Popup แจ้งเตือน -->
+    <div id="popup-not" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <p class="text-center text-gray-700">ฟีเจอร์นี้ยังไม่เปิดให้บริการ</p>
+            <button id="close-popup" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-full w-full ">
+                ปิด
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/media/audio.js"></script>
+    <script>
+        // ฟังก์ชันแสดง popup
+        function showPopup() {
+            document.getElementById('popup-not').classList.remove('hidden');
+        }
+
+        // ฟังก์ชันปิด popup
+        document.getElementById('close-popup').addEventListener('click', function () {
+            document.getElementById('popup-not').classList.add('hidden');
+        });
+
+        // เพิ่ม event listener ให้กับปุ่มแต่ละปุ่ม
+        document.getElementById('post-image').addEventListener('click', showPopup);
+        document.getElementById('post-meme').addEventListener('click', showPopup);
+        document.getElementById('create-audio').addEventListener('click', showPopup);
+    </script>
+     <script defer type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+          const readArticles = JSON.parse(localStorage.getItem('readArticles')) || {};
+          const articles = document.querySelectorAll('article');
+        
+          articles.forEach(article => {
+            const articleId = article.getAttribute('data-articleid');
+            const readArticle = readArticles[articleId];
+            const readTimeElement = article.querySelector('#read-time');
+        
+            if (readTimeElement) {
+              if (readArticle && readArticle.readAt) {
+                const timeAgo = getTimeAgo(new Date(readArticle.readAt));
+                readTimeElement.textContent = `อ่านเมื่อ ${timeAgo}`;
+              } else {
+                readTimeElement.textContent = 'ยังไม่ได้อ่าน';
+              }
+            }
+          });
+        
+          // ฟังก์ชันสำหรับคำนวณเวลาแบบ Relative Time ภาษาไทย
+          function getTimeAgo(readTime) {
+            const now = new Date();
+            const diffMs = now - readTime;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMinutes / 60);
+            const diffDays = Math.floor(diffHours / 24);
+        
+            if (diffSeconds < 60) return `${diffSeconds} วินาทีที่แล้ว`;
+            if (diffMinutes < 60) return `${diffMinutes} นาทีที่แล้ว`;
+            if (diffHours < 24) return `${diffHours} ชั่วโมงที่แล้ว`;
+            return `${diffDays} วันที่แล้ว`;
+          }
+        });
+      </script>
+</body>
+
+</html>
