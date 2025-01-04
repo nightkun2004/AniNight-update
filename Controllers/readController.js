@@ -127,12 +127,13 @@ const getRead = async (req, res, next) => {
         if (!adInserted) {
             // แทรกแบนเนอร์ Google AdSense
             contentArray.splice(middleIndex, 0, `
-        <div class="ad-banner bg-white shadow-lg overflow-hidden my-6 text-center">
+        <div class="ad-banner bg-white shadow-lg overflow-hidden my-6 mx-auto mb-6 mt-6 w-full max-w-[728px]">
             <ins class="adsbygoogle"
                 style="display:block; text-align:center;"
                 data-ad-layout="in-article"
                 data-ad-format="fluid"
                 data-ad-client="ca-pub-6579807593228261"
+                data-full-width-responsive="true"
                 data-ad-slot="5850425226"></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
