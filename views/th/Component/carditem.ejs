@@ -1,16 +1,30 @@
 <% if (post.published) { %>
     <article data-articleid="<%= post._id %>" class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
         <% let thumbnail = post.thumbnail.startsWith('http') ? post.thumbnail : '/uploads/thumbnails/' + (post.thumbnail  || 'default.png'); %>
-        <picture class="lazyload">
+        <picture class="lazyload relative">
             <a href="/read/<%= post.urlslug %>">
-                <img class="lazyload w-full h-48 object-cover" data-src="<%= thumbnail %>" alt="<%= post.title %>" src="https://via.placeholder.com/1270x720" loading="lazy" />
+                <!-- ขนาดภาพสำหรับหน้าจอเล็ก -->
+                <source media="(max-width: 640px)" data-srcset="<%= thumbnail %>?w=640" />
+                <!-- ขนาดภาพสำหรับหน้าจอขนาดกลาง -->
+                <source media="(max-width: 1024px)" data-srcset="<%= thumbnail %>?w=1024" />
+                <!-- ขนาดภาพสำหรับหน้าจอขนาดใหญ่ -->
+                <source media="(min-width: 1025px)" data-srcset="<%= thumbnail %>?w=1270" />
+                <!-- Placeholder และ fallback image -->
+                <img 
+                    class="lazyload w-full h-auto max-h-96 object-cover  shadow-lg" 
+                    data-src="<%= thumbnail %>" 
+                    alt="<%= post.title %>" 
+                    src="https://via.placeholder.com/1270x720" 
+                    loading="lazy" 
+                />
             </a>
-
-            <!-- view left -->
+        
+            <!-- view count -->
             <div class="absolute top-0 left-0 p-2 bg-blue-500 text-white rounded-br-lg">
                 <i class="far fa-eye"></i> <%= formatNumber(post.views) %>
             </div>
         </picture>
+        
 
         <div class="p-6">
             <div class="flex items-center space-x-2 mb-2">

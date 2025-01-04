@@ -33,26 +33,37 @@
   <% if (page===1) { %>
     <link rel="canonical" href="<%= lang === 'th_TH' ? '/' : '/' %>">
     <% } else { %>
-    <link rel="canonical" href="<%= lang === 'th_TH' ? '/page/' + page : '/page/' + page %>">
-   <% } %>
+      <link rel="canonical" href="<%= lang === 'th_TH' ? '/page/' + page : '/page/' + page %>">
+      <% } %>
 
-  <script src="/css/tailwindcss.css"></script>
-  <script src="/js/fontawesome.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-    crossorigin="anonymous"></script>
+        <script src="/css/tailwindcss.css"></script>
+        <script src="/js/fontawesome.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+        <script async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+          crossorigin="anonymous"></script>
+        <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+<style>
+  .slide-up {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+.visible {
+  transform: translateY(0);
+}
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X2HYDKP19Y"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+</style>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-X2HYDKP19Y"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
 
-    gtag('config', 'G-X2HYDKP19Y');
-  </script>
+          gtag('config', 'G-X2HYDKP19Y');
+        </script>
 
-  <script type="application/ld+json">
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -70,35 +81,37 @@
   </script>
 </head>
 
-<body class="bg-gray-100 text-black font-sans" >
+<body class="bg-gray-100 text-black font-sans">
 
   <!-- Header -->
   <%- include('./Component/Header') %>
 
-      <!-- Main Content -->
-      <main class="mx-auto max-w-6xl px-4 p-5">
-        <div class="container mx-auto p-4">
-          <!-- Card Container -->
+    <!-- Main Content -->
+    <main class="mx-auto max-w-6xl px-4 p-5">
+      <div class="container mx-auto p-4">
+        <!-- Card Container -->
 
-          <% if (userID) {%>
-            <div class="bg-white rounded-lg shadow-md p-4 flex items-center gap-4">
-              <!-- User Avatar -->
-              <% if (userID.user.profilePicture) { %>
-                <% if (userID.user.profilePicture.startsWith('http')) { %>
-                  <img src="<%= userID.user.profilePicture %>" alt="@<%= userID.user.username %>" class="w-12 h-12 rounded-full">
+        <% if (userID) {%>
+          <div class="bg-white rounded-lg shadow-md p-4 flex items-center gap-4">
+            <!-- User Avatar -->
+            <% if (userID.user.profilePicture) { %>
+              <% if (userID.user.profilePicture.startsWith('http')) { %>
+                <img src="<%= userID.user.profilePicture %>" alt="@<%= userID.user.username %>"
+                  class="w-12 h-12 rounded-full">
                 <% } else { %>
-                    <img src="/uploads/profiles/<%= userID.user.profilePicture %>" class="w-12 h-12 rounded-full" alt="@<%= userID.user.username %>">
-                <% } %>
-            <% } %>
-              <!-- Input Box -->
-              <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-gray-600">
-                  คุณอยากสร้างอะไรใหม่ ๆ บ้าง?
-              </div>
+                  <img src="/uploads/profiles/<%= userID.user.profilePicture %>" class="w-12 h-12 rounded-full"
+                    alt="@<%= userID.user.username %>">
+                  <% } %>
+                    <% } %>
+                      <!-- Input Box -->
+                      <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-gray-600">
+                        คุณอยากสร้างอะไรใหม่ ๆ บ้าง?
+                      </div>
           </div>
           <% } %>
-        
-          <!-- Action Buttons -->
-          <!-- <div class="flex justify-between mt-1 px-4 flex-wrap gap-4">
+
+            <!-- Action Buttons -->
+            <!-- <div class="flex justify-between mt-1 px-4 flex-wrap gap-4">
       
               <button class="flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-600 text-sm font-medium hover:bg-blue-200">
                   <i class="fa-solid fa-pen"></i>
@@ -124,208 +137,236 @@
               </button>
           </div> -->
       </div>
-        <div class="bg-white rounded-lg md:mb-12 mb-1 p-4" style="height: auto !important;">
-          <!-- Index_home -->
-          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
-            data-ad-slot="7771171707" data-ad-format="auto" data-full-width-responsive="true"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </div>  
+      <div class="bg-white rounded-lg md:mb-12 mb-1 p-4" style="height: auto !important;">
+        <!-- Index_home -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
+          data-ad-slot="7771171707" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
 
-        <section class="flex flex-wrap">
-          <!-- Left Side Content with Lazy Loading Images -->
-          <div class="w-full lg:w-3/4 p-5 bg-white rounded-lg">
-            <h2 class="text-xl font-semibold mb-4"> 🎄 อัพเดตใหม่ 🎄</h2>
-            <% if (Posts.length> 0 && typeof error === 'undefined') { %>
-              <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <% Posts.slice(0, 10).forEach((post, index)=> { %>
-                  <%- include('./Component/carditem', { post: post, index: index }) %>
-              <% }) %>
-              </section>
-              <% } else { %>
-                <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
-             <% } %>
+      <section class="flex flex-wrap">
+        <!-- Left Side Content with Lazy Loading Images -->
+        <div class="w-full lg:w-3/4 p-5 bg-white rounded-lg">
+          <h2 class="text-xl font-semibold mb-4"> 🎄 อัพเดตใหม่ 🎄</h2>
+          <% if (Posts.length> 0 && typeof error === 'undefined') { %>
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <% Posts.slice(0, 10).forEach((post, index)=> { %>
+                <%- include('./Component/carditem', { post: post, index: index }) %>
+                  <% }) %>
+            </section>
+            <% } else { %>
+              <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
+              <% } %>
 
-                  <div class="flex justify-center items-center">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
-                      <% if (page> 1) { %>
-                        <a href="/page/<%= page - 1 %>" rel="nofollow"
-                          class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                <div class="flex justify-center items-center">
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
+                    <% if (page> 1) { %>
+                      <a href="/page/<%= page - 1 %>" rel="nofollow"
+                        class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                        ก่อนหน้า
+                      </a>
+                      <% } else { %>
+                        <span
+                          class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
                           ก่อนหน้า
-                        </a>
-                        <% } else { %>
-                          <span
-                            class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
-                            ก่อนหน้า
-                          </span>
-                          <% } %>
-                  
-                            <% for (let i=1; i <=totalPages; i++) { %>
-                              <a href="/page/<%= i %>" rel="nofollow"
-                                class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
-                                <%= i %>
-                              </a>
-                              <% } %>
-                  
-                                <% if (page < totalPages) { %>
-                                  <a href="/page/<%= page + 1 %>" rel="nofollow"
-                                    class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
-                                    ถัดไป
-                                  </a>
-                                  <% } else { %>
-                                    <span
-                                      class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
-                                      ถัดไป
-                                    </span>
-                                    <% } %>
-                    </div>
-                  </div>
+                        </span>
+                        <% } %>
 
-                  <!-- Anime Next -->
-                  <div class="bg-white rounded-lg md:mb-12 mb-2 p-4 mt-5" style="height: auto !important;">
-                    <h2 class="text-xl font-semibold mb-4">อนิเมะซีซั่นนี้</h2>
-                    <div class="result-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-10">
-                      <% if (Nextseason && Nextseason.length> 0) { %>
-                        <% Nextseason.forEach(anime=> { %>
-                          <% if (anime.published) { %>
-                            <div class="anime-card overflow-hidden">
-                              <a href="/anime/<%= anime.urlslug %>"
-                                class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
-                                <% if (anime.poster.startsWith('http')) { %>
-                                  <!-- External image URL -->
-                                  <img data-src="<%= anime.poster %>" src="https://via.placeholder.com/400x200"
-                                    alt="<%= anime.title.th || anime.en %>" class="lazyload w-full rounded-lg" loading="lazy">
-                                  <% } else { %>
-                                    <!-- Local server image path -->
-                                    <img loading="lazy"
-                                      data-src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
-                                      src="https://via.placeholder.com/400x300" alt="<%= anime.title.th || anime.en %>"
-                                      class="lazyload w-full rounded-lg">
-                                    <% } %>
-                              </a>
-                              <a class="anime-info title" href="/anime/<%= anime.urlslug %>">
-                                <h2 class="text-sm font-bold">
-                                  <%= anime.title.th || anime.en %>
-                                </h2>
-                              </a>
-                            </div>
+                          <% for (let i=1; i <=totalPages; i++) { %>
+                            <a href="/page/<%= i %>" rel="nofollow"
+                              class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
+                              <%= i %>
+                            </a>
                             <% } %>
-                              <% }) %>
-                                <% } else { %>
-                                  <p>ยังไม่มีอนิเมะ</p>
-                                  <% } %>
-                    </div>
-                  </div>
-          </div>
 
-          <!-- Right Sidebar with Ads -->
-          <aside class="w-full lg:w-1/4 lg:pl-8 mt-8 lg:mt-0">
-            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-              <!-- เช็คการการเข้าสู่ระบบ -->
-              <div>
+                              <% if (page < totalPages) { %>
+                                <a href="/page/<%= page + 1 %>" rel="nofollow"
+                                  class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                                  ถัดไป
+                                </a>
+                                <% } else { %>
+                                  <span
+                                    class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
+                                    ถัดไป
+                                  </span>
+                                  <% } %>
+                  </div>
+                </div>
+
+                <!-- Anime Next -->
+                <div class="bg-white rounded-lg md:mb-12 mb-2 p-4 mt-5" style="height: auto !important;">
+                  <h2 class="text-xl font-semibold mb-4">อนิเมะซีซั่นนี้</h2>
+                  <div
+                    class="result-content grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-10">
+                    <% if (Nextseason && Nextseason.length> 0) { %>
+                      <% Nextseason.forEach(anime=> { %>
+                        <% if (anime.published) { %>
+                          <div class="anime-card overflow-hidden">
+                            <a href="/anime/<%= anime.urlslug %>"
+                              class="cover w-[150px] h-[225px] sm:h-[115px] rounded-lg overflow-hidden">
+                              <% if (anime.poster.startsWith('http')) { %>
+                                <!-- External image URL -->
+                                <img data-src="<%= anime.poster %>" src="https://via.placeholder.com/400x200"
+                                  alt="<%= anime.title.th || anime.en %>" class="lazyload w-full rounded-lg"
+                                  loading="lazy">
+                                <% } else { %>
+                                  <!-- Local server image path -->
+                                  <img loading="lazy"
+                                    data-src="<%= anime.poster ? '/uploads/posters/' + anime.poster : 'https://via.placeholder.com/400x200' %>"
+                                    src="https://via.placeholder.com/400x300" alt="<%= anime.title.th || anime.en %>"
+                                    class="lazyload w-full rounded-lg">
+                                  <% } %>
+                            </a>
+                            <a class="anime-info title" href="/anime/<%= anime.urlslug %>">
+                              <h2 class="text-sm font-bold">
+                                <%= anime.title.th || anime.en %>
+                              </h2>
+                            </a>
+                          </div>
+                          <% } %>
+                            <% }) %>
+                              <% } else { %>
+                                <p>ยังไม่มีอนิเมะ</p>
+                                <% } %>
+                  </div>
+                </div>
+        </div>
+
+        <!-- Right Sidebar with Ads -->
+        <aside class="w-full lg:w-1/4 lg:pl-8 mt-8 lg:mt-0">
+          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <!-- เช็คการการเข้าสู่ระบบ -->
+            <div>
               <% if (userID) { %>
                 <form id="logoutForm" action="/api/v2/logout" method="post">
                   <!-- btn logout -->
                   <button
                     class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-all duration-200 text-center">ออกจากระบบ</button>
-              </form>
+                </form>
 
-                 <!-- Logout Confirmation Popup -->
-                <div id="logout-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <!-- Logout Confirmation Popup -->
+                <div id="logout-popup"
+                  class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                   <div class="bg-white rounded-lg shadow-lg w-80 p-6">
-                      <h2 class="text-lg font-semibold text-gray-800 mb-4">ยืนยันการออกจากระบบ</h2>
-                      <p class="text-gray-600 mb-6">คุณต้องการออกจากระบบหรือไม่?</p>
-                      <div class="flex justify-end space-x-3">
-                          <button onclick="hideLogoutPopup()"
-                              class="px-4 py-2 rounded-md text-gray-600 hover:bg-gray-100">
-                              ยกเลิก
-                          </button>
-                          <button onclick="confirmLogout()"
-                              class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                              ออกจากระบบ
-                          </button>
-                      </div>
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">ยืนยันการออกจากระบบ</h2>
+                    <p class="text-gray-600 mb-6">คุณต้องการออกจากระบบหรือไม่?</p>
+                    <div class="flex justify-end space-x-3">
+                      <button onclick="hideLogoutPopup()" class="px-4 py-2 rounded-md text-gray-600 hover:bg-gray-100">
+                        ยกเลิก
+                      </button>
+                      <button onclick="confirmLogout()"
+                        class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                        ออกจากระบบ
+                      </button>
+                    </div>
                   </div>
-              </div>
+                </div>
 
 
-              <script>
+                <script>
 
-                function showLogoutPopup(event) {
+                  function showLogoutPopup(event) {
                     event.preventDefault();
                     document.getElementById('logout-popup').classList.remove('hidden');
-                }
-            
-                function hideLogoutPopup() {
+                  }
+
+                  function hideLogoutPopup() {
                     document.getElementById('logout-popup').classList.add('hidden');
-                }
-            
-                function confirmLogout() {
+                  }
+
+                  function confirmLogout() {
                     document.getElementById('logoutForm').submit();
                     hideLogoutPopup();
-                }
-            </script>
+                  }
+                </script>
                 <% } else { %>
 
                   <h3 class="text-lg font-semibold mb-3">สมัคร/เข้าสู่ระบบ</h3>
-              <p class="text-sm text-gray-600">สมัครสมาชิกเพื่อเข้าถึงบทความที่น่าสนใจและอัปเดตข้อมูลล่าสุด</p>
-              <div class="flex justify-between mt-4">
-                <a href="/auth/login"
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">เข้าสู่ระบบ</a>
-              <a href="/auth/register"
-                class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition-all duration-200 text-center">สมัครสมาชิก</a>
-         
-              </div>
-                 
+                  <p class="text-sm text-gray-600">สมัครสมาชิกเพื่อเข้าถึงบทความที่น่าสนใจและอัปเดตข้อมูลล่าสุด</p>
+                  <div class="flex justify-between mt-4">
+                    <a href="/auth/login"
+                      class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">เข้าสู่ระบบ</a>
+                    <a href="/auth/register"
+                      class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition-all duration-200 text-center">สมัครสมาชิก</a>
+
+                  </div>
+
                   <% } %>
-                </div>
-              
             </div>
 
-            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-              <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
-              <div class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261" data-ad-slot="7771171707"
-                data-ad-format="auto" data-full-width-responsive="true"></div>
+          </div>
 
-              <div class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261" data-ad-slot="7771171707"
-                data-ad-format="auto" data-full-width-responsive="true"></div>
-            </div>
+          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
+            <amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-6579807593228261"
+              data-ad-slot="3059776200" data-auto-format="rspv" data-full-width="">
+              <div overflow=""></div>
+            </amp-ad>
+          </div>
 
-            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-              <h3 class="text-lg font-semibold mb-3">ติดตามเรา</h3>
-              <p class="text-sm text-gray-600">ติดตามเราได้ที่ช่องทางต่างๆ ด้านล่างนี้</p>
-              <div class="flex justify-between mt-4">
-                <a href="https://www.facebook.com/AniNightOfficial" target="_blank"
-                  class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">Facebook</a>
-                <a href="https://twitter.com/AniNightOfficial" target="_blank"
-                  class="bg-blue-400 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-500 transition-all duration-200 text-center">Twitter</a>
-              </div>
+          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h3 class="text-lg font-semibold mb-3">ติดตามเรา</h3>
+            <p class="text-sm text-gray-600">ติดตามเราได้ที่ช่องทางต่างๆ ด้านล่างนี้</p>
+            <div class="flex justify-between mt-4">
+              <a href="https://web.facebook.com/AniNightOffice.net" target="_blank"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">Facebook</a>
             </div>
+          </div>
 
-           <!-- Update -->
-            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-              <h3 class="text-lg font-semibold mb-3">อัพเดตล่าสุด</h3>
-              <div class="grid grid-cols-1 gap-4">
-                <% if (LatestPosts.length> 0) { %>
-                  <% LatestPosts.slice(0, 2).forEach((post, index)=> { %>
-                    <%- include('./Component/carditem', { post: post, index: index }) %>
-                <% }) %>
-                <% } else { %>
-                  <p>ยังไม่มีอัพเดต</p>
-                  <% } %>
-              </div>
+          <!-- Update -->
+          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h3 class="text-lg font-semibold mb-3">อัพเดตล่าสุด</h3>
+            <div class="grid grid-cols-1 gap-4">
+              <% if (LatestPosts.length> 0) { %>
+                <% LatestPosts.slice(0, 2).forEach((post, index)=> { %>
+                  <%- include('./Component/carditem', { post: post, index: index }) %>
+                    <% }) %>
+                      <% } else { %>
+                        <p>ยังไม่มีอัพเดต</p>
+                        <% } %>
             </div>
+          </div>
 
-            <!-- Ads -->
-            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-              <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
-              <div class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261" data-ad-slot="7771171707"
-                data-ad-format="auto" data-full-width-responsive="true"></div>
-            </div>
-          </aside>
-        </section>
-      </main>
+          <!-- Ads -->
+          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
+            <amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-6579807593228261"
+              data-ad-slot="3059776200" data-auto-format="rspv" data-full-width="">
+              <div overflow=""></div>
+            </amp-ad>
+          </div>
+        </aside>
+      </section>
+    </main>
+<!-- Ads bottom popup mobile -->
+<div class="fixed bottom-0 left-0 w-full h-32 z-50 bg-white/80 backdrop-blur-md rounded-t-lg shadow-lg p-4 ad-popup">
+  <div class="flex justify-between items-center h-full">
+    <!-- Ad Content -->
+   <div class="bg-white">
+   <!-- right_home -->
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-6579807593228261"
+data-ad-slot="3059776200"
+data-ad-format="auto"
+data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+   </div>
+    <!-- Close Button -->
+    <button onclick="document.querySelector('.ad-popup').classList.add('hidden')" 
+      class="text-gray-600 hover:text-red-500">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+
 
     <!-- Footer -->
     <%- include('./Component/Footer') %>
@@ -337,12 +378,12 @@
         document.addEventListener('DOMContentLoaded', () => {
           const readArticles = JSON.parse(localStorage.getItem('readArticles')) || {};
           const articles = document.querySelectorAll('article');
-        
+
           articles.forEach(article => {
             const articleId = article.getAttribute('data-articleid');
             const readArticle = readArticles[articleId];
             const readTimeElement = article.querySelector('#read-time');
-        
+
             if (readTimeElement) {
               if (readArticle && readArticle.readAt) {
                 const timeAgo = getTimeAgo(new Date(readArticle.readAt));
@@ -352,7 +393,7 @@
               }
             }
           });
-        
+
           // ฟังก์ชันสำหรับคำนวณเวลาแบบ Relative Time ภาษาไทย
           function getTimeAgo(readTime) {
             const now = new Date();
@@ -361,17 +402,22 @@
             const diffMinutes = Math.floor(diffSeconds / 60);
             const diffHours = Math.floor(diffMinutes / 60);
             const diffDays = Math.floor(diffHours / 24);
-        
+
             if (diffSeconds < 60) return `${diffSeconds} วินาทีที่แล้ว`;
             if (diffMinutes < 60) return `${diffMinutes} นาทีที่แล้ว`;
             if (diffHours < 24) return `${diffHours} ชั่วโมงที่แล้ว`;
             return `${diffDays} วันที่แล้ว`;
           }
+
+          setTimeout(() => {
+  document.querySelector('.ad-popup').classList.add('hidden');
+}, 10000);
+
         });
       </script>
-      
-      
-      
-      </body>
+
+
+
+</body>
 
 </html>

@@ -52,12 +52,12 @@ const addViewToArticle = async (articleId, userId) => {
 };
 
 
-       // await sendEmail(
-        //     user.email, 
-        //     `ถึง ${user.username} แจ้งเตือนรายได้จากผู้ใช้ที่อ่านเรื่อง ${article.title}`, 
-        //     emailHtmlAddViewsArticle(user.username, user.earnings.toFixed(2), article.urlslug, article.title)
-        // );
-        // console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
+// await sendEmail(
+//     user.email, 
+//     `ถึง ${user.username} แจ้งเตือนรายได้จากผู้ใช้ที่อ่านเรื่อง ${article.title}`, 
+//     emailHtmlAddViewsArticle(user.username, user.earnings.toFixed(2), article.urlslug, article.title)
+// );
+// console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
 
 // ============================= get SINGLE POST
 // GET : /api/posts
@@ -112,7 +112,50 @@ const getRead = async (req, res, next) => {
             isSaved = post.savearticles.includes(userID.toString());
         }
 
-        res.render(`./th/read`, { active: "read", post, recentUpdates, userID, isSaved, Bannerlists: banners, translations: req.translations, lang });
+        let content = post.content;
+
+        // แบ่งเนื้อหาเป็นอาร์เรย์ตาม <p>
+        let contentArray = content.split('</p>');
+
+        // กำหนดจุดที่จะใส่แบนเนอร์ (เช่น หลังจากย่อหน้ากลาง)
+        let middleIndex = Math.floor(contentArray.length / 2);
+
+        // ตัวแปรตรวจสอบจำนวนแบนเนอร์ที่แทรก
+        let adInserted = false;
+
+        // ตรวจสอบว่าไม่เคยแทรกแบนเนอร์แล้ว
+        if (!adInserted) {
+            // แทรกแบนเนอร์ Google AdSense
+            contentArray.splice(middleIndex, 0, `
+        <div class="ad-banner bg-white shadow-lg overflow-hidden my-6 text-center">
+            <ins class="adsbygoogle"
+                style="display:block; text-align:center;"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="5850425226"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    `);
+            adInserted = true; // ระบุว่าแบนเนอร์ได้ถูกแทรกแล้ว
+        }
+
+        // รวมเนื้อหากลับเป็น HTML
+        let newContent = contentArray.join('</p>');
+
+        res.render(`./th/read`, {
+            active: "read",
+            post,
+            recentUpdates,
+            userID,
+            isSaved,
+            Bannerlists: banners,
+            translations: req.translations,
+            lang,
+            newContent: newContent
+        });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
         res.status(500).json({

@@ -1,0 +1,281 @@
+<section class="mx-auto max-w-6xl p-2 mb-5 mt-5 md:p-5 bg-white">
+    <div class="container mx-auto mt-3">
+        <div class="mb-6 mt-4">
+            <% if (typeof error !== 'undefined') { %>
+                <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
+            <% } %>
+        </div>
+       </div>
+
+       <div class="flex-1 text-black open-windows-read">
+        <div class="skeleton">
+            <div class="title__main">
+                    <h1  class="text-3xl font-semibold text-gray-900 mb-4">
+                        <%= post.title %>
+                    </h1>
+                    <p class="text-lg mb-6 text-gray-600">
+                        <a href="/">หน้าหลัก </a>
+                        <span class="engfont-bold m-2"> > </span>
+                        <%= post.title %>
+                    </p>
+            </div>
+
+            
+            <!-- Article Description Section -->
+            <div class="mt-4 p-4 bg-gray-100 rounded-md">
+                <div class="mb-6">
+                    <img src="<%= post.thumbnail.startsWith('http') ? post.thumbnail : '/uploads/thumbnails/' + post.thumbnail %>" alt="<%= post.title %>" class="w-full h-auto rounded-lg shadow-md">
+                  </div>
+                <div class="text-gray-700 flex flex-wrap text-sm md:text-base">
+                    <p class="pl-3 text-sm">
+                        <i class="fa-regular fa-eye"></i> การดู <%= formatNumber(post.views) %> ครั้ง,
+                    </p>
+                    <p class="pl-3 text-sm">
+                        <%= moment(post.createdAt).locale('th').fromNow() %>
+                    </p>
+                    <p class="pl-3 text-sm">
+                        เผยแพร่เมื่อ: <%= new Date(post.createdAt).toLocaleDateString() %>
+                    </p>
+                 
+                </div>
+                <div class="tages">
+                    <div class="mt-1 flex">
+                        <% if (post && post.tags && post.tags.length> 0) { %>
+                            <h2>
+                                 <% post.tags.forEach((tag, index)=> { %>
+                                    <a class="inline-block rounded-full border-2 mr-2 bg-white mb-2 border-info px-6 text-md font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 text-black" href="/tag/<%= tag %>">
+                                        <%= tag %>
+                                    </a>
+                                    <% if (index < post.tags.length - 1) { %>
+                                        ,
+                                        <% } %>
+                                            <% }); %>
+                            </h2>
+                            <% } else { %>
+                                <h2>Tags: ไม่มีแท็ก</h2>
+                                <% } %>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-start justify-between space-y-2 md:space-y-0 md:space-x-4 p-4 bg-white shadow-lg rounded-md">
+                    <!-- Left Section: Channel/Author Info -->
+                    <div class="flex items-center space-x-4">
+                        <% if (post.creator.profilePicture && post.creator.profilePicture.startsWith('http')) { %>
+                            <img  data-popover-target="popover-user-<%= post.creator.id._id %>" src="<%= post.creator.profilePicture %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                        <% } else { %>
+                            <% if (post.creator.profilePicture) { %>
+                                <img  data-popover-target="popover-user-<%= post.creator.id._id %>" src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                            <% } else { %>
+                                <img  data-popover-target="popover-user-<%= post.creator.id._id %>" src="/uploads/profiles/default.png" alt="Profile Picture" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover">
+                            <% } %>
+                        <% } %> 
+                        <div data-popover id="popover-user-<%= post.creator.id._id %>" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
+                            <div class="p-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <a href="/editor/<%= post.creator.username %>">
+                                        <img class="w-10 h-10 rounded-full" src="/uploads/profiles/<%= post.creator.profilePicture %>" alt="Jese Leos">
+                                    </a>
+                                    
+                                </div>
+                                <p class="text-base font-semibold leading-none text-gray-900 dark:text-white">
+                                    <a href="/channel/<%= post.creator.username %>"><%= post.creator.id.username %></a>
+                                </p>
+                                <p class="mb-3 text-sm font-normal">
+                                    <a href="/channel/<%= post.creator.username %>" class="hover:underline">@<%= post.creator.id.username %></a>
+                                </p>
+                                <p class="mb-4 text-sm"><%= post.creator.id.bio %></p>
+                                <ul class="flex text-sm">
+                                    <li class="me-2">
+                                        <a href="#" class="hover:underline">
+                                            <span class="font-semibold text-gray-900 dark:text-white"><%= formatNumber(post.creator.id.followers.length) %></span>
+                                            <span>ผู้ติดตาม</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="hover:underline">
+                                            <span class="font-semibold text-gray-900 dark:text-white"><%= formatNumber(post.creator.id.following.length) %></span>
+                                            <span>กำลังติดตาม</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div data-popper-arrow></div>
+                        </div>    
+                        <div>
+                            <a href="/channel/<%= post.creator.id.username %>"  class="flex items-center">
+                                <h1 class="font-semibold text-lg md:text-xl"><%= post.creator.id.username %></h1>
+                                <% if (post.creator.id.role  === 'admin') { %>
+                                    <i class="fas fa-check-circle ml-2 text-green-500" title="Admin"></i>
+                                <% } %>
+                            </a>
+                           <p class="text-gray-600">ผู้ติดตาม <%= formatNumber(post.creator.id.followers.length) %> คน</p>
+                        </div>
+                    </div>
+                
+                    <!-- Right Section: Buttons -->
+                    <div class="flex space-x-4 items-center">
+                        <!-- Follow Button -->
+                        <!-- <button class="bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-800 transition duration-200">
+                            <a href="/channel/<%= post.creator.username %>">ติดตาม</a>
+                        </button> -->
+                        <% if (userID) { %>
+                            <% if (post.creator.id.followers.includes(userID.user._id)) { %>
+                                <!-- ปุ่มยกเลิกติดตาม (แสดงเมื่อผู้ใช้ติดตามช่องนี้แล้ว) -->  
+                                <button id="unfollow-btn" class="text-red-500 hover:bg-red-100 px-4 py-2 rounded-lg"
+                                    onclick="confirmUnfollow('<%= post.creator.id._id %>')">
+                                    <i class="fa-solid fa-user-minus"></i> ติดตามแล้ว
+                                </button>
+                            <% } else { %>
+                                <!-- ปุ่มติดตาม (แสดงเมื่อผู้ใช้ยังไม่ได้ติดตามช่องนี้) -->
+                                <button id="follow-btn" class="text-blue-500 hover:bg-blue-100 px-4 py-2 rounded-lg"
+                                        onclick="toggleFollow('<%= post.creator.id._id %>')">
+                                    <i class="fa-solid fa-user-plus"></i> ติดตาม
+                                </button>
+                            <% } %>
+                        <% } %>
+                        <!-- Like and Share Buttons -->
+                        <div class="flex space-x-2">
+                            <% if (userID) { %>
+                                <button id="like-button-<%= post._id %>" 
+                                        class="<%= post.likes.includes(userID.user._id) ? 'liked' : '' %>"
+                                        onclick="likeArticle('<%= post._id %>')">
+                                        
+                                  <i class="fa fa-heart <%= post.likes.includes(userID.user._id) ? 'text-red-500' : 'text-gray-500' %>"></i>
+                                  <span class="pl-2" id="like-count-<%= post._id %>"><%= formatNumber(post.likes.length) %> ไลค์</span>
+                                </button>
+                              <% } else { %>
+                                <button disabled>
+                                    <a href="/auth/login"><%= formatNumber(post.likes.length) %> ใจ | เข้าสู่เพื่อไลค์</a>
+                                </button>
+                              <% } %>
+                        </div>
+                        <div class="right__title-main flex flex-col items-center">
+                            <div class="relative">
+                                <!-- Share Button -->
+                                <button id="share-button" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                    แชร์
+                                </button>
+
+                            <!-- Popup Alert -->
+                  <div id="popupalert" class="hidden fixed top-12 left-0 right-0 mx-auto flex justify-center ml-10 mr-10 z-50">
+                      <p class="bg-gray-500 text-center px-4 py-2 text-white rounded-md">แชร์ลิ้งแล้ว</p>
+                   </div>
+
+
+                            <div class="data__box-share hidden">
+                                <form>
+                                    <input type="text" name="articleTitle" value="<%= post.title %>">
+                                    <input type="text" name="articleContent" value="<%- post.content %>">
+                                    <input type="file" name="articleImage" value="/uploads/thumbnails/<%= post.thumbnail %>">
+                                </form>
+                            </div>
+
+                            
+                                <!-- Share Popup -->
+                                <div id="share-popup" class="hidden absolute top-full right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
+                                    <h3 class="text-md font-semibold mb-2">แชร์บทความนี้</h3>
+                                    <button id="copy-link" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-1 rounded mb-2 flex items-center justify-between">
+                                        คัดลอกลิ้ง
+                                        <i class="fas fa-link"></i>
+                                    </button>
+                                    <button class="share-button w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="facebook">
+                                        Facebook
+                                        <i class="fab fa-facebook-f"></i>
+                                    </button>
+                                    <button class="share-button w-full bg-blue-400 hover:bg-blue-500 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="twitter">
+                                        Twitter
+                                        <i class="fab fa-twitter"></i>
+                                    </button>
+                                    <button class="share-button w-full bg-pink-500 hover:bg-pink-600 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="tiktok">
+                                        TikTok
+                                        <i class="fab fa-tiktok"></i>
+                                    </button>
+                                    <button class="share-button w-full bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded mb-2 flex items-center justify-between" data-platform="youtube">
+                                        YouTube
+                                        <i class="fab fa-youtube"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Advertisement Section -->
+                <div class="ads-container ">
+                    <script async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                        crossorigin="anonymous"></script>
+                    <ins class="adsbygoogle block mx-auto" style="display:block; text-align:center; width: 50%;"
+                        data-ad-layout="in-article" data-ad-format="video" data-ad-client="ca-pub-6579807593228261"
+                        data-ad-slot="5440757573"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+            
+                </div>
+                <hr class="mt-4 mb-6">
+            </div>
+
+            <div class="flex justify-center mt-6 mb-5">
+                <div class="relative w-full max-w-lg overflow-hidden md:rounded-lg shadow-lg">
+                    <div class="slides flex transition-transform duration-500">
+                        <% if (Bannerlists.length > 0) { %>
+                            <% Bannerlists.forEach(banner => { %>
+                                <div class="slide w-full flex-shrink-0">
+                                    <a href="<%= banner.link %>" target="_blank">
+                                        <img src="<%= banner.imageUrl %>" alt="<%= banner.title %>" class="w-full h-auto md:rounded-lg">
+                                    </a>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="slide w-full flex-shrink-0">
+                                <a href="mailto:aninight.info@gmail.com" target="_blank" class="block">
+                                    <img src="/annight/banner/b3-ads.svg" alt="ads ติดต่อโฆษณา" class="w-full h-auto md:rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out">
+                                </a>
+                            </div>
+                            
+                        <% } %>
+                    </div>
+                    <button class="prev absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-900 focus:outline-none">❮</button>
+                    <button class="next absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-900 focus:outline-none">❯</button>
+                </div>
+                
+            </div>
+
+          <article class="bg-white text-black font-light p-6 space-y-4 leading-relaxed">
+            <%- post.content %>
+          </article>
+
+            <div class="gallery w-full mt-5 z-0">
+                <% if (post.imagesarticle.length > 0) { %>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                        <% post.imagesarticle.forEach(function(image) { %>
+                            <img src="/uploads/articlesImages/<%= image %>" 
+                                 alt="<%= post.title %>" 
+                                 class="w-full h-[200px] object-cover rounded-lg shadow-md cursor-pointer open-fullscreen hover:scale-105 transition-transform duration-200">
+                        <% }); %>
+                    </div>
+                <% } %>
+            </div>
+        
+            <div class="bg-white rounded-lg md:mb-12 mb-2 p-4">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                crossorigin="anonymous"></script>
+           <ins class="adsbygoogle"
+                style="display:block; text-align:center;"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+                data-ad-client="ca-pub-6579807593228261"
+                data-ad-slot="2386038227"></ins>
+           <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+           </script>
+            </div>
+
+            <h3 class="font-normal text-base mb-5 mt-5 md:text-2xl border-blue-300 border-l-2 pl-2">อัพเดตใหม่</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <% recentUpdates.forEach((update, index) => { %>       
+                    <%- include('./Component/carditem', {post: update, index: index}) %> 
+              <% }) %>
+            </div>
+         </div>
+     </div>
+</section>

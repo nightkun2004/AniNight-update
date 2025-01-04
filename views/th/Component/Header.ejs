@@ -1,7 +1,6 @@
 
-<canvas id="snowCanvas" class="absolute inset-0 -z-10 w-full"></canvas>
-<header class=" text-white shadow-white shadow-lg sticky max-w-full top-0 w-full z-10"
-style="background-image: url('/annight/bg_menu_anime-christmas.gif'); background-repeat: repeat-x;">
+<!-- <canvas id="snowCanvas" class="absolute inset-0 -z-10 w-full"></canvas> -->
+<header class="bg-white text-black border-b-2 border-black sticky max-w-full top-0 w-full z-10">
     <div class="px-4 flex items-center justify-between mx-auto xl:max-w-7xl z-20">
         <!-- Logo left -->
         <div class="flex items-center space-x-4">
@@ -10,7 +9,7 @@ style="background-image: url('/annight/bg_menu_anime-christmas.gif'); background
                 <a href="/"  class="text-blue-500 text-2xl font-bold flex items-center overflow-hidden">
                     <img src="/annight/logo_mini.png" alt="logo_mini" class="w-full h-12 md:h-16 object-cover">
                 </a>
-                <button onclick="toggleMenuHeader('.open_card')">
+                <button onclick="toggleMenuHeader()">
                     <svg class="h-8 w-8 text-black hover:text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -44,15 +43,37 @@ style="background-image: url('/annight/bg_menu_anime-christmas.gif'); background
             </div>
 
             <script>
-                function toggleMenuHeader(menuClass) {
-                    document.querySelector('.card_menus').classList.toggle("hidden");
+                function toggleMenuHeader() {
+                    const menu = document.querySelector('.card_menus');
+                    menu.classList.toggle('hidden');
                 }
+
+                window.addEventListener('click', function (e) {
+                    const menu = document.querySelector('.card_menus');
+                    const button = document.querySelector('button'); // ปุ่มที่ใช้ toggle
+
+                    if (!menu.contains(e.target) && e.target !== button && !button.contains(e.target)) {
+                        menu.classList.add('hidden');
+                    }
+                });
+
+                // scllo add shadow
+                window.addEventListener('scroll', function () {
+                    const header = document.querySelector('header');
+                    if (window.scrollY > 0) {
+                        header.classList.add('shadow-lg');
+                        header.classList.add('border-b-2');
+                    } else {
+                        header.classList.remove('shadow-lg');
+                        header.classList.remove('border-b-2');
+                    }
+                });
 
             </script>
             <!-- Navigation Links -->
-            <nav class="hidden md:hidden lg:flex">
+            <nav class="hidden md:hidden lg:flex items-center space-x-4">
                 <a href="/" class=" text-md md:text-text-1xl px-5">หน้าหลัก</a>
-                <a href="/foryou?recomment=0&i-0&sortBy=views" class=" text-md md:text-text-1xl  px-5">สำหรับคุณ</a>
+                <a href="/foryou" class=" text-md md:text-text-1xl  px-5">สำหรับคุณ</a>
                 <a href="/schedule/anime" class=" text-md md:text-text-1xl  px-5">ตารางอนิเมะ</a>
                 <a href="/memes" class=" text-md md:text-text-1xl  px-5">มีม</a>
                 <div class="relative group">

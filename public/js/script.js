@@ -59,65 +59,67 @@ document.getElementById("searchInput").addEventListener("input", function () {
     debounceTimeout = setTimeout(() => {}, 300);
 });
 
-const canvas = document.getElementById('snowCanvas');
-const ctx = canvas.getContext('2d');
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const snowflakes = [];
 
 // ฟังก์ชันสร้างหิมะ
-function createSnowflake() {
-  return {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: Math.random() * 4 + 1,
-    speed: Math.random() * 1 + 0.5,
-    opacity: Math.random()
-  };
-}
+// const canvas = document.getElementById('snowCanvas');
+// const ctx = canvas.getContext('2d');
 
-// สร้างหิมะเริ่มต้น
-for (let i = 0; i < 100; i++) {
-  snowflakes.push(createSnowflake());
-}
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
 
-// ฟังก์ชันวาดหิมะ
-function drawSnowflakes() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'white';
+// const snowflakes = [];
 
-  snowflakes.forEach((flake) => {
-    ctx.globalAlpha = flake.opacity;
-    ctx.beginPath();
-    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
 
-// ฟังก์ชันอัปเดตหิมะ
-function updateSnowflakes() {
-  snowflakes.forEach((flake) => {
-    flake.y += flake.speed;
-    if (flake.y > canvas.height) {
-      flake.y = 0;
-      flake.x = Math.random() * canvas.width;
-    }
-  });
-}
+// function createSnowflake() {
+//   return {
+//     x: Math.random() * canvas.width,
+//     y: Math.random() * canvas.height,
+//     radius: Math.random() * 4 + 1,
+//     speed: Math.random() * 1 + 0.5,
+//     opacity: Math.random()
+//   };
+// }
 
-// อัปเดต Canvas
-function animate() {
-  drawSnowflakes();
-  updateSnowflakes();
-  requestAnimationFrame(animate);
-}
+// // สร้างหิมะเริ่มต้น
+// for (let i = 0; i < 100; i++) {
+//   snowflakes.push(createSnowflake());
+// }
 
-// อัปเดตขนาดหน้าจอ
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+// // ฟังก์ชันวาดหิมะ
+// function drawSnowflakes() {
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+//   ctx.fillStyle = 'white';
 
-animate();
+//   snowflakes.forEach((flake) => {
+//     ctx.globalAlpha = flake.opacity;
+//     ctx.beginPath();
+//     ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+//     ctx.fill();
+//   });
+// }
+
+// // ฟังก์ชันอัปเดตหิมะ
+// function updateSnowflakes() {
+//   snowflakes.forEach((flake) => {
+//     flake.y += flake.speed;
+//     if (flake.y > canvas.height) {
+//       flake.y = 0;
+//       flake.x = Math.random() * canvas.width;
+//     }
+//   });
+// }
+
+// // อัปเดต Canvas
+// function animate() {
+//   drawSnowflakes();
+//   updateSnowflakes();
+//   requestAnimationFrame(animate);
+// }
+
+// // อัปเดตขนาดหน้าจอ
+// window.addEventListener('resize', () => {
+//   canvas.width = window.innerWidth;
+//   canvas.height = window.innerHeight;
+// });
+
+// animate();
