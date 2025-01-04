@@ -181,12 +181,15 @@
 
                     <div class="share-buttons-top flex gap-4 items-center">
                         <!-- Facebook Share Button -->
-                        <a href="https://www.facebook.com/sharer.php?u=<%= post.urlslug %>" target="_blank"
-                           class="flex items-center space-x-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg shadow-md"
-                           rel="external noopener nofollow" title="Facebook">
-                            <i class="fab fa-facebook-f"></i> <!-- Font Awesome Facebook Icon -->
-                            <span class="text-sm">Share</span>
-                        </a>
+                        <a href="https://www.facebook.com/sharer.php?u=<%= fullURL %>" 
+                            target="_blank"
+                            class="flex items-center space-x-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg shadow-md"
+                            rel="external noopener nofollow" 
+                            title="Facebook">
+                             <i class="fab fa-facebook-f"></i> <!-- Font Awesome Facebook Icon -->
+                             <span class="text-sm">Share</span>
+                         </a>
+                         
                         
                         <!-- Twitter Share Button -->
                         <a href="https://twitter.com/intent/tweet?text=<%= post.title %>&url<%= post.urlslug %>" target="_blank"

@@ -125,7 +125,6 @@ const getRead = async (req, res, next) => {
 
         // ตรวจสอบว่าไม่เคยแทรกแบนเนอร์แล้ว
         if (!adInserted) {
-            // แทรกแบนเนอร์ Google AdSense
             contentArray.splice(middleIndex, 0, `
         <div class="ad-banner bg-white shadow-lg overflow-hidden my-6 mx-auto mb-6 mt-6 w-full max-w-[728px]">
             <ins class="adsbygoogle"
@@ -140,11 +139,14 @@ const getRead = async (req, res, next) => {
             </script>
         </div>
     `);
-            adInserted = true; // ระบุว่าแบนเนอร์ได้ถูกแทรกแล้ว
+            adInserted = true;
         }
 
         // รวมเนื้อหากลับเป็น HTML
         let newContent = contentArray.join('</p>');
+
+        const baseURL = `${req.protocol}://${req.get('host')}`;
+        const fullURL = `${baseURL}/read/${post.urlslug}`;
 
         res.render(`./th/read`, {
             active: "read",
@@ -155,7 +157,8 @@ const getRead = async (req, res, next) => {
             Bannerlists: banners,
             translations: req.translations,
             lang,
-            newContent: newContent
+            newContent: newContent,
+            fullURL
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';
