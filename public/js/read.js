@@ -585,8 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
                 return url;
             }
-            // ถ้าไม่ใช่ URL ที่เริ่มต้นด้วย http หรือ https ให้ใช้ URL ภายใน
-            return `http://localhost:5000/uploads/profiles/${url}`;
+            return `https://ani-night.online/uploads/profiles/${url}`;
         };
 
         comments.forEach(commentData => {
