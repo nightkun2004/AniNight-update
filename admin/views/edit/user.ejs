@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขผู้ใช้</title>
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/css/tailwindcss.css"></script>
+    <script src="/js/fontawesome.js" defer></script>
+</head>
+
+<body>
+    <div class="flex flex-col h-screen">
+        <%- include('../Component/Header') %>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="aside"
+                    class="bg-white w-64 h-full fixed lg:relative transform -translate-x-full lg:translate-x-0 transition-transform z-50">
+                    <%- include('../Component/aside') %>
+                </aside>
+
+                <main id="mainContent" class="flex-1 p-4 overflow-y-auto overflow-hidden bg-gray-50 transition-all">
+                    <div class="flex justify-between items-center mb-4 border-b-2 py-2">
+                        <a href="/admin/manage/users"
+                            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                            <i class="fas fa-plus"></i> จัดการผู้ใช้
+                        </a>
+                    </div>
+
+                    <div class="overflow-x-auto overflow-hidden">
+                        <div class="bg-white p-6 rounded-md shadow-md">
+                            <form id="editUserForm" action="/users/edit/<%= userData._id %>" method="POST"
+                                class="space-y-4">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label for="googleId"
+                                            class="block text-sm font-medium text-gray-700">googleId</label>
+                                        <input type="text" id="googleId" name="googleId"
+                                            class="mt-2 p-2 w-full border rounded-md outline-none"
+                                            value="<%= userData.googleId %>" readonly>
+                                    </div>
+                                    <div>
+                                        <label for="username"
+                                            class="block text-sm font-medium text-gray-700">ชื่อผู้ใช้</label>
+                                        <input type="text" id="username" name="username"
+                                            class="mt-2 p-2 w-full border rounded-md outline-none"
+                                            value="<%= userData.username %>" required>
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">อีเมล</label>
+                                        <input type="email" id="email" name="email"
+                                            class="mt-2 p-2 w-full border rounded-md outline-none"
+                                            value="<%= userData.email %>" required>
+                                    </div>
+                                    <div>
+                                        <label for="earnings" class="block text-sm font-medium text-gray-700">รายได้</label>
+                                        <input type="text" id="earnings" name="earnings"
+                                            class="mt-2 p-2 w-full border rounded-md outline-none"
+                                            value="<%= userData.earnings.toFixed(2) %>" required>
+                                    </div>
+                                    <div>
+                                        <label for="role" class="block text-sm font-medium text-gray-700">บทบาท</label>
+                                        <select id="role" name="role"
+                                            class="mt-2 p-2 w-full border rounded-md outline-none">
+                                            <option value="user" <%=userData.role==="user" ? "selected" : "" %>>ผู้ใช้
+                                            </option>
+                                            <option value="content_creator" <%=userData.role==="content_creator"
+                                                ? "selected" : "" %>>ผู้สร้างเนื้อหา</option>
+                                            <option value="partners" <%=userData.role==="partners" ? "selected" : "" %>
+                                                >พาร์ทเนอร์</option>
+                                            <option value="admin" <%=userData.role==="admin" ? "selected" : "" %>>แอดมิน
+                                            </option>
+                                            <option value="moderator" <%=userData.role==="moderator" ? "selected" : ""
+                                                %>>ผู้ดูแล</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="points"
+                                            class="block text-sm font-medium text-gray-700">คะแนน</label>
+                                        <input type="number" id="points" name="points"
+                                            class="mt-2 p-2 w-full border rounded-md outline-none"
+                                            value="<%= userData.points %>">
+                                    </div>
+                                    <div>
+                                        <label for="isApproved"
+                                            class="block text-sm font-medium text-gray-700">สถานะการอนุมัติ</label>
+                                        <input type="checkbox" id="isApproved" name="isApproved" class="mt-1"
+                                            <%=userData.isApproved ? "checked" : "" %>>
+                                        <span class="text-sm text-gray-600">อนุมัติผู้ใช้</span>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">บันทึกการเปลี่ยนแปลง</button>
+                            </form>
+
+                            <!-- Profile Banner -->
+                            <div class="relative bg-blue-500 rounded-lg h-48 mt-5">
+                                <img src="/uploads/banners/<%= userData.bannerImagePath %>" alt="Banner"
+                                    class="absolute inset-0 w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-blue-500 rounded-lg bg-opacity-50"></div>
+                            </div>
+
+                            <!-- Profile Info -->
+                            <section class="relative max-w-7xl mx-auto px-4 -mt-16">
+                                <div class="bg-white rounded-lg shadow-lg p-6">
+                                    <div class="flex items-center">
+                                        <% if (userData.profilePicture && userData.profilePicture.startsWith('http')) { %>
+                                            <img src="<%= userData.profilePicture %>" alt="Profile Picture"   class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
+                                        <% } else { %>
+                                            <% if (userData.profilePicture) { %>
+                                                <img src="/uploads/profiles/<%= userData.profilePicture %>" alt="Profile Picture" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
+                                            <% } else { %>
+                                                <img src="https://pics.craiyon.com/2023-10-25/b65f72d6d11a48c1bc560059cc36e31f.webp" alt="Profile Picture"  class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
+                                            <% } %>
+                                        <% } %>  
+                                        <div class="ml-6">
+                                            <h2 class="text-2xl font-bold text-gray-800">
+                                                <%= userData.username %>
+                                            </h2>
+                                            <p class="text-gray-600">
+                                                <%= userData.bio || 'ยังไม่ได้เพิ่มข้อมูลส่วนตัว' %>
+                                            </p>
+                                            <div class="mt-2">
+                                                <span class="text-blue-500 font-medium">Followers: <%=
+                                                        userData.followers.length %></span>
+                                                <span class="text-gray-500 mx-2">|</span>
+                                                <span class="text-blue-500 font-medium">Following: <%=
+                                                        userData.following.length %></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+    </div>
+
+    <!-- Notification Popup -->
+    <div id="notification"
+        class="fixed bottom-5 left-5 z-50 max-w-sm w-full p-4 bg-green-100 text-green-800 rounded-lg shadow-lg hidden"
+        role="alert">
+        <div class="relative flex items-center">
+            <div class="flex-shrink-0">
+                <!-- Icon -->
+                <svg class="w-5 h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-2a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3 flex-1">
+                <p class="text-sm font-medium" id="notification-msg"></p>
+            </div>
+            <button id="close-btn" class="ml-4 text-green-800 hover:text-green-600 focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <!-- Status Bar -->
+            <div class="absolute bottom-0 left-0 w-full h-1 bg-green-300 rounded-full" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <script src="/js/admin/index.js"></script>
+    <script>
+        function showNotification(msg, type = "success", duration = 3000) {
+            const notification = document.getElementById("notification");
+            const notificationMsg = document.getElementById("notification-msg");
+            const closeButton = document.getElementById("close-btn");
+            const progressBar = document.getElementById("progress-bar");
+
+            // ตั้งค่าข้อความ
+            notificationMsg.textContent = msg;
+
+            // ตั้งค่าประเภทการแจ้งเตือน
+            if (type === "success") {
+                notification.classList.remove("bg-red-100", "text-red-800");
+                notification.classList.add("bg-green-100", "text-green-800");
+                progressBar.classList.add("bg-green-300");
+                progressBar.classList.remove("bg-red-300");
+            } else if (type === "error") {
+                notification.classList.remove("bg-green-100", "text-green-800");
+                notification.classList.add("bg-red-100", "text-red-800");
+                progressBar.classList.add("bg-red-300");
+                progressBar.classList.remove("bg-green-300");
+            }
+
+            // แสดงการแจ้งเตือน
+            notification.classList.remove("hidden");
+
+            // แถบ Status Bar
+            progressBar.style.transition = `width ${duration}ms linear`;
+            progressBar.style.width = "100%";
+
+            // ซ่อนการแจ้งเตือนเมื่อเวลาหมด
+            const timeoutId = setTimeout(() => {
+                hideNotification();
+            }, duration);
+
+            // ฟังก์ชันปิดการแจ้งเตือน
+            closeButton.onclick = () => {
+                clearTimeout(timeoutId);
+                hideNotification();
+            };
+
+            function hideNotification() {
+                notification.classList.add("hidden");
+                progressBar.style.width = "0%";
+                progressBar.style.transition = "none"; // รีเซ็ตการเลื่อน
+            }
+        }
+
+        // อ่าน Query String จาก URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const msg = urlParams.get("msg");
+        const status = urlParams.get("status");
+
+        // ตรวจสอบว่ามี msg และ status หรือไม่
+        if (msg && status) {
+            const type = status === "true" ? "success" : "error";
+            showNotification(msg, type, 5000);
+        }
+
+    </script>
+</body>
+
+</html>

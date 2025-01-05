@@ -73,6 +73,27 @@ const getAdminManageUser = async (req, res) => {
         })
     }
 }
+const getAdminEditUser = async (req, res) => {
+    const lang = res.locals.lang;
+    const userID = req.session.userlogin;
+    const { userId } = req.params;
+    try {
+        const userData = await User.findById(userId);
+        res.render("./edit/user", {
+            translations: req.translations,
+            lang,
+            userID,
+            userData,
+            active: "AdminManageUser"
+        })
+    } catch (error) {
+        const errorMessage = error.message || 'Internal Server Error';
+        res.status(500).json({
+            msg: "Server Error",
+            errorMessage
+        })
+    }
+}
 
 const getAdminReward = async (req, res) => {
     const lang = res.locals.lang;
@@ -289,7 +310,7 @@ const getListseriesEP = async (req, res) => {
     try {
         const series = await Play.findOne(videoid).exec(); // ค้นหาตาม videoid
         if (!series) {
-            return res.json ({
+            return res.json({
                 userID,
                 series: null,
                 lang,
@@ -354,9 +375,28 @@ const filterUsers = async (req, res) => {
     }
 }
 
+const EditUserAdmin = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const { username, email, role, points, isApproved } = req.body;
+        const user = await User.findByIdAndUpdate(userId, {
+            username,
+            email,
+            role,
+            points,
+            isApproved: isApproved === 'on',
+        }, { new: true });
+        if (!user) return res.status(404).send('ไม่พบผู้ใช้');
+        res.redirect(`/admin/edit/user/${userId}?status=true&msg=อัจเดตแล้ว`);
+    } catch (error) {
+        res.status(500).send('เกิดข้อผิดพลาด');
+    }
+}
+
 module.exports = {
     getAdmin,
     getAdminManageUser,
+    getAdminEditUser,
     getAdminReward,
     getListseriesEP,
     getAdminAPIKEY,
@@ -370,5 +410,6 @@ module.exports = {
     getAdminRewardManage,
     ManageVideos,
     updateUserRole,
-    filterUsers
+    filterUsers,
+    EditUserAdmin
 }
