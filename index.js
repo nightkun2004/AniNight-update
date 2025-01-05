@@ -8,7 +8,8 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const formatNumber = require("./formats/formatNumber")
 
-const { addComment } = require('./Controllers/MemeController')
+
+const { addComment } = require("./Controllers/CommentController")
 // const { handleWebSocketMessage } = require("./Controllers/AiController")
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -46,15 +47,21 @@ const PlaymentRoute = require("./routers/PlaymentRouter")
 const RewardRoute = require("./routers/RewardRouter")
 const AiRoute = require("./routers/AiRouter")
 const MemeRouter = require("./routers/MemeRouter")
+const CommentRouter = require("./routers/Commentrouter")
 // const TrendingRouter = require("./")
 
 const setLanguage = require("./lib/language")
+app.set("wss", wss); 
 
 app.get('/ads.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/ads.txt'));
 });
 app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/robots.txt'));
+});
+
+app.post("/add-comment", (req, res) => {
+  addComment(req, res, io); // ส่ง io เข้าใน Controller
 });
 
 // เส้นทาง router สำหรับ lib
@@ -185,12 +192,15 @@ app.use("/api/v2", SurveyRouterCrerate)
 app.use("/api/v2", PlaymentRoute)
 app.use("/api/v2", RewardRoute)
 app.use("/api/v2", AiRoute)
+app.use("/api/v2", CommentRouter)
+
 
 // wss.on('connection', (ws) => {
 //   console.log('New client connected');
 //   ws.on('message', (message) => AiRoute.handleWebSocketMessage(ws, message));
 //   ws.on('close', () => console.log('Client disconnected'));
 // });
+
 
 app.use(compression());
 app.use(helmet());

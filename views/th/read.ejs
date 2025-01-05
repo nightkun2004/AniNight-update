@@ -241,7 +241,7 @@
                 <!-- Related News -->
                 <aside class="bg-white p-6 rounded-lg shadow flex-shrink-0 w-full lg:w-1/3">
                     <!-- ad -->
-                    <div class="mb-6 overflow-hidden">
+                    <div class="mb-6">
                         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
                             crossorigin="anonymous"></script>
                         <!-- right_home -->
@@ -254,46 +254,39 @@
                     
                     <!-- Comment and Comments-->
                     <div class="comments-section bg-gray-50 p-6 rounded-lg shadow-md">
-                        <h2 class="text-xl font-bold mb-4">ความคิดเห็น</h2>
+                        <h2 class="text-xl font-bold mb-4">ความคิดเห็น <span id="commentsAll">(0)</span></h2>
                     
                         <!-- ฟอร์มเพิ่มความคิดเห็น -->
-                        <form class="comment-form mb-6">
-                            <textarea class="comment-textarea w-full p-3 rounded-md border border-gray-300" placeholder="เขียนความคิดเห็น..."></textarea>
-                            <button type="button" class="comment-submit bg-blue-500 text-white px-4 py-2 rounded-md mt-2 hover:bg-blue-600">
+                        <form class="comment-form mb-6" id="comment-form" data-articleid="<%= post._id %>">
+                            <textarea id="comment-input" class="comment-textarea w-full p-3 rounded-md border border-gray-300" placeholder="เขียนความคิดเห็น..."></textarea>
+                            <button type="submit" class="comment-submit bg-blue-500 text-white px-4 py-2 rounded-md mt-2 hover:bg-blue-600">
                                 ส่งความคิดเห็น
                             </button>
                         </form>
                     
                         <!-- รายการความคิดเห็น -->
-                        <div class="comments-list space-y-6">
+                        <div class="comments-list space-y-6" id="comments">
                             <!-- ความคิดเห็นตัวอย่าง -->
-                            <div class="comment-item">
+                            <!-- <div class="comment-item">
                                 <div class="flex items-start space-x-4">
-                                    <!-- รูปโปรไฟล์ -->
                                     <img src="https://via.placeholder.com/150" alt="User Avatar" class="w-12 h-12 rounded-full">
                                     
                                     <div>
-                                        <!-- ชื่อผู้ใช้ -->
                                         <h3 class="text-sm font-semibold text-gray-800">Guest</h3>
-                                        
-                                        <!-- เวลา -->
+                                
                                         <p class="text-xs text-gray-500 mb-2">1 ชั่วโมงที่ผ่านมา</p>
-                                        
-                                        <!-- เนื้อหาความคิดเห็น -->
+                                    
                                         <p class="text-gray-700 mb-2">
                                             นี่คือความคิดเห็นตัวอย่างที่แสดงให้เห็นว่าเป็นความคิดเห็นต้นแบบ
                                         </p>
                                         
-                                        <!-- ปุ่มตอบกลับ -->
                                         <button class="reply-button text-blue-500 text-sm hover:underline">
                                             ตอบกลับ
                                         </button>
                                     </div>
                                 </div>
                                 
-                                <!-- โซนแสดงความคิดเห็นย่อย -->
                                 <div class="nested-comments ml-12 mt-4">
-                                    <!-- ตัวอย่างความคิดเห็นย่อย -->
                                     <div class="flex items-start space-x-4">
                                         <img src="https://via.placeholder.com/150" alt="User Avatar" class="w-10 h-10 rounded-full">
                                         
@@ -306,11 +299,26 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     
-                    
+                    <!-- Popup Modal (Hidden by default) -->
+                <div id="popup-login" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+                        <h2 class="text-lg font-semibold mb-4">จำเป็นต้องเข้าสู่ระบบ</h2>
+                        <p class="text-gray-700 mb-4">โปรเข้าสู่ระบบก่อนแสดงความคิดเห็น.</p>
+                        <a href="/auth/login" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">เข้าสู่ระบบ</a>
+                        <button id="closePopup" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">ปิด</button>
+                    </div>
+                </div>
+                <div id="popup-comment" class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white p-6 rounded-md">
+                        <p class="text-lg">ความคิดเห็นของคุณถูกส่งแล้ว! รีโหลดหน้าเว็บเพื่อดูคึวามคิดเห็นใหม่</p>
+                        <button id="closeCommentPopup" class="mt-4 bg-red-500 text-white py-2 px-4 rounded">ปิด</button>
+                    </div>
+                </div>
+                
                      
                 </aside>
             </main>
@@ -342,8 +350,7 @@
                         <script src="/js/script.js" defer></script>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script>
                         <script src="/js/read.js" defer></script>
-                        <script src="/js/loadImage.js" defer></script>
-
+                        <script src="/js/loadImage.js" defer></script>             
 
                         <script defer type="text/javascript">
                             // ฟังก์ชันในการบันทึกเวลาอ่าน

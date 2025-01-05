@@ -117,29 +117,27 @@ const getRead = async (req, res, next) => {
         // แบ่งเนื้อหาเป็นอาร์เรย์ตาม <p>
         let contentArray = content.split('</p>');
 
-        // กำหนดจุดที่จะใส่แบนเนอร์ (เช่น หลังจากย่อหน้ากลาง)
-        let middleIndex = Math.floor(contentArray.length / 2);
+        let adFrequency = 3; // แทรกโฆษณาทุก 3 ย่อหน้า
+        let bannerHTML = `
+    <div class="ad-banner bg-white rounded-lg shadow-lg my-6 mx-auto mb-6 mt-6 w-full max-w-[728px]">
+        <p class="text-center text-sm text-gray-500 mb-2">ได้รับคำสนับสนุน</p>
+        <ins class="adsbygoogle"
+            style="display:block; text-align:center;"
+            data-ad-layout="in-article"
+            data-ad-format="fluid"
+            data-ad-client="ca-pub-6579807593228261"
+            data-full-width-responsive="true"
+            data-ad-slot="5850425226"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+`;
 
-        // ตัวแปรตรวจสอบจำนวนแบนเนอร์ที่แทรก
-        let adInserted = false;
 
-        // ตรวจสอบว่าไม่เคยแทรกแบนเนอร์แล้ว
-        if (!adInserted) {
-            contentArray.splice(middleIndex, 0, `
-        <div class="ad-banner bg-white shadow-lg overflow-hidden my-6 mx-auto mb-6 mt-6 w-full max-w-[728px]">
-            <ins class="adsbygoogle"
-                style="display:block; text-align:center;"
-                data-ad-layout="in-article"
-                data-ad-format="fluid"
-                data-ad-client="ca-pub-6579807593228261"
-                data-full-width-responsive="true"
-                data-ad-slot="5850425226"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    `);
-            adInserted = true;
+        // แทรกโฆษณาทุกๆ adFrequency ย่อหน้า
+        for (let i = adFrequency; i < contentArray.length; i += adFrequency + 1) {
+            contentArray.splice(i, 0, bannerHTML);
         }
 
         // รวมเนื้อหากลับเป็น HTML

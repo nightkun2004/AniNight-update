@@ -236,72 +236,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // แชร์ POPUP
-document.addEventListener('DOMContentLoaded', function () {
-    const shareButton = document.getElementById('share-button');
-    const sharePopup = document.getElementById('share-popup');
-    const copyLinkButton = document.getElementById('copy-link');
-    const shareButtons = document.querySelectorAll('.share-button');
-    const articleUrl = window.location.href;
+// document.addEventListener('DOMContentLoaded', function () {
+//     const shareButton = document.getElementById('share-button');
+//     const sharePopup = document.getElementById('share-popup');
+//     const copyLinkButton = document.getElementById('copy-link');
+//     const shareButtons = document.querySelectorAll('.share-button');
+//     const articleUrl = window.location.href;
 
-    // Toggle share popup
-    shareButton.addEventListener('click', function () {
-        sharePopup.classList.toggle('hidden');
-    });
+//     // Toggle share popup
+//     shareButton.addEventListener('click', function () {
+//         sharePopup.classList.toggle('hidden');
+//     });
 
-    // Copy link to clipboard
-    copyLinkButton.addEventListener('click', function () {
-        navigator.clipboard.writeText(articleUrl).then(() => {
-            popupalert.style.display = 'block';
-            setTimeout(() => {
-                popupalert.style.display = 'none';
-            }, 2000);
-        }).catch(err => {
-            console.error('Error copying link:', err);
-        });
-    });
+//     // Copy link to clipboard
+//     copyLinkButton.addEventListener('click', function () {
+//         navigator.clipboard.writeText(articleUrl).then(() => {
+//             popupalert.style.display = 'block';
+//             setTimeout(() => {
+//                 popupalert.style.display = 'none';
+//             }, 2000);
+//         }).catch(err => {
+//             console.error('Error copying link:', err);
+//         });
+//     });
 
-    // Share to social platforms
-    shareButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const platform = this.dataset.platform;
-            const articleTitle = document.querySelector('input[name="articleTitle"]').value;
-            let shareUrl = '';
+//     // Share to social platforms
+//     shareButtons.forEach(button => {
+//         button.addEventListener('click', function () {
+//             const platform = this.dataset.platform;
+//             const articleTitle = document.querySelector('input[name="articleTitle"]').value;
+//             let shareUrl = '';
 
-            switch (platform) {
-                case 'facebook':
-                    FB.ui({
-                        method: 'share',
-                        href: articleUrl,
-                        quote: articleTitle,
-                    }, function (response) { });
-                    break;
-                case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${encodeURIComponent(articleTitle)}`;
-                    window.open(shareUrl, '_blank');
-                    break;
-                case 'tiktok':
-                    shareUrl = `https://www.tiktok.com/share?url=${encodeURIComponent(articleUrl)}`;
-                    window.open(shareUrl, '_blank');
-                    break;
-                case 'youtube':
-                    shareUrl = `https://www.youtube.com/share?url=${encodeURIComponent(articleUrl)}&title=${encodeURIComponent(articleTitle)}`;
-                    window.open(shareUrl, '_blank');
-                    break;
-                default:
-                    console.error(`Unsupported platform: ${platform}`);
-                    break;
-            }
-            window.open(shareUrl, '_blank');
-        });
-    });
+//             switch (platform) {
+//                 case 'facebook':
+//                     FB.ui({
+//                         method: 'share',
+//                         href: articleUrl,
+//                         quote: articleTitle,
+//                     }, function (response) { });
+//                     break;
+//                 case 'twitter':
+//                     shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${encodeURIComponent(articleTitle)}`;
+//                     window.open(shareUrl, '_blank');
+//                     break;
+//                 case 'tiktok':
+//                     shareUrl = `https://www.tiktok.com/share?url=${encodeURIComponent(articleUrl)}`;
+//                     window.open(shareUrl, '_blank');
+//                     break;
+//                 case 'youtube':
+//                     shareUrl = `https://www.youtube.com/share?url=${encodeURIComponent(articleUrl)}&title=${encodeURIComponent(articleTitle)}`;
+//                     window.open(shareUrl, '_blank');
+//                     break;
+//                 default:
+//                     console.error(`Unsupported platform: ${platform}`);
+//                     break;
+//             }
+//             window.open(shareUrl, '_blank');
+//         });
+//     });
 
-    // Hide popup when clicking outside
-    document.addEventListener('click', function (event) {
-        if (!shareButton.contains(event.target) && !sharePopup.contains(event.target)) {
-            sharePopup.classList.add('hidden');
-        }
-    });
-});
+//     // Hide popup when clicking outside
+//     document.addEventListener('click', function (event) {
+//         if (!shareButton.contains(event.target) && !sharePopup.contains(event.target)) {
+//             sharePopup.classList.add('hidden');
+//         }
+//     });
+// });
 
 
 
@@ -468,3 +468,176 @@ $(document).ready(function () {
     // เริ่มต้นการแสดงภาพแรก
     showSlide(currentIndex);
 });
+
+
+// =================================== Comment
+document.addEventListener('DOMContentLoaded', () => {
+    // ฟังก์ชั่นสำหรับดึงคุกกี้
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    // ฟังก์ชั่นแสดง Popup ให้เข้าสู่ระบบ
+    function showLoginPopup() {
+        const popup = document.getElementById('popup-login');
+        popup.classList.remove('hidden');
+
+        // ปิด Popup เมื่อกดปุ่ม Close
+        document.getElementById('closePopup').addEventListener('click', () => {
+            popup.classList.add('hidden');
+        });
+    }
+
+    // ฟังก์ชั่นแสดง Popup แจ้งเตือนการแสดงความคิดเห็น
+    function showCommentPopup() {
+        const popup = document.getElementById('popup-comment');
+        popup.classList.remove('hidden');
+
+        // ปิด Popup เมื่อกดปุ่ม Close
+        document.getElementById('closeCommentPopup').addEventListener('click', () => {
+            popup.classList.add('hidden');
+        });
+
+        // ปิด Popup หลังจาก 3 วินาที
+        setTimeout(() => {
+            popup.classList.add('hidden');
+        }, 3000);
+    }
+
+    // ตรวจสอบค่าคุกกี้ Token
+    const token = getCookie('tksave');
+    console.log('Token in Cookie:', token);  // เพิ่ม log เพื่อตรวจสอบค่าคุกกี้
+
+    const commentForm = document.getElementById('comment-form');
+    const commentInput = document.getElementById('comment-input');
+    const commentsDiv = document.getElementById('comments');
+    const articleId = commentForm.getAttribute('data-articleid'); // แก้ไขตรงนี้
+
+    console.log('Article ID comment:', articleId);
+
+    // เมื่อกดปุ่ม submit
+    commentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // ตรวจสอบหากไม่มี Token ให้แสดง Popup
+        if (!token) {
+            showLoginPopup();
+            return;  // ไม่ทำการส่งข้อมูล
+        }
+
+        const comment = commentInput.value;
+        console.log("รับค่า input Comment", comment)
+
+        // ส่งข้อมูลความคิดเห็นผ่าน API
+        fetch('/api/v2/add/comment/article', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                postId: articleId,
+                comment: comment,
+                userId: token,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Comment added:", data);
+                // แสดง Popup แจ้งเตือนแสดงความคิดเห็นสำเร็จ
+                showCommentPopup();
+
+                // เคลียร์ช่องข้อความหลังจากส่ง
+                commentInput.value = '';
+            })
+            .catch(error => {
+                console.error("Error adding comment:", error);
+            });
+    });
+
+    // โหลดความคิดเห็นที่มีอยู่เมื่อโหลดหน้าเว็บ
+    const loadComments = async () => {
+        const response = await fetch(`/api/v2/article/comments/${articleId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        const comments = await response.json();
+        console.log(comments);
+
+        // อัปเดตจำนวนความคิดเห็นใน <span id="commentsAll">
+        const commentsCount = comments.length;
+        document.getElementById('commentsAll').textContent = `(${commentsCount})`;
+
+        // เช็คว่าไม่มีความคิดเห็น
+        if (comments.length === 0) {
+            commentsDiv.innerHTML = '<p>คุณแสดงความคิดเห็นเป็นคนแรก</p>';
+            return;
+        }
+
+        const checkImageUrl = (url) => {
+            // เช็คว่า URL เริ่มต้นด้วย http:// หรือ https:// หรือไม่
+            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                return url;
+            }
+            // ถ้าไม่ใช่ URL ที่เริ่มต้นด้วย http หรือ https ให้ใช้ URL ภายใน
+            return `http://localhost:5000/uploads/profiles/${url}`;
+        };
+
+        comments.forEach(commentData => {
+            const commentItem = document.createElement('div');
+            commentItem.classList.add('comment-item');
+
+            const profleUrl = checkImageUrl(commentData.userId.profilePicture || 'https://via.placeholder.com/150');
+
+            // แปลงวันที่ให้เป็นรูปแบบ "21 พ.ย. 2024 เวลา 11:54"
+            const commentDate = new Date(commentData.createdAt);
+
+            // แปลงวันที่ให้เป็น ค.ศ.
+            const formattedDate = new Intl.DateTimeFormat('th-TH', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+            }).format(commentDate);
+            const formattedDateWithCE = formattedDate.replace(/\d{4}/, (year) => parseInt(year) - 543);
+
+            // เวลา
+            const formattedTime = commentDate.toLocaleTimeString('th-TH', {
+                hour: '2-digit',
+                minute: '2-digit',
+            });
+
+            commentItem.innerHTML = `
+                <div class="flex items-start space-x-4">
+                    <!-- ใช้ profile picture ที่ดึงมา -->
+                    <img src="${profleUrl}" alt="${commentData.userId.username}" class="w-12 h-12 rounded-full">
+                    <div class="bg-white p-2 rounded-lg w-full">
+                        <!-- ใช้ username ที่ดึงมา -->
+                        <h3 class="text-sm font-semibold text-gray-800">${commentData.userId.username}</h3>
+                        <!-- แสดงวันที่และเวลา -->
+                        <p class="text-xs text-gray-500 mb-1">${formattedDateWithCE} เวลา ${formattedTime}</p>
+                        <p class="text-gray-700 mb-2">${commentData.comment}</p>
+                    </div>
+                </div>
+                <div class="nested-comments ml-12 mt-4">
+                    <!-- ตัวอย่างความคิดเห็นย่อย -->
+                </div>
+            `;
+
+            commentsDiv.appendChild(commentItem);
+        });
+    };
+
+
+
+    // เรียกใช้ฟังก์ชันโหลดความคิดเห็น
+    loadComments();
+});
+{/* <button class="reply-button text-blue-500 text-sm hover:underline">
+ตอบกลับ
+</button> */}
