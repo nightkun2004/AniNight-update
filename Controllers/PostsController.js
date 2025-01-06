@@ -82,7 +82,8 @@ const getPosts = async (req, res, next) => {
         const templates = {
             th: './th/index',
             en: './home/en/index',
-            jp: './home/jp/index', // เพิ่มตัวเลือกภาษาญี่ปุ่น
+            jp: './home/en/index',
+            Laos: './home/Laos/index',
         };
         const template = templates[lang] || templates.th;
         // console.log(template)

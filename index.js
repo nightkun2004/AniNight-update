@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+const geoip = require('geoip-lite');
 const formatNumber = require("./formats/formatNumber")
 
 
@@ -51,7 +52,7 @@ const CommentRouter = require("./routers/Commentrouter")
 // const TrendingRouter = require("./")
 
 const setLanguage = require("./lib/language")
-app.set("wss", wss); 
+app.set("wss", wss);
 
 app.get('/ads.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './google/ads.txt'));
@@ -97,8 +98,35 @@ app.use((req, res, next) => {
   // รับค่า `header-lang` หรือ path (/th, /en, /jp)
   let lang = req.headers['header-lang'] || req.path.split('/')[1];
 
-  // ตรวจสอบว่า lang มีค่าถูกต้องหรือไม่ (th, en, jp)
-  const supportedLanguages = ['th', 'en', 'jp'];
+  // ดึงข้อมูลจาก IP
+  const ip = req.ip || req.connection.remoteAddress;
+  const geo = geoip.lookup(ip);
+
+  console.log('Geo lookup result:', geo);
+
+  // ถ้ารู้จักประเทศจาก IP
+  if (geo && geo.country) {
+    switch (geo.country) {
+      case 'TH':
+        lang = 'th';
+        break;
+      case 'US':
+        lang = 'en';
+        break;
+      case 'JP':
+        lang = 'jp';
+        break;
+      case 'Laos':  // เปลี่ยนเป็น 'Laos'
+        lang = 'Laos';  // ใช้ 'Laos' แทน 'LA'
+        break;
+      default:
+        lang = browserLang;
+        break;
+    }
+  }
+
+  // ตรวจสอบว่า lang มีค่าถูกต้องหรือไม่ (th, en, jp, Laos)
+  const supportedLanguages = ['th', 'en', 'jp', 'Laos'];
   if (!supportedLanguages.includes(lang)) {
     lang = supportedLanguages.includes(browserLang) ? browserLang : 'th'; // เลือกค่าภาษาของเบราว์เซอร์หากรองรับ
   }
@@ -126,6 +154,7 @@ app.use((req, res, next) => {
 app.set('views', [
   path.join(__dirname, '/client/web/views/th'),
   path.join(__dirname, '/client/web/views/en'),
+  path.join(__dirname, '/client/web/views/Laos'),
   path.join(__dirname, '/views'),
   path.join(__dirname, '/admin/views'),
   path.join(__dirname, '/media/views'),
@@ -190,7 +219,7 @@ app.use("/api/v2", MemeRouter)
 app.use("/api/v2", UploadsRouter)
 app.use("/api/v2", PostsRouter)
 app.use("/api/v2", DashboardRouter)
-app.use("/api/v2",  ApiService)
+app.use("/api/v2", ApiService)
 app.use("/api/v2", channalRouter)
 app.use("/api/v2", SurveyRouter)
 app.use("/api/v2", SurveyRouterCrerate)
