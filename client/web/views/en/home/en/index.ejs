@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Ultimate Anime News Hub | Schedules, Streaming Platforms, and Seasonal Updates | AniNight</title>
+    <meta name="description"
+        content="Stay updated with the latest anime news, explore engaging articles, and check out the anime schedule on AniNight. Whether it's dubbed or subbed anime, you can find it all here.">
+    <meta name="keywords"
+        content="articles, anime news, anime schedule, dubbed anime, manga, anime, online, AniNight, anime night">
+    <meta name="author" content="AniNight Team">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Canonical and SEO Meta -->
+    <link rel="canonical" href="https://ani-night.online">
+    <meta property="og:url" content="https://ani-night.online">
+    <meta property="og:title"
+        content="Your Ultimate Anime News Hub | Schedules, Streaming Platforms, and Seasonal Updates | AniNight">
+    <meta property="og:description"
+        content="Discover the latest anime news, exclusive articles, and updated anime schedules at AniNight! Create content and earn with our tools.">
+    <meta property="og:image" content="https://ani-night.online/annight/home_web.jpg">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="AniNight">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1280">
+    <meta property="og:image:height" content="720">
+
+    <!-- CSS & JS -->
+    <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/index.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/df26bd9708.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+        crossorigin="anonymous"></script>
+     <!-- Google tag (gtag.js) -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-X2HYDKP19Y"></script>
+     <script>
+       window.dataLayer = window.dataLayer || [];
+       function gtag() { dataLayer.push(arguments); }
+       gtag('js', new Date());
+
+       gtag('config', 'G-X2HYDKP19Y');
+     </script>
+     <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Ani Night",
+          "author": "Night เองครับ",
+          "image": "https://ani-night.online/annight/home_web.jpg",
+          "url": "https://ani-night.online/",
+          "description": "Ani Night แหล่งข่าวอนิเมะและบทความเกี่ยวกับอนิเมะญี่ปุ่นที่ครบถ้วนที่สุด พร้อมอัปเดตตารางอนิเมะตอนใหม่และลิงก์อนิเมะที่ได้รับลิขสิทธิ์",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://ani-night.online/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      </script>
+</head>
+
+<body class="bg-gray-100 text-black font-sans">
+    <%- include('./Component/Header') %>
+    <div class="app">
+        <main class="mx-auto max-w-6xl px-4 p-5">
+            <div class="container mx-auto p-4">
+                <div class="bg-white rounded-lg md:mb-12 mb-1 p-4" style="height: auto !important;">
+                    <!-- Index_home -->
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
+                        data-ad-slot="7771171707" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+
+                <section class="max-w-6xl mx-auto mt-6 mb-6 flex flex-col lg:flex-row gap-6">
+                      <!-- Left Side Content with Lazy Loading Images -->
+                    <div class="bg-white p-6 rounded-lg shadow flex-1">
+                        <h2 class="text-xl font-semibold mb-4"> New Update</h2>
+                        <% if (Posts.length> 0 && typeof error === 'undefined') { %>
+                            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <% Posts.slice(0, 10).forEach((post, index)=> { %>
+                                    <%- include('./Component/CardArticle', { post: post, index: index }) %>
+                                        <% }) %>
+                            </section>
+                            <% } else { %>
+                                <p class="text-center text-gray-500">Haven't written any articles yet.</p>
+                         <% } %>
+
+                         <div class="flex justify-center items-center">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
+                              <% if (page> 1) { %>
+                                <a href="/page/<%= page - 1 %>" rel="nofollow"
+                                  class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                                  ก่อนหน้า
+                                </a>
+                                <% } else { %>
+                                  <span
+                                    class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
+                                    ก่อนหน้า
+                                  </span>
+                                  <% } %>
+          
+                                    <% for (let i=1; i <=totalPages; i++) { %>
+                                      <a href="/page/<%= i %>" rel="nofollow"
+                                        class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
+                                        <%= i %>
+                                      </a>
+                                      <% } %>
+          
+                                        <% if (page < totalPages) { %>
+                                          <a href="/page/<%= page + 1 %>" rel="nofollow"
+                                            class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
+                                            ถัดไป
+                                          </a>
+                                          <% } else { %>
+                                            <span
+                                              class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
+                                              ถัดไป
+                                            </span>
+                                            <% } %>
+                            </div>
+                          </div>
+                    </div>
+                       <!-- Right Sidebar with Ads -->
+                        <aside class="bg-white p-6 rounded-lg shadow flex-shrink-0 w-full lg:w-1/3">
+                            <% if (userID) { %>
+                                <form id="logoutForm" action="/api/v2/logout" method="post" class="inline">
+                                  <button
+                                    type="button"
+                                    class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-all duration-200 text-center"
+                                    id="logoutBtn"
+                                  >
+                                    Logout
+                                  </button>
+                                </form>
+                              <% } else {%>
+                                <h3 class="text-lg font-semibold mb-3">Sign Up / Log In</h3>
+                                <p class="text-sm text-gray-600">Sign up to access exclusive articles and stay updated with the latest information.</p>
+                                <div class="flex justify-between mt-4">
+                                  <a href="/auth/login"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">Log In</a>
+                                  <a href="/auth/register"
+                                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition-all duration-200 text-center">Sign Up</a>
+                                </div>
+                                <hr class="mt-5 mb-4">                                
+                            <% } %>
+
+                            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                            
+                                <h3 class="text-lg font-semibold mb-3">Advertisement</h3>
+                                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
+                                    crossorigin="anonymous"></script>
+                                <!-- right_home -->
+                                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261" data-ad-slot="3059776200"
+                                    data-ad-format="auto" data-full-width-responsive="true"></ins>
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                            </div>
+
+                            <div class="mb-6">
+                                <h3 class="text-lg font-semibold mb-3">Follow Us</h3>
+                                <p class="text-sm text-gray-600">Follow us on our platforms below.</p>
+                                <div class="flex justify-between mt-4">
+                                    <a href="https://web.facebook.com/AniNightOffice.net" target="_blank"
+                                        class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">Facebook</a>
+                                </div>
+                            
+                                <hr class="mt-5 mb-4">
+                            </div>
+                        </aside>
+                </section>
+            </div>
+        </main>
+
+        <%- include('./Component/Footer') %>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div id="logoutPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-80">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Logout</h2>
+            <p class="text-gray-600 mb-6">Are you sure you want to log out?</p>
+            <div class="flex justify-end space-x-4">
+                <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-all"
+                    id="cancelBtn">
+                    Cancel
+                </button>
+                <button type="submit" form="logoutForm"
+                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenuHeader() {
+            const menu = document.querySelector('.card_menus');
+            menu.classList.toggle('hidden');
+        }
+
+        window.addEventListener('click', function (e) {
+            const menu = document.querySelector('.card_menus');
+            const button = document.querySelector('button'); // ปุ่มที่ใช้ toggle
+
+            if (!menu.contains(e.target) && e.target !== button && !button.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // scllo add shadow
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('header');
+            if (window.scrollY > 0) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutPopup = document.getElementById('logoutPopup');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            // Show the popup when logout button is clicked
+            logoutBtn?.addEventListener('click', () => {
+                logoutPopup.classList.remove('hidden');
+            });
+
+            // Hide the popup when cancel button is clicked
+            cancelBtn?.addEventListener('click', () => {
+                logoutPopup.classList.add('hidden');
+            });
+
+            // Close popup if clicked outside the popup content
+            logoutPopup?.addEventListener('click', (event) => {
+                if (event.target === logoutPopup) {
+                    logoutPopup.classList.add('hidden');
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const translateButtons = document.querySelectorAll('.translate-btn');
+
+    translateButtons.forEach(button => {
+        button.addEventListener('click', async function () {
+            const postId = button.getAttribute('data-post-id');
+            const lang = 'en'; // ตัวอย่างการแปลเป็นภาษาอังกฤษ
+            const popup = document.getElementById(`translate-popup-${postId}`);
+            const translatedTitleElement = document.getElementById(`translated-title-${postId}`);
+            const translatedContentElement = document.getElementById(`translated-content-${postId}`);
+            const loadingSpinner = document.getElementById(`loading-spinner-${postId}`);
+
+            // แสดง popup
+            popup.classList.remove('hidden');
+            popup.classList.add('flex');
+            translatedContentElement.innerHTML = ""; // รีเซ็ตเนื้อหาเดิม
+            loadingSpinner.style.display = "block"; // แสดงโลโก้แปล
+
+            try {
+                // ส่งคำขอแปลไปยังเซิร์ฟเวอร์
+                const response = await fetch(`/api/v2/translate/${postId}?lang=${lang}`, { method: 'GET' });
+                const data = await response.json();
+
+                // ซ่อน loading spinner เมื่อแปลเสร็จ
+                loadingSpinner.style.display = "none";
+
+                // แสดงผลการแปล
+                const translatedTitle = data.translatedTitle;
+                translatedContentElement.innerHTML = `<p>${translatedTitle}</p>`; // แสดงข้อความแปล
+            } catch (error) {
+                console.error('Error translating title:', error);
+                alert('Unable to translate title');
+                loadingSpinner.style.display = "none"; // ซ่อน spinner ถ้าเกิดข้อผิดพลาด
+            }
+        });
+    });
+});
+
+// ฟังก์ชั่นสำหรับปิดป็อปอัพ
+function closePopup(postId) {
+    const popup = document.getElementById(`translate-popup-${postId}`);
+    popup.classList.add('hidden');
+    popup.classList.remove('flex');
+}
+
+
+        // ฟังก์ชั่นสำหรับจัดรูปแบบการแปล
+        function formatTranslatedTitle(translatedTitle) {
+            // แบ่งข้อความแปลเป็นประโยคหรือหัวข้อย่อย
+            const sentences = translatedTitle.split('\n');
+            return sentences.map(sentence => {
+                return `<p class="mb-2">${sentence}</p>`; // จัดข้อความแปลให้แสดงในแต่ละบรรทัด
+            }).join('');
+        }
+
+        // ฟังก์ชั่นสำหรับปิดป็อปอัพ
+        function closePopup(postId) {
+            const popup = document.getElementById(`translate-popup-${postId}`);
+            popup.classList.add('hidden');
+            popup.classList.remove('flex');
+        }
+
+
+    </script>
+    <script src="/js/script.js" defer></script>
+</body>
+
+</html>

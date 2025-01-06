@@ -91,19 +91,23 @@ app.use((req, res, next) => {
 
 
 app.use((req, res, next) => {
-  // รับค่า `header-lang` จาก header ของ request
+  // รับค่า `Accept-Language` จาก header
+  const browserLang = req.headers['accept-language']?.split(',')[0].split('-')[0] || 'th';
+
+  // รับค่า `header-lang` หรือ path (/th, /en, /jp)
   let lang = req.headers['header-lang'] || req.path.split('/')[1];
 
   // ตรวจสอบว่า lang มีค่าถูกต้องหรือไม่ (th, en, jp)
   const supportedLanguages = ['th', 'en', 'jp'];
   if (!supportedLanguages.includes(lang)) {
-    lang = 'th'; // ค่าเริ่มต้นคือภาษาไทย
+    lang = supportedLanguages.includes(browserLang) ? browserLang : 'th'; // เลือกค่าภาษาของเบราว์เซอร์หากรองรับ
   }
 
-  // กำหนดค่า res.locals.lang เพื่อให้ EJS ใช้
+  // กำหนดค่า res.locals.lang
   res.locals.lang = lang;
   next();
 });
+
 
 
 
@@ -121,6 +125,7 @@ app.use((req, res, next) => {
 
 app.set('views', [
   path.join(__dirname, '/client/web/views/th'),
+  path.join(__dirname, '/client/web/views/en'),
   path.join(__dirname, '/views'),
   path.join(__dirname, '/admin/views'),
   path.join(__dirname, '/media/views'),
@@ -144,7 +149,7 @@ app.locals.number2 = 500;
 app.locals.number3 = 1500;
 app.locals.number4 = 1200000;
 app.locals.formatNumber = formatNumber;
-app.use(setLanguage);
+app.use('/:lang', setLanguage);
 app.use(bodyParser.json({ limit: '1000mb' }));
 app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(express.json({ limit: '1000mb' }));

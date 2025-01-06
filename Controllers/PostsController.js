@@ -4,6 +4,7 @@ const Anime = require("../models/AnimeModel")
 const Play = require("../models/PlayModel")
 const { getRecommendations } = require("../lib/generateRecommen")
 const { getRecommendedContent } = require("../Controllers/RecommenController")
+const { getAiResponseForTranslation } = require("../services/aiService")
 
 const checkScheduledArticles = async () => {
     try {
@@ -22,16 +23,38 @@ const checkScheduledArticles = async () => {
     }
 };
 
-setInterval(checkScheduledArticles, 60000); // ตั้งเวลาให้ทำงานทุกๆ 1 นาที (60000 มิลลิวินาที)
+setInterval(checkScheduledArticles, 60000);
+
+const getTranslation = async (req, res) => {
+    const postId = req.params.postId;
+    const lang = req.query.lang; // ภาษาเป้าหมาย (เช่น 'en')
+
+    try {
+        // ดึงข้อมูลบทความจากฐานข้อมูล
+        const post = await Article.findById(postId);
+        if (!post) {
+            return res.status(404).json({ error: 'บทความไม่พบ' });
+        }
+
+        // เรียกฟังก์ชันแปล
+        const translatedTitle = await getAiResponseForTranslation(post.title, lang);
+
+        // ส่งผลลัพธ์การแปลกลับ
+        res.json({ translatedTitle });
+    } catch (error) {
+        console.error('Error in translation API:', error);
+        res.status(500).json({ error: 'เกิดข้อผิดพลาดในการแปล' });
+    }
+}
 
 // ============================= get SINGLE POST
 // HOME PAGE MAIN
-const getPosts =  async (req, res, next) => {
-    const userID = req.session.userlogin; 
-    const usertoken = userID?.user?._id; 
-    const lang = res.locals.lang; 
+const getPosts = async (req, res, next) => {
+    const userID = req.session.userlogin;
+    const usertoken = userID?.user?._id;
+    const lang = res.locals.lang;
     const page = parseInt(req.params.page) || 1;
-    const limit = 15; 
+    const limit = 15;
 
     try {
         const Posts = await Article.find()
@@ -53,9 +76,17 @@ const getPosts =  async (req, res, next) => {
         const Animelists = await Anime.find()
             .sort({ createdAt: -1 })
             .exec();
-        const Nextseason = await Anime.find({ year: 2025, season: "Winter" }).sort({ createdAt: -1 }).exec(); 
+        const Nextseason = await Anime.find({ year: 2025, season: "Winter" }).sort({ createdAt: -1 }).exec();
 
-        const template = lang === 'th_TH' ? './th/index' : './th/index';
+        // กำหนดเทมเพลตตามภาษา
+        const templates = {
+            th: './th/index',
+            en: './home/en/index',
+            jp: './home/jp/index', // เพิ่มตัวเลือกภาษาญี่ปุ่น
+        };
+        const template = templates[lang] || templates.th;
+        // console.log(template)
+        // แปลหัวข้อบทความตามภาษาที่เลือก
 
         let recommendedContent = [];
         if (userID) {
@@ -107,5 +138,6 @@ const getAPINextdoraemon = async (req, res, next) => {
 
 module.exports = {
     getPosts,
+    getTranslation,
     getAPINextdoraemon
 }

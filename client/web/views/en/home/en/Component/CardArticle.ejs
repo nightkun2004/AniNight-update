@@ -1,0 +1,102 @@
+<% if (post.published) { %>
+    <article data-articleid="<%= post._id %>"
+        class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 hover:bg-blue-400 hover:text-white cursor-pointer">
+        <% let thumbnail=post.thumbnail.startsWith('http') ? post.thumbnail : '/uploads/thumbnails/' + (post.thumbnail
+            || 'default.png' ); %>
+            <picture class="lazyload relative">
+                <a href="/read/<%= post.urlslug %>">
+                    <!-- ขนาดภาพสำหรับหน้าจอเล็ก -->
+                    <source media="(max-width: 640px)" data-srcset="<%= thumbnail %>?w=640" />
+                    <!-- ขนาดภาพสำหรับหน้าจอขนาดกลาง -->
+                    <source media="(max-width: 1024px)" data-srcset="<%= thumbnail %>?w=1024" />
+                    <!-- ขนาดภาพสำหรับหน้าจอขนาดใหญ่ -->
+                    <source media="(min-width: 1025px)" data-srcset="<%= thumbnail %>?w=1270" />
+                    <!-- Placeholder และ fallback image -->
+                    <img class="lazyload w-full h-auto max-h-96 object-cover  shadow-lg" data-src="<%= thumbnail %>"
+                        alt="<%= post.title %>" src="https://via.placeholder.com/1270x720" loading="lazy" />
+                </a>
+
+                <!-- view count -->
+                <div class="absolute top-0 left-0 p-2 bg-blue-500 text-white rounded-br-lg">
+                    <i class="far fa-eye"></i>
+                    <%= formatNumber(post.views) %>
+                </div>
+            </picture>
+
+
+            <div class="p-6">
+                <div class="flex items-center space-x-2 mb-2">
+                    <% const maxTags=3; %>
+                        <% post.tags.slice(0, 3).forEach(tag=> { %>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm line-clamp-1">
+                                <a href="/search?q=<%= tag %>" class="hover:text-blue-500">
+                                    <%= tag %>
+                                </a>
+                            </span>
+                            <% }) %>
+                                <% if (post.tags.length> maxTags) { %>
+                                    <span class="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-sm">
+                                        +<%= post.tags.length - maxTags %>
+                                    </span>
+                                    <% } %>
+                </div>
+                <h2 class="text-xl font-bold mb-2 line-clamp-2">
+                    <a href="/read/<%= post.urlslug %>" class="hover:text-blue-500">
+                        <%= post.title %>
+                    </a>
+                </h2>
+                <!-- ปุ่มแปล -->
+                <button class="translate-btn bg-green-400 w-full p-2 rounded-lg mb-6 text-white hover:bg-green-500"
+                    data-post-id="<%= post._id %>">Translate</button>
+
+
+
+
+                <% if (post.creator.id && post.creator.id.profilePicture) { %>
+                    <% let profilePic=post.creator.id.profilePicture.startsWith('http') ? post.creator.id.profilePicture
+                        : '/uploads/profiles/' + (post.creator.id.profilePicture || 'default.png' ); %>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <a href="/editor/<%= post.creator.id.username %>">
+                                    <img src="<%= profilePic %>" alt="<%= post.creator.id.username %>"
+                                        class="w-8 h-8 rounded-full">
+                                </a>
+                                <span class="text-sm text-gray-600">
+                                    <a href="/editor/<%= post.creator.id.username %>">
+                                        <%= post.creator.id.username %>
+                                    </a>
+                                </span>
+                            </div>
+                            <span id="datae-time" class="text-sm text-gray-500">
+                                <%= moment(post.createdAt).locale('th').fromNow() %>
+                            </span>
+
+                        </div>
+                        <span id="read-time" class="text-sm text-gray-500"></span>
+                        <% } else { %>
+                            <p class="text-gray-600 text-sm">โพสต์นี้ไม่มีผู้สร้าง</p>
+                            <% } %>
+            </div>
+    </article>
+
+    <% } %>
+
+
+<!-- Popup แปล -->
+<div id="translate-popup-<%= post._id %>"
+    class="popup-container fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+   <div class="popup-content bg-white p-6 rounded-lg text-center max-w-lg w-full">
+       <!-- Loading Spinner -->
+       <div id="loading-spinner-<%= post._id %>" class="loading-spinner mb-4">Translating...</div>
+
+       <!-- แสดงผลการแปล -->
+       <div id="translated-title-<%= post._id %>">
+           <!-- เพิ่มชื่อผู้ช่วยก่อนข้อความแปล -->
+           <p class="font-semibold text-lg text-gray-800">Reo's assistant:</p>
+           <div id="translated-content-<%= post._id %>" class="text-gray-700 mt-2"></div> <!-- แสดงข้อความแปลที่นี่ -->
+       </div>
+
+       <button class="close-popup bg-red-500 text-white p-2 rounded-lg mt-4 hover:bg-red-600"
+               onclick="closePopup('<%= post._id %>')">Close</button>
+   </div>
+</div>
