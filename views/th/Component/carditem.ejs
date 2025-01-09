@@ -11,11 +11,13 @@
                 <source media="(min-width: 1025px)" data-srcset="<%= thumbnail %>?w=1270" />
                 <!-- Placeholder และ fallback image -->
                 <img 
-                    class="lazyload w-full h-auto max-h-96 object-cover  shadow-lg" 
+                    class="lazyload w-full h-auto max-h-96 object-cover shadow-lg" 
                     data-src="<%= thumbnail %>" 
                     alt="<%= post.title %>" 
                     src="https://via.placeholder.com/1270x720" 
                     loading="lazy" 
+                    width="1270" 
+                    height="720"
                 />
             </a>
         
@@ -24,6 +26,7 @@
                 <i class="far fa-eye"></i> <%= formatNumber(post.views) %>
             </div>
         </picture>
+        
         
 
         <div class="p-6">

@@ -60,7 +60,7 @@ const addViewToArticle = async (articleId, userId) => {
 // console.log(`อีเมลถูกส่งไปยัง ${user.email}`);
 
 // ============================= get SINGLE POST
-// GET : /api/posts
+// GET : /api/posts 
 const getRead = async (req, res, next) => {
     const { urlslug } = req.params;
     const lang = res.locals.lang;
@@ -119,8 +119,8 @@ const getRead = async (req, res, next) => {
 
         let adFrequency = 3; // แทรกโฆษณาทุก 3 ย่อหน้า
         let bannerHTML = `
-    <div class="ad-banner bg-white rounded-lg shadow-lg my-6 mx-auto mb-6 mt-6 w-full max-w-[728px]">
-        <p class="text-center text-sm text-gray-500 mb-2">ได้รับคำสนับสนุน</p>
+    <div class="ad-banner bg-white rounded-lg shadow-lg my-6 mx-auto mb-6 p-4 mt-6 w-full max-w-[728px]">
+        <p class="text-center text-sm text-gray-500 mb-2">ได้รับการสนับสนุน</p>
         <ins class="adsbygoogle"
             style="display:block; text-align:center;"
             data-ad-layout="in-article"
@@ -143,6 +143,19 @@ const getRead = async (req, res, next) => {
         // รวมเนื้อหากลับเป็น HTML
         let newContent = contentArray.join('</p>');
 
+        function stripHtmlTags(html) {
+            // ลบแท็ก HTML ทั้งหมด
+            let text = html.replace(/<[^>]*>?/gm, '');
+
+            // ลบอักขระพิเศษ HTML เช่น &nbsp; &amp; ฯลฯ
+            text = text.replace(/&nbsp;/g, ' '); // แทน &nbsp; ด้วยช่องว่าง
+            text = text.replace(/&[a-zA-Z]+;/g, ''); // ลบอักขระพิเศษ HTML ที่เหลือ
+
+            return text.trim(); // ตัดช่องว่างส่วนเกินที่หัวท้าย
+        }
+        const descriptionContent = stripHtmlTags(post.content);
+        // console.log(descriptionContent)
+
         const baseURL = `${req.protocol}://${req.get('host')}`;
         const fullURL = `${baseURL}/read/${post.urlslug}`;
 
@@ -156,7 +169,8 @@ const getRead = async (req, res, next) => {
             translations: req.translations,
             lang,
             newContent: newContent,
-            fullURL
+            fullURL,
+            descriptionContent
         });
     } catch (error) {
         const errorMessage = error.message || 'Internal Server Error';

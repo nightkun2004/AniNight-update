@@ -9,7 +9,7 @@ function previewImage(input, previewId, coverTextId) {
         reader.onload = function (e) {
             preview.src = e.target.result;
             preview.style.display = 'block';
-            coverText.style.display = 'none'; 
+            coverText.style.display = 'none';
         }
 
         reader.readAsDataURL(file);
@@ -31,7 +31,7 @@ function previewImages(input) {
         img.style.height = 'auto';
         img.style.marginBottom = '10px';
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             img.src = e.target.result;
         }
 
@@ -53,47 +53,52 @@ const example_image_upload_handler = (blobInfo, progress) => {
             body: formData,
             credentials: 'same-origin' // หรือ 'include' หากต้องการส่ง cookies
         })
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 403) {
-                    reject({ message: 'HTTP Error: ' + response.status, remove: true });
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        reject({ message: 'HTTP Error: ' + response.status, remove: true });
+                        return;
+                    }
+                    reject('HTTP Error: ' + response.status);
+                }
+
+                return response.json();
+            })
+            .then(json => {
+                // ตรวจสอบว่ามี location หรือไม่
+                if (!json || typeof json.src !== 'string') {
+                    reject('Invalid JSON: ' + JSON.stringify(json));
                     return;
                 }
-                reject('HTTP Error: ' + response.status);
-            }
 
-            return response.json();
-        })
-        .then(json => {
-            // ตรวจสอบว่ามี location หรือไม่
-            if (!json || typeof json.src !== 'string') {
-                reject('Invalid JSON: ' + JSON.stringify(json));
-                return;
-            }
-
-            resolve(json.src); // ส่ง URL กลับไปยัง TinyMCE
-        })
-        .catch(error => {
-            reject('Image upload failed: ' + error.message);
-        });
+                resolve(json.src); // ส่ง URL กลับไปยัง TinyMCE
+            })
+            .catch(error => {
+                reject('Image upload failed: ' + error.message);
+            });
     });
 };
 
 
-// Initialize editor
 tinymce.init({
     selector: '#editor',
-    height: 500,
+    height: 800,
     plugins: 'link image media lists',
     toolbar: 'undo redo | image | formatselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright | bullist numlist | link image media | removeformat',
-    menubar: false,  // ซ่อนเมนูบาร์
+    menubar: false, // ซ่อนเมนูบาร์
     setup: function (editor) {
         editor.on('change', function () {
-            var content = editor.getContent();
-            document.getElementById('content').value = content;  // อัพเดทค่าใน input hidden
+            var content = editor.getContent(); // ดึงข้อมูลจาก TinyMCE editor
+            document.getElementById('content').value = content; // อัพเดทค่าใน input hidden
+            const previewElement = document.getElementById('preview-article-Demo');
+            if (previewElement) {
+                previewElement.innerHTML = content; // อัพเดทส่วนแสดงตัวอย่าง
+            } else {
+                console.error("Preview element not found");
+            }
         });
     },
-    images_upload_handler: example_image_upload_handler 
+    images_upload_handler: example_image_upload_handler
 });
 
 function selectLocalImage() {
@@ -112,14 +117,14 @@ function selectLocalImage() {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(result => {
-                const range = quill.getSelection();
-                quill.insertEmbed(range.index, 'image', result.url);
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-            });
+                .then(response => response.json())
+                .then(result => {
+                    const range = quill.getSelection();
+                    quill.insertEmbed(range.index, 'image', result.url);
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                });
         }
     };
 }

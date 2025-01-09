@@ -102,8 +102,6 @@ app.use((req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
   const geo = geoip.lookup(ip);
 
-  console.log('Geo lookup result:', geo);
-
   // ถ้ารู้จักประเทศจาก IP
   if (geo && geo.country) {
     switch (geo.country) {
@@ -116,8 +114,8 @@ app.use((req, res, next) => {
       case 'JP':
         lang = 'jp';
         break;
-      case 'Laos':  // เปลี่ยนเป็น 'Laos'
-        lang = 'Laos';  // ใช้ 'Laos' แทน 'LA'
+      case 'Laos':
+        lang = 'Laos';
         break;
       default:
         lang = browserLang;

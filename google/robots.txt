@@ -1,6 +1,9 @@
 User-agent: *
-Disallow: /?page=
+Disallow: /
 Disallow: /dashboard
 Disallow: /cgi-bin/
 
 Sitemap: https://ani-night.online/sitemap.xml
+Sitemap: https://ani-night.online/schedule/anime
+Sitemap: https://ani-night.online/animes/sitemap.xml
+Sitemap: https://ani-night.online/articles/sitemap.xml
