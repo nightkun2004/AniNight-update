@@ -177,9 +177,7 @@ app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(express.json({ limit: '1000mb' }));
 app.use(express.urlencoded({ limit: '1000mb', extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: '1d',
-}));
+app.use(express.static('public', { etag: false })); 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(session({
