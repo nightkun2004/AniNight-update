@@ -54,12 +54,6 @@ const CommentRouter = require("./routers/Commentrouter")
 const setLanguage = require("./lib/language")
 app.set("wss", wss);
 
-app.get('/ads.txt', (req, res) => {
-  res.sendFile(path.join(__dirname, './google/ads.txt'));
-});
-app.get('/robots.txt', (req, res) => {
-  res.sendFile(path.join(__dirname, './google/robots.txt'));
-});
 
 app.post("/add-comment", (req, res) => {
   addComment(req, res, io); // ส่ง io เข้าใน Controller
@@ -156,7 +150,8 @@ app.set('views', [
   path.join(__dirname, '/views'),
   path.join(__dirname, '/admin/views'),
   path.join(__dirname, '/media/views'),
-  path.join(__dirname, '/animeschedule/views')
+  path.join(__dirname, '/animeschedule/views'),
+  path.join(__dirname, '/shots/views')
 ]);
 app.set('view engine', 'ejs');
 app.use(fileUpload({
