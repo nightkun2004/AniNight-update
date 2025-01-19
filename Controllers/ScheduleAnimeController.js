@@ -156,10 +156,10 @@ const getAnimeScheduleTimeline = async (req, res) => {
                 path: 'animes.anime',
                 model: 'Anime',
             })
+            // .sort({ createdAt: -1 })
+            .limit(5)
             .exec();
 
-        // ตรวจสอบข้อมูลที่ได้จากฐานข้อมูล
-        // console.log('Schedules:', JSON.stringify(schedules, null, 2));
 
         const currentDate = moment().tz('Asia/Bangkok').format('DD/MM');
 
