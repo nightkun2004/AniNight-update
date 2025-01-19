@@ -44,6 +44,8 @@ const CreateArticle = async (req, res, next) => {
             return res.status(400).json({ error: "ไม่พบรูปภาพ" });
         }
 
+        // console.log('reCAPTCHA Response:', recaptchaRespons);
+
         // ตรวจสอบการทำงานของ Google reCAPTCHA
         const recaptchaVerification = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
             params: {
@@ -51,6 +53,8 @@ const CreateArticle = async (req, res, next) => {
                 response: recaptchaRespons,
             }
         });
+
+        // console.log('reCAPTCHA Verification Result:', recaptchaVerification.data);
 
         // หากการตรวจสอบไม่ผ่าน
         if (!recaptchaVerification.data.success) {

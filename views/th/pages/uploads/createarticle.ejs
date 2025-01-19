@@ -324,6 +324,8 @@
                     </div>
                     <div class="mb-4">
                         <div class="g-recaptcha" data-sitekey="<%= siteKey %>"></div>
+                        <!-- Hidden field to capture the reCAPTCHA response -->
+                        <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse" value="">
                     </div>
                     <button type="submit"
                         class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -429,7 +431,18 @@
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
+                // ดึงค่าจาก reCAPTCHA ก่อนที่จะใช้
+                const recaptchaResponse = grecaptcha.getResponse();
+
+                // ตรวจสอบว่ามีค่า reCAPTCHA หรือไม่
+                if (!recaptchaResponse) {
+                    alert("กรุณายืนยันแคปซ่าก่อน");
+                    return;
+                }
+
                 const formData = new FormData(form);
+                formData.append('g-recaptcha-response', recaptchaResponse); 
+
                 const xhr = new XMLHttpRequest();
 
                 xhr.open('POST', form.action, true);
@@ -472,7 +485,6 @@
                     }
                 };
 
-
                 xhr.onerror = () => {
                     console.error('Upload failed:', xhr.statusText || 'Unknown error');
                     statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การอัปโหลดหรือส่งล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`; // เปลี่ยนเป็น HTML พร้อมสี
@@ -481,7 +493,6 @@
                 // ส่งข้อมูลฟอร์ม
                 xhr.send(formData);
             });
-
 
 
         </script>
