@@ -156,7 +156,7 @@ const getAnimeScheduleTimeline = async (req, res) => {
                 path: 'animes.anime',
                 model: 'Anime',
             })
-            // .sort({ createdAt: -1 })
+            .sort({ createdAt: -1 })
             .limit(5)
             .exec();
 
