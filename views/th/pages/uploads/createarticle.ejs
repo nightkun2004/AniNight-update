@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th_TH">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,30 +12,33 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/df26bd9708.js" crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body::-webkit-scrollbar {
-           display: none;
-       }
+            display: none;
+        }
 
-       section {
-           overflow-y: auto;
-           overflow-x: hidden;
-       }
+        section {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
 
-       input[type="checkbox"] {
+        input[type="checkbox"] {
             appearance: none;
             -webkit-appearance: none;
             width: 20px;
             height: 20px;
             border: 2px solid #ccc;
-            border-radius: 50%; /* ทำให้เป็นวงกลม */
+            border-radius: 50%;
+            /* ทำให้เป็นวงกลม */
             outline: none;
             cursor: pointer;
             transition: 0.3s;
         }
 
         input[type="checkbox"]:checked {
-            background-color: #BFECFF; /* สีเมื่อเลือก */
+            background-color: #BFECFF;
+            /* สีเมื่อเลือก */
             border-color: #BFECFF;
         }
 
@@ -50,394 +54,437 @@
         .category-label span:hover {
             background-color: #f0f0f0;
         }
-   </style>
+    </style>
 </head>
+
 <body class="bg-gray-100">
 
     <%- include('../../Component/Header') %>
-    <section class="flex flex-col md:flex-row gap-5 p-2 md:p-5">
-        <!-- Form Section -->
-        <div class="flex-1 md:w-2/3 bg-white p-4 rounded shadow-md">
-            <!-- ข้อความแจ้งเตือน -->
-            <div class="mb-6 mt-4">
-                <% if (typeof message !== 'undefined') { %>
-                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center"><%= message %></div>
-                <% } %>
-                <div id="message" class="message mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center" style="display: none;"></div>
-                <div id="errormessage" class="errormessage mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center" style="display: none;"></div>
-                <% if (typeof error !== 'undefined') { %>
-                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"><%= error %></div>
-                <% } %>
-                <% if (typeof dataprofile !== 'undefined') { %>
-                    <div class="mb-4 bg-gray-100 rounded-lg p-2 text-sky-500 text-center"><%= dataprofile %></div>
-                <% } %>
-            </div>
-    
-            <h1 class="text-2xl font-semibold text-gray-800 mb-6 pr-6">
-                <a href="/<%= userID.user.username %>">
-                    <i class="fa-solid fa-arrow-left"></i> กลับ
-                </a>
-            </h1>
-            
-            <!-- Form Content -->
-            <form id="AddArticle" action="/api/v2/post/article/create" method="post" enctype="multipart/form-data">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="mb-5">
-                        <label for="name_act" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อบทความ</label>
-                        <input type="text" id="title" name="title" class="shadow-sm border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
-                    </div>
-                    <div class="mb-5">
-                        <label for="tags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ใสแท็กเนื้อหาของคุณ</label>
-                        <input type="text" id="tags" name="tags" class="shadow-sm border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
-                        <p class="text-gray-500 text-sm">Tip: ตัวอย่างแท็กที่สมบูรณ์: #9test #anime #ตัวอย่าง #ทดสอบแท็ก</p>
-                    </div>
-                </div> 
-
-                <div class="mb-4">
-                   <label for="content" class="block text-sm font-medium text-gray-700">เนื้อหา</label>
-                   <textarea id="editor" class="mt-1 block w-full h-[300px] md:h-[500px] shadow-sm sm:text-sm border border-gray-300 rounded-md"></textarea>
-                   <textarea class="hidden" id="content" name="content"></textarea>
-               </div>
-
-               <div class="grid grid-cols-2 gap-4">
-                <div class="mb-5">
-                    <label for="thumbnail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่มภาพปกของคุณ</label>
-                    <input id="thumbnail"
-                        class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
-                        type="file" name="thumbnail" accept="image/*" required onchange="previewImage(this)">
-                        <p class="text-gray-600 font-light"> ภาพแนะนำให้เป็น 16:9 ( 1280 x 720 ) เพื่อให้สามารถอ่านได้ง่าย</p>
-                </div>  
-                <div class="mb-5">
-                    <div class="flex">
-                        <div class="flex items-center h-5">
-                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" id="published" name="published"
-                             class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+        <section class="flex flex-col md:flex-row gap-5 p-2 md:p-5">
+            <!-- Form Section -->
+            <div class="flex-1 md:w-2/3 bg-white p-4 rounded shadow-md">
+                <!-- ข้อความแจ้งเตือน -->
+                <div class="mb-6 mt-4">
+                    <% if (typeof message !=='undefined' ) { %>
+                        <div class="mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center">
+                            <%= message %>
                         </div>
-                        <div class="ms-2 text-sm">
-                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
-                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้ หากคุณต้องการเผยแพร่เลยให้ติ้งไว้</p>
+                        <% } %>
+                            <div id="message" class="message mb-4 bg-gray-100 rounded-lg p-2 text-green-500 text-center"
+                                style="display: none;"></div>
+                            <div id="errormessage"
+                                class="errormessage mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center"
+                                style="display: none;"></div>
+                            <% if (typeof error !=='undefined' ) { %>
+                                <div class="mb-4 bg-gray-100 rounded-lg p-2 text-red-500 text-center">
+                                    <%= error %>
+                                </div>
+                                <% } %>
+                                    <% if (typeof dataprofile !=='undefined' ) { %>
+                                        <div class="mb-4 bg-gray-100 rounded-lg p-2 text-sky-500 text-center">
+                                            <%= dataprofile %>
+                                        </div>
+                                        <% } %>
+                </div>
+
+                <h1 class="text-2xl font-semibold text-gray-800 mb-6 pr-6">
+                    <a href="/<%= userID.user.username %>">
+                        <i class="fa-solid fa-arrow-left"></i> กลับ
+                    </a>
+                </h1>
+
+                <!-- Form Content -->
+                <form id="AddArticle" action="/api/v2/post/article/create" method="post" enctype="multipart/form-data">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="mb-5">
+                            <label for="name_act"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อบทความ</label>
+                            <input type="text" id="title" name="title"
+                                class="shadow-sm border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="tags"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ใสแท็กเนื้อหาของคุณ</label>
+                            <input type="text" id="tags" name="tags"
+                                class="shadow-sm border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                            <p class="text-gray-500 text-sm">Tip: ตัวอย่างแท็กที่สมบูรณ์: #9test #anime #ตัวอย่าง
+                                #ทดสอบแท็ก</p>
                         </div>
                     </div>
-                </div> 
-                <div class="mb-5">
-                    <label for="scheduledAt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ตั้งเวลาเผยแพร่</label>
-                    <input type="datetime-local" id="scheduledAt" name="scheduledAt" 
-                           class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
-                    <p class="text-gray-500 text-sm">กำหนดวันที่และเวลาในการเผยแพร่บทความ หากไม่เลือกจะถูกบันทึกเป็นฉบับร่าง</p>
-                </div>
-              </div> 
-              <div class="mb-5">
-                <label for="url_edit">แก้ไข URL</label>
-                <input class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                 type="text" name="urlslug" placeholder="use-hyphens-for-spaces">
-                <p>การแก้ไข URL จะช่วยให้บทความขึ้นคำค้นหาของ Google ได้</p>
-                <ul class="text-sm mt-2">
-                    <li> * ใช้ตัวอักษรภาษาอังกฤษและตัวเลขเท่านั้น</li>
-                    <li> * แทนที่ช่องว่างด้วยเครื่องหมายขีด (-)</li>
-                    <li> * ใช้คำสำคัญที่เกี่ยวข้องกับเนื้อหา</li>
-                    <li> * หลีกเลี่ยงคำซ้ำหรือคำที่ไม่จำเป็น</li>
-                    <li> * ความยาว URL ไม่เกิน 60 ตัวอักษร</li>
-                </ul>
-            </div>
-               
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">หมวดหมู่</label>
-                    <div class="grid grid-cols-2  gap-5 mt-2">
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="อนิเมะ">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">อนิเมะ</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="BL">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">BL</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="GL">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">GL</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="แอ็กชัน">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">แอ็กชัน</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ผจญภัย">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ผจญภัย</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ตลก">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ตลก</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ดราม่า">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ดราม่า</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="แฟนตาซี">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">แฟนตาซี</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="โรแมนติก">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">โรแมนติก</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="สยองขวัญ">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">สยองขวัญ</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ลึกลับ">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ลึกลับ</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ไซไฟ">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ไซไฟ</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ชีวิตประจำวัน">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ชีวิตประจำวัน</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ต่างโลก">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ต่างโลก</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="หุ่นยนต์">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">หุ่นยนต์</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="บันเทิง">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">บันเทิง</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="เพลง">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">เพลง</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="การ์ตูน" >
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">การ์ตูน</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="ข่าวสาร">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ข่าวสาร</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="การท่องเที่ยว">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">การท่องเที่ยว</span>
-                        </label>
-                        <label class="category-label">
-                            <input type="checkbox" name="categories" value="อาหาร">
-                            <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer ">อาหาร</span>
-                        </label>
+
+                    <div class="mb-4">
+                        <label for="content" class="block text-sm font-medium text-gray-700">เนื้อหา</label>
+                        <textarea id="editor"
+                            class="mt-1 block w-full h-[300px] md:h-[500px] shadow-sm sm:text-sm border border-gray-300 rounded-md"></textarea>
+                        <textarea class="hidden" id="content" name="content"></textarea>
                     </div>
-                </div>
-               
-                <!-- <div class="mb-5">
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="mb-5">
+                            <label for="thumbnail"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เพิ่มภาพปกของคุณ</label>
+                            <input id="thumbnail"
+                                class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
+                                type="file" name="thumbnail" accept="image/*" required onchange="previewImage(this)">
+                            <p class="text-gray-600 font-light"> ภาพแนะนำให้เป็น 16:9 ( 1280 x 720 )
+                                เพื่อให้สามารถอ่านได้ง่าย</p>
+                        </div>
+                        <div class="mb-5">
+                            <div class="flex">
+                                <div class="flex items-center h-5">
+                                    <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox"
+                                        id="published" name="published"
+                                        class="w-4 h-4 p-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                </div>
+                                <div class="ms-2 text-sm">
+                                    <label for="helper-checkbox"
+                                        class="font-medium text-gray-900 dark:text-gray-300">เผยแพร่บทความตอนนี้</label>
+                                    <p id="helper-checkbox-text"
+                                        class="text-xs font-normal text-gray-500 dark:text-gray-300">
+                                        หากคุณยังไม่ได้เผยแพร่ คุณไม่ต้องติ้งช่องนี้ หากคุณต้องการเผยแพร่เลยให้ติ้งไว้
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label for="scheduledAt"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ตั้งเวลาเผยแพร่</label>
+                            <input type="datetime-local" id="scheduledAt" name="scheduledAt"
+                                class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                            <p class="text-gray-500 text-sm">กำหนดวันที่และเวลาในการเผยแพร่บทความ
+                                หากไม่เลือกจะถูกบันทึกเป็นฉบับร่าง</p>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label for="url_edit">แก้ไข URL</label>
+                        <input
+                            class="shadow-sm border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            type="text" name="urlslug" placeholder="use-hyphens-for-spaces">
+                        <p>การแก้ไข URL จะช่วยให้บทความขึ้นคำค้นหาของ Google ได้</p>
+                        <ul class="text-sm mt-2">
+                            <li> * ใช้ตัวอักษรภาษาอังกฤษและตัวเลขเท่านั้น</li>
+                            <li> * แทนที่ช่องว่างด้วยเครื่องหมายขีด (-)</li>
+                            <li> * ใช้คำสำคัญที่เกี่ยวข้องกับเนื้อหา</li>
+                            <li> * หลีกเลี่ยงคำซ้ำหรือคำที่ไม่จำเป็น</li>
+                            <li> * ความยาว URL ไม่เกิน 60 ตัวอักษร</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">หมวดหมู่</label>
+                        <div class="grid grid-cols-2  gap-5 mt-2">
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="อนิเมะ">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">อนิเมะ</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="BL">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">BL</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="GL">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">GL</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="แอ็กชัน">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">แอ็กชัน</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ผจญภัย">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ผจญภัย</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ตลก">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ตลก</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ดราม่า">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ดราม่า</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="แฟนตาซี">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">แฟนตาซี</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="โรแมนติก">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">โรแมนติก</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="สยองขวัญ">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">สยองขวัญ</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ลึกลับ">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ลึกลับ</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ไซไฟ">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ไซไฟ</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ชีวิตประจำวัน">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ชีวิตประจำวัน</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ต่างโลก">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ต่างโลก</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="หุ่นยนต์">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">หุ่นยนต์</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="บันเทิง">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">บันเทิง</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="เพลง">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">เพลง</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="การ์ตูน">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">การ์ตูน</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="ข่าวสาร">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">ข่าวสาร</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="การท่องเที่ยว">
+                                <span
+                                    class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer">การท่องเที่ยว</span>
+                            </label>
+                            <label class="category-label">
+                                <input type="checkbox" name="categories" value="อาหาร">
+                                <span class="px-3 py-1 rounded-full border border-gray-300 cursor-pointer ">อาหาร</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- <div class="mb-5">
                     <label for="images" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ภาพประกอบ</label>
                     <input type="file"
                         class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-b-50 dark:text-gray-400 focus:outline-none dark:bg-blue-400  dark:border-gray-600 dark:placeholder-blue-400"
                         id="images" name="images" multiple accept="image/*" onchange="previewImages(this)">
                 </div>
-     --> 
-                
-        </div>
-    
-        <!-- ตัวอย่าง Section -->
-        <div class="w-full md:w-1/3 bg-white p-4 rounded shadow-md">
-            <div id="previewContainer" class="block border rounded-lg p-5">
-                <!-- ตัวอย่างโพสต์ -->
-                <a href="javascript:void(0)" class="block">
-                    <!-- ใช้ aspect-w-16 และ aspect-h-9 เพื่อให้อัตราส่วนเป็น 16:9 -->
-                    <div class="relative aspect-w-16 aspect-h-9">
-                        <img id="previewThumbnail" src="" alt="ตัวอย่างชื่อโพสต์" class="w-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex items-center mt-2" id="previewCreatorInfo">
-                        <% if (userID.user.profilePicture) { %>
-                            <% if (userID.user.profilePicture.startsWith('http')) { %>
-                                <img id="previewCreatorImage" src="<%= userID.user.profilePicture %>" class="w-9 h-9 rounded-full" alt="Profile Picture">
-                            <% } else { %>
-                                <img id="previewCreatorImage" src="/uploads/profiles/<%= userID.user.profilePicture %>"class="w-9 h-9 rounded-full" alt="Profile Picture">
-                            <% } %>
-                        <% } %>
-                        <div class="ml-3">
-                            <h2 id="previewTitle" class="previewTitle text-sm font-semibold text-black-color dark:text-black-color line-clamp-2">
-                                ตัวอย่างชื่อโพสต์
-                            </h2>
-                            <p id="previewUsername" class="text-xs text-secondary-color"><%= userID.user.username %></p>
-                            <p id="previewStats" class="text-xs text-secondary-color">รอการเผยแพร่</p>
-                        </div>
-                    </div>
-                </a>
-                <div class="mt-3">
-                    <div id="statusBar" class="bg-gray-200 rounded-md h-2">
-                      <div id="progressBar" class="bg-blue-500 h-2 rounded-md" style="width: 0%;"></div>
-                    </div>
-                    <p id="statusText" class="text-sm font-bold text-gray-600 mt-1"></p>
-              </div>
-                <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    ส่งบทความ</button> 
-            </form>
-            <button onclick="openDemoArticle('article-popup')" class="text-white w-full bg-orange-700 hover:bg-orange-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-5">ดูตัวอย่างบทความ</button>
+     -->
+
             </div>
-            
-            <div class="mt-5 mb-5">
-                <h3>ตัวอย่างภาพประกอบที่คุณเลือก</h3>
-                <div class="bg-gray-100 rounded relative w-full h-[320px] md:h-[230px]">
-                    <p id="cover-text" class="absolute top-0 left-0 w-full h-full flex items-center justify-center text-gray-500">ภาพประกอบ</p>
-                    <div id="previewimages" class="absolute inset-0 w-full h-full object-cover"></div>
+
+            <!-- ตัวอย่าง Section -->
+            <div class="w-full md:w-1/3 bg-white p-4 rounded shadow-md">
+                <div id="previewContainer" class="block border rounded-lg p-5">
+                    <!-- ตัวอย่างโพสต์ -->
+                    <a href="javascript:void(0)" class="block">
+                        <!-- ใช้ aspect-w-16 และ aspect-h-9 เพื่อให้อัตราส่วนเป็น 16:9 -->
+                        <div class="relative aspect-w-16 aspect-h-9">
+                            <img id="previewThumbnail" src="" alt="ตัวอย่างชื่อโพสต์"
+                                class="w-full object-cover rounded-lg">
+                        </div>
+                        <div class="flex items-center mt-2" id="previewCreatorInfo">
+                            <% if (userID.user.profilePicture) { %>
+                                <% if (userID.user.profilePicture.startsWith('http')) { %>
+                                    <img id="previewCreatorImage" src="<%= userID.user.profilePicture %>"
+                                        class="w-9 h-9 rounded-full" alt="Profile Picture">
+                                    <% } else { %>
+                                        <img id="previewCreatorImage"
+                                            src="/uploads/profiles/<%= userID.user.profilePicture %>"
+                                            class="w-9 h-9 rounded-full" alt="Profile Picture">
+                                        <% } %>
+                                            <% } %>
+                                                <div class="ml-3">
+                                                    <h2 id="previewTitle"
+                                                        class="previewTitle text-sm font-semibold text-black-color dark:text-black-color line-clamp-2">
+                                                        ตัวอย่างชื่อโพสต์
+                                                    </h2>
+                                                    <p id="previewUsername" class="text-xs text-secondary-color">
+                                                        <%= userID.user.username %>
+                                                    </p>
+                                                    <p id="previewStats" class="text-xs text-secondary-color">
+                                                        รอการเผยแพร่</p>
+                                                </div>
+                        </div>
+                    </a>
+                    <div class="mt-3">
+                        <div id="statusBar" class="bg-gray-200 rounded-md h-2">
+                            <div id="progressBar" class="bg-blue-500 h-2 rounded-md" style="width: 0%;"></div>
+                        </div>
+                        <p id="statusText" class="text-sm font-bold text-gray-600 mt-1"></p>
+                    </div>
+                    <div class="mb-4">
+                        <div class="g-recaptcha" data-sitekey="<%= siteKey %>"></div>
+                    </div>
+                    <button type="submit"
+                        class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        ส่งบทความ</button>
+                    </form>
+                    <button onclick="openDemoArticle('article-popup')"
+                        class="text-white w-full bg-orange-700 hover:bg-orange-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-5">ดูตัวอย่างบทความ</button>
+                </div>
+
+                <div class="mt-5 mb-5">
+                    <h3>ตัวอย่างภาพประกอบที่คุณเลือก</h3>
+                    <div class="bg-gray-100 rounded relative w-full h-[320px] md:h-[230px]">
+                        <p id="cover-text"
+                            class="absolute top-0 left-0 w-full h-full flex items-center justify-center text-gray-500">
+                            ภาพประกอบ</p>
+                        <div id="previewimages" class="absolute inset-0 w-full h-full object-cover"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popup Article -->
+        <div id="article-popup"
+            class="popup-container fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="popup-content bg-white p-6 rounded-lg shadow-lg text-left max-w-lg w-full">
+
+                <!-- Article Header -->
+                <h2 class="previewTitle text-xl font-bold text-gray-800 mb-4">ตัวอย่างบทความ</h2>
+
+                <!-- Article Content -->
+                <div class="article-content text-gray-700 mb-6 max-h-96 w-full overflow-y-auto">
+                    <div id="preview-article-Demo">ตัวอย่างบทความจะแสดงที่นี่</div>
+                </div>
+
+
+                <!-- Footer Actions -->
+                <div class="popup-footer flex justify-end gap-4">
+                    <button class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                        onclick="closePopup('article-popup')">ปิด</button>
                 </div>
             </div>
         </div>
-    </section>
 
-<!-- Popup Article -->
-<div id="article-popup" class="popup-container fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="popup-content bg-white p-6 rounded-lg shadow-lg text-left max-w-lg w-full">
-
-        <!-- Article Header -->
-        <h2 class="previewTitle text-xl font-bold text-gray-800 mb-4">ตัวอย่างบทความ</h2>
-
-        <!-- Article Content -->
-        <div class="article-content text-gray-700 mb-6 max-h-96 w-full overflow-y-auto">
-            <div id="preview-article-Demo">ตัวอย่างบทความจะแสดงที่นี่</div>
-        </div>
-        
-
-        <!-- Footer Actions -->
-        <div class="popup-footer flex justify-end gap-4">
-            <button class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-                onclick="closePopup('article-popup')">ปิด</button>
-        </div>
-    </div>
-</div>
-
-    <script src="https://cdn.tiny.cloud/1/k10l81kijx2sgrr3h6dofsi509gkpluq1ugssphl6wz0kp53/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="/js/script.js"></script>
-    <script src="/js/uploads/article.js"></script>
-    <script>
-        document.getElementById("title").addEventListener("input", function () {
-            const previewTitles = document.querySelectorAll(".previewTitle"); 
-            previewTitles.forEach(previewTitle => {
-                previewTitle.textContent = this.value || "ตัวอย่างชื่อโพสต์"; 
+        <script src="https://cdn.tiny.cloud/1/k10l81kijx2sgrr3h6dofsi509gkpluq1ugssphl6wz0kp53/tinymce/7/tinymce.min.js"
+            referrerpolicy="origin"></script>
+        <script src="/js/script.js"></script>
+        <script src="/js/uploads/article.js"></script>
+        <script>
+            document.getElementById("title").addEventListener("input", function () {
+                const previewTitles = document.querySelectorAll(".previewTitle");
+                previewTitles.forEach(previewTitle => {
+                    previewTitle.textContent = this.value || "ตัวอย่างชื่อโพสต์";
+                });
             });
-        });
 
 
-        function closePopup(id) {
-            const popup = document.getElementById(id); // ใช้ id ที่ส่งเข้ามา
-            popup.classList.add('hidden'); // เพิ่ม hidden เพื่อซ่อน
-        }
-
-        function openDemoArticle(id) {
-            const popup = document.getElementById(id); // ใช้ id ที่ส่งเข้ามา
-            popup.classList.remove('hidden'); // ลบ hidden เพื่อแสดง popup
-        }
-
-
-        function previewImage(input) {
-            const file = input.files[0];
-            const previewThumbnail = document.getElementById("previewThumbnail");
-
-            if (file) {
-                const reader = new FileReader();
-
-                // โหลดภาพและตั้งค่า src ของ <img> ให้เป็นภาพที่เลือก
-                reader.onload = function (e) {
-                    previewThumbnail.src = e.target.result;
-                }
-
-                reader.readAsDataURL(file);
-            } else {
-                // ถ้าไม่มีไฟล์ ให้เคลียร์ src ของ <img>
-                previewThumbnail.src = "";
+            function closePopup(id) {
+                const popup = document.getElementById(id); // ใช้ id ที่ส่งเข้ามา
+                popup.classList.add('hidden'); // เพิ่ม hidden เพื่อซ่อน
             }
-        }
 
-
-        function togglePublishStatus() {
-            const checkbox = document.getElementById("published");
-            const previewStats = document.getElementById("previewStats");
-
-            if (checkbox.checked) {
-                previewStats.textContent = "กำลังเผยแพร่";
-            } else {
-                previewStats.textContent = "รอการเผยแพร่";
+            function openDemoArticle(id) {
+                const popup = document.getElementById(id); // ใช้ id ที่ส่งเข้ามา
+                popup.classList.remove('hidden'); // ลบ hidden เพื่อแสดง popup
             }
-        }
 
-        const form = document.getElementById("AddArticle");
-        const progressBar = document.getElementById('progressBar');
-        const statusText = document.getElementById('statusText');
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+            function previewImage(input) {
+                const file = input.files[0];
+                const previewThumbnail = document.getElementById("previewThumbnail");
 
-            const formData = new FormData(form);
-            const xhr = new XMLHttpRequest();
+                if (file) {
+                    const reader = new FileReader();
 
-            xhr.open('POST', form.action, true);
-
-            // ติดตามความก้าวหน้า
-            xhr.upload.onprogress = (event) => {
-                if (event.lengthComputable) {
-                    const percent = Math.round((event.loaded * 100) / event.total);
-                    const progressPercent = percent < 90 ? percent : 90;
-                    progressBar.style.width = progressPercent + '%';
-                    statusText.textContent = `กำลังอัปโหลด... ${progressPercent}%`;
-                }
-            };
-
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response && response.status === 'ok') {
-                            progressBar.style.width = '90%';
-                            statusText.textContent = 'การอัปโหลดกำลังเริ่มต้น...';
-
-                            // รอ 1 วินาทีก่อนขึ้น 100%
-                            setTimeout(() => {
-                                progressBar.style.width = '100%';
-                                statusText.innerHTML = `<i class="fas fa-check-circle text-green-500"></i> อัปโหลดเสร็จสมบูรณ์! "${response.msg}"`; // เปลี่ยนเป็น HTML พร้อมสี
-
-                                const previewStats = document.getElementById("previewStats");
-                                if (response.Articlesave.published === true) {
-                                    previewStats.innerHTML = `<i class="fas fa-check text-green-500"></i> เผยแพร่แล้ว`;
-                                } else {
-                                    previewStats.innerHTML = `<i class="fas fa-times text-red-500"></i> ยังไม่ได้เผยแพร่`; // เพิ่มสีแดง
-                                }
-
-                                if (response.Articlesave.scheduledAt) {
-                                    previewStats.innerHTML += `<br><i class="fas fa-check text-green-500"></i> ตั้งเวลาเผยแพร่ไว้`;
-                                } else {
-                                    previewStats.innerHTML += `<br><i class="fas fa-times text-red-500"></i> ไม่มีการตั้งเวลาเผยแพร่`;
-                                }
-
-                            }, 5000);
-
-                        } else {
-                            // แสดงข้อผิดพลาดจากเซิร์ฟเวอร์
-                            statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-yellow-500"></i> เกิดข้อผิดพลาด: ${response.msg || 'ไม่ทราบข้อผิดพลาด'}`; // เปลี่ยนเป็น HTML พร้อมสี
-                        }
-                    } catch (e) {
-                        console.error('Error parsing server response:', e);
-                        statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> เกิดข้อผิดพลาดในการประมวลผลข้อมูลที่ตอบกลับจากเซิร์ฟเวอร์`; // เปลี่ยนเป็น HTML พร้อมสี
+                    // โหลดภาพและตั้งค่า src ของ <img> ให้เป็นภาพที่เลือก
+                    reader.onload = function (e) {
+                        previewThumbnail.src = e.target.result;
                     }
+
+                    reader.readAsDataURL(file);
                 } else {
-                    console.error('Upload failed:', xhr.statusText || 'Unknown error');
-                    statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การส่งล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`; // เปลี่ยนเป็น HTML พร้อมสี
+                    // ถ้าไม่มีไฟล์ ให้เคลียร์ src ของ <img>
+                    previewThumbnail.src = "";
                 }
-            };
-
-            xhr.onerror = () => {
-                console.error('Upload failed:', xhr.statusText || 'Unknown error');
-                statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การอัปโหลดหรือส่งล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`; // เปลี่ยนเป็น HTML พร้อมสี
-            };
-
-            // ส่งข้อมูลฟอร์ม
-            xhr.send(formData);
-        });
+            }
 
 
+            function togglePublishStatus() {
+                const checkbox = document.getElementById("published");
+                const previewStats = document.getElementById("previewStats");
 
-    </script>
-</body> 
+                if (checkbox.checked) {
+                    previewStats.textContent = "กำลังเผยแพร่";
+                } else {
+                    previewStats.textContent = "รอการเผยแพร่";
+                }
+            }
+
+            const form = document.getElementById("AddArticle");
+            const progressBar = document.getElementById('progressBar');
+            const statusText = document.getElementById('statusText');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', form.action, true);
+
+                // ติดตามความก้าวหน้า
+                xhr.upload.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        const percent = Math.round((event.loaded * 100) / event.total);
+                        const progressPercent = percent < 90 ? percent : 90;
+                        progressBar.style.width = progressPercent + '%';
+                        statusText.textContent = `กำลังอัปโหลด... ${progressPercent}%`;
+                    }
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response && response.status === 'ok') {
+                                progressBar.style.width = '90%';
+                                statusText.textContent = 'การอัปโหลดกำลังเริ่มต้น...';
+
+                                setTimeout(() => {
+                                    progressBar.style.width = '100%';
+                                    statusText.innerHTML = `<i class="fas fa-check-circle text-green-500"></i> อัปโหลดเสร็จสมบูรณ์! "${response.success}"`;
+                                }, 5000);
+                            } else {
+                                statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-yellow-500"></i> เกิดข้อผิดพลาด: ${response.error || 'ไม่ทราบข้อผิดพลาด'}`;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing server response:', e);
+                            statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> เกิดข้อผิดพลาดในการประมวลผลข้อมูลที่ตอบกลับจากเซิร์ฟเวอร์`;
+                        }
+                    } else if (xhr.status === 429) { // จัดการสถานะ 429 Too Many Requests
+                        const response = JSON.parse(xhr.responseText);
+                        statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> ${response.error || 'คุณโพสต์บ่อยเกินไป กรุณารอ 1 นาทีแล้วลองใหม่อีกครั้ง!'}`;
+                    } else {
+                        const response = JSON.parse(xhr.responseText);
+                        statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การส่งล้มเหลว: ${response.error} : ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`;
+                    }
+                };
+
+
+                xhr.onerror = () => {
+                    console.error('Upload failed:', xhr.statusText || 'Unknown error');
+                    statusText.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> การอัปโหลดหรือส่งล้มเหลว: ${xhr.statusText || 'ไม่ทราบข้อผิดพลาด'}`; // เปลี่ยนเป็น HTML พร้อมสี
+                };
+
+                // ส่งข้อมูลฟอร์ม
+                xhr.send(formData);
+            });
+
+
+
+        </script>
+</body>
+
 </html>

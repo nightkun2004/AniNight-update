@@ -29,40 +29,11 @@ const moment = require('moment');
 const cookieParser = require('cookie-parser');
 require("dotenv").config();
 
-const IndexRouter = require("./routers/indexRouter")
-const SearchRouter = require("./routers/SearchRouter")
-const authRouter = require("./routers/authRouter")
-const TopCoinRouter = require("./routers/topCoinRouter")
-const ReadRouter = require("./routers/ReadRouter")
-const PlayRouter = require("./routers/PlayRouter")
-const UploadsRouter = require("./routers/uploadRouter")
-const PostsRouter = require("./routers/ArticleRouter")
-const recommenRouter = require("./routers/RecommenRouter")
-const DashboardRouter = require("./routers/DashboardRouter")
-const AdminRouter = require("./routers/AdminRouter")
-const AnimeRouter = require("./routers/AnimeRouer")
-const channalRouter = require("./routers/ChannelRouter")
-const SurveyRouter = require("./routers/SurveyRouter")
-const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
-const PlaymentRoute = require("./routers/PlaymentRouter")
-const RewardRoute = require("./routers/RewardRouter")
-const AiRoute = require("./routers/AiRouter")
-const MemeRouter = require("./routers/MemeRouter")
-const CommentRouter = require("./routers/Commentrouter")
-// const TrendingRouter = require("./")
-
-const setLanguage = require("./lib/language")
-app.set("wss", wss);
-
 
 app.post("/add-comment", (req, res) => {
   addComment(req, res, io); // ส่ง io เข้าใน Controller
 });
 
-// เส้นทาง router สำหรับ lib
-const Router = require("./lib/routers/router")
-const ApiService = require("./lib/routers/serverApis")
-const { checkAuth } = require("./lib/auth")
 
 const allowedOrigins = [
   'https://live-aninight.ani-night.online',
@@ -171,7 +142,6 @@ app.locals.number2 = 500;
 app.locals.number3 = 1500;
 app.locals.number4 = 1200000;
 app.locals.formatNumber = formatNumber;
-app.use('/:lang', setLanguage);
 app.use(bodyParser.json({ limit: '1000mb' }));
 app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(express.json({ limit: '1000mb' }));
@@ -194,6 +164,44 @@ app.use(session({
 }));
 
 
+
+
+const IndexRouter = require("./routers/indexRouter")
+const SearchRouter = require("./routers/SearchRouter")
+const authRouter = require("./routers/authRouter")
+const TopCoinRouter = require("./routers/topCoinRouter")
+const ReadRouter = require("./routers/ReadRouter")
+const PlayRouter = require("./routers/PlayRouter")
+const UploadsRouter = require("./routers/uploadRouter")
+const PostsRouter = require("./routers/ArticleRouter")
+const recommenRouter = require("./routers/RecommenRouter")
+const DashboardRouter = require("./routers/DashboardRouter")
+const AdminRouter = require("./routers/AdminRouter")
+const AnimeRouter = require("./routers/AnimeRouer")
+const channalRouter = require("./routers/ChannelRouter")
+const SurveyRouter = require("./routers/SurveyRouter")
+const SurveyRouterCrerate = require("./routers/Survey/SurveyRouter")
+const PlaymentRoute = require("./routers/PlaymentRouter")
+const RewardRoute = require("./routers/RewardRouter")
+const AiRoute = require("./routers/AiRouter")
+const MemeRouter = require("./routers/MemeRouter")
+const CommentRouter = require("./routers/Commentrouter")
+// const TrendingRouter = require("./")
+
+const setLanguage = require("./lib/language")
+// เส้นทาง router สำหรับ lib
+const Router = require("./lib/routers/router")
+const ApiService = require("./lib/routers/serverApis")
+const { checkAuth } = require("./lib/auth")
+app.set("wss", wss);
+
+const postLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 นาที
+  max: 5, // 5 Requests/IP
+  message: "คุณโพสต์บ่อยเกินไป กรุณารอ 1 นาทีแล้วลองใหม่อีกครั้ง!",
+});
+
+app.use('/:lang', setLanguage);
 app.use(Router)
 app.use(IndexRouter)
 app.use(SearchRouter)
@@ -208,7 +216,7 @@ app.use("/auth", checkAuth)
 app.use("/api/v2", authRouter)
 app.use("/api/v2", MemeRouter)
 app.use("/api/v2", UploadsRouter)
-app.use("/api/v2", PostsRouter)
+app.use("/api/v2", postLimiter, PostsRouter)
 app.use("/api/v2", DashboardRouter)
 app.use("/api/v2", ApiService)
 app.use("/api/v2", channalRouter)
@@ -234,6 +242,7 @@ const apiLimiter = rateLimit({
   max: 100, // จำกัดคำขอ 100 ครั้งต่อ IP
   message: 'Too many requests from this IP, please try again later.',
 });
+
 
 app.use('/api/v2/schedule/anime', apiLimiter);
 
