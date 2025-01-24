@@ -340,7 +340,7 @@ const CreateanimeItem = async (req, res) => {
                     formData.append('poster', poster.data, poster.name);
 
                     // ส่ง formData แทนที่จะส่ง poster.data
-                    const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/posters/sv7/close', formData, {
+                    const uploadResponse = await axios.post('https://sv7.ani-night.online/api/v2/upload/posters/sv7', formData, {
                         headers: {
                             ...formData.getHeaders()
                         }
