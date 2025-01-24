@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { authMiddleware, ensureAuthenticated } = require("../Middlewares/authMiddleware")
 const { checkAuth } = require("../lib/auth")
-const { createMeme, likeMeme, addComment, likeMemeComment, addReply, postComment } = require("../Controllers/MemeController")
+const { createMeme, likeMeme, addComment, likeMemeComment, addReply, postComment, DeleteMeme } = require("../Controllers/MemeController")
 
 router.post("/post/meme/new",ensureAuthenticated, checkAuth, authMiddleware,  createMeme)
 // router.post("/api/comments",ensureAuthenticated, checkAuth, authMiddleware,  postComment)
@@ -11,6 +11,9 @@ router.post("/api/like/meme/:id",ensureAuthenticated, checkAuth, authMiddleware,
 router.post("/meme/:id/comments/:commentId/like",ensureAuthenticated, checkAuth, authMiddleware,  likeMemeComment)
 router.post('/meme/:id/comment', checkAuth, authMiddleware, addComment);
 router.post('/meme/:id/comment/:commentId/reply', checkAuth, authMiddleware, addReply);
+
+
+router.delete("/meme/post/:id",ensureAuthenticated, checkAuth, authMiddleware,  DeleteMeme)
 
 
 module.exports = router;

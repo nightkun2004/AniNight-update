@@ -53,7 +53,7 @@
               </p>
               <% } %>
 
-                <form id="memeForm" action="/api/v2/post/meme/new" method="POST" enctype="multipart/form-data"
+                <form id="memeForm" action="/post/meme/new/meme" method="POST" enctype="multipart/form-data"
                   class="space-y-4 p-6">
                   <!-- Meme Description -->
                   <div class="mt-5">
@@ -95,12 +95,17 @@
                     <p class="text-red-500 font-light text-base">ดูสถานะตรงนี้ 👇🏻</p>
                     <p id="statusText" class="text-sm font-bold text-gray-600 mt-1"></p>
                   </div>
+                  
+                  <!-- ข้อความปิดการอัปโหลดมีม -->
+                  <p class="text-red-500 font-light text-base">หลังจากกดส่งมีมแล้ว โปรดรอสักครู่ ระบบจะทำการประมวลผลข้อมูลของคุณ</p>
+                  <!-- แจ้งเตือนผู้ใช้ ระบบได้ปิดการสร้างมีมแล้ว -->
+                  <p class="text-red-500 font-light text-base">ระบบได้ปิดการสร้างมีมแล้ว ขออภัยในความไม่สะดวก</p>
 
                   <!-- Submit Button -->
-                  <button type="submit"
+                  <!-- <button type="submit"
                     class="w-full bg-blue-500 text-white p-3 rounded-md font-bold hover:bg-blue-600 transition duration-300">
                     ส่งมีม
-                  </button>
+                  </button> -->
                 </form>
 
       </section>

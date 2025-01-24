@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>มีม ค้นหามีมที่เป็นกระแสที่นี่ - Meme</title>
-    <meta name="keywords" content="ค้นหามีมที่เป็นกระแสที่นี่, มีม, meme, Meme, TikTok, YouTube, Search, ค้นหา, มีมอนิเมะ, มีมตลก, มีม 18+">
+    <meta name="keywords"
+        content="ค้นหามีมที่เป็นกระแสที่นี่, มีม, meme, Meme, TikTok, YouTube, Search, ค้นหา, มีมอนิเมะ, มีมตลก, มีม 18+">
     <link rel="stylesheet" href="/css/index.css">
     <link rel="shortcut icon" href="/logo/favicon.png" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -13,7 +14,7 @@
     <script src="/cdn/tailwincss.js"></script>
     <script src="/cdn/fontawesome.js" crossorigin="anonymous"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-    crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
     <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
         crossorigin="anonymous"></script>
@@ -30,145 +31,44 @@
         body::-webkit-scrollbar {
             display: none;
         }
-        section {
-    overflow-y: auto;
-    overflow-x: hidden; 
-}
 
+        section {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     </style>
 </head>
 
 <body class="overflow-hidden">
-            <!-- Main Content -->
-            <main class="bg-white flex flex-row w-full h-screen">
-                <%- include('../Component/Sidebar') %>
+    <!-- Main Content -->
+    <main class="bg-white flex flex-row w-full h-screen">
+        <%- include('../Component/Sidebar') %>
 
-                <section class="flex-1 w-full h-full p-5 overflow-y-scroll">
-                    <h2 class="font-normal text-2xl">ค้นหามีมที่เป็นกระแสที่นี่</h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-10 mb-36">
-                        <% memes.forEach((meme, index) => { %>
-                            <div class="grid gap-1 md:gap-4 lg:gap-2">
-                                <a href="/post/<%= meme._id %>">
-                                 <div class="mb-2 mt-5">
-                                    <% 
-                                    const isVideo = meme.memeimageUrl.split('?')[0].endsWith('.mp4'); 
-                                  %>
-                                  <% if (isVideo) { %>
-                                    <video controls muted loop controlsList="nodownload" oncontextmenu="return false;"  class="h-auto max-w-full rounded-lg">
-                                      <source src="<%= meme.memeimageUrl %>" type="video/mp4">
-                                      Your browser does not support the video tag.
-                                    </video>
-                                  <% } else { %>
-                                    <img src="<%= meme.memeimageUrl %>" alt="<%= meme.description %>" class="h-auto max-w-full rounded-lg">
-                                  <% } %>
-                                 </div>
-                                  <p class="text-gray-600">
-                                    <%= meme.description %>
-                                  </p>
-                                </a>
-                              </div>
-                              
-                              
-                    
-                            <% if ((index + 1) % 5 === 0) { %>
-                                <div class="overflow-hidden bg-gray-100">
-                                    <div class="grid gap-1 md:gap-4 lg:gap-2">
-                                        <ins class="adsbygoogle"
-                                        style="display:block"
-                                        data-ad-client="ca-pub-6579807593228261"
-                                        data-ad-slot="7580652369"
-                                        data-ad-format="responsive"></ins>                                    
-                                        <script>
-                                            (adsbygoogle = window.adsbygoogle || []).push({});
-                                        </script>
-                                    </div>
-                                </div>
-                            <% } %>
+            <section class="flex-1 w-full h-full p-5 overflow-y-scroll">
+                <h2 class="font-normal text-2xl">ค้นหามีมที่เป็นกระแสที่นี่</h2>
 
-                            <% if ((index + 1) % 10 === 0) { %>
-                                <div class="overflow-hidden bg-gray-100">
-                                    <div class="grid gap-1 md:gap-4 lg:gap-2">
-                                        <ins class="adsbygoogle"
-                                        style="display:block"
-                                        data-ad-client="ca-pub-6579807593228261"
-                                        data-ad-slot="7580652369"
-                                        data-ad-format="responsive"></ins>                                    
-                                        <script>
-                                            (adsbygoogle = window.adsbygoogle || []).push({});
-                                        </script>
-                                    </div>
-                                </div>
-                            <% } %>
-
-
-                            <% if ((index + 1) % 12 === 0) { %>
-                                <div class="overflow-hidden bg-gray-100">
-                                    <div class="grid gap-1 md:gap-4 lg:gap-2">
-                                        <ins class="adsbygoogle"
-                                        style="display:block"
-                                        data-ad-client="ca-pub-6579807593228261"
-                                        data-ad-slot="7580652369"
-                                        data-ad-format="responsive"></ins>                                    
-                                        <script>
-                                            (adsbygoogle = window.adsbygoogle || []).push({});
-                                        </script>
-                                    </div>
-                                </div>
-                            <% } %>
-
-                        <% }) %>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <h3 class="font-semibold text-lg">มีมอนิเมะ</h3>
+                        <p class="text-gray-500">ค้นหามีมอนิเมะที่คุณชื่นชอบ</p>
+                        <a href="/memes/anime" class="text-blue-500 hover:underline">ค้นหา</a>
                     </div>
-                    
-
-                  
-                  <div class="flex justify-center items-center">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 justify-center items-center">
-                        <% if (page > 1) { %>
-                            <a href="/memes/page/<%= page - 1 %>" class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
-                                ก่อนหน้า
-                            </a>
-                        <% } else { %>
-                            <span class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
-                                ก่อนหน้า
-                            </span>
-                        <% } %>
-                    
-                        <% for (let i = 1; i <= totalPages; i++) { %>
-                            <a href="/memes/page/<%= i %>" class="text-gray-700 px-4 py-2 rounded-lg shadow text-center <%= i === page ? 'font-bold bg-gray-200' : 'hover:bg-gray-100 transition-all duration-200' %>">
-                                <%= i %>
-                            </a>
-                        <% } %>
-                    
-                        <% if (page < totalPages) { %>
-                            <a href="/memes/page/<%= page + 1 %>" class="col-span-2 md:col-span-1 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-all duration-200 text-center">
-                                ถัดไป
-                            </a>
-                        <% } else { %>
-                            <span class="col-span-2 md:col-span-1 bg-gray-300 text-white px-4 py-2 rounded-lg shadow text-center cursor-not-allowed">
-                                ถัดไป
-                            </span>
-                        <% } %>
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <h3 class="font-semibold text-lg">มีมตลก</h3>
+                        <p class="text-gray-500">ค้นหามีมตลกที่คุณชื่นชอบ</p>
+                        <a href="/memes/funny" class="text-blue-500 hover:underline">ค้นหา</a>
                     </div>
-                   </div>  
-            <footer class="bg-white shadow mt-8">
-                <div class="container mx-auto px-4 py-4 text-center text-gray-600">
-                    Design By AniNight 2024 &copy; 2024 MemePost - All Rights Reserved.
-                </div>
-            </footer>
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <h3 class="font-semibold text-lg">มีม 18+</h3>
+                        <p class="text-gray-500">ค้นหามีม 18+ ที่คุณชื่นชอบ</p>
+                        <a href="/memes/18plus" class="text-blue-500 hover:underline">ค้นหา</a>
+                    </div>
             </section>
-            </main>
+    </main>
 
 
 
-            <script src="/js/script.js"></script>
-            <script>
-                // Example: Simple share button alert
-                document.querySelectorAll('button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        alert('Meme shared!');
-                    });
-                });
-            </script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>

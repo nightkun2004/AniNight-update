@@ -37,7 +37,7 @@
                 <thead class="bg-gray-100 text-gray-600">
                     <tr class="text-black">
                         <th class="py-2 px-4 border-b text-sm ">ภาพมีม/วีดีโอ</th>
-                        <th class="py-2 px-4 border-b text-sm ">ชื่อบทความ</th>
+                        <th class="py-2 px-4 border-b text-sm ">ชื่อ</th>
                         <th class="py-2 px-4 border-b text-sm ">วันที่เผยแพร่</th>
                         <!-- <th class="py-2 px-4 border-b text-sm"><span class="hidden md:block">ตั้งเวลาเผยแพร่ไว้</span></th> -->
                         <th class="py-2 px-4 border-b text-sm ">จัดการ</th>
@@ -46,7 +46,7 @@
                 <tbody>
                     <% if (userDatas && userDatas.Mememes.length > 0) { %>
                         <% userDatas.Mememes.forEach((post, index) => { %>
-                        <tr class="text-black">
+                        <tr class="text-black"  id="post-<%= post._id %>">
                             <td class="py-2 px-4 border-b flex justify-center">
                                 <% 
                                 const isVideo = post.memeimageUrl.split('?')[0].endsWith('.mp4'); 
@@ -80,20 +80,35 @@
                                 </button>
                             
                                 <!-- Dropdown menu -->
-                                <div id="menu_<%= post._id %>" class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                                <div id="menu_<%= post._id %>"
+                                    class="dropdown-menu hidden absolute right-28 top-1 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                                     <a href="/edit/post/meme?memeId=<%= post._id %>" class="block px-4 py-2 text-sm text-blue-500 hover:bg-blue-100">
                                         แก้ไข
                                     </a>
-                                    <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="deletepost(event, '<%= post._id %>')" type="button">
+                                    <a class="block text-red-500 px-4 py-2 hover:bg-red-100 cursor-pointer" onclick="confirmDelete('<%= post._id %>')"
+                                        type="button">
                                         ลบ
-                                    </a>
+                                     </a>
+                                     
+                                     <!-- Popup ยืนยัน -->
+                                     <div id="deletePopup-<%= post._id %>" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                                       <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                                         <h2 class="text-lg font-semibold mb-4">ยืนยันการลบ</h2>
+                                         <p class="mb-6">คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้?</p>
+                                         <div class="flex justify-center space-x-4">
+                                           <button class="cancelButton px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg">ยกเลิก</button>
+                                           <button class="confirmButton px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg" data-postid="<%= post._id %>">ยืนยัน</button>
+                                         </div>
+                                       </div>
+                                     </div>
+                                     
                                 </div>
                             </td>
                         </tr>
                         <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีบทความ</td>
+                            <td colspan="6" class="py-2 px-4 border-b text-center">ไม่มีบ Meme ของคุณ</td>
                         </tr>
                     <% } %>
                 </tbody>
@@ -124,6 +139,46 @@
                 }
             });
         }
+
+      // ฟังก์ชันสำหรับแสดง Popup
+function confirmDelete(postId) {
+  const deletePopup = document.getElementById(`deletePopup-${postId}`);
+  const confirmButton = deletePopup.querySelector(".confirmButton");
+  const cancelButton = deletePopup.querySelector(".cancelButton");
+
+  // แสดง Popup
+  deletePopup.classList.remove("hidden");
+
+  // เมื่อกดปุ่ม "ยืนยัน"
+  confirmButton.onclick = async () => {
+    try {
+      const response = await fetch(`/api/v2/meme/post/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert("โพสต์ถูกลบเรียบร้อยแล้ว!");
+        deletePopup.classList.add("hidden");
+        // ลบโพสต์ออกจาก DOM
+        document.getElementById(`post-${postId}`).remove();
+      } else {
+        const result = await response.json();
+        alert(`เกิดข้อผิดพลาด: ${result.msg || "ไม่สามารถลบโพสต์ได้"}`);
+      }
+    } catch (error) {
+      alert(`ข้อผิดพลาดจากเซิร์ฟเวอร์: ${error.message}`);
+    }
+  };
+
+  // เมื่อกดปุ่ม "ยกเลิก"
+  cancelButton.onclick = () => {
+    deletePopup.classList.add("hidden");
+  };
+}
+
     </script>
 </body>
 </html>

@@ -89,20 +89,20 @@
     <!-- Main Content -->
     <main class="mx-auto max-w-6xl px-4 p-5">
 
-      <section class="relative bg-gray-800 text-white">
+      <section class="relative bg-gray-800 text-white rounded-lg">
         <!-- Hero Banner Wrapper -->
         <div class="container mx-auto">
-          <div class="relative p-4">
+          <div class="relative">
             <!-- Image Slider -->
             <div id="heroSlider" class="flex overflow-hidden relative">
               <% if (HeroSectionbanner.length > 0 && typeof error === 'undefined') { %>
                 <% HeroSectionbanner.slice(0, 10).forEach((item, index) => { %>
-                  <div class="w-full flex-shrink-0">
-                    <div class="flex flex-col md:flex-row items-center py-16 relative">
+                  <div class="w-full flex-shrink-0" style="min-width: 100%">
+                    <div class="flex flex-col md:flex-row items-center py-16 relative" style="background-image: url(<%= item.banner %>); background-size: cover; background-position: center;">
                       <!-- Left Side - Anime Info -->
-                      <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
+                      <div class="md:w-1/2 mb-8 md:mb-0 p-5 text-center md:text-left">
                         <h2 class="text-3xl font-bold mb-4 text-white truncate max-w-[500px]"><%= item.title.th || item.title.en %></h2>
-                        <p class="text-lg text-gray-300 mb-6 line-clamp-3">
+                        <p class="text-sm md:text-lg text-gray-300 mb-6 line-clamp-3">
                           <%= item.synopsis %>
                         </p>
                         <a href="/anime/<%= item.urlslug %>" class="inline-block bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-all duration-300">
@@ -111,7 +111,7 @@
                       </div>
       
                       <!-- Right Side - Anime Poster as Image -->
-                      <div class="md:w-1/2 md:absolute md:-right-56 md:top-0 md:bottom-0">
+                      <div class="md:w-1/2 md:absolute md:-right-56 md:top-0 md:bottom-0 p-3">
                         <% if (item.poster.startsWith('http')) { %>
                           <img src="<%= item.poster %>" alt="<%= item.title.en %>" class="max-h-80 h-full right-1 object-cover rounded-lg shadow-lg">
                         <% } else { %>

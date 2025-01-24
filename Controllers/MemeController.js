@@ -7,7 +7,7 @@ const WebSocket = require('ws');
 
 const getMeme = async (req, res) => {
     const userID = req.session.userlogin;
-    const page = parseInt(req.params.page) || 1; // ค่าเริ่มต้นเป็นหน้า 1
+    const page = parseInt(req.params.page) || 1;
     const limit = 10;
 
     try {
@@ -336,6 +336,35 @@ const postComment = async (req, res,) => {
 };
 
 
+// Delete Meme
+// Method: DELETE /api/v2/meme/post/:id
+const DeleteMeme = async (req, res) => {
+    try {
+        // ค้นหา Meme โดยใช้ ID
+        const meme = await Meme.findById(req.params.id);
+
+        // หากไม่พบ Meme
+        if (!meme) {
+            return res.status(404).json({ msg: "Meme not found" });
+        }
+
+        // ตรวจสอบว่าผู้ใช้ที่ส่งคำขอเป็นเจ้าของ Meme หรือไม่
+        if (meme.creator.toString() !== req.user.id) {
+            return res.status(403).json({ msg: "User not authorized" }); // เปลี่ยนเป็น 403 (Forbidden)
+        }
+
+        // ลบ Meme
+        await Meme.findByIdAndDelete(req.params.id);
+
+        // ตอบกลับสำเร็จ
+        return res.status(200).json({ msg: "Meme removed successfully" });
+    } catch (error) {
+        console.error(error.message); // Log ข้อผิดพลาด
+        return res.status(500).json({ msg: "Server Error", error: error.message });
+    }
+};
+
+
 module.exports = {
     getMeme,
     getDashboardManageMeme,
@@ -347,5 +376,6 @@ module.exports = {
     postComment,
     likeMemeComment,
     addComment,
-    addReply
+    addReply,
+    DeleteMeme
 };
