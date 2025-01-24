@@ -15,9 +15,14 @@
     <%- include('./Component/Header') %>
     <main class="container mx-auto mt-9 p-5">
         <div class="bg-white rounded p-4 mb-5" id="Monetization-Policy">
-            <p>อัพเดตล่าสุดเมื่อ (30/10/2024)</p>
+            <p>อัพเดตล่าสุดเมื่อ (24/01/2025)</p>
             <div class="mb-6">
                 <h2 class="text-2xl font-semibold text-blue-500 mb-2">นโยบายการสร้างรายได้ (Monetization Policy)</h2>
+                 <!-- ข้อความแจ้งเตือน -->
+                 <div class="bg-yellow-200 text-yellow-800 p-4 rounded-lg mb-4 shadow">
+                    <p class="font-semibold">⚠️ แจ้งเตือน:</p>
+                    <p>เราได้หยุดให้บริการสร้างรายได้ชั่วคราวเพื่อทำการปรับปรุงระบบ โปรดติดตามการอัปเดตเพิ่มเติมผ่านหน้าเว็บไซต์ของเรา</p>
+                </div>
                 <p>ครีเอเตอร์ที่ต้องการสร้างรายได้จากผลงานบทความบน <strong>ani-night.online</strong> จะต้องปฏิบัติตามเงื่อนไขดังต่อไปนี้:</p>
                 <ul class="list-disc list-inside space-y-2">
                     <li>ต้องมีบทความอย่างน้อย 5 บทความ</li>
@@ -153,17 +158,14 @@
                 </p>
             </div>
             <h3 class="text-2xl font-medium">ความเป็นส่วนตัวของแบบสำรวจ</h3>
-            <div class="leading-8 font-light pt-6">
-                <p class="leading-7">
-                    โปรดทราบเราตลาดแบบสำรวจของ <span class="font-medium"><a href="https://web.bitlabs.ai/surveys" target="_blank" class="border-blue-400 border-b-4">bitlalbs</a></span> และในเครือ NPatPublisher ของเราเท่านั้น คุณสามารถเข้าไปตรวจสอบนโยบาบความเป็นส่วนตัวของผู้ให้บริการแบบสำรวจนั้นๆ ได้
-                </p>
+            <div class="leading-8 font-light">
                 <p class="leading-8">
                     <span class="font-normal">NPatPublisher</span> คือ บริษัทให้บริการสื่อเนื้อหาและการสำรวจการตลาดของเรา หรือ AniNight โปรเจคของเรา
                 </p>
             </div>
          </section>
 
-         <section class="mb-6 mt-5 bg-white p-6 shadow-lg rounded-lg">
+         <!-- <section class="mb-6 mt-5 bg-white p-6 shadow-lg rounded-lg">
             <h2 class="text-2xl font-bold mb-4 text-gray-700">เงื่อนไขการใช้ API</h2>
             <p class="text-gray-600">
                 บริการ API ของเรามีการจัดเตรียมข้อมูลเกี่ยวกับอนิเมะและบทความต่างๆ ซึ่งสามารถนำไปใช้ในการพัฒนาบริการในเชิงพาณิชย์ เช่น แอปพลิเคชันหรือเว็บไซต์ที่มีเนื้อหาเกี่ยวข้องกับอนิเมะหรือข่าวสารต่างๆ โดยมีเงื่อนไขการใช้งานดังนี้:
@@ -177,10 +179,10 @@
             </ul>
 
             <hr class="my-8">
-            </section>
+            </section> -->
 
         
-        <main class="container mx-auto my-10" id="api">
+        <!-- <main class="container mx-auto my-10" id="api">
             <h1 class="text-3xl font-bold mt-10 mb-5">สอนใช้ API</h1>
             <section class="bg-white p-6 shadow-lg rounded-lg">
                 <h2 class="text-2xl font-bold text-orange-500 mb-4">API Key คืออะไร?</h2>
@@ -212,7 +214,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 mt-6 mb-2">ตัวอย่างการใช้ใน JavaScript (Fetch)</h3>
                 <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto">
                         <code>
-        fetch('https://api.ani-night.online/api/<--- บริการที่ต้องการเข้าถึง API  ของเรา --->', {
+        fetch('https://api.ani-night.online/api/<--- บริการที่ต้องการเข้าถึง API  ของเรา ---', {
             method: 'GET',
             headers: {
                 'x-api-key': 'YOUR_API_KEY'
@@ -245,7 +247,7 @@
     const apiKey = 'YOUR_API_KEY';
 
     // Make a GET request to the API
-    axios.get('https://api.yourwebsite.com/api/<--- บริการที่ต้องการเข้าถึง API  ของเรา --->', {
+    axios.get('https://api.yourwebsite.com/api/<--- บริการที่ต้องการเข้าถึง API  ของเรา ---', {
         headers: {
             'x-api-key': apiKey
         }
@@ -295,7 +297,7 @@
             <section class="mb-6 mt-5 bg-white p-6 shadow-lg rounded-lg">
                 <section>
                     <h2 class="text-2xl font-bold mb-4 text-gray-700">ขั้นตอนที่ 1: ขอรับ API Key</h2>
-                    <!-- <span class="text-orange-500">support@ani-night.com</span> -->
+                 <span class="text-orange-500">support@ani-night.com</span> 
                     <p class="text-gray-600">เพื่อใช้งาน API ของเรา คุณต้องทำการติดต่อผู้พัฒนาเพื่อขอรับ API Key โดยส่งอีเมลมาที่: <span class="text-orange-500">aninight.info@gmail.com</span></p>
                     <p class="text-gray-600">ตัวอย่าง API Key: <span class="font-mono text-orange-500">12345-abcde-67890</span></p>
                 </section>
@@ -327,7 +329,7 @@
 
                 <p class="text-gray-600">อย่าลืมแทนที่ <span class="font-mono text-orange-500">'12345-abcde-67890'</span> ด้วย API Key จริงของคุณ</p>
 
-                <!-- Step 3: Authorization with JWT -->
+
                 <h2 class="text-2xl font-bold mt-10 mb-4 text-gray-700">ขั้นตอนที่ 3: การใช้งาน Authorization ด้วย JWT</h2>
                 <p class="text-gray-600">สำหรับการเข้าถึงเส้นทางที่ป้องกันไว้ คุณต้องส่ง JWT token ในส่วน Authorization header ดังนี้:</p>
     
@@ -399,7 +401,7 @@
                         </code>
                     </pre>
             </section>
-        </main>
+        </main> -->
     </main>
 
     <%- include('./Component/Footer') %>

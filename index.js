@@ -1,6 +1,6 @@
 const express = require("express")
 const scheduleJobs = require("./jobs")
-const PORT = process.env.PORT || 5000;
+
 const http = require('http');
 const WebSocket = require('ws');
 const app = express();
@@ -271,7 +271,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-// เริ่มต้นเซิร์ฟเวอร์
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

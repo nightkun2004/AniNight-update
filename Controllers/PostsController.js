@@ -76,6 +76,8 @@ const getPosts = async (req, res, next) => {
         const Animelists = await Anime.find()
             .sort({ createdAt: -1 })
             .exec();
+        
+        const HeroSectionbanner = await Anime.find({ year: 2025, season: "Winter" }).sort({ createdAt: -1 }).limit(3).exec();
         const Nextseason = await Anime.find({ year: 2025, season: "Winter" }).sort({ createdAt: -1 }).exec();
 
         // กำหนดเทมเพลตตามภาษา
@@ -100,6 +102,7 @@ const getPosts = async (req, res, next) => {
             Posts: Posts || [],
             Animelists,
             LatestPosts,
+            HeroSectionbanner,
             Nextseason,
             userID,
             TopViews,

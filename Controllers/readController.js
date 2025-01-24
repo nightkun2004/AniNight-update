@@ -114,11 +114,9 @@ const getRead = async (req, res, next) => {
 
         let content = post.content;
 
-        // แบ่งเนื้อหาเป็นอาร์เรย์ตาม <p>
-        let contentArray = content.split('</p>');
-
-        let adFrequency = 3; // แทรกโฆษณาทุก 3 ย่อหน้า
-        let bannerHTML = `
+        // Function สำหรับสร้าง HTML ของโฆษณา
+        function createAdBanner() {
+            return `
     <div class="ad-banner bg-white rounded-lg shadow-lg my-6 mx-auto mb-6 p-4 mt-6 w-full max-w-[728px]">
         <p class="text-center text-sm text-gray-500 mb-2">ได้รับการสนับสนุน</p>
         <ins class="adsbygoogle"
@@ -132,12 +130,22 @@ const getRead = async (req, res, next) => {
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
     </div>
-`;
+  `;
+        }
 
 
-        // แทรกโฆษณาทุกๆ adFrequency ย่อหน้า
-        for (let i = adFrequency; i < contentArray.length; i += adFrequency + 1) {
-            contentArray.splice(i, 0, bannerHTML);
+        // จำกัดจำนวนโฆษณาสูงสุด
+        const maxAds = 3;
+        let adCount = 0;
+
+        // แบ่งเนื้อหาเป็นอาร์เรย์ตามแท็ก <p>
+        let contentArray = content.split('</p>');
+
+        // แทรกโฆษณาทุกๆ 3 ย่อหน้าโดยจำกัดจำนวนที่ 3
+        let adFrequency = 3;
+        for (let i = adFrequency; i < contentArray.length && adCount < maxAds; i += adFrequency + 1) {
+            contentArray.splice(i, 0, createAdBanner());
+            adCount++;
         }
 
         // รวมเนื้อหากลับเป็น HTML

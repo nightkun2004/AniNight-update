@@ -87,7 +87,14 @@ const getNotifications = async (req, res) => {
     }
 };
 
-
+const getMonetization = async (req, res) => {
+    const userID = req.session.userlogin;
+    try {
+        res.render("./th/pages/dashboard/monetization.ejs" , { userID });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error or', error });
+    }
+};
 
 
 const getNotificationisRead = async (req, res) => {
@@ -375,6 +382,7 @@ module.exports = {
     getDashboardManageArticle,
     getNotifications,
     getNotificationisRead,
+    getMonetization,
     Getedit,
     GetRewardCode,
     gatPlaymentEdit,

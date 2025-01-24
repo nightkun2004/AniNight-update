@@ -88,56 +88,54 @@
 
     <!-- Main Content -->
     <main class="mx-auto max-w-6xl px-4 p-5">
-      <div class="container mx-auto p-4">
-        <!-- Card Container -->
 
-        <% if (userID) {%>
-          <div class="bg-white rounded-lg shadow-md p-4 flex items-center gap-4">
-            <!-- User Avatar -->
-            <% if (userID.user.profilePicture) { %>
-              <% if (userID.user.profilePicture.startsWith('http')) { %>
-                <img src="<%= userID.user.profilePicture %>" alt="@<%= userID.user.username %>"
-                  class="w-12 h-12 rounded-full">
-                <% } else { %>
-                  <img src="/uploads/profiles/<%= userID.user.profilePicture %>" class="w-12 h-12 rounded-full"
-                    alt="@<%= userID.user.username %>">
-                  <% } %>
-                    <% } %>
-                      <!-- Input Box -->
-                      <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-gray-600">
-                        คุณอยากสร้างอะไรใหม่ ๆ บ้าง?
+      <section class="relative bg-gray-800 text-white">
+        <!-- Hero Banner Wrapper -->
+        <div class="container mx-auto">
+          <div class="relative p-4">
+            <!-- Image Slider -->
+            <div id="heroSlider" class="flex overflow-hidden relative">
+              <% if (HeroSectionbanner.length > 0 && typeof error === 'undefined') { %>
+                <% HeroSectionbanner.slice(0, 10).forEach((item, index) => { %>
+                  <div class="w-full flex-shrink-0">
+                    <div class="flex flex-col md:flex-row items-center py-16 relative">
+                      <!-- Left Side - Anime Info -->
+                      <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
+                        <h2 class="text-3xl font-bold mb-4 text-white truncate max-w-[500px]"><%= item.title.th || item.title.en %></h2>
+                        <p class="text-lg text-gray-300 mb-6 line-clamp-3">
+                          <%= item.synopsis %>
+                        </p>
+                        <a href="/anime/<%= item.urlslug %>" class="inline-block bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-all duration-300">
+                          ดูรายละเอียดแพลตฟอร์มฉาย
+                        </a>
                       </div>
+      
+                      <!-- Right Side - Anime Poster as Image -->
+                      <div class="md:w-1/2 md:absolute md:-right-56 md:top-0 md:bottom-0">
+                        <% if (item.poster.startsWith('http')) { %>
+                          <img src="<%= item.poster %>" alt="<%= item.title.en %>" class="max-h-80 h-full right-1 object-cover rounded-lg shadow-lg">
+                        <% } else { %>
+                          <img src="/uploads/posters/<%= item.poster %>" alt="<%= item.title.en %>" class="max-h-80 right-1 h-full object-cover rounded-lg shadow-lg">
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              <% } %>
+            </div>
+      
+            <!-- Dots Navigation -->
+            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-4 pb-4">
+              <button class="w-4 h-4 bg-gray-500 rounded-full focus:outline-none" data-slide="0"></button>
+              <button class="w-4 h-4 bg-gray-500 rounded-full focus:outline-none" data-slide="1"></button>
+              <button class="w-4 h-4 bg-gray-500 rounded-full focus:outline-none" data-slide="2"></button>
+            </div>
           </div>
-          <% } %>
-
-            <!-- Action Buttons -->
-            <!-- <div class="flex justify-between mt-1 px-4 flex-wrap gap-4">
+        </div>
+      </section>
       
-              <button class="flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-600 text-sm font-medium hover:bg-blue-200">
-                  <i class="fa-solid fa-pen"></i>
-                  <a href="/uploads/create/article">เขียนบทความ</a>
-              </button>
       
- 
-              <button class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full text-green-600 text-sm font-medium hover:bg-green-200">
-                  <i class="fa-solid fa-image"></i>
-                  โพสต์ภาพ
-              </button>
-      
-           
-              <button class="flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-full text-yellow-600 text-sm font-medium hover:bg-yellow-200">
-                  <i class="fa-solid fa-face-laugh"></i>
-                  โพสต์มีม
-              </button>
-      
-         
-              <button class="flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full text-purple-600 text-sm font-medium hover:bg-purple-200">
-                  <i class="fa-solid fa-microphone"></i>
-                  สร้างข้อความเสียง
-              </button>
-          </div> -->
-      </div>
-      <div class="bg-white rounded-lg md:mb-12 mb-1 p-4" style="height: auto !important;">
+      <div class="bg-white rounded-lg md:mb-12 mb-1 mt-5 p-4" style="height: auto !important;">
         <!-- Index_home -->
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
           data-ad-slot="7771171707" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -146,15 +144,15 @@
         </script>
       </div>
 
-      <section class="flex flex-wrap">
+      <section class="container mx-auto mt-1 mb-6 flex flex-col lg:flex-row gap-6">
         <!-- Left Side Content with Lazy Loading Images -->
-        <div class="w-full lg:w-3/4 p-5 bg-white rounded-lg">
+        <div class="bg-white p-6 rounded-lg shadow flex-1">
           <h2 class="text-xl font-semibold mb-4"> อัพเดตใหม่</h2>
           <% if (Posts.length> 0 && typeof error === 'undefined') { %>
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <% Posts.slice(0, 10).forEach((post, index)=> { %>
                 <%- include('./Component/carditem', { post: post, index: index }) %>
-                  <% }) %>
+              <% }) %>
             </section>
             <% } else { %>
               <p class="text-center text-gray-500">ยังไม่ได้เขียนบทความ</p>
@@ -235,7 +233,7 @@
         </div>
  
         <!-- Right Sidebar with Ads -->
-        <aside class="w-full lg:w-1/4 lg:pl-8 mt-8 lg:mt-0">
+        <aside class="bg-white p-6 rounded-lg shadow flex-shrink-0 w-full lg:w-1/3">
           <div class="bg-white p-4 rounded-lg shadow-md mb-6">
             <!-- เช็คการการเข้าสู่ระบบ -->
             <div>
@@ -243,9 +241,10 @@
                 <form id="logoutForm" action="/api/v2/logout" method="post">
                   <!-- btn logout -->
                   <button
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-all duration-200 text-center">ออกจากระบบ</button>
+                    class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-all duration-200 text-center"
+                    onclick="showLogoutPopup(event)">ออกจากระบบ</button>
                 </form>
-
+                
                 <!-- Logout Confirmation Popup -->
                 <div id="logout-popup"
                   class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -263,24 +262,23 @@
                     </div>
                   </div>
                 </div>
-
-
+                
                 <script>
-
                   function showLogoutPopup(event) {
                     event.preventDefault();
                     document.getElementById('logout-popup').classList.remove('hidden');
                   }
-
+                
                   function hideLogoutPopup() {
                     document.getElementById('logout-popup').classList.add('hidden');
                   }
-
+                
                   function confirmLogout() {
                     document.getElementById('logoutForm').submit();
                     hideLogoutPopup();
                   }
                 </script>
+                
                 <% } else { %>
 
                   <h3 class="text-lg font-semibold mb-3">สมัคร/เข้าสู่ระบบ</h3>
@@ -300,10 +298,11 @@
 
           <div class="bg-white p-4 rounded-lg shadow-md mb-6">
             <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
-            <amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-6579807593228261"
-              data-ad-slot="3059776200" data-auto-format="rspv" data-full-width="">
-              <div overflow=""></div>
-            </amp-ad>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6579807593228261"
+          data-ad-slot="7771171707" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
           </div>
 
           <div class="bg-white p-4 rounded-lg shadow-md mb-6">
@@ -315,60 +314,9 @@
             </div>
           </div>
 
-          <!-- Update -->
-          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-            <h3 class="text-lg font-semibold mb-3">อัพเดตล่าสุด</h3>
-            <div class="grid grid-cols-1 gap-4">
-              <% if (LatestPosts.length> 0) { %>
-                <% LatestPosts.slice(0, 2).forEach((post, index)=> { %>
-                  <%- include('./Component/carditem', { post: post, index: index }) %>
-                    <% }) %>
-                      <% } else { %>
-                        <p>ยังไม่มีอัพเดต</p>
-                        <% } %>
-            </div>
-          </div>
-
-          <!-- Ads -->
-          <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-            <h3 class="text-lg font-semibold mb-3">โฆษณา</h3>
-            <amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-6579807593228261"
-              data-ad-slot="3059776200" data-auto-format="rspv" data-full-width="">
-              <div overflow=""></div>
-            </amp-ad>
-          </div>
         </aside>
       </section>
     </main>
-<!-- Ads bottom popup mobile -->
-<div class="fixed bottom-0 left-0 w-full h-32 z-50 bg-white/80 backdrop-blur-md rounded-t-lg shadow-lg p-4 ad-popup">
-  <div class="flex justify-between items-center h-full">
-    <!-- Ad Content -->
-   <div class="bg-white">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579807593228261"
-    crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-    style="display:block"
-    data-ad-format="fluid"
-    data-ad-layout-key="-ef+6k-30-ac+ty"
-    data-ad-client="ca-pub-6579807593228261"
-    data-ad-slot="6551181691"></ins>
-<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-   </div>
-    <!-- Close Button -->
-    <button onclick="document.querySelector('.ad-popup').classList.add('hidden')" 
-      class="text-gray-600 hover:text-red-500">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-</div>
-
-
-
     <!-- Footer -->
     <%- include('./Component/Footer') %>
 
@@ -411,10 +359,49 @@
           }
 
           setTimeout(() => {
-  document.querySelector('.ad-popup').classList.add('hidden');
-}, 20000);
+            document.querySelector('.ad-popup').classList.add('hidden');
+          }, 20000);
 
         });
+
+        const slides = document.querySelectorAll("#heroSlider > div");
+const dots = document.querySelectorAll("button[data-slide]");
+let currentSlide = 0;
+
+const updateSlide = (index) => {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle("hidden", i !== index);
+  });
+  dots.forEach((dot, i) => {
+    dot.classList.toggle("bg-blue-500", i === index);
+    dot.classList.toggle("bg-gray-500", i !== index);
+  });
+};
+
+const prevSlide = () => {
+  currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+  updateSlide(currentSlide);
+};
+
+const nextSlide = () => {
+  currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+  updateSlide(currentSlide);
+};
+
+// กำหนดให้สไลด์เปลี่ยนทุก 5 วินาที
+setInterval(nextSlide, 5000);
+
+// เพิ่ม event listeners สำหรับ dot เพื่อเปลี่ยนสไลด์ด้วยคลิก
+dots.forEach((dot, index) => {
+  dot.addEventListener("click", () => {
+    currentSlide = index;
+    updateSlide(currentSlide);
+  });
+});
+
+// เริ่มต้นการแสดงผลของสไลด์แรก
+updateSlide(currentSlide);
+
       </script>
 
 

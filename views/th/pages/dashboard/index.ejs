@@ -29,7 +29,7 @@
         <main class="flex-grow md:p-6 mx-auto max-w-6xl">
             <!-- Dashboard Header -->
             <header class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">จัดการบทความ / การสร้างรายได้</h1>
+                <h1 class="text-2xl font-bold text-gray-800">จัดการบทความ</h1>
                 <p class="text-gray-600">ภาพรวมของบทความและเครื่องมือการจัดการของคุณ</p>
             </header>
 
@@ -43,11 +43,14 @@
                         <li>
                             <a href="/dashboard/manage/memes" class="text-gray-600 hover:text-blue-500 font-medium">จัดการโพสต์มีม</a>
                         </li>
+                        <!-- <li>
+                            <a href="/monetization" class="text-gray-600 hover:text-blue-500 font-medium">การสร้างรายได้</a>
+                        </li> -->
                     </ul>
                 </div>
             </nav>
 
-            <div class="flex justify-center mb-5">
+            <!-- <div class="flex justify-center mb-5">
                 <div class="relative w-full max-w-lg overflow-hidden md:rounded-lg shadow-lg">
                     <div class="slides flex transition-transform duration-500">
                         <% if (Bannerlists.length > 0) { %>
@@ -71,7 +74,7 @@
                     <button class="next absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-900 focus:outline-none">❯</button>
                 </div>
                 
-            </div>
+            </div> -->
 
 
             <!-- Overview Section -->
@@ -99,13 +102,13 @@
                         <%= userDatas.articles.filter(article => !article.published).length %> 
                     </p>
                 </div>   
-                
+<!--                 
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <h2 class="text-xl font-semibold text-gray-700">คุณต้องมี 5 บทความถึงจะเปิดสร้างรายได้</h2>
                     <p class="text-gray-500" id="progress-info" 
                        data-total-articles="<%= userDatas.articles.length %>" 
                        data-published-articles="<%= publishedArticlesCount %>">
-                       <!-- This will be updated dynamically -->
+
                     </p>
                     <p class="text-gray-700">เราต้องการ <span class="font-bold">5</span> บทความ</p>
                     <div class="mt-2 bg-gray-200 rounded-full">
@@ -114,7 +117,7 @@
                             style="width: 0%">0%</div>
                     </div>
                     <p id="monetization-message" class="text-center text-2xl text-blue-600 font-medium mt-4"></p>
-                    <!-- <p id="progress-text">0/5</p> -->
+   
                 </div>
 
                 <div class="bg-white p-4 rounded-lg shadow">
@@ -248,7 +251,7 @@
                         <% } %>
                     </div>
                 </div>
-                
+                 -->
                
                 
              
